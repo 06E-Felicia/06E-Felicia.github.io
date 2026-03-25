@@ -2,8 +2,9 @@ name: 自动更新实况数据
 
 on:
   schedule:
-    - cron: '*/30 * * * *'
-  workflow_dispatch: # 保留此项，方便手动测试
+    # 每 1 小时自动运行一次 (分钟 小时 日 月 周)
+    - cron: '0 * * * *'
+  workflow_dispatch: # 允许手动点击按钮立即运行
 
 jobs:
   update-weather:
