@@ -2,6 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>深中气象</title>
     <style>
         :root {
@@ -21,7 +22,8 @@
             display: flex;
             flex-direction: column;
             background: #222 no-repeat center/cover;
-            overflow: hidden;
+            background-attachment: fixed;
+            overflow-x: hidden;
         }
 
         /* --- 导航栏 --- */
@@ -37,26 +39,28 @@
             padding: 0 30px;
             box-sizing: border-box;
             z-index: 1000;
+            flex-shrink: 0;
         }
 
         .nav-logo {
-            height: 50px; width: 50px;
-            margin-right: 25px;
+            height: 45px; width: 45px;
+            margin-right: 15px;
             border-radius: 50%; 
             overflow: hidden;
             border: 2px solid rgba(255,255,255,0.3);
             display: flex; justify-content: center; align-items: center;
             background: rgba(255,255,255,0.05);
+            flex-shrink: 0;
         }
         .nav-logo img { width: 100%; height: 100%; object-fit: cover; }
 
-        .nav-menus { display: flex; flex: 1; justify-content: space-between; align-items: center; }
-        .nav-group { display: flex; gap: 12px; list-style: none; margin: 0; padding: 0; }
+        .nav-menus { display: flex; flex: 1; justify-content: space-between; align-items: center; overflow-x: auto; }
+        .nav-group { display: flex; gap: 8px; list-style: none; margin: 0; padding: 0; white-space: nowrap; }
 
         .nav-item {
             color: white; text-decoration: none;
-            font-size: 14px; font-weight: 500; opacity: 0.7;
-            padding: 8px 14px; border-radius: 8px;
+            font-size: 13px; font-weight: 500; opacity: 0.7;
+            padding: 8px 12px; border-radius: 8px;
             transition: all 0.2s ease;
         }
         .nav-item:hover { opacity: 1; background: rgba(255, 255, 255, 0.1); }
@@ -67,14 +71,14 @@
             background: rgba(25, 25, 25, 0.96);
             backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            border-radius: 12px; min-width: 190px;
-            padding: 10px 0; display: none;
+            border-radius: 12px; min-width: 160px;
+            padding: 8px 0; display: none;
             box-shadow: 0 15px 35px rgba(0,0,0,0.6);
         }
         .dropdown:hover .dropdown-menu { display: block; }
         .dropdown-menu a {
             display: block; color: rgba(255,255,255,0.8);
-            text-decoration: none; padding: 10px 20px; font-size: 13px;
+            text-decoration: none; padding: 10px 15px; font-size: 13px;
         }
         .dropdown-menu a:hover { background: rgba(255,255,255,0.1); color: white; }
 
@@ -87,9 +91,9 @@
             color: #333;
             padding: 12px 20px;
             border-radius: 20px;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
-            max-width: 200px;
+            max-width: 180px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             z-index: 10001;
             opacity: 0;
@@ -105,27 +109,19 @@
             border-style: solid;
             border-color: rgba(255, 255, 255, 0.95) transparent transparent;
         }
-        .speech-bubble.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .speech-bubble.active { opacity: 1; transform: translateY(0); }
 
         /* --- 左下角悬浮展示图 --- */
         .floating-display {
             position: fixed;
-            bottom: 20px;
-            left: 20px;
-            width: 250px; 
-            height: auto;
+            bottom: 20px; left: 20px;
+            width: 200px; height: auto;
             z-index: 9999;
-            border: none;
-            background: transparent;
             cursor: pointer;
             transition: transform 0.3s ease;
             animation: float-micro 5s ease-in-out infinite;
         }
         .floating-display img { width: 100%; height: auto; display: block; }
-        .floating-display:hover { transform: scale(1.05); }
 
         @keyframes float-micro {
             0%, 100% { transform: translateY(0); }
@@ -133,35 +129,70 @@
         }
 
         /* --- 主看板内容 --- */
-        .main-content { flex: 1; display: flex; justify-content: center; align-items: center; }
+        .main-content { 
+            flex: 1; display: flex; justify-content: center; align-items: center; 
+            padding: 20px; box-sizing: border-box; overflow-y: auto;
+        }
         .weather-mega-card {
             background: var(--glass-bg);
             backdrop-filter: blur(35px);
+            -webkit-backdrop-filter: blur(35px);
             border: 1px solid var(--glass-border);
-            border-radius: 60px;
+            border-radius: 50px;
             display: flex;
             box-shadow: 0 25px 60px rgba(0,0,0,0.4);
             color: white;
+            width: 100%; max-width: 900px;
         }
-        .section { padding: 50px 50px; display: flex; flex-direction: column; justify-content: center; }
-        .forecast-side { border-right: 1px solid rgba(255, 255, 255, 0.1); width: 400px; align-items: center; }
-        .weather-icon { width: 150px; height: 150px; margin-bottom: 5px; }
-        .temp-row { font-size: 70px; font-weight: 800; display: flex; gap: 15px; margin-bottom: 35px; }
-        .live-side { width: 200px; background: rgba(255, 255, 255, 0.04); padding: 50px 40px; }
-        .live-header { color: var(--live-green); display: flex; align-items: center; gap: 10px; margin-bottom: 35px; }
+        .section { padding: 40px; display: flex; flex-direction: column; justify-content: center; }
+        
+        .forecast-side { border-right: 1px solid rgba(255, 255, 255, 0.1); flex: 1.5; align-items: center; }
+        .weather-icon { width: 120px; height: 120px; margin-bottom: 10px; }
+        .temp-row { font-size: 60px; font-weight: 800; display: flex; gap: 15px; margin-bottom: 30px; }
+        
+        .live-side { flex: 1; background: rgba(255, 255, 255, 0.04); padding: 40px; }
+        .live-header { color: var(--live-green); display: flex; align-items: center; gap: 10px; margin-bottom: 25px; }
         .live-title { font-size: 18px; font-weight: bold; }
         .live-dot { width: 8px; height: 8px; background: var(--live-green); border-radius: 50%; box-shadow: 0 0 12px var(--live-green); animation: pulse 2s infinite; }
         
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; }
         .forecast-side .info-grid .item { align-items: center; text-align: center; border-left: none; padding-left: 0; }
-        .live-grid { grid-template-columns: 1fr; gap: 22px; }
-        .item { display: flex; flex-direction: column; border-left: 3px solid rgba(255,255,255,0.15); padding-left: 18px; }
-        .label { font-size: 15px; opacity: 0.5; margin-bottom: 6px; }
-        .val { font-size: 30px; font-weight: 700; }
+        .live-grid { grid-template-columns: 1fr; gap: 18px; }
+        .item { display: flex; flex-direction: column; border-left: 3px solid rgba(255,255,255,0.15); padding-left: 15px; }
+        .label { font-size: 13px; opacity: 0.5; margin-bottom: 4px; }
+        .val { font-size: 24px; font-weight: 700; }
         .rain-val { color: var(--rain-blue); }
-        .update-time { font-size: 10px; opacity: 0.3; margin-top: 40px; font-family: monospace; }
+        .update-time { font-size: 10px; opacity: 0.3; margin-top: 30px; font-family: monospace; }
+
+        /* --- 响应式适配 (手机竖屏) --- */
+        @media (max-width: 768px) {
+            body { overflow-y: auto; height: auto; min-height: 100vh; }
+            .nav-bar { padding: 0 15px; height: 60px; }
+            .nav-logo { width: 35px; height: 35px; margin-right: 8px; }
+            .nav-item { font-size: 12px; padding: 6px 8px; }
+
+            .main-content { align-items: flex-start; padding: 15px; padding-bottom: 100px; }
+            .weather-mega-card { flex-direction: column; border-radius: 30px; }
+            .forecast-side { border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 30px 20px; }
+            .live-side { padding: 30px 20px; }
+            
+            .temp-row { font-size: 45px; }
+            .weather-icon { width: 100px; height: 100px; }
+            .val { font-size: 20px; }
+
+            .floating-display { width: 130px; bottom: 10px; left: 10px; }
+            .speech-bubble { left: 20px; bottom: 140px; font-size: 13px; max-width: 150px; }
+        }
+
+        /* --- 响应式适配 (手机横屏) --- */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .nav-bar { height: 50px; }
+            .main-content { align-items: flex-start; }
+            .weather-mega-card { transform: scale(0.85); transform-origin: top center; margin-top: -20px; }
+            .floating-display { width: 100px; }
+        }
     </style>
 </head>
 <body>
@@ -176,7 +207,6 @@
                 <li class="dropdown">
                     <a href="#" class="nav-item">预报</a>
                     <div class="dropdown-menu">
-                        <!-- <a href="https://raw.githubusercontent.com/06E-Felicia/06E-Felicia.github.io/main/预报图.html" target="_blank">一周天气</a> -->
                         <a href="https://smca.fun/#/nwp_forecast?type=six_elem" target="_blank">EC要素预报</a>
                         <a href="https://smca.fun/#/tc_forecast?type=fnv3_attack" target="_blank">台风路径预报</a>
                     </div>
@@ -201,7 +231,7 @@
                     </div>
                 </li>
                 <li class="dropdown">
-                    <a href="#" class="nav-item">支持我们</a>
+                    <a href="#" class="nav-item">支持</a>
                     <div class="dropdown-menu" style="left: auto; right: 0;">
                         <a href="https://raw.githubusercontent.com/06E-Felicia/06E-Felicia.github.io/refs/heads/main/%E7%96%AF%E7%8B%82%E6%98%9F%E6%9C%9F%E5%9B%9BV%E6%88%9150.jpg" target="_blank">用爱发电</a>
                     </div>
@@ -270,9 +300,7 @@
             if (!hasFinishedLoop) {
                 targetText = dialogs[currentIndex];
                 currentIndex++;
-                if (currentIndex >= dialogs.length) {
-                    hasFinishedLoop = true;
-                }
+                if (currentIndex >= dialogs.length) hasFinishedLoop = true;
             } else {
                 const randomIdx = Math.floor(Math.random() * (dialogs.length - 1)) + 1;
                 targetText = dialogs[randomIdx];
@@ -288,7 +316,9 @@
             }, 3000); 
         }
 
+        // 这里的 LIVE_DATA 会由你的 Python 脚本自动更新
         const LIVE_DATA = {"t": "27.6℃", "time": "2026-03-25 16:54", "th": "29.9℃", "tl": "20.9℃", "r_day": "0mm", "r_1h": "0mm", "p": "1010.5hPa"};
+        
         const MANUAL_CONFIG = {
             low: "20°C", high: "30°C", humidity: "舒适", rainProb: "0mm", wind: "3级", dir: "南风", 
             icon: "https://raw.githubusercontent.com/06E-Felicia/06E-Felicia.github.io/main/02.png", 
