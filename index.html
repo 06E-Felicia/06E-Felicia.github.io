@@ -183,7 +183,7 @@
             .val { font-size: 20px; }
 
             .floating-display { width: 130px; bottom: 10px; left: 10px; }
-            .speech-bubble { left: 20px; bottom: 140px; font-size: 13px; max-width: 150px; }
+            .speech-bubble { left: 20px; bottom: 200px; font-size: 13px; max-width: 150px; }
         }
 
         /* --- 响应式适配 (手机横屏) --- */
@@ -192,6 +192,10 @@
             .main-content { align-items: flex-start; }
             .weather-mega-card { transform: scale(0.85); transform-origin: top center; margin-top: -20px; }
             .floating-display { width: 100px; }
+            .speech-bubble {
+                bottom: 200px; /* 举例：横屏时高度较低，对话框也需要下移 */
+                left: 60px;
+            }
         }
     </style>
 </head>
