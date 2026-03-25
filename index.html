@@ -168,7 +168,7 @@
 
     <nav class="nav-bar">
         <div class="nav-logo">
-            <img src="https://github.com/06E-Felicia/06E-Felicia.github.io/blob/main/空门苍.jpg" alt="Logo">
+            <img src="https://raw.githubusercontent.com/06E-Felicia/06E-Felicia.github.io/main/空门苍.jpg" alt="Logo">
         </div>
         <div class="nav-menus">
             <ul class="nav-group">
@@ -176,7 +176,7 @@
                 <li class="dropdown">
                     <a href="#" class="nav-item">预报</a>
                     <div class="dropdown-menu">
-                        <a href="https://github.com/06E-Felicia/06E-Felicia.github.io/blob/main/预报图.html">一周天气</a>
+                        <a href="https://raw.githubusercontent.com/06E-Felicia/06E-Felicia.github.io/main/预报图.html">一周天气</a>
                         <a href="https://smca.fun/#/nwp_forecast?type=six_elem">EC要素预报</a>
                         <a href="https://smca.fun/#/tc_forecast?type=fnv3_attack">台风路径预报</a>
                     </div>
@@ -245,12 +245,12 @@
     <div id="dialog-bubble" class="speech-bubble">内容加载中...</div>
 
     <div class="floating-display" onclick="showRandomDialog()">
-        <img src="https://github.com/06E-Felicia/06E-Felicia.github.io/blob/main/鼠标.png" alt="Display">
+        <img src="https://raw.githubusercontent.com/06E-Felicia/06E-Felicia.github.io/main/鼠标.png" alt="Display">
     </div>
 
     <script>
         const dialogs = [
-            "瓦达西瓦Sorakado Ao酱~", // 第一句：初始
+            "瓦达西瓦Sorakado Ao酱~", 
             "不可以随便戳我(生气)",    
             "Hentai Hentai Hentai!",   
             "我要去找主人告状了！",     
@@ -259,24 +259,20 @@
         ];
 
         let dialogTimer = null;
-        let currentIndex = 0;       // 记录顺序点击的进度
-        let hasFinishedLoop = false; // 记录一轮循环是否走完
+        let currentIndex = 0;       
+        let hasFinishedLoop = false; 
 
         function showRandomDialog() {
             const bubble = document.getElementById('dialog-bubble');
             let targetText = "";
 
             if (!hasFinishedLoop) {
-                // --- 顺序循环阶段 ---
                 targetText = dialogs[currentIndex];
                 currentIndex++;
-                
-                // 如果刚刚放完了最后一句
                 if (currentIndex >= dialogs.length) {
                     hasFinishedLoop = true;
                 }
             } else {
-                // --- 随机抽选阶段 (排除第0句) ---
                 const randomIdx = Math.floor(Math.random() * (dialogs.length - 1)) + 1;
                 targetText = dialogs[randomIdx];
             }
@@ -284,7 +280,6 @@
             bubble.innerText = targetText;
             bubble.classList.add('active');
 
-            // 3秒自动隐藏（如果你点击过快，会重置这3秒）
             if (dialogTimer) clearTimeout(dialogTimer);
             dialogTimer = setTimeout(() => {
                 bubble.classList.remove('active');
@@ -294,7 +289,9 @@
 
         const LIVE_DATA = {"t": "23℃", "time": "2026-03-24 21:54", "th": "23.5℃", "tl": "22.8℃", "r_day": "0mm", "r_1h": "0mm", "p": "1012.9hPa"};
         const MANUAL_CONFIG = {
-            low: "20°C", high: "30°C", humidity: "舒适", rainProb: "0mm", wind: "3级", dir: "南风", icon: "https://github.com/06E-Felicia/06E-Felicia.github.io/blob/main/weatherIcon/02.png", bg: "https://github.com/06E-Felicia/06E-Felicia.github.io/blob/main/1.jpg" 
+            low: "20°C", high: "30°C", humidity: "舒适", rainProb: "0mm", wind: "3级", dir: "南风", 
+            icon: "https://raw.githubusercontent.com/06E-Felicia/06E-Felicia.github.io/main/weatherIcon/02.png", 
+            bg: "https://raw.githubusercontent.com/06E-Felicia/06E-Felicia.github.io/main/1.jpg" 
         };
 
         function render() {
