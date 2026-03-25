@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>深中气象</title>
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.1); 
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --temp-red: #ff5f5f;
+            --temp-blue: #5fbfff;
+            --rain-blue: #407be2;
+            --live-green: #2ecc71;
+            --nav-height: 70px;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: 'PingFang SC', 'SF Pro Display', sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #222 no-repeat center/cover;
+            overflow: hidden;
+        }
+
+        /* --- 导航栏 --- */
+        .nav-bar {
+            width: 100%;
+            height: var(--nav-height);
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            padding: 0 30px;
+            box-sizing: border-box;
+            z-index: 1000;
+        }
+
+        .nav-logo {
+            height: 50px; width: 50px;
+            margin-right: 25px;
+            border-radius: 50%; 
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.3);
+            display: flex; justify-content: center; align-items: center;
+            background: rgba(255,255,255,0.05);
+        }
+        .nav-logo img { width: 100%; height: 100%; object-fit: cover; }
+
+        .nav-menus { display: flex; flex: 1; justify-content: space-between; align-items: center; }
+        .nav-group { display: flex; gap: 12px; list-style: none; margin: 0; padding: 0; }
+
+        .nav-item {
+            color: white; text-decoration: none;
+            font-size: 14px; font-weight: 500; opacity: 0.7;
+            padding: 8px 14px; border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        .nav-item:hover { opacity: 1; background: rgba(255, 255, 255, 0.1); }
+
+        .dropdown { position: relative; }
+        .dropdown-menu {
+            position: absolute; top: 100%; left: 0;
+            background: rgba(25, 25, 25, 0.96);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px; min-width: 190px;
+            padding: 10px 0; display: none;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+        }
+        .dropdown:hover .dropdown-menu { display: block; }
+        .dropdown-menu a {
+            display: block; color: rgba(255,255,255,0.8);
+            text-decoration: none; padding: 10px 20px; font-size: 13px;
+        }
+        .dropdown-menu a:hover { background: rgba(255,255,255,0.1); color: white; }
+
+        /* --- 对话框样式 --- */
+        .speech-bubble {
+            position: fixed;
+            bottom: 410px; 
+            left: 85px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            padding: 12px 20px;
+            border-radius: 20px;
+            font-size: 15px;
+            font-weight: 600;
+            max-width: 200px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 10001;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+        }
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -8px; left: 30px;
+            border-width: 8px 8px 0;
+            border-style: solid;
+            border-color: rgba(255, 255, 255, 0.95) transparent transparent;
+        }
+        .speech-bubble.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- 左下角悬浮展示图 --- */
+        .floating-display {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 250px; 
+            height: auto;
+            z-index: 9999;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            animation: float-micro 5s ease-in-out infinite;
+        }
+        .floating-display img { width: 100%; height: auto; display: block; }
+        .floating-display:hover { transform: scale(1.05); }
+
+        @keyframes float-micro {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* --- 主看板内容 --- */
+        .main-content { flex: 1; display: flex; justify-content: center; align-items: center; }
+        .weather-mega-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(35px);
+            border: 1px solid var(--glass-border);
+            border-radius: 60px;
+            display: flex;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+            color: white;
+        }
+        .section { padding: 50px 50px; display: flex; flex-direction: column; justify-content: center; }
+        .forecast-side { border-right: 1px solid rgba(255, 255, 255, 0.1); width: 400px; align-items: center; }
+        .weather-icon { width: 150px; height: 150px; margin-bottom: 5px; }
+        .temp-row { font-size: 70px; font-weight: 800; display: flex; gap: 15px; margin-bottom: 35px; }
+        .live-side { width: 200px; background: rgba(255, 255, 255, 0.04); padding: 50px 40px; }
+        .live-header { color: var(--live-green); display: flex; align-items: center; gap: 10px; margin-bottom: 35px; }
+        .live-title { font-size: 18px; font-weight: bold; }
+        .live-dot { width: 8px; height: 8px; background: var(--live-green); border-radius: 50%; box-shadow: 0 0 12px var(--live-green); animation: pulse 2s infinite; }
+        
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; }
+        .forecast-side .info-grid .item { align-items: center; text-align: center; border-left: none; padding-left: 0; }
+        .live-grid { grid-template-columns: 1fr; gap: 22px; }
+        .item { display: flex; flex-direction: column; border-left: 3px solid rgba(255,255,255,0.15); padding-left: 18px; }
+        .label { font-size: 15px; opacity: 0.5; margin-bottom: 6px; }
+        .val { font-size: 30px; font-weight: 700; }
+        .rain-val { color: var(--rain-blue); }
+        .update-time { font-size: 10px; opacity: 0.3; margin-top: 40px; font-family: monospace; }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-bar">
+        <div class="nav-logo">
+            <img src="file:///Users/ethan/Desktop/test/气象社网页/空门苍.jpg" alt="Logo">
+        </div>
+        <div class="nav-menus">
+            <ul class="nav-group">
+                <li><a href="index.html" class="nav-item" style="opacity: 1; background: rgba(255,255,255,0.12);">今日天气</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-item">预报</a>
+                    <div class="dropdown-menu">
+                        <a href="/Users/ethan/Desktop/test/气象社网页/预报图.html">一周天气</a>
+                        <a href="https://smca.fun/#/nwp_forecast?type=six_elem">EC要素预报</a>
+                        <a href="https://smca.fun/#/tc_forecast?type=fnv3_attack">台风路径预报</a>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="nav-item">卫星云图</a>
+                    <div class="dropdown-menu">
+                        <a href="https://www.nmc.cn/publish/radar/huanan.html">华南雷达</a>
+                        <a href="https://www.dapiya.top/satellite/floater/">热带气旋卫星云图</a>
+                        <a href="https://www.storm-chasers.cn/wp-content/uploads/satimgs/Composite_TVIS_FDLK.jpg">圆盘图</a>
+                    </div>
+                </li>
+                <li><a href="test.html" class="nav-item">测试</a></li>
+            </ul>
+            <ul class="nav-group">
+                <li class="dropdown">
+                    <a href="#" class="nav-item">友情链接</a>
+                    <div class="dropdown-menu" style="left: auto; right: 0;">
+                        <a href="https://www.tyboard.net/" target="_blank">台风论坛</a>
+                        <a href="https://smca.fun/" target="_blank">菜园子的气象栈</a>
+                        <a href="https://weather.sz.gov.cn/" target="_blank">深圳气象台</a>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="nav-item">支持我们</a>
+                    <div class="dropdown-menu" style="left: auto; right: 0;">
+                        <a href="https://ys.mihoyo.com/" target="_blank">用爱发电</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="weather-mega-card">
+            <div class="section forecast-side">
+                <img id="ui-icon" class="weather-icon" src="" alt=" ">
+                <div class="temp-row">
+                    <span id="ui-low" style="color:var(--temp-blue)">--</span>
+                    <span style="opacity: 0.15; font-weight: 200;">-</span>
+                    <span id="ui-high" style="color:var(--temp-red)">--</span>
+                </div>
+                <div class="info-grid">
+                    <div class="item"><span class="label">湿度</span><span id="ui-hum" class="val">--</span></div>
+                    <div class="item"><span class="label">降雨量</span><span id="ui-rain-pre" class="val rain-val">--</span></div>
+                    <div class="item"><span class="label">风力</span><span id="ui-wind" class="val">--</span></div>
+                    <div class="item"><span class="label">风向</span><span id="ui-dir" class="val">--</span></div>
+                </div>
+            </div>
+            <div class="section live-side">
+                <div class="live-header">
+                    <div class="live-dot"></div>
+                    <div class="live-title">深圳市实况</div>
+                </div>
+                <div class="info-grid live-grid">
+                    <div class="item"><span class="label">当前气温</span><span id="t" class="val">--</span></div>
+                    <div class="item"><span class="label">日雨量</span><span id="r_day" class="val rain-val">--</span></div>
+                    <div class="item"><span class="label">1h 滑动雨量</span><span id="r_1h" class="val rain-val">--</span></div>
+                    <div class="item"><span class="label">气压</span><span id="p" class="val" style="font-size: 18px;">--</span></div>
+                </div>
+                <div id="ltime" class="update-time">UPDATE: --</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="dialog-bubble" class="speech-bubble">内容加载中...</div>
+
+    <div class="floating-display" onclick="showRandomDialog()">
+        <img src="file:///Users/ethan/Desktop/test/气象社网页/鼠标.png" alt="Display">
+    </div>
+
+    <script>
+        const dialogs = [
+            "瓦达西瓦Sorakado Ao酱~", // 第一句：初始
+            "不可以随便戳我(生气)",    
+            "Hentai Hentai Hentai!",   
+            "我要去找主人告状了！",     
+            "再戳就为您自动下载原神",   
+            "最开始的时候请温柔一点~"    
+        ];
+
+        let dialogTimer = null;
+        let currentIndex = 0;       // 记录顺序点击的进度
+        let hasFinishedLoop = false; // 记录一轮循环是否走完
+
+        function showRandomDialog() {
+            const bubble = document.getElementById('dialog-bubble');
+            let targetText = "";
+
+            if (!hasFinishedLoop) {
+                // --- 顺序循环阶段 ---
+                targetText = dialogs[currentIndex];
+                currentIndex++;
+                
+                // 如果刚刚放完了最后一句
+                if (currentIndex >= dialogs.length) {
+                    hasFinishedLoop = true;
+                }
+            } else {
+                // --- 随机抽选阶段 (排除第0句) ---
+                const randomIdx = Math.floor(Math.random() * (dialogs.length - 1)) + 1;
+                targetText = dialogs[randomIdx];
+            }
+
+            bubble.innerText = targetText;
+            bubble.classList.add('active');
+
+            // 3秒自动隐藏（如果你点击过快，会重置这3秒）
+            if (dialogTimer) clearTimeout(dialogTimer);
+            dialogTimer = setTimeout(() => {
+                bubble.classList.remove('active');
+                dialogTimer = null;
+            }, 3000); 
+        }
+
+        const LIVE_DATA = {"t": "23℃", "time": "2026-03-24 21:54", "th": "23.5℃", "tl": "22.8℃", "r_day": "0mm", "r_1h": "0mm", "p": "1012.9hPa"};
+        const MANUAL_CONFIG = {
+            low: "20°C", high: "30°C", humidity: "舒适", rainProb: "0mm", wind: "3级", dir: "南风", icon: "weatherIcon/02.png", bg: "1.jpg" 
+        };
+
+        function render() {
+            document.body.style.backgroundImage = `url('${MANUAL_CONFIG.bg}')`;
+            document.getElementById('ui-icon').src = MANUAL_CONFIG.icon;
+            document.getElementById('ui-low').innerText = MANUAL_CONFIG.low;
+            document.getElementById('ui-high').innerText = MANUAL_CONFIG.high;
+            document.getElementById('ui-hum').innerText = MANUAL_CONFIG.humidity;
+            document.getElementById('ui-rain-pre').innerText = MANUAL_CONFIG.rainProb;
+            document.getElementById('ui-wind').innerText = MANUAL_CONFIG.wind;
+            document.getElementById('ui-dir').innerText = MANUAL_CONFIG.dir;
+            document.getElementById('t').innerText = LIVE_DATA.t;
+            document.getElementById('r_day').innerText = LIVE_DATA.r_day;
+            document.getElementById('r_1h').innerText = LIVE_DATA.r_1h;
+            document.getElementById('p').innerText = LIVE_DATA.p;
+            document.getElementById('ltime').innerText = "UPDATE: " + LIVE_DATA.time;
+        }
+        window.onload = render;
+    </script>
+</body>
+</html>
