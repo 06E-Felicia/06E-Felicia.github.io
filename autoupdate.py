@@ -10,11 +10,11 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
-HTML_FILE = "/Users/ethan/Desktop/test/气象社网页/深中气象网页.html"
+HTML_FILE = "https://github.com/06E-Felicia/06E-Felicia.github.io/blob/main/index.html"
 URL = "https://smca.fun/#/"
 
 def fetch_smca():
-    print("📡 正在获取 SMCA 白鸟区雨量实况...")
+    # print("📡 正在获取 SMCA 白鸟区雨量实况...")
     opt = Options()
     opt.add_argument("--headless")
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=opt)
@@ -36,7 +36,7 @@ def fetch_smca():
                 res["time"] = i.find_element(By.CLASS_NAME, "stat-description").text.replace("数据时间: ", "").strip()
         return res
     except Exception as e:
-        print(f"❌ 抓取错误: {e}")
+        # print(f"❌ 抓取错误: {e}")
         return None
     finally:
         driver.quit()
@@ -52,8 +52,9 @@ def update_html(data):
     
     with open(HTML_FILE, "w", encoding="utf-8") as f:
         f.write(content)
-    print("✅ 实况同步成功！你可以去手动修改预报部分了。")
+    # print("✅ 实况同步成功！你可以去手动修改预报部分了。")
 
 while True:
     update_html(fetch_smca())
-    break
+    # break
+    time.sleep(6000)
