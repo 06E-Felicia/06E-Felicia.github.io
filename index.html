@@ -15,6 +15,7 @@
             --nav-height: 70px;
         }
 
+        /* --- 基础样式 --- */
         body {
             margin: 0; padding: 0;
             font-family: 'PingFang SC', 'SF Pro Display', sans-serif;
@@ -22,6 +23,7 @@
             display: flex;
             flex-direction: column;
             background: #222 no-repeat center/cover;
+            background-attachment: fixed;
             overflow: hidden;
         }
 
@@ -29,13 +31,11 @@
         .nav-bar {
             width: 100%; height: var(--nav-height);
             background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             border-bottom: 1px solid var(--glass-border);
             display: flex; align-items: center;
             padding: 0 30px; box-sizing: border-box; z-index: 1000;
         }
-
         .nav-logo {
             height: 50px; width: 50px; margin-right: 25px;
             border-radius: 50%; overflow: hidden;
@@ -44,96 +44,66 @@
             background: rgba(255,255,255,0.05);
         }
         .nav-logo img { width: 100%; height: 100%; object-fit: cover; }
-
         .nav-menus { display: flex; flex: 1; justify-content: space-between; align-items: center; }
         .nav-group { display: flex; gap: 12px; list-style: none; margin: 0; padding: 0; }
-
         .nav-item {
-            color: white; text-decoration: none;
-            font-size: 14px; font-weight: 500; opacity: 0.7;
+            color: white; text-decoration: none; font-size: 14px; font-weight: 500; opacity: 0.7;
             padding: 8px 14px; border-radius: 8px; transition: all 0.2s ease;
         }
         .nav-item:hover { opacity: 1; background: rgba(255, 255, 255, 0.1); }
-
         .dropdown { position: relative; }
         .dropdown-menu {
             position: absolute; top: 100%; left: 0;
-            background: rgba(25, 25, 25, 0.96);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px; min-width: 190px;
-            padding: 10px 0; display: none;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            background: rgba(25, 25, 25, 0.96); backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 12px; min-width: 190px;
+            padding: 10px 0; display: none; box-shadow: 0 15px 35px rgba(0,0,0,0.6);
         }
         .dropdown:hover .dropdown-menu { display: block; }
-        .dropdown-menu a {
-            display: block; color: rgba(255,255,255,0.8);
-            text-decoration: none; padding: 10px 20px; font-size: 13px;
-        }
-        .dropdown-menu a:hover { background: rgba(255,255,255,0.1); color: white; }
+        .dropdown-menu a { display: block; color: rgba(255,255,255,0.8); text-decoration: none; padding: 10px 20px; font-size: 13px; }
 
-        /* --- 对话框样式 (电脑端布局) --- */
+        /* --- 对话框 & 悬浮图 (默认电脑端) --- */
         .speech-bubble {
             position: fixed;
-            bottom: 410px; /* 【电脑端修改这里：上下高度】 */
-            left: 85px;    /* 【电脑端修改这里：左右位置】 */
+            bottom: 410px; /* 电脑端位置 */
+            left: 85px;   /* 电脑端位置 */
             background: rgba(255, 255, 255, 0.95);
-            color: #333; padding: 12px 20px;
-            border-radius: 20px; font-size: 15px; font-weight: 600;
-            max-width: 200px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            z-index: 10001; opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            pointer-events: none;
+            color: #333; padding: 12px 20px; border-radius: 20px;
+            font-size: 15px; font-weight: 600; max-width: 200px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 10001;
+            opacity: 0; transform: translateY(20px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none;
         }
         .speech-bubble::after {
-            content: ''; position: absolute;
-            bottom: -8px; left: 30px;
+            content: ''; position: absolute; bottom: -8px; left: 30px;
             border-width: 8px 8px 0; border-style: solid;
             border-color: rgba(255, 255, 255, 0.95) transparent transparent;
         }
         .speech-bubble.active { opacity: 1; transform: translateY(0); }
 
-        /* --- 左下角悬浮展示图 (电脑端布局) --- */
         .floating-display {
-            position: fixed;
-            bottom: 20px; left: 20px;
-            width: 250px; height: auto;
-            z-index: 9999; cursor: pointer;
-            transition: transform 0.3s ease;
+            position: fixed; bottom: 20px; left: 20px; width: 250px; height: auto;
+            z-index: 9999; cursor: pointer; transition: transform 0.3s ease;
             animation: float-micro 5s ease-in-out infinite;
         }
         .floating-display img { width: 100%; height: auto; display: block; }
-        .floating-display:hover { transform: scale(1.05); }
+        @keyframes float-micro { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
-        @keyframes float-micro {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        /* --- 主看板内容 (电脑端布局) --- */
+        /* --- 主看板 (电脑端布局) --- */
         .main-content { flex: 1; display: flex; justify-content: center; align-items: center; }
         .weather-mega-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(35px);
-            border: 1px solid var(--glass-border);
-            border-radius: 60px;
-            display: flex; /* 电脑端强制横向 */
-            box-shadow: 0 25px 60px rgba(0,0,0,0.4);
-            color: white;
+            background: var(--glass-bg); backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px);
+            border: 1px solid var(--glass-border); border-radius: 60px;
+            display: flex; box-shadow: 0 25px 60px rgba(0,0,0,0.4); color: white;
         }
         .section { padding: 50px 50px; display: flex; flex-direction: column; justify-content: center; }
         .forecast-side { border-right: 1px solid rgba(255, 255, 255, 0.1); width: 400px; align-items: center; }
         .weather-icon { width: 150px; height: 150px; margin-bottom: 5px; }
         .temp-row { font-size: 70px; font-weight: 800; display: flex; gap: 15px; margin-bottom: 35px; }
-        
         .live-side { width: 200px; background: rgba(255, 255, 255, 0.04); padding: 50px 40px; }
         .live-header { color: var(--live-green); display: flex; align-items: center; gap: 10px; margin-bottom: 35px; }
         .live-title { font-size: 18px; font-weight: bold; }
         .live-dot { width: 8px; height: 8px; background: var(--live-green); border-radius: 50%; box-shadow: 0 0 12px var(--live-green); animation: pulse 2s infinite; }
         
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-
         .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; }
         .forecast-side .info-grid .item { align-items: center; text-align: center; border-left: none; padding-left: 0; }
         .live-grid { grid-template-columns: 1fr; gap: 22px; }
@@ -144,28 +114,41 @@
         .update-time { font-size: 10px; opacity: 0.3; margin-top: 40px; font-family: monospace; }
 
         /* ============================================================
-           📱 移动端适配 (当屏幕宽度小于 768px 时生效)
+           📱 响应式适配 (手机端：应用你要求的第二套代码布局)
            ============================================================ */
         @media (max-width: 768px) {
-            body { overflow-y: auto; height: auto; min-height: 100vh; }
-            
-            /* 1. 卡片由横变竖 */
-            .weather-mega-card { flex-direction: column; border-radius: 40px; margin: 20px; width: 90%; }
-            .forecast-side { width: auto; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 30px; }
-            .live-side { width: auto; padding: 30px; }
-            
-            /* 2. 缩小字体防止溢出 */
-            .temp-row { font-size: 50px; }
-            .val { font-size: 24px; }
-            .weather-icon { width: 120px; height: 120px; }
+            body { overflow-y: auto; height: auto; min-height: 100vh; overflow-x: hidden; }
+            .nav-bar { padding: 0 15px; height: 60px; }
+            .nav-logo { width: 35px; height: 35px; margin-right: 8px; }
+            .nav-item { font-size: 12px; padding: 6px 8px; }
+            .nav-menus { overflow-x: auto; }
+            .nav-group { gap: 8px; white-space: nowrap; }
 
-            /* 3. 手机端对话框位置修改区 */
-            .speech-bubble {
-                left: 20px;     /* 【手机端修改这里：左右位置】 */
-                bottom: 150px;  /* 【手机端修改这里：上下高度】 */
-                font-size: 13px; max-width: 150px;
+            .main-content { align-items: flex-start; padding: 15px; padding-bottom: 100px; }
+            .weather-mega-card { flex-direction: column; border-radius: 30px; width: 100%; max-width: none; }
+            
+            .section { padding: 30px 20px; }
+            .forecast-side { border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.1); width: auto; flex: none; }
+            .live-side { width: auto; flex: none; }
+            
+            .temp-row { font-size: 45px; margin-bottom: 20px; }
+            .weather-icon { width: 100px; height: 100px; }
+            .val { font-size: 20px; }
+            .info-grid { gap: 15px; }
+
+            /* 手机端对话框 & 悬浮图位置 */
+            .floating-display { width: 130px; bottom: 10px; left: 10px; }
+            .speech-bubble { 
+                left: 30px;    /* 手机端位置 */
+                bottom: 210px; /* 手机端位置 */
+                font-size: 13px; max-width: 150px; 
             }
-            .floating-display { width: 150px; bottom: 10px; left: 10px; }
+        }
+
+        /* 手机横屏额外适配 */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .weather-mega-card { transform: scale(0.85); transform-origin: top center; }
+            .speech-bubble { bottom: 180px; left: 50px; }
         }
     </style>
 </head>
