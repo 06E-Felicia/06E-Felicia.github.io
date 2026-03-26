@@ -238,36 +238,72 @@
     </div>
 
     <script>
-        const dialogs = [
-            "瓦达西瓦Sorakado Ao酱~", 
-            "不可以随便戳我(生气)",    
-            "Hentai Hentai Hentai!",   
-            "我要去找主人告状了！",     
-            "再戳就为您自动下载原神",   
-            "你为啥跟我直接表白啊？！嘎啦game里不是这样！",    
-            "我不接受！！！"
-        ];
+        // const dialogs = [
+        //     "瓦达西瓦Sorakado Ao酱~", 
+        //     "不可以随便戳我(生气)",    
+        //     "Hentai Hentai Hentai!",   
+        //     "我要去找主人告状了！",     
+        //     "再戳就为您自动下载原神",   
+        //     "你为啥跟我直接表白啊？！嘎啦game里不是这样！",    
+        //     "我不接受！！！"
+        // ];
 
+        // let dialogTimer = null;
+        // let currentIndex = 0;       
+        // let hasFinishedLoop = false; 
+
+        // function showRandomDialog() {
+        //     const bubble = document.getElementById('dialog-bubble');
+        //     let targetText = "";
+
+        //     if (!hasFinishedLoop) {
+        //         targetText = dialogs[currentIndex];
+        //         currentIndex++;
+        //         if (currentIndex >= dialogs.length) hasFinishedLoop = true;
+        //     } else {
+        //         const randomIdx = Math.floor(Math.random() * (dialogs.length - 1)) + 1;
+        //         targetText = dialogs[randomIdx];
+        //     }
+
+        //     bubble.innerText = targetText;
+        //     bubble.classList.add('active');
+
+        //     if (dialogTimer) clearTimeout(dialogTimer);
+        //     dialogTimer = setTimeout(() => {
+        //         bubble.classList.remove('active');
+        //         dialogTimer = null;
+        //     }, 3000); 
+        // }
+
+        const dialogs = [
+            "所以说，不要停下来啊", 
+            "你为啥跟我直接表白啊？！嘎啦game里不是这样！",    
+            "不，不行，还不能笑，我要忍住",   
+            "为什么你这么熟练啊！",     
+            "原神，启动！",   
+            "为什么，会变成这样呢",    
+            "你白银觉得是我的锅，那就是我的锅",   
+            "↑↑ ↑↑↑, ↓ ↓ ↓↓↓",  
+            "人被杀了就会死",  
+            "我不明白！我就是不明白！",
+            "你去了祭典吧，和我不认识的女生一起",  
+            "听好了：1月25日，世界模式就此陷落。每个陷落的章节都将迎来一场漩涡，为这些旋律带来全新的Beyond难度。你所熟知的一切都将改变，你所熟悉的歌曲都将加诸Beyond的历练。至此，一锤定音。尘埃，已然落定。",
+            "战至最后一刻，自刎归天！"
+        ];
+        
         let dialogTimer = null;
-        let currentIndex = 0;       
-        let hasFinishedLoop = false; 
 
         function showRandomDialog() {
             const bubble = document.getElementById('dialog-bubble');
-            let targetText = "";
-
-            if (!hasFinishedLoop) {
-                targetText = dialogs[currentIndex];
-                currentIndex++;
-                if (currentIndex >= dialogs.length) hasFinishedLoop = true;
-            } else {
-                const randomIdx = Math.floor(Math.random() * (dialogs.length - 1)) + 1;
-                targetText = dialogs[randomIdx];
-            }
+            
+            // 纯随机逻辑：从数组中随机抽取一个索引
+            const randomIdx = Math.floor(Math.random() * dialogs.length);
+            const targetText = dialogs[randomIdx];
 
             bubble.innerText = targetText;
             bubble.classList.add('active');
 
+            // 自动隐藏逻辑
             if (dialogTimer) clearTimeout(dialogTimer);
             dialogTimer = setTimeout(() => {
                 bubble.classList.remove('active');
