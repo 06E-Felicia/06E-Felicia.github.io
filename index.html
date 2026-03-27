@@ -173,7 +173,7 @@
                 <li class="dropdown">
                     <a href="#" class="nav-item">预报</a>
                     <div class="dropdown-menu">
-                        <a href="https://smca.fun/#/nwp_forecast?type=six_elem" target="_blank">EC要素预报</a>
+                        <a id="ec-link" href="https://smca.fun/#/nwp_forecast?type=six_elem" target="_blank">一周天气</a>
                         <a href="https://smca.fun/#/tc_forecast?type=fnv3_attack" target="_blank">台风路径预报</a>
                     </div>
                 </li>
@@ -342,6 +342,52 @@
             bg: "https://raw.githubusercontent.com/06E-Felicia/06E-Felicia.github.io/main/1.jpg" 
         };
 
+        function generateECUrl(offsetHours = 0) {
+            const now = new Date(new Date().getTime() - offsetHours * 60 * 60 * 1000);
+            const utcYear = now.getUTCFullYear();
+            const utcMonth = String(now.getUTCMonth() + 1).padStart(2, '0');
+            const utcDate = String(now.getUTCDate()).padStart(2, '0');
+            const utcHours = now.getUTCHours();
+            let cycle = "00", targetDate = utcDate;
+
+            if (utcHours >= 20) { cycle = "12"; } 
+            else if (utcHours >= 8) { cycle = "00"; } 
+            else {
+                const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+                targetDate = String(yesterday.getUTCDate()).padStart(2, '0');
+                cycle = "12";
+            }
+            const timeStr = `${utcYear}${utcMonth}${targetDate}${cycle}`;
+            return `https://www.smca.fun/assets/image/NWP/ECMWF/Six_Elem/${timeStr}/1795565_${timeStr}.png`;
+        }
+
+        function updateECForecastImage() {
+            const imgElement = document.getElementById('ec-forecast-img');
+            const linkElement = document.getElementById('ec-link'); // 👈 获取链接元素
+            
+            const primaryUrl = generateECUrl(0);
+            const fallbackUrl = generateECUrl(12);
+
+            // 1. 更新导航栏链接 (点击直接看大图)
+            if (linkElement) {
+                linkElement.href = primaryUrl;
+            }
+
+            // 2. 如果页面上有预览图，更新预览图
+            if (imgElement) {
+                imgElement.src = primaryUrl;
+                imgElement.onerror = function() {
+                    if (this.src !== fallbackUrl) {
+                        this.src = fallbackUrl;
+                        if (linkElement) linkElement.href = fallbackUrl; // 👈 链接也同步回退
+                    } else {
+                        this.alt = "预报图加载失败";
+                        this.onerror = null;
+                    }
+                };
+            }
+        }
+
         function render() {
             document.body.style.backgroundImage = `url('${MANUAL_CONFIG.bg}')`;
             document.getElementById('ui-icon').src = MANUAL_CONFIG.icon;
@@ -356,6 +402,9 @@
             document.getElementById('r_1h').innerText = LIVE_DATA.r_1h;
             document.getElementById('p').innerText = LIVE_DATA.p;
             document.getElementById('ltime').innerText = "UPDATE: " + LIVE_DATA.time;
+            
+            // 执行图片更新
+            updateECForecastImage();
         }
         window.onload = render;
     </script>
