@@ -123,7 +123,7 @@
             .nav-logo { width: 35px; height: 35px; margin-right: 8px; }
             .nav-item { font-size: 12px; padding: 6px 8px; }
             .nav-menus { 
-                overflow: visible !important; /* 确保下拉菜单可以溢出显示 */
+                overflow: visible !important; 
             }
             .nav-group { gap: 8px; white-space: nowrap; }
 
@@ -144,24 +144,179 @@
             .speech-bubble { 
                 left: auto;
                 right: 30px;
-                bottom: 220px; /* 手机端位置 */
+                bottom: 220px; 
                 font-size: 13px; max-width: 150px; 
             }
             
             .speech-bubble::after {
-                left: auto;    /* 👈 取消左侧定位 */
-                right: 30px;   /* 👈 让小尾巴指向右侧的 Ao 酱 */
+                left: auto;    
+                right: 30px;   
             }
         }
 
-        /* /* 手机横屏额外适配 */
-        @media (max-height: 500px) and (orientation: landscape) {
-            .weather-mega-card { transform: scale(0.85); transform-origin: top center; }
-            .speech-bubble { bottom: 180px; left: 50px; }
-        } */
+        /* --- ✨ 巨型预警模块样式 (左右 1:1 分割) ✨ --- */
+        .alert-overlay {
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            display: none; 
+            justify-content: center; align-items: center;
+            z-index: 30000; 
+            padding: 40px; box-sizing: border-box;
+        }
+
+        .alert-modal {
+            background: rgba(35, 35, 35, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 40px;
+            width: 90%; 
+            max-width: 1100px; /* 👈 显著放大最大宽度 */
+            /* height: 70vh; remove fixed height to allow button at bottom */
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 40px 90px rgba(0,0,0,0.8);
+            animation: modal-in 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        @keyframes modal-in {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* 预警头部 (标题) */
+        .alert-header {
+            padding: 25px 40px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .alert-modal h2 {
+            margin: 0; 
+            font-size: 32px; /* 👈 放大标题 */
+            color: var(--temp-red); 
+            letter-spacing: 2px;
+            font-weight: 800;
+        }
+
+        /* 预警核心内容区 (左右分割) */
+        .alert-main-body {
+            display: flex;
+            flex: 1;
+            overflow: hidden; /* 防止内部溢出 */
+        }
+
+        /* 👈 左侧图片：占据一半空间 */
+        .alert-image-side {
+            flex: 0 0 50%; /* 👈 核心修改：精准占据 50% */
+            width: 50%;
+            background-color: rgba(0,0,0,0.2);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .alert-image-side img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 👈 填满空间，根据需要可改为 contain */
+            display: block;
+        }
+
+        /* 👉 右侧文字：占据剩余空间 */
+        .alert-text-side {
+            flex: 1;
+            padding: 50px; /* 👈 放大内边距 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* 文字垂直居中 */
+            background: rgba(255,255,255,0.02);
+        }
+
+        .alert-text-side p {
+            margin: 0;
+            font-size: 22px; /* 👈 显著放大正文字体 */
+            line-height: 1.8;
+            opacity: 0.95;
+            color: rgba(255,255,255,0.9);
+        }
+
+        /* 底部按钮区 */
+        .alert-footer {
+            padding: 25px 50px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            flex-shrink: 0;
+        }
+        .alert-close-btn {
+            width: 100%; 
+            padding: 20px; /* 👈 放大按钮 */
+            border-radius: 20px;
+            border: none; 
+            background: var(--rain-blue); 
+            color: white;
+            font-size: 20px; /* 👈 放大按钮字体 */
+            font-weight: bold; 
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(64, 123, 226, 0.3);
+        }
+        .alert-close-btn:hover { 
+            background: #356ac2; 
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(64, 123, 226, 0.4);
+        }
+
+        /* ✨ 巨型预警手机端适配 ✨ */
+        @media (max-width: 768px) {
+            .alert-overlay { padding: 20px; }
+            .alert-modal { width: 100%; max-width: none; border-radius: 30px; }
+            
+            .alert-header { padding: 15px 20px; }
+            .alert-modal h2 { font-size: 22px; }
+
+            /* 手机端改为上下布局 */
+            .alert-main-body { flex-direction: column; overflow-y: auto; }
+            
+            /* 图片在手机端占据 40% 高度 */
+            .alert-image-side { 
+                flex: 0 0 40vh; 
+                width: 100%;
+            }
+            
+            .alert-text-side { 
+                padding: 30px 25px; 
+            }
+            .alert-text-side p { font-size: 17px; }
+            
+            .alert-footer { padding: 15px 25px; }
+            .alert-close-btn { padding: 15px; font-size: 17px; border-radius: 15px; }
+        }
     </style>
 </head>
 <body>
+    <div id="alert-overlay" class="alert-overlay">
+        <div class="alert-modal">
+            <div class="alert-header">
+                <h2 id="alert-title">-- 预警标题 --</h2>
+            </div>
+            
+            <div class="alert-main-body">
+                <div class="alert-image-side">
+                    <img id="alert-img" src="" alt="预警雷达图">
+                </div>
+                
+                <div class="alert-text-side">
+                    <p id="alert-msg">-- 预警详细内容 --</p>
+                </div>
+            </div>
+
+            <div class="alert-footer">
+                <button class="alert-close-btn" onclick="closeAlert()">我知道了 (点击关闭)</button>
+            </div>
+        </div>
+    </div>
 
     <nav class="nav-bar">
         <div class="nav-logo">
@@ -195,13 +350,7 @@
                         <a href="https://weather.sz.gov.cn/" target="_blank">深圳气象台</a>
                     </div>
                 </li>
-                <li><a href="https://raw.githubusercontent.com/06E-Felicia/06E-Felicia.github.io/refs/heads/main/%E7%96%AF%E7%8B%82%E6%98%9F%E6%9C%9F%E5%9B%9BV%E6%88%9150.jpg" class="nav-item" target="_blank");">支持我们</a></li>
-                <!-- <li class="dropdown">
-                    <a href="#" class="nav-item">支持我们</a>
-                    <div class="dropdown-menu" style="left: auto; right: 0;">
-                        <a href="https://raw.githubusercontent.com/06E-Felicia/06E-Felicia.github.io/refs/heads/main/%E7%96%AF%E7%8B%82%E6%98%9F%E6%9C%9F%E5%9B%9BV%E6%88%9150.jpg" target="_blank">用爱发电</a>
-                    </div>
-                </li> -->
+                <li><a href="https://raw.githubusercontent.com/06E-Felicia/06E-Felicia.github.io/refs/heads/main/%E7%96%AF%E7%8B%82%E6%98%9F%E6%9C%9F%E5%9B%9BV%E6%88%9150.jpg" class="nav-item" target="_blank">支持我们</a></li>
             </ul>
         </div>
     </nav>
@@ -253,7 +402,6 @@
             "再戳就为您自动下载原神",   
             "你为啥跟我直接表白啊？！嘎啦game里不是这样！", 
             "我不接受！！！",
-            
             "所以说，不要停下来啊", 
             "明明是我先来的",    
             "不，不行，还不能笑，我要忍住",   
@@ -265,7 +413,7 @@
             "人被杀了就会死",  
             "我不明白！我就是不明白！",
             "你去了祭典吧，和我不认识的女生一起",  
-            "听好了：1月25日，世界模式就此陷落。每个陷落的章节都将迎来一场漩涡，为这些旋律带来全新的Beyond难度。你所熟知的一切都将改变，你所熟悉的歌曲都将加诸Beyond的历练。至此，一锤定音。尘埃，已然落定。",
+            "听好了：1月25日，世界模式就此陷落。每个陷落的章节都将迎来一场漩涡，为这些旋律带来全新的Beyond难度。",
             "你说得对，但是原神是一款由米哈游自主研发的开放世界冒险游戏", 
             "所以，我不做人了，JOJO！", 
             "大家，并没有那么脆弱，不是吗",
@@ -300,47 +448,19 @@
             }, 3000); 
         }
 
-        // const dialogs = [
-            // "所以说，不要停下来啊", 
-            // "你为啥跟我直接表白啊？！嘎啦game里不是这样！",    
-            // "不，不行，还不能笑，我要忍住",   
-            // "为什么你这么熟练啊！",     
-            // "原神，启动！",   
-            // "为什么，会变成这样呢",    
-            // "你白银觉得是我的锅，那就是我的锅",   
-            // "↑↑ ↑↑↑, ↓ ↓ ↓↓↓",  
-            // "人被杀了就会死",  
-            // "我不明白！我就是不明白！",
-            // "你去了祭典吧，和我不认识的女生一起",  
-            // "听好了：1月25日，世界模式就此陷落。每个陷落的章节都将迎来一场漩涡，为这些旋律带来全新的Beyond难度。你所熟知的一切都将改变，你所熟悉的歌曲都将加诸Beyond的历练。至此，一锤定音。尘埃，已然落定。",
-            // "战至最后一刻，自刎归天！"
-        // ];
-        
-        // let dialogTimer = null;
-
-        // function showRandomDialog() {
-        //     const bubble = document.getElementById('dialog-bubble');
-            
-        //     // 纯随机逻辑：从数组中随机抽取一个索引
-        //     const randomIdx = Math.floor(Math.random() * dialogs.length);
-        //     const targetText = dialogs[randomIdx];
-
-        //     bubble.innerText = targetText;
-        //     bubble.classList.add('active');
-
-        //     // 自动隐藏逻辑
-        //     if (dialogTimer) clearTimeout(dialogTimer);
-        //     dialogTimer = setTimeout(() => {
-        //         bubble.classList.remove('active');
-        //         dialogTimer = null;
-        //     }, 3000); 
-        // }
-
         const LIVE_DATA = {"t": "28.4℃", "time": "2026-03-27 13:18", "th": "28.9℃", "tl": "21.7℃", "r_day": "0mm", "r_1h": "0mm", "p": "1010.4hPa"};
         const MANUAL_CONFIG = {
             low: "22°C", high: "29°C", humidity: "舒适", rainProb: "0mm", wind: "3级", dir: "南风", 
             icon: "https://raw.githubusercontent.com/06E-Felicia/06E-Felicia.github.io/main/02.png", 
             bg: "https://raw.githubusercontent.com/06E-Felicia/06E-Felicia.github.io/main/1.jpg" 
+        };
+
+        const ALERT_CONFIG = {
+            enabled: true, 
+            title: "Storm Watch",
+            // 👈 图片链接已保留，测试时请确保文件存在或替换为网络链接
+            image: "https://github.com/06E-Felicia/06E-Felicia.github.io/blob/main/%E9%A2%84%E8%AD%A6%E6%B5%8B%E8%AF%95.png", 
+            message: "【深中气象】珠西及粤西切变线激发列车回波东移，预计未来2-3小时内我校可能出现强雷雨天气。"
         };
 
         function generateECUrl(offsetHours = 0) {
@@ -363,30 +483,25 @@
         }
 
         function updateECForecastImage() {
-            const imgElement = document.getElementById('ec-forecast-img');
-            const linkElement = document.getElementById('ec-link'); // 👈 获取链接元素
-            
+            const linkElement = document.getElementById('ec-link'); 
             const primaryUrl = generateECUrl(0);
-            const fallbackUrl = generateECUrl(12);
+            if (linkElement) linkElement.href = primaryUrl;
+        }
 
-            // 1. 更新导航栏链接 (点击直接看大图)
-            if (linkElement) {
-                linkElement.href = primaryUrl;
+        function checkAndShowAlert() {
+            const overlay = document.getElementById('alert-overlay');
+            if (!ALERT_CONFIG.enabled || !ALERT_CONFIG.title || !ALERT_CONFIG.message) {
+                overlay.style.display = 'none';
+                return;
             }
+            document.getElementById('alert-title').innerText = ALERT_CONFIG.title;
+            document.getElementById('alert-img').src = ALERT_CONFIG.image;
+            document.getElementById('alert-msg').innerText = ALERT_CONFIG.message;
+            overlay.style.display = 'flex';
+        }
 
-            // 2. 如果页面上有预览图，更新预览图
-            if (imgElement) {
-                imgElement.src = primaryUrl;
-                imgElement.onerror = function() {
-                    if (this.src !== fallbackUrl) {
-                        this.src = fallbackUrl;
-                        if (linkElement) linkElement.href = fallbackUrl; // 👈 链接也同步回退
-                    } else {
-                        this.alt = "预报图加载失败";
-                        this.onerror = null;
-                    }
-                };
-            }
+        function closeAlert() {
+            document.getElementById('alert-overlay').style.display = 'none';
         }
 
         function render() {
@@ -404,8 +519,8 @@
             document.getElementById('p').innerText = LIVE_DATA.p;
             document.getElementById('ltime').innerText = "UPDATE: " + LIVE_DATA.time;
             
-            // 执行图片更新
             updateECForecastImage();
+            checkAndShowAlert();
         }
         window.onload = render;
     </script>
