@@ -465,21 +465,30 @@
         };
 
         function generateECUrl(offsetHours = 0) {
-            const now = new Date(new Date().getTime() - offsetHours * 60 * 60 * 1000);
-            const utcYear = now.getUTCFullYear();
-            const utcMonth = String(now.getUTCMonth() + 1).padStart(2, '0');
-            const utcDate = String(now.getUTCDate()).padStart(2, '0');
-            const utcHours = now.getUTCHours();
-            let cycle = "00", targetDate = utcDate;
-
-            if (utcHours >= 20) { cycle = "12"; } 
-            else if (utcHours >= 8) { cycle = "00"; } 
-            else {
-                const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-                targetDate = String(yesterday.getUTCDate()).padStart(2, '0');
+            // 1. 获取基础时间（减去偏移量）
+            let now = new Date(new Date().getTime() - offsetHours * 60 * 60 * 1000);
+            
+            let utcHours = now.getUTCHours();
+            let cycle = "00";
+            let targetDate = new Date(now); // 创建一个副本用于调整
+        
+            // 2. 判断逻辑优化
+            if (utcHours >= 20) {
+                cycle = "12";
+            } else if (utcHours >= 8) {
+                cycle = "00";
+            } else {
+                // 关键点：直接通过 Date 对象减去一天，它会自动处理月份和年份的跨度
+                targetDate.setUTCDate(targetDate.getUTCDate() - 1);
                 cycle = "12";
             }
-            const timeStr = `${utcYear}${utcMonth}${targetDate}${cycle}`;
+    
+            // 3. 从最终确定的 Date 对象中提取格式化字符串
+            const utcYear = targetDate.getUTCFullYear();
+            const utcMonth = String(targetDate.getUTCMonth() + 1).padStart(2, '0');
+            const utcDay = String(targetDate.getUTCDate()).padStart(2, '0');
+        
+            const timeStr = `${utcYear}${utcMonth}${utcDay}${cycle}`;
             return `https://www.smca.fun/assets/image/NWP/ECMWF/Six_Elem/${timeStr}/1795565_${timeStr}.png`;
         }
 
