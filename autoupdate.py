@@ -1,7 +1,4 @@
-import time
 import json
-import re
-import os
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -10,68 +7,98 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
-# 修改为仓库内的相对路径
-HTML_FILE = "index.html" 
-URL = "https://smca.fun/#/"
+from updater_common import load_config, log_error, save_config
 
-def fetch_smca():
+
+def get_runtime_settings(config):
+    auto_cfg = config.get("AUTOUPDATE_CONFIG", {})
+    return {
+        "source_url": auto_cfg.get("source_url", "https://smca.fun/#/"),
+        "wait_timeout": int(auto_cfg.get("wait_timeout", 15)),
+        "targets": auto_cfg.get("targets", {}),
+        "time_prefix": auto_cfg.get("time_prefix", "数据时间: "),
+        "chrome_args": auto_cfg.get("chrome_args", []),
+        "wait_class_name": auto_cfg.get("wait_class_name", "stat-number"),
+        "item_class_name": auto_cfg.get("item_class_name", "stat-item"),
+        "label_class_name": auto_cfg.get("label_class_name", "stat-label"),
+        "value_class_name": auto_cfg.get("value_class_name", "stat-number"),
+        "desc_class_name": auto_cfg.get("desc_class_name", "stat-description"),
+    }
+
+
+def fetch_smca(config, settings):
     print("📡 正在获取实况数据...")
     opt = Options()
-    opt.add_argument("--headless")
-    opt.add_argument("--no-sandbox")
-    opt.add_argument("--disable-dev-shm-usage")
+    for arg in settings["chrome_args"]:
+        opt.add_argument(arg)
     
     # GitHub Actions 环境建议写法
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=opt)
     
     try:
-        driver.get(URL)
-        wait = WebDriverWait(driver, 15) # 增加等待时间提高稳定性
-        wait.until(EC.presence_of_element_located((By.CLASS_NAME, "stat-number")))
+        driver.get(settings["source_url"])
+        wait = WebDriverWait(driver, settings["wait_timeout"])
+        wait.until(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, settings["wait_class_name"])
+            )
+        )
         
-        targets = {"分钟气温": "t", "最高气温": "th", "最低气温": "tl", "日雨量": "r_day", "1h滑动雨量": "r_1h", "海平面气压": "p"}
+        targets = settings["targets"]
         res = {}
         
         # 获取所有数据项
-        items = driver.find_elements(By.CLASS_NAME, "stat-item")
+        items = driver.find_elements(By.CLASS_NAME, settings["item_class_name"])
         for i in items:
             try:
-                lbl = i.find_element(By.CLASS_NAME, "stat-label").text.strip()
-                val = i.find_element(By.CLASS_NAME, "stat-number").text.strip()
+                lbl = i.find_element(By.CLASS_NAME, settings["label_class_name"]).text.strip()
+                val = i.find_element(By.CLASS_NAME, settings["value_class_name"]).text.strip()
                 if lbl in targets:
                     res[targets[lbl]] = val
                 if "time" not in res:
-                    desc = i.find_element(By.CLASS_NAME, "stat-description").text
-                    res["time"] = desc.replace("数据时间: ", "").strip()
-            except:
+                    desc = i.find_element(By.CLASS_NAME, settings["desc_class_name"]).text
+                    res["time"] = desc.replace(settings["time_prefix"], "").strip()
+            except Exception:
                 continue
+
+        if not res:
+            log_error(
+                config,
+                "autoupdate.fetch_smca",
+                "No live data extracted from page",
+                driver.page_source[:1000],
+            )
         return res
     except Exception as e:
         print(f"❌ 抓取错误: {e}")
+        page_snapshot = ""
+        try:
+            page_snapshot = driver.page_source[:1000]
+        except Exception:
+            pass
+        log_error(config, "autoupdate.fetch_smca", str(e), page_snapshot)
         return None
     finally:
         driver.quit()
 
-def update_html(data):
+def update_config(data):
     if not data: 
         print("⚠️ 未获取到有效数据，停止更新。")
         return
-    
-    if not os.path.exists(HTML_FILE):
-        print(f"❌ 未找到文件: {HTML_FILE}")
-        return
 
-    with open(HTML_FILE, "r", encoding="utf-8") as f:
-        content = f.read()
-    
-    # 替换 JS 中的 LIVE_DATA 变量
-    new_json = json.dumps(data, ensure_ascii=False)
-    content = re.sub(r'const LIVE_DATA = \{.*?\};', f'const LIVE_DATA = {new_json};', content)
-    
-    with open(HTML_FILE, "w", encoding="utf-8") as f:
-        f.write(content)
-    print(f"✅ 数据同步成功: {new_json}")
+    config = load_config()
+    config["LIVE_DATA"] = data
+    save_config(config)
+    print(f"✅ LIVE_DATA 更新成功: {json.dumps(data, ensure_ascii=False)}")
 
 if __name__ == "__main__":
-    data = fetch_smca()
-    update_html(data)
+    try:
+        app_config = load_config()
+    except Exception as e:
+        print(f"❌ 读取配置失败: {e}")
+        log_error(None, "autoupdate.load_config", str(e))
+        raise SystemExit(1)
+
+    runtime_settings = get_runtime_settings(app_config)
+    data = fetch_smca(app_config, runtime_settings)
+    update_config(data)

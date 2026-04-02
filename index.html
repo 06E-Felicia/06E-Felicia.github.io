@@ -1,346 +1,28 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>深中气象</title>
-    <style>
-        :root {
-            --glass-bg: rgba(255, 255, 255, 0.1); 
-            --glass-border: rgba(255, 255, 255, 0.15);
-            --temp-red: #ff5f5f;
-            --temp-blue: #5fbfff;
-            --rain-blue: #407be2;
-            --live-green: #2ecc71;
-            --nav-height: 70px;
-        }
-
-        /* --- 基础样式 --- */
-        body {
-            margin: 0; padding: 0;
-            font-family: 'PingFang SC', 'SF Pro Display', sans-serif;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background: #222 no-repeat center/cover;
-            background-attachment: fixed;
-            overflow: hidden;
-        }
-
-        /* --- 导航栏 --- */
-        .nav-bar {
-            width: 100%; height: var(--nav-height);
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            border-bottom: 1px solid var(--glass-border);
-            display: flex; align-items: center;
-            padding: 0 30px; box-sizing: border-box; z-index: 10002;
-        }
-        .nav-logo {
-            height: 50px; width: 50px; margin-right: 25px;
-            border-radius: 50%; overflow: hidden;
-            border: 2px solid rgba(255,255,255,0.3);
-            display: flex; justify-content: center; align-items: center;
-            background: rgba(255,255,255,0.05);
-        }
-        .nav-logo img { width: 100%; height: 100%; object-fit: cover; }
-        .nav-menus { display: flex; flex: 1; justify-content: space-between; align-items: center; }
-        .nav-group { display: flex; gap: 12px; list-style: none; margin: 0; padding: 0; }
-        .nav-item {
-            color: white; text-decoration: none; font-size: 14px; font-weight: 500; opacity: 0.7;
-            padding: 8px 14px; border-radius: 8px; transition: all 0.2s ease;
-        }
-        .nav-item:hover { opacity: 1; background: rgba(255, 255, 255, 0.1); }
-        .dropdown { position: relative; }
-        .dropdown-menu {
-            position: absolute; top: 100%; left: 0;
-            background: rgba(25, 25, 25, 0.96); backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border); border-radius: 12px; min-width: 190px;
-            padding: 10px 0; display: none; box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-            z-index: 10003;
-        }
-        .dropdown:hover .dropdown-menu { display: block; }
-        .dropdown-menu a { display: block; color: rgba(255,255,255,0.8); text-decoration: none; padding: 10px 20px; font-size: 13px; }
-        /* 1. 头像容器定位 */
-        .nav-logo-wrapper { position: relative; display: flex; align-items: center; }
-
-        /* 2. 专门为头像定制的透明玻璃感下拉菜单 */
-        .nav-logo-wrapper .dropdown-menu.active { 
-            display: block; 
-            min-width: 220px; 
-            padding: 12px 0;
-            top: 115%; 
-            left: 0;
-            /* 核心修改：改为透明模糊背景 */
-            background: rgba(20, 20, 20, 0.6); 
-            backdrop-filter: blur(25px); 
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
-        }
-
-        /* 3. 调整菜单项文字颜色与整体契合 */
-        .nav-logo-wrapper .dropdown-menu a {
-            padding: 14px 22px;
-            font-size: 15px;
-            color: rgba(255, 255, 255, 0.85); /* 柔和的白色 */
-            font-weight: 500;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all 0.3s ease;
-        }
-
-        .nav-logo-wrapper .dropdown-menu a:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            padding-left: 28px; /* 增加一个悬停小动画 */
-        }
-
-        .nav-logo-wrapper .dropdown-menu a:last-child { border-bottom: none; }
-        /* --- 对话框 & 悬浮图 (默认电脑端) --- */
-        .speech-bubble {
-            position: fixed;
-            bottom: 410px; /* 电脑端位置 */
-            left: 85px;   /* 电脑端位置 */
-            background: rgba(255, 255, 255, 0.95);
-            color: #333; padding: 12px 20px; border-radius: 20px;
-            font-size: 15px; font-weight: 600; max-width: 200px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 10001;
-            opacity: 0; transform: translateY(20px);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none;
-        }
-        .speech-bubble::after {
-            content: ''; position: absolute; bottom: -8px; left: 30px;
-            border-width: 8px 8px 0; border-style: solid;
-            border-color: rgba(255, 255, 255, 0.95) transparent transparent;
-        }
-        .speech-bubble.active { opacity: 1; transform: translateY(0); }
-
-        .floating-display {
-            position: fixed; bottom: 20px; left: 20px; width: 250px; height: auto;
-            z-index: 9999; cursor: pointer; transition: transform 0.3s ease;
-            animation: float-micro 5s ease-in-out infinite;
-        }
-        .floating-display img { width: 100%; height: auto; display: block; }
-        @keyframes float-micro { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-
-        /* --- 主看板 (电脑端布局) --- */
-        .main-content { flex: 1; display: flex; justify-content: center; align-items: center; }
-        .weather-mega-card {
-            background: var(--glass-bg); backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px);
-            border: 1px solid var(--glass-border); border-radius: 60px;
-            display: flex; box-shadow: 0 25px 60px rgba(0,0,0,0.4); color: white;
-        }
-        .section { padding: 50px 50px; display: flex; flex-direction: column; justify-content: center; }
-        .forecast-side { border-right: 1px solid rgba(255, 255, 255, 0.1); width: 400px; align-items: center; }
-        .weather-icon { width: 150px; height: 150px; margin-bottom: 5px; }
-        .temp-row { font-size: 70px; font-weight: 800; display: flex; gap: 15px; margin-bottom: 35px; }
-        .live-side { width: 200px; background: rgba(255, 255, 255, 0.04); padding: 50px 40px; }
-        .live-header { color: var(--live-green); display: flex; align-items: center; gap: 10px; margin-bottom: 35px; }
-        .live-title { font-size: 18px; font-weight: bold; }
-        .live-dot { width: 8px; height: 8px; background: var(--live-green); border-radius: 50%; box-shadow: 0 0 12px var(--live-green); animation: pulse 2s infinite; }
-        
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; }
-        .forecast-side .info-grid .item { align-items: center; text-align: center; border-left: none; padding-left: 0; }
-        .live-grid { grid-template-columns: 1fr; gap: 22px; }
-        .item { display: flex; flex-direction: column; border-left: 3px solid rgba(255,255,255,0.15); padding-left: 18px; }
-        .label { font-size: 15px; opacity: 0.5; margin-bottom: 6px; }
-        .val { font-size: 30px; font-weight: 700; }
-        .rain-val { color: var(--rain-blue); }
-        .update-time { font-size: 10px; opacity: 0.3; margin-top: 40px; font-family: monospace; }
-        /* ============================================================
-           📱 响应式适配 (手机端：应用你要求的第二套代码布局)
-           ============================================================ */
-        @media (max-width: 768px) {
-            body { overflow-y: auto; height: auto; min-height: 100vh; overflow-x: hidden; }
-            .nav-bar { padding: 0 15px; height: 60px; }
-            .nav-logo { width: 35px; height: 35px; margin-right: 8px; }
-            .nav-item { font-size: 12px; padding: 6px 8px; }
-            .nav-menus { 
-                overflow: visible !important; 
-            }
-            .nav-group { gap: 8px; white-space: nowrap; }
-
-            .main-content { align-items: flex-start; padding: 15px; padding-bottom: 100px; }
-            .weather-mega-card { flex-direction: column; border-radius: 30px; width: 100%; max-width: none; }
-            
-            .section { padding: 30px 20px; }
-            .forecast-side { border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.1); width: auto; flex: none; }
-            .live-side { width: auto; flex: none; }
-            
-            .temp-row { font-size: 45px; margin-bottom: 20px; }
-            .weather-icon { width: 100px; height: 100px; }
-            .val { font-size: 20px; }
-            .info-grid { gap: 15px; }
-
-            /* 手机端对话框 & 悬浮图位置 */
-            .floating-display { width: 130px; bottom: 10px; left: auto; right: 10px;}
-            .speech-bubble { 
-                left: auto;
-                right: 30px;
-                bottom: 220px; 
-                font-size: 13px; max-width: 150px; 
-            }
-            
-            .speech-bubble::after {
-                left: auto;    
-                right: 30px;   
-            }
-        }
-
-        /* --- ✨ 巨型预警模块样式 (左右 1:1 分割) ✨ --- */
-        .alert-overlay {
-            position: fixed; 
-            top: 0; left: 0; 
-            width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            display: none; 
-            justify-content: center; align-items: center;
-            z-index: 30000; 
-            padding: 40px; box-sizing: border-box;
-        }
-
-        .alert-modal {
-            background: rgba(35, 35, 35, 0.95);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 40px;
-            width: 90%; 
-            max-width: 1100px; /* 👈 显著放大最大宽度 */
-            /* height: 70vh; remove fixed height to allow button at bottom */
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            box-shadow: 0 40px 90px rgba(0,0,0,0.8);
-            animation: modal-in 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
-        }
-
-        @keyframes modal-in {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        /* 预警头部 (标题) */
-        .alert-header {
-            padding: 25px 40px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            text-align: center;
-            flex-shrink: 0;
-        }
-        .alert-modal h2 {
-            margin: 0; 
-            font-size: 32px; /* 👈 放大标题 */
-            color: var(--temp-red); 
-            letter-spacing: 2px;
-            font-weight: 800;
-        }
-
-        /* 预警核心内容区 (左右分割) */
-        .alert-main-body {
-            display: flex;
-            flex: 1;
-            overflow: hidden; /* 防止内部溢出 */
-        }
-
-        /* 👈 左侧图片：占据一半空间 */
-        .alert-image-side {
-            flex: 0 0 50%; /* 👈 核心修改：精准占据 50% */
-            width: 50%;
-            background-color: rgba(0,0,0,0.2);
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .alert-image-side img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* 👈 填满空间，根据需要可改为 contain */
-            display: block;
-        }
-
-        /* 👉 右侧文字：占据剩余空间 */
-        .alert-text-side {
-            flex: 1;
-            padding: 50px; /* 👈 放大内边距 */
-            display: flex;
-            flex-direction: column;
-            justify-content: center; /* 文字垂直居中 */
-            background: rgba(255,255,255,0.02);
-        }
-
-        .alert-text-side p {
-            margin: 0;
-            font-size: 22px; /* 👈 显著放大正文字体 */
-            line-height: 1.8;
-            opacity: 0.95;
-            color: rgba(255,255,255,0.9);
-        }
-
-        /* 底部按钮区 */
-        .alert-footer {
-            padding: 25px 50px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            flex-shrink: 0;
-        }
-        .alert-close-btn {
-            width: 100%; 
-            padding: 20px; /* 👈 放大按钮 */
-            border-radius: 20px;
-            border: none; 
-            background: var(--rain-blue); 
-            color: white;
-            font-size: 20px; /* 👈 放大按钮字体 */
-            font-weight: bold; 
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(64, 123, 226, 0.3);
-        }
-        .alert-close-btn:hover { 
-            background: #356ac2; 
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(64, 123, 226, 0.4);
-        }
-
-        /* ✨ 巨型预警手机端适配 ✨ */
-        @media (max-width: 768px) {
-            .alert-overlay { padding: 20px; }
-            .alert-modal { width: 100%; max-width: none; border-radius: 30px; }
-            
-            .alert-header { padding: 15px 20px; }
-            .alert-modal h2 { font-size: 22px; }
-
-            /* 手机端改为上下布局 */
-            .alert-main-body { flex-direction: column; overflow-y: auto; }
-            
-            /* 图片在手机端占据 40% 高度 */
-            .alert-image-side { 
-                flex: 0 0 40vh; 
-                width: 100%;
-            }
-            
-            .alert-text-side { 
-                padding: 30px 25px; 
-            }
-            .alert-text-side p { font-size: 17px; }
-            
-            .alert-footer { padding: 15px 25px; }
-            .alert-close-btn { padding: 15px; font-size: 17px; border-radius: 15px; }
-        }
-    </style>
+    <link rel="stylesheet" href="assets/styles/style.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <meta name="description" content="深中气象 - 提供深圳市最新天气实况、预报和预警信息，助您做好出行和生活安排。">
+    <meta name="keywords" content="深中气象, 深圳天气, 天气预报, 天气实况, 天气预警, 台风预报, 卫星云图, 气象信息">
 </head>
+
 <body>
     <div id="alert-overlay" class="alert-overlay">
         <div class="alert-modal">
             <div class="alert-header">
                 <h2 id="alert-title">-- 预警标题 --</h2>
             </div>
-            
+
             <div class="alert-main-body">
                 <div class="alert-image-side">
                     <img id="alert-img" src="" alt="预警雷达图">
                 </div>
-                
+
                 <div class="alert-text-side">
                     <p id="alert-msg">-- 预警详细内容 --</p>
                 </div>
@@ -354,8 +36,8 @@
 
     <nav class="nav-bar">
         <div class="nav-logo-wrapper">
-            <div class="nav-logo" style="cursor: pointer; width: 55px; height: 55px;" onclick="toggleAvatarMenu(event)">
-                <img src="https://raw.githubusercontent.com/06E-Felicia/06E-Felicia.github.io/main/空门苍.jpg" alt="Logo">
+            <div class="nav-logo" onclick="toggleAvatarMenu(event)">
+                <img src="assets/images/profile_photo.jpg" alt="Avatar">
             </div>
             <div id="avatar-menu" class="dropdown-menu">
                 <a href="https://github.com/06E-Felicia" target="_blank">项目主页</a>
@@ -367,7 +49,7 @@
         </div>
         <div class="nav-menus">
             <ul class="nav-group">
-                <li><a href="index.html" class="nav-item" style="opacity: 1; background: rgba(255,255,255,0.12);">今日天气</a></li>
+                <li><a href="index.html" class="nav-item active">今日天气</a></li>
                 <li class="dropdown">
                     <a href="#" class="nav-item">预报</a>
                     <div class="dropdown-menu">
@@ -380,7 +62,8 @@
                     <div class="dropdown-menu">
                         <a href="https://www.nmc.cn/publish/radar/huanan.html" target="_blank">华南雷达</a>
                         <a href="https://www.dapiya.top/satellite/floater/" target="_blank">台风卫星云图</a>
-                        <a href="https://www.storm-chasers.cn/wp-content/uploads/satimgs/Composite_TVIS_FDLK.jpg" target="_blank">向日葵圆盘图</a>
+                        <a href="https://www.storm-chasers.cn/wp-content/uploads/satimgs/Composite_TVIS_FDLK.jpg"
+                            target="_blank">向日葵圆盘图</a>
                     </div>
                 </li>
             </ul>
@@ -393,7 +76,8 @@
                         <a href="https://weather.sz.gov.cn/" target="_blank">深圳气象台</a>
                     </div>
                 </li>
-                <li><a href="https://raw.githubusercontent.com/06E-Felicia/06E-Felicia.github.io/refs/heads/main/%E7%96%AF%E7%8B%82%E6%98%9F%E6%9C%9F%E5%9B%9BV%E6%88%9150.jpg" class="nav-item" target="_blank">支持我们</a></li>
+                <li><a href="assets/images/crazy_thursday.jpg"
+                        class="nav-item" target="_blank">支持我们</a></li>
             </ul>
         </div>
     </nav>
@@ -409,7 +93,8 @@
                 </div>
                 <div class="info-grid">
                     <div class="item"><span class="label">湿度</span><span id="ui-hum" class="val">--</span></div>
-                    <div class="item"><span class="label">降雨量</span><span id="ui-rain-pre" class="val rain-val">--</span></div>
+                    <div class="item"><span class="label">降雨量</span><span id="ui-rain-pre"
+                            class="val rain-val">--</span></div>
                     <div class="item"><span class="label">风力</span><span id="ui-wind" class="val">--</span></div>
                     <div class="item"><span class="label">风向</span><span id="ui-dir" class="val">--</span></div>
                 </div>
@@ -421,9 +106,12 @@
                 </div>
                 <div class="info-grid live-grid">
                     <div class="item"><span class="label">当前气温</span><span id="t" class="val">--</span></div>
-                    <div class="item"><span class="label">日雨量</span><span id="r_day" class="val rain-val">--</span></div>
-                    <div class="item"><span class="label">1h 滑动雨量</span><span id="r_1h" class="val rain-val">--</span></div>
-                    <div class="item"><span class="label">气压</span><span id="p" class="val" style="font-size: 18px;">--</span></div>
+                    <div class="item"><span class="label">日雨量</span><span id="r_day" class="val rain-val">--</span>
+                    </div>
+                    <div class="item"><span class="label">1h 滑动雨量</span><span id="r_1h" class="val rain-val">--</span>
+                    </div>
+                    <div class="item"><span class="label">气压</span><span id="p" class="val"
+                            style="font-size: 18px;">--</span></div>
                 </div>
                 <div id="ltime" class="update-time">UPDATE: --</div>
             </div>
@@ -433,162 +121,12 @@
     <div id="dialog-bubble" class="speech-bubble">内容加载中...</div>
 
     <div class="floating-display" onclick="showRandomDialog()">
-        <img src="https://raw.githubusercontent.com/06E-Felicia/06E-Felicia.github.io/main/鼠标.png" alt="Display">
+        <img src="assets/images/cursor.png" alt="Display">
     </div>
 
-    <script>
-        const dialogs = [
-            "瓦达西瓦Sorakado Ao酱~", 
-            "不可以随便戳我(生气)",    
-            "Hentai Hentai Hentai!",   
-            "我要去找主人告状了！",     
-            "再戳就为您自动下载原神",   
-            "你为啥跟我直接表白啊？！嘎啦game里不是这样！", 
-            "我不接受！！！",
-            "所以说，不要停下来啊", 
-            "明明是我先来的",    
-            "不，不行，还不能笑，我要忍住",   
-            "为什么你这么熟练啊！",     
-            "原神，启动！",   
-            "为什么，会变成这样呢",    
-            "你白银觉得是我的锅，那就是我的锅",   
-            "↑ ↑ ↑↑↑, ↓ ↓ ↓↓↓",  
-            "队友呢，救一下啊！",  
-            "我不明白！我就是不明白！",
-            "你去了祭典吧，和我不认识的女生一起",  
-            "听好了：1月25日，世界模式就此陷落。每个陷落的章节都将迎来一场漩涡，为这些旋律带来全新的Beyond难度。",
-            "你说得对，但是原神是一款由米哈游自主研发的开放世界冒险游戏", 
-            "所以，我不做人了，JOJO！", 
-            "大家，并没有那么脆弱，不是吗",
-            "双星很难吗？我rsk12.66",
-            "这么高的颜值，却这么「纯情」，也太犯规了吧！！",
-            "Never gonna give you up, never gonna let you down.",
-            "战至最后一刻，自刎归天！"
-        ];
+    <script src="assets/scripts/script.js"></script>
 
-        let dialogTimer = null;
-        let currentIndex = 0;       
-        let hasFinishedLoop = false; 
 
-        function showRandomDialog() {
-            const bubble = document.getElementById('dialog-bubble');
-            let targetText = "";
-
-            if (!hasFinishedLoop) {
-                targetText = dialogs[currentIndex];
-                currentIndex++;
-                if (currentIndex >= dialogs.length) hasFinishedLoop = true;
-            } else {
-                const randomIdx = Math.floor(Math.random() * (dialogs.length - 1)) + 1;
-                targetText = dialogs[randomIdx];
-            }
-
-            bubble.innerText = targetText;
-            bubble.classList.add('active');
-
-            if (dialogTimer) clearTimeout(dialogTimer);
-            dialogTimer = setTimeout(() => {
-                bubble.classList.remove('active');
-                dialogTimer = null;
-            }, 3000); 
-        }
-
-        const LIVE_DATA = {"t": "22.5℃", "time": "2026-04-02 22:04", "th": "22.7℃", "tl": "22.2℃", "r_day": "0mm", "r_1h": "0mm", "p": "1012.8hPa"};
-        const MANUAL_CONFIG = {
-            low: "22°C", high: "26°C", humidity: "舒适", rainProb: "9mm", wind: "3-4级", dir: "东南风", 
-            icon: "https://raw.githubusercontent.com/06E-Felicia/06E-Felicia.github.io/main/03.png", 
-            bg: "https://raw.githubusercontent.com/06E-Felicia/06E-Felicia.github.io/main/1.jpg" 
-        };
-
-        const ALERT_CONFIG = {
-            // enabled: true, 
-            enabled: false, 
-            title: "Typhoon Emergancy",
-            image: "https://raw.githubusercontent.com/06E-Felicia/06E-Felicia.github.io/refs/heads/main/%E9%A2%84%E8%AD%A6%E5%9B%BE.png", 
-            message: "【深中气象】超强台风“伊蕾娜”已于今天19时前后在深圳大鹏半岛登陆，登陆时中心附近最大风力68m/s(大于17级)，中心最低气压895hpa。目前，其中心位于盐田区近海，正在以20-25km/h速度向西北移动，强度逐渐减弱。目前，我校正处于其西北眼墙中，已出现17级以上阵风和大暴雨。深中气象提醒，“伊雷娜”已成为深圳历史上影响最严重的台风。风眼过境期间将出现静风，切勿外出。请同学们欢度愚人节！"
-        };
-
-        function generateECUrl(offsetHours = 0) {
-            // 1. 获取基础时间（减去偏移量）
-            let now = new Date(new Date().getTime() - offsetHours * 60 * 60 * 1000);
-            
-            let utcHours = now.getUTCHours();
-            let cycle = "00";
-            let targetDate = new Date(now); // 创建一个副本用于调整
-        
-            // 2. 判断逻辑优化
-            if (utcHours >= 20) {
-                cycle = "12";
-            } else if (utcHours >= 8) {
-                cycle = "00";
-            } else {
-                // 关键点：直接通过 Date 对象减去一天，它会自动处理月份和年份的跨度
-                targetDate.setUTCDate(targetDate.getUTCDate() - 1);
-                cycle = "12";
-            }
-    
-            // 3. 从最终确定的 Date 对象中提取格式化字符串
-            const utcYear = targetDate.getUTCFullYear();
-            const utcMonth = String(targetDate.getUTCMonth() + 1).padStart(2, '0');
-            const utcDay = String(targetDate.getUTCDate()).padStart(2, '0');
-        
-            const timeStr = `${utcYear}${utcMonth}${utcDay}${cycle}`;
-            return `https://www.smca.fun/assets/image/NWP/ECMWF/Six_Elem/${timeStr}/1795565_${timeStr}.png`;
-        }
-
-        function updateECForecastImage() {
-            const linkElement = document.getElementById('ec-link'); 
-            const primaryUrl = generateECUrl(0);
-            if (linkElement) linkElement.href = primaryUrl;
-        }
-
-        function checkAndShowAlert() {
-            const overlay = document.getElementById('alert-overlay');
-            if (!ALERT_CONFIG.enabled || !ALERT_CONFIG.title || !ALERT_CONFIG.message) {
-                overlay.style.display = 'none';
-                return;
-            }
-            document.getElementById('alert-title').innerText = ALERT_CONFIG.title;
-            document.getElementById('alert-img').src = ALERT_CONFIG.image;
-            document.getElementById('alert-msg').innerText = ALERT_CONFIG.message;
-            overlay.style.display = 'flex';
-        }
-
-        function closeAlert() {
-            document.getElementById('alert-overlay').style.display = 'none';
-        }
-
-        function render() {
-            document.body.style.backgroundImage = `url('${MANUAL_CONFIG.bg}')`;
-            document.getElementById('ui-icon').src = MANUAL_CONFIG.icon;
-            document.getElementById('ui-low').innerText = MANUAL_CONFIG.low;
-            document.getElementById('ui-high').innerText = MANUAL_CONFIG.high;
-            document.getElementById('ui-hum').innerText = MANUAL_CONFIG.humidity;
-            document.getElementById('ui-rain-pre').innerText = MANUAL_CONFIG.rainProb;
-            document.getElementById('ui-wind').innerText = MANUAL_CONFIG.wind;
-            document.getElementById('ui-dir').innerText = MANUAL_CONFIG.dir;
-            document.getElementById('t').innerText = LIVE_DATA.t;
-            document.getElementById('r_day').innerText = LIVE_DATA.r_day;
-            document.getElementById('r_1h').innerText = LIVE_DATA.r_1h;
-            document.getElementById('p').innerText = LIVE_DATA.p;
-            document.getElementById('ltime').innerText = "UPDATE: " + LIVE_DATA.time;
-            
-            updateECForecastImage();
-            checkAndShowAlert();
-        }
-        window.onload = render;
-        // 切换头像菜单显示
-function toggleAvatarMenu(event) {
-    event.stopPropagation(); // 阻止冒泡
-    const menu = document.getElementById('avatar-menu');
-    menu.classList.toggle('active');
-}
-
-// 点击页面其他地方关闭菜单
-document.addEventListener('click', function() {
-    const menu = document.getElementById('avatar-menu');
-    if (menu) menu.classList.remove('active');
-});
-    </script>
 </body>
+
 </html>

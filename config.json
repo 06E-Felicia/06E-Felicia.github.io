@@ -1,0 +1,64 @@
+{
+    "LIVE_DATA": {
+        "t": "22.5℃",
+        "time": "2026-04-02 22:04",
+        "th": "22.7℃",
+        "tl": "22.2℃",
+        "r_day": "0mm",
+        "r_1h": "0mm",
+        "p": "1012.8hPa"
+    },
+    "MANUAL_CONFIG": {
+        "low": "22°C",
+        "high": "26°C",
+        "humidity": "舒适",
+        "rainProb": "9mm",
+        "wind": "3-4级",
+        "dir": "东南风",
+        "icon": "assets/images/weather_icons/03.png",
+        "bg": "assets/images/background.jpg"
+    },
+    "ALERT_CONFIG": {
+        "enabled": false,
+        "title": "Typhoon Emergency",
+        "image": "assets/images/warnings/warning.png",
+        "message": "【深中气象】超强台风“伊蕾娜”已于今天19时前后在深圳大鹏半岛登陆，登陆时中心附近最大风力68m/s(大于17级)，中心最低气压895hpa。目前，其中心位于盐田区近海，正在以20-25km/h速度向西北移动，强度逐渐减弱。目前，我校正处于其西北眼墙中，已出现17级以上阵风和大暴雨。深中气象提醒，“伊雷娜”已成为深圳历史上影响最严重的台风。风眼过境期间将出现静风，切勿外出。请同学们欢度愚人节！"
+    },
+    "WARNINGS": [],
+    "REFRESH_INTERVAL": 600,
+    "AUTOUPDATE_CONFIG": {
+        "source_url": "https://smca.fun/#/",
+        "wait_timeout": 15,
+        "time_prefix": "数据时间: ",
+        "wait_class_name": "stat-number",
+        "item_class_name": "stat-item",
+        "label_class_name": "stat-label",
+        "value_class_name": "stat-number",
+        "desc_class_name": "stat-description",
+        "chrome_args": [
+            "--headless",
+            "--no-sandbox",
+            "--disable-dev-shm-usage"
+        ],
+        "targets": {
+            "分钟气温": "t",
+            "最高气温": "th",
+            "最低气温": "tl",
+            "日雨量": "r_day",
+            "1h滑动雨量": "r_1h",
+            "海平面气压": "p"
+        }
+    },
+    "WARNING_CONFIG": {
+        "source_url": "https://weather.sz.gov.cn/qixiangfuwu/yujingfuwu/tufashijianyujing/index.html",
+        "city_selector_class": "tit fl tit_sz",
+        "request_timeout": 20,
+        "refresh_interval": 600,
+        "headers": {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+        }
+    },
+    "LOG_CONFIG": {
+        "error_log": "logs/err.log"
+    }
+}

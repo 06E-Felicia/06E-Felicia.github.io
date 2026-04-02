@@ -1,55 +1,77 @@
+import time
+
 import requests
 from bs4 import BeautifulSoup
-import time
-import json
-import re
 
-# 你的 HTML 文件路径
-HTML_FILE_PATH = "index.html" 
+from updater_common import load_config, log_error, save_config
 
-def fetch_sz_warnings():
-    url = "https://weather.sz.gov.cn/qixiangfuwu/yujingfuwu/tufashijianyujing/index.html"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+
+def get_warning_settings(config):
+    warning_cfg = config.get("WARNING_CONFIG", {})
+    return {
+        "source_url": warning_cfg.get(
+            "source_url",
+            "https://weather.sz.gov.cn/qixiangfuwu/yujingfuwu/tufashijianyujing/index.html",
+        ),
+        "headers": warning_cfg.get("headers"),
+        "city_selector_class": warning_cfg.get("city_selector_class", "tit fl tit_sz"),
+        "request_timeout": int(warning_cfg.get("request_timeout", 20)),
+        "refresh_interval": int(
+            warning_cfg.get("refresh_interval", config.get("REFRESH_INTERVAL", 600))
+        ),
     }
-    
+
+
+def fetch_sz_warnings(config, settings):
+    response = None
     try:
-        response = requests.get(url, headers=headers)
-        response.encoding = 'utf-8'
-        soup = BeautifulSoup(response.text, 'html.parser')
-        
-        # 定位深圳预警区域
+        response = requests.get(
+            settings["source_url"],
+            headers=settings["headers"],
+            timeout=settings["request_timeout"],
+        )
+        response.raise_for_status()
+        response.encoding = "utf-8"
+        soup = BeautifulSoup(response.text, "html.parser")
+
         warn_icons = []
-        sz_div = soup.find('div', class_='tit fl tit_sz')
+        sz_div = soup.find("div", class_=settings["city_selector_class"])
         if sz_div:
-            imgs = sz_div.find_all('img')
+            imgs = sz_div.find_all("img")
             for img in imgs:
-                src = img.get('src')
+                src = img.get("src")
                 if src:
                     warn_icons.append(src)
-        
+
         return warn_icons
     except Exception as e:
         print(f"爬取失败: {e}")
+        response_snapshot = ""
+        if response is not None and response.text:
+            response_snapshot = response.text[:1000]
+        log_error(config, "warning.fetch_sz_warnings", str(e), response_snapshot)
         return []
 
-def update_html():
-    warnings = fetch_sz_warnings()
-    
-    with open(HTML_FILE_PATH, 'r', encoding='utf-8') as f:
-        content = f.read()
 
-    # 使用正则替换 HTML 中的 WARNINGS 变量内容
-    # 匹配 const WARNINGS = [...];
-    new_data = f"const WARNINGS = {json.dumps(warnings)};"
-    content = re.sub(r'const WARNINGS = \[.*?\];', new_data, content)
+def update_config():
+    config = load_config()
+    settings = get_warning_settings(config)
+    warnings = fetch_sz_warnings(config, settings)
 
-    with open(HTML_FILE_PATH, 'w', encoding='utf-8') as f:
-        f.write(content)
-    
+    config["WARNINGS"] = warnings
+    config["REFRESH_INTERVAL"] = settings["refresh_interval"]
+    save_config(config)
+
     print(f"[{time.strftime('%H:%M:%S')}] 更新成功，当前预警数: {len(warnings)}")
+    return settings["refresh_interval"]
+
 
 if __name__ == "__main__":
     while True:
-        update_html()
-        time.sleep(600)  # 600秒 = 10分钟
+        try:
+            interval = update_config()
+        except Exception as e:
+            print(f"更新失败: {e}")
+            log_error(None, "warning.update_config", str(e))
+            interval = 600
+        time.sleep(interval)
