@@ -1,4 +1,4 @@
-name: 自动更新实况数据
+name: 自动更新天气数据
 
 on:
   schedule:
@@ -23,15 +23,24 @@ jobs:
 
       - name: 安装依赖
         run: |
-          pip install selenium webdriver-manager
+          pip install selenium webdriver-manager requests beautifulsoup4
 
-      - name: 执行更新脚本
-        run: python autoupdate.py
+      - name: 执行更新脚本（实况 + 预警）
+        run: |
+          python autoupdate.py || true
+          python -c "import warning; warning.update_config()" || true
 
       - name: 提交并推送到仓库
         run: |
           git config --global user.name "WeatherBot"
           git config --global user.email "bot@weather.com"
-          git add index.html
+          git add config.json
+          if [ -f logs/err.log ]; then
+            git add logs/err.log
+          fi
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
           git commit -m "Auto Update: $(date +'%Y-%m-%d %H:%M:%S')" || exit 0
           git push
