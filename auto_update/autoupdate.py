@@ -17,6 +17,12 @@ def _safe_int(value, default):
         return default
 
 
+def _safe_list(value, default):
+    if isinstance(value, list):
+        return value
+    return default
+
+
 def _safe_find_text(element, class_name):
     try:
         return element.find_element(By.CLASS_NAME, class_name).text.strip()
@@ -24,12 +30,13 @@ def _safe_find_text(element, class_name):
         return ""
 
 
-def _extract_live_data(items, settings, targets, max_items):
+def _extract_live_data(items, settings, targets, max_items=None):
     result = {}
     required_keys = set(targets.values())
+    remaining_keys = set(required_keys)
 
     for index, item in enumerate(items):
-        if index >= max_items:
+        if max_items is not None and index >= max_items:
             break
 
         label_text = _safe_find_text(item, settings["label_class_name"])
@@ -41,13 +48,14 @@ def _extract_live_data(items, settings, targets, max_items):
             value_text = _safe_find_text(item, settings["value_class_name"])
             if value_text:
                 result[target_key] = value_text
+                remaining_keys.discard(target_key)
 
         if "time" not in result:
             desc_text = _safe_find_text(item, settings["desc_class_name"])
             if desc_text:
                 result["time"] = desc_text.replace(settings["time_prefix"], "", 1).strip()
 
-        if "time" in result and required_keys.issubset(result.keys()):
+        if "time" in result and not remaining_keys:
             break
 
     return result
@@ -57,13 +65,13 @@ def get_runtime_settings(config):
     auto_cfg = config.get("AUTOUPDATE_CONFIG", {})
     return {
         "source_url": auto_cfg.get("source_url", "https://smca.fun/#/"),
-        "wait_timeout": _safe_int(auto_cfg.get("wait_timeout", 15), 15),
+        "wait_timeout": _safe_int(auto_cfg.get("wait_timeout", 120), 120),
         "page_load_timeout": _safe_int(auto_cfg.get("page_load_timeout", 30), 30),
         "script_timeout": _safe_int(auto_cfg.get("script_timeout", 30), 30),
         "max_items": _safe_int(auto_cfg.get("max_items", 200), 200),
         "targets": auto_cfg.get("targets", {}),
         "time_prefix": auto_cfg.get("time_prefix", "数据时间: "),
-        "chrome_args": auto_cfg.get("chrome_args", []),
+        "chrome_args": _safe_list(auto_cfg.get("chrome_args", []), []),
         "wait_class_name": auto_cfg.get("wait_class_name", "stat-number"),
         "item_class_name": auto_cfg.get("item_class_name", "stat-item"),
         "label_class_name": auto_cfg.get("label_class_name", "stat-label"),
@@ -75,6 +83,7 @@ def get_runtime_settings(config):
 def fetch_smca(config, settings):
     print("📡 正在获取实况数据...")
     opt = Options()
+    opt.page_load_strategy = "eager"
     for arg in settings["chrome_args"]:
         opt.add_argument(arg)
     
@@ -82,7 +91,6 @@ def fetch_smca(config, settings):
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=opt)
     
     try:
-        # Bound browser operations to prevent hang-like behavior.
         driver.set_page_load_timeout(settings["page_load_timeout"])
         driver.set_script_timeout(settings["script_timeout"])
 
@@ -125,6 +133,10 @@ def update_config(data):
         return
 
     config = load_config()
+    if config.get("LIVE_DATA") == data:
+        print("ℹ️ LIVE_DATA 无变化，跳过写入。")
+        return
+
     config["LIVE_DATA"] = data
     save_config(config)
     print(f"✅ LIVE_DATA 更新成功: {json.dumps(data, ensure_ascii=False)}")

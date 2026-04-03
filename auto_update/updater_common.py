@@ -3,8 +3,8 @@ import traceback
 from datetime import datetime
 from pathlib import Path
 
-CONFIG_FILE = Path("/config.json")
-DEFAULT_ERROR_LOG = "/logs/err.log"
+CONFIG_FILE = Path("config.json")
+DEFAULT_ERROR_LOG = "logs/err.log"
 
 
 def load_config():

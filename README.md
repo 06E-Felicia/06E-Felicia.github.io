@@ -101,12 +101,6 @@ python warning.py
 	- class selectors (`wait_class_name`, `item_class_name`, ...)
 	- `chrome_args`
 	- `targets` (mapping source labels to output keys)
-- `WARNING_CONFIG`
-	- `source_url`
-	- `city_selector_class`
-	- `request_timeout`
-	- `refresh_interval`
-	- `headers`
 - `REFRESH_INTERVAL`: fallback interval
 
 ### Logging

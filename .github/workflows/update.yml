@@ -13,7 +13,7 @@ concurrency:
 jobs:
   update-weather:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 10
     permissions:
       contents: write # 必须开启写入权限
     env:
@@ -34,7 +34,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install selenium webdriver-manager
 
-      - name: 执行更新脚本（实况 + 预警）
+      - name: 获取天气数据更新
         continue-on-error: true
         run: |
           python auto_update/autoupdate.py
