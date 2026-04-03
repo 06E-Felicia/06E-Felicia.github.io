@@ -459,6 +459,7 @@ body {
         padding: 0 10px;
         gap: 10px;
         height: 62px;
+        overflow: visible;
     }
 
     .nav-logo {
@@ -480,6 +481,7 @@ body {
         align-items: center;
         gap: 10px;
         flex: 1;
+        position: relative;
     }
 
     .nav-menus::-webkit-scrollbar {
