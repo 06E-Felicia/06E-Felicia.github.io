@@ -24,11 +24,9 @@
         "image": "assets/images/warnings/warning.png",
         "message": "【深中气象】超强台风“伊蕾娜”已于今天19时前后在深圳大鹏半岛登陆，登陆时中心附近最大风力68m/s(大于17级)，中心最低气压895hpa。目前，其中心位于盐田区近海，正在以20-25km/h速度向西北移动，强度逐渐减弱。目前，我校正处于其西北眼墙中，已出现17级以上阵风和大暴雨。深中气象提醒，“伊雷娜”已成为深圳历史上影响最严重的台风。风眼过境期间将出现静风，切勿外出。请同学们欢度愚人节！"
     },
-    "WARNINGS": [],
-    "REFRESH_INTERVAL": 600,
     "AUTOUPDATE_CONFIG": {
         "source_url": "https://smca.fun/#/",
-        "wait_timeout": 15,
+        "wait_timeout": 120,
         "time_prefix": "数据时间: ",
         "wait_class_name": "stat-number",
         "item_class_name": "stat-item",
@@ -50,6 +48,6 @@
         }
     },
     "LOG_CONFIG": {
-        "error_log": "/logs/err.log"
+        "error_log": "logs/err.log"
     }
 }
