@@ -127,6 +127,110 @@
     <script src="assets/scripts/script.js"></script>
 
 
+            if (dialogTimer) clearTimeout(dialogTimer);
+            dialogTimer = setTimeout(() => {
+                bubble.classList.remove('active');
+                dialogTimer = null;
+            }, 3000); 
+        }
+
+        const LIVE_DATA = {"t": "25.6℃", "time": "2026-04-03 09:00", "th": "25.6℃", "tl": "21.9℃", "r_day": "0mm", "r_1h": "0mm", "p": "1009.9hPa"};
+        const MANUAL_CONFIG = {
+            low: "22°C", high: "26°C", humidity: "舒适", rainProb: "9mm", wind: "3-4级", dir: "东南风", 
+            icon: "https://raw.githubusercontent.com/06E-Felicia/06E-Felicia.github.io/main/03.png", 
+            bg: "https://raw.githubusercontent.com/06E-Felicia/06E-Felicia.github.io/main/1.jpg" 
+        };
+
+        const ALERT_CONFIG = {
+            // enabled: true, 
+            enabled: false, 
+            title: "Typhoon Emergancy",
+            image: "https://raw.githubusercontent.com/06E-Felicia/06E-Felicia.github.io/refs/heads/main/%E9%A2%84%E8%AD%A6%E5%9B%BE.png", 
+            message: "【深中气象】超强台风“伊蕾娜”已于今天19时前后在深圳大鹏半岛登陆，登陆时中心附近最大风力68m/s(大于17级)，中心最低气压895hpa。目前，其中心位于盐田区近海，正在以20-25km/h速度向西北移动，强度逐渐减弱。目前，我校正处于其西北眼墙中，已出现17级以上阵风和大暴雨。深中气象提醒，“伊雷娜”已成为深圳历史上影响最严重的台风。风眼过境期间将出现静风，切勿外出。请同学们欢度愚人节！"
+        };
+
+        function generateECUrl(offsetHours = 0) {
+            // 1. 获取基础时间（减去偏移量）
+            let now = new Date(new Date().getTime() - offsetHours * 60 * 60 * 1000);
+            
+            let utcHours = now.getUTCHours();
+            let cycle = "00";
+            let targetDate = new Date(now); // 创建一个副本用于调整
+        
+            // 2. 判断逻辑优化
+            if (utcHours >= 20) {
+                cycle = "12";
+            } else if (utcHours >= 8) {
+                cycle = "00";
+            } else {
+                // 关键点：直接通过 Date 对象减去一天，它会自动处理月份和年份的跨度
+                targetDate.setUTCDate(targetDate.getUTCDate() - 1);
+                cycle = "12";
+            }
+    
+            // 3. 从最终确定的 Date 对象中提取格式化字符串
+            const utcYear = targetDate.getUTCFullYear();
+            const utcMonth = String(targetDate.getUTCMonth() + 1).padStart(2, '0');
+            const utcDay = String(targetDate.getUTCDate()).padStart(2, '0');
+        
+            const timeStr = `${utcYear}${utcMonth}${utcDay}${cycle}`;
+            return `https://www.smca.fun/assets/image/NWP/ECMWF/Six_Elem/${timeStr}/1795565_${timeStr}.png`;
+        }
+
+        function updateECForecastImage() {
+            const linkElement = document.getElementById('ec-link'); 
+            const primaryUrl = generateECUrl(0);
+            if (linkElement) linkElement.href = primaryUrl;
+        }
+
+        function checkAndShowAlert() {
+            const overlay = document.getElementById('alert-overlay');
+            if (!ALERT_CONFIG.enabled || !ALERT_CONFIG.title || !ALERT_CONFIG.message) {
+                overlay.style.display = 'none';
+                return;
+            }
+            document.getElementById('alert-title').innerText = ALERT_CONFIG.title;
+            document.getElementById('alert-img').src = ALERT_CONFIG.image;
+            document.getElementById('alert-msg').innerText = ALERT_CONFIG.message;
+            overlay.style.display = 'flex';
+        }
+
+        function closeAlert() {
+            document.getElementById('alert-overlay').style.display = 'none';
+        }
+
+        function render() {
+            document.body.style.backgroundImage = `url('${MANUAL_CONFIG.bg}')`;
+            document.getElementById('ui-icon').src = MANUAL_CONFIG.icon;
+            document.getElementById('ui-low').innerText = MANUAL_CONFIG.low;
+            document.getElementById('ui-high').innerText = MANUAL_CONFIG.high;
+            document.getElementById('ui-hum').innerText = MANUAL_CONFIG.humidity;
+            document.getElementById('ui-rain-pre').innerText = MANUAL_CONFIG.rainProb;
+            document.getElementById('ui-wind').innerText = MANUAL_CONFIG.wind;
+            document.getElementById('ui-dir').innerText = MANUAL_CONFIG.dir;
+            document.getElementById('t').innerText = LIVE_DATA.t;
+            document.getElementById('r_day').innerText = LIVE_DATA.r_day;
+            document.getElementById('r_1h').innerText = LIVE_DATA.r_1h;
+            document.getElementById('p').innerText = LIVE_DATA.p;
+            document.getElementById('ltime').innerText = "UPDATE: " + LIVE_DATA.time;
+            
+            updateECForecastImage();
+            checkAndShowAlert();
+        }
+        window.onload = render;
+        // 切换头像菜单显示
+function toggleAvatarMenu(event) {
+    event.stopPropagation(); // 阻止冒泡
+    const menu = document.getElementById('avatar-menu');
+    menu.classList.toggle('active');
+}
+
+// 点击页面其他地方关闭菜单
+document.addEventListener('click', function() {
+    const menu = document.getElementById('avatar-menu');
+    if (menu) menu.classList.remove('active');
+});
+    </script>
 </body>
 
 </html>
