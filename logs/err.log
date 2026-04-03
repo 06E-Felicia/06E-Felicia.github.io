@@ -1,0 +1,91 @@
+[2026-04-03 15:07:33] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 26.171
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x563d56610a6a <unknown>
+#1 0x563d5601fab5 <unknown>
+#2 0x563d560073bb <unknown>
+#3 0x563d560070a4 <unknown>
+#4 0x563d56004deb <unknown>
+#5 0x563d5600576f <unknown>
+#6 0x563d560147a0 <unknown>
+#7 0x563d5602e4b7 <unknown>
+#8 0x563d56034feb <unknown>
+#9 0x563d56005ebf <unknown>
+#10 0x563d5602e24b <unknown>
+#11 0x563d560baac6 <unknown>
+#12 0x563d56065cbf <unknown>
+#13 0x563d56066a81 <unknown>
+#14 0x563d565d6a64 <unknown>
+#15 0x563d565d9951 <unknown>
+#16 0x563d565c321e <unknown>
+#17 0x563d565da51e <unknown>
+#18 0x563d565a9be0 <unknown>
+#19 0x563d565fd9b8 <unknown>
+#20 0x563d565fdb88 <unknown>
+#21 0x563d5660f4de <unknown>
+#22 0x7efca349caa4 <unknown>
+#23 0x7efca3529c6c <unknown>
+
+OUTPUT: <html lang="zh-CN"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+      
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <!-- <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script> -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/full.js"></script> -->
+  <script src="/library/leaflet.js"></script>
+  <script src="/library/full.js"></script>
+
+  
+  <!-- SEO Meta Tags -->
+  <title>菜园子的气象栈</title>
+  <meta name="description" content="数值预报平台，为您的生活和工作提供准确的气象信息支持。">
+  <meta name="keywords" content="天气预报,气象数据,预警信息,气候分析,数值预报">
+  <meta name="author" content="气象站">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://weather-stati
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 97, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 26.171
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x563d56610a6a <unknown>
+#1 0x563d5601fab5 <unknown>
+#2 0x563d560073bb <unknown>
+#3 0x563d560070a4 <unknown>
+#4 0x563d56004deb <unknown>
+#5 0x563d5600576f <unknown>
+#6 0x563d560147a0 <unknown>
+#7 0x563d5602e4b7 <unknown>
+#8 0x563d56034feb <unknown>
+#9 0x563d56005ebf <unknown>
+#10 0x563d5602e24b <unknown>
+#11 0x563d560baac6 <unknown>
+#12 0x563d56065cbf <unknown>
+#13 0x563d56066a81 <unknown>
+#14 0x563d565d6a64 <unknown>
+#15 0x563d565d9951 <unknown>
+#16 0x563d565c321e <unknown>
+#17 0x563d565da51e <unknown>
+#18 0x563d565a9be0 <unknown>
+#19 0x563d565fd9b8 <unknown>
+#20 0x563d565fdb88 <unknown>
+#21 0x563d5660f4de <unknown>
+#22 0x7efca349caa4 <unknown>
+#23 0x7efca3529c6c <unknown>
+
+
+
