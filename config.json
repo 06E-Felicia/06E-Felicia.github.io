@@ -14,9 +14,9 @@
     },
     "ALERT_CONFIG": {
         "enabled": true,
-        "title": "Storm Warning",
+        "title": "Storm Emergancy",
         "image": "assets/images/warnings/预警图.png",
-        "message": "【深中气象】4月4日凌晨，切变线推至广东沿海并静止，高空浅槽东移，对流系统将沿切变线激发并东移。预计明天上午，我校可能迎来一轮强对流过程，后可能有持续性降水，累计雨量可达大到暴雨局地大暴雨，雨时阵风可达6级。"
+        "message": "【深中气象】珠西强回波正在渡江。未来1h内我市将出现大范围雷雨大风天气。"
     },
     "AUTOUPDATE_CONFIG": {
         "source_url": "https://smca.fun/#/",
