@@ -13,7 +13,7 @@
         "bg": "assets/images/background.jpg"
     },
     "ALERT_CONFIG": {
-        "enabled": true,
+        "enabled": false,
         "title": "Storm Emergancy",
         "image": "assets/images/warnings/预警图.png",
         "message": "【深中气象】珠西强回波正在渡江。未来1h内我市将出现强雷雨天气，小时雨强20-40mm。"
