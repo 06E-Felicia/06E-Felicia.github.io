@@ -13,10 +13,10 @@
         "bg": "assets/images/background.jpg"
     },
     "ALERT_CONFIG": {
-        "enabled": false,
-        "title": "Storm Emergancy",
+        "enabled": true,
+        "title": "Storm Watch",
         "image": "assets/images/warnings/预警图.png",
-        "message": "【深中气象】珠西强回波正在渡江。未来1h内我市将出现强雷雨天气，小时雨强20-40mm。"
+        "message": "【深中气象】今天下午，在高空浅槽，低空急流和强劲暖湿气流作用下，强对流系统将在中午至午后在珠西-粤西激发并东移发展，风暴模式为离散单体。预计今天下午，我校可能迎来多轮强对流过程，有6-7级阵风和短时强降水，累计雨量可达大到暴雨。今天提示板不会更新，请及时关注实况。"
     },
     "AUTOUPDATE_CONFIG": {
         "source_url": "https://smca.fun/#/",
