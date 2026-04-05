@@ -1,7 +1,8 @@
+import re
+from pathlib import Path
 from functools import lru_cache
 
 import requests
-from pathlib import Path
 from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
 from selenium import webdriver
@@ -26,7 +27,8 @@ TARGETS = {
     "time": "更新时间"
 }
 HTTP_TIMEOUT = 15
-PAGE_TIMEOUT = 120
+PAGE_TIMEOUT = 60
+DATETIME_PATTERN = re.compile(r"(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}(?::\d{2})?)")
 
 
 def _create_retry_session():
@@ -52,12 +54,12 @@ def fetch_fallback_data(logger):
             response.raise_for_status()
             weather_data = response.json()
             return {
-                "t": weather_data.get("temperature", ""),
-                "th": weather_data.get("temp_max", ""),
-                "tl": weather_data.get("temp_min", ""),
+                "t": str(weather_data.get("temperature", "")) + "°C",
+                "th": str(weather_data.get("temp_max", "")) + "°C",
+                "tl": str(weather_data.get("temp_min", "")) + "°C",
                 "r_day": "---",
-                "r_1h": weather_data.get("precipitation", ""),
-                "p": weather_data.get("pressure", ""),
+                "r_1h": str(weather_data.get("precipitation", "")) + "mm",
+                "p": str(weather_data.get("pressure", "")) + "hPa",
                 "time": weather_data.get("report_time", "")
             }
     except Exception as e:
@@ -72,6 +74,19 @@ def _safe_find_text(element, class_name):
         return ""
 
 
+def _extract_update_time(text):
+    if not text:
+        return ""
+
+    if "数据时间" in text:
+        cleaned = text.replace("数据时间", "", 1).lstrip(":： ").strip()
+        match = DATETIME_PATTERN.search(cleaned)
+        return match.group(1) if match else cleaned
+
+    match = DATETIME_PATTERN.search(text)
+    return match.group(1) if match else ""
+
+
 def _extract_live_data(items, logger):
     data = {}
     label_to_key = {label: key for key, label in TARGETS.items()}
@@ -79,13 +94,24 @@ def _extract_live_data(items, logger):
 
     for item in items:
         try:
+            if "time" in remaining_targets:
+                desc_text = _safe_find_text(item, "stat-description")
+                update_time = _extract_update_time(desc_text)
+                if update_time:
+                    data["time"] = update_time
+                    remaining_targets.discard("time")
+
             label = _safe_find_text(item, "stat-label")
             target_key = label_to_key.get(label)
             if not target_key or target_key not in remaining_targets:
+                if not remaining_targets:
+                    break
                 continue
 
             value = _safe_find_text(item, "stat-value") or _safe_find_text(item, "stat-number")
             if not value:
+                if not remaining_targets:
+                    break
                 continue
 
             data[target_key] = value
