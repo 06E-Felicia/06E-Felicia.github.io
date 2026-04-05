@@ -32,20 +32,20 @@ jobs:
       - name: 安装依赖
         run: |
           python -m pip install --upgrade pip
-          python -m pip install selenium webdriver-manager
+          python -m pip install selenium webdriver-manager requests
 
       - name: 获取天气数据更新
         continue-on-error: true
         run: |
-          python auto_update/autoupdate.py
+          python auto_update/updater.py
 
       - name: 提交并推送到仓库
         run: |
           git config user.name "WeatherBot"
           git config user.email "bot@weather.com"
           git add config.json
-          if [ -f logs/err.log ]; then
-            git add logs/err.log
+          if [ -f logs/run.log ]; then
+            git add logs/run.log
           fi
           if git diff --cached --quiet; then
             echo "No changes to commit"

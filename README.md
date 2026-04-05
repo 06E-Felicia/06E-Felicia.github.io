@@ -2,16 +2,16 @@
 
 Static weather dashboard for Shenzhen Middle School Meteorology Club.
 
-The page itself is static (`index.html` + assets), while weather data is updated by Python scripts that write into `config.json`.
+The page itself is static (`index.html` + assets), while weather data is updated by Python scripts under `auto_update/` that write into `config.json`.
 
 ## Highlights
 
 - Static front-end, easy to host on GitHub Pages.
 - Config-driven runtime data in `config.json`.
-- Two update scripts:
-	- `autoupdate.py`: fetches live weather values.
-	- `warning.py`: fetches weather warning icons.
-- Unified error logging to `logs/err.log` when fetch/update actions fail.
+- Live updater with fallback source:
+	- `auto_update/updater.py`: fetches live weather values and falls back to API data when needed.
+	- `auto_update/utils/util_updater.py`: Selenium scraping + HTTP fallback data fetch.
+- Unified error logging to `logs/run.log` when fetch/update actions fail.
 
 ## Project Structure
 
@@ -19,13 +19,17 @@ The page itself is static (`index.html` + assets), while weather data is updated
 .
 |- index.html
 |- config.json
-|- autoupdate.py
-|- warning.py
-|- updater_common.py
+|- README.md
 |- assets/
 |  |- scripts/script.js
 |  |- styles/style.css
 |  `- images/
+|- auto_update/
+|  |- updater.py
+|  `- utils/
+|     |- __init__.py
+|     |- util_services.py
+|     `- util_updater.py
 |- logs/
 `- .github/workflows/update.yml
 ```
@@ -37,9 +41,10 @@ The page itself is static (`index.html` + assets), while weather data is updated
 	 - `LIVE_DATA`
 	 - `MANUAL_CONFIG`
 	 - `ALERT_CONFIG`
-	 - `WARNINGS`
-3. Python scripts update `config.json` periodically.
-4. If fetch fails, scripts append details to `logs/err.log`.
+3. `auto_update/updater.py` fetches live weather data from SMCA.
+4. If live fetch fails or returns empty values, updater falls back to API data.
+5. Updater writes `LIVE_DATA` into `config.json`.
+6. If fetch/update fails, scripts append details to `logs/run.log`.
 
 ## Requirements
 
@@ -49,12 +54,11 @@ The page itself is static (`index.html` + assets), while weather data is updated
 	- `selenium`
 	- `webdriver-manager`
 	- `requests`
-	- `beautifulsoup4`
 
 Install dependencies:
 
 ```bash
-pip install selenium webdriver-manager requests beautifulsoup4
+pip install selenium webdriver-manager requests
 ```
 
 ## Local Development
@@ -74,13 +78,7 @@ http://localhost:8080
 Run one-time live weather update:
 
 ```bash
-python autoupdate.py
-```
-
-Run warning updater loop:
-
-```bash
-python warning.py
+python auto_update/updater.py
 ```
 
 ## Configuration (`config.json`)
@@ -90,27 +88,15 @@ python warning.py
 - `LIVE_DATA`: live weather values (`t`, `r_day`, `r_1h`, `p`, `time`, etc.)
 - `MANUAL_CONFIG`: manually controlled forecast card values and images
 - `ALERT_CONFIG`: modal alert switch/content
-- `WARNINGS`: warning icon URLs
-
-### Update behavior
-
-- `AUTOUPDATE_CONFIG`
-	- `source_url`
-	- `wait_timeout`
-	- `time_prefix`
-	- class selectors (`wait_class_name`, `item_class_name`, ...)
-	- `chrome_args`
-	- `targets` (mapping source labels to output keys)
-- `REFRESH_INTERVAL`: fallback interval
 
 ### Logging
 
 - `LOG_CONFIG.error_log`: error log output path
-- Current default path: `logs/err.log`
+- Current default path: `logs/run.log`
 
 ## Error Logging
 
-When fetch or update fails, scripts append a block to `logs/err.log` with:
+When fetch or update fails, scripts append a block to `logs/run.log` with:
 
 - timestamp
 - action name
@@ -122,9 +108,9 @@ When fetch or update fails, scripts append a block to `logs/err.log` with:
 
 Workflow file: `.github/workflows/update.yml`
 
-Current workflow runs on a 10-minute cron and executes `autoupdate.py`.
+Current workflow runs on a 30-minute cron and executes `auto_update/updater.py`.
 
-If you want fully config-driven commits with current code, ensure workflow commits `config.json` (and `logs/err.log` only if you want logs versioned), not `index.html`.
+If you want fully config-driven commits with current code, ensure workflow commits `config.json` (and `logs/run.log` only if you want logs versioned), not `index.html`.
 
 ## Common Issues
 
@@ -133,10 +119,11 @@ If you want fully config-driven commits with current code, ensure workflow commi
 
 2. `No live data extracted from page`
 	 - Source page structure may have changed.
-	 - Update selector-related fields in `AUTOUPDATE_CONFIG`.
+	 - Update selectors in `auto_update/utils/util_updater.py`.
 
-3. Warning list stays empty
-	 - Verify `WARNING_CONFIG.city_selector_class` and target site availability.
+3. `FileNotFoundError` for chromedriver path under `.wdm`
+	 - Clear stale webdriver-manager cache: `rm -rf ~/.wdm`
+	 - Reinstall/update dependencies: `pip install -U selenium webdriver-manager`
 
 ## License
 
