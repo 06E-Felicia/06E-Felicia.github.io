@@ -9,17 +9,17 @@
         "p": "1008hPa"
     },
     "MANUAL_CONFIG": {
-        "low": "22°C",
-        "high": "26°C",
+        "low": "23°C",
+        "high": "28°C",
         "humidity": "舒适",
-        "rainProb": "大到暴雨",
-        "wind": "阵风5-6级",
-        "dir": "不固定风向",
-        "icon": "assets/images/weather_icons/05.png",
+        "rainProb": "阵雨",
+        "wind": "2-3级",
+        "dir": "南风",
+        "icon": "assets/images/weather_icons/03.png",
         "bg": "assets/images/background.jpg"
     },
     "ALERT_CONFIG": {
-        "enabled": true,
+        "enabled": false,
         "title": "Storm Watch",
         "image": "assets/images/warnings/预警图.png",
         "message": "【深中气象】珠西强回波正在渡江。未来1h内我市将出现强雷雨天气，小时雨强20-40mm。"
