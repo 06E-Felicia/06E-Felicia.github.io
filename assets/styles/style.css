@@ -735,20 +735,21 @@ body {
 /* 👈 左侧图片：占据一半空间 */
 .alert-image-side {
     flex: 0 0 auto;
-    /* 👈 核心修改：精准占据 50% */
     width: 50%;
     background-color: rgba(0, 0, 0, 0.2);
     overflow: hidden;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: center; /* 水平居中 */
+    align-items: center;     /* 垂直居中 */
 }
 
 .alert-image-side img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    /* 👈 填满空间，根据需要可改为 contain */
+    /* 核心修改： */
+    max-width: 100%;       /* 宽度最大不超过容器 */
+    max-height: 100%;      /* 高度最大不超过容器 */
+    width: auto;           /* 长度自适应比例 */
+    height: auto;          /* 高度自适应比例 */
+    object-fit: contain;   /* 确保图片在容器内按比例缩放，不被裁剪 */
     display: block;
 }
 
