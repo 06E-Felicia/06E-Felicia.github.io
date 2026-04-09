@@ -9,17 +9,17 @@
         "p": "1011.9hPa"
     },
     "MANUAL_CONFIG": {
-        "low": "23°C",
-        "high": "27°C",
+        "low": "22°C",
+        "high": "30°C",
         "humidity": "潮湿",
         "rainProb": "0mm",
-        "wind": "阵风5-6级",
-        "dir": "东南风",
-        "icon": "assets/images/weather_icons/03.png",
+        "wind": "3-4级",
+        "dir": "南风",
+        "icon": "assets/images/weather_icons/02.png",
         "bg": "assets/images/background.jpg"
     },
     "ALERT_CONFIG": {
-        "enabled": true,
+        "enabled": false,
         "title": "Gale Warning",
         "image": "assets/images/warnings/预警图.png",
         "message": "【深中气象】在东路回流冷空气叠加泥岗东-西走廊狭管效应下，8日我校阵风可达5-6级。"
