@@ -9,13 +9,13 @@
         "p": "1011.2hPa"
     },
     "MANUAL_CONFIG": {
-        "low": "25°C",
-        "high": "30°C",
+        "low": "24°C",
+        "high": "29°C",
         "humidity": "潮湿",
-        "rainProb": "0mm",
+        "rainProb": "阵雨",
         "wind": "3-4级",
         "dir": "南风",
-        "icon": "assets/images/weather_icons/02.png",
+        "icon": "assets/images/weather_icons/03.png",
         "bg": "assets/images/background.jpg"
     },
     "ALERT_CONFIG": {
