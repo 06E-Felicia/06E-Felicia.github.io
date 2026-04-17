@@ -19,9 +19,9 @@
         "bg": "assets/images/background.jpg"
     },
     "ALERT_CONFIG": {
-        "enabled": false,
-        "title": "Storm Watch",
+        "enabled": true,
+        "title": "Shower Watch",
         "image": "assets/images/warnings/预警图.png",
-        "message": "【深中气象】粤西有飑线东移。预计中午前后我校可能有雷阵雨。"
+        "message": "【深中气象】在冷池激发下，珠西有散装对流回波东北移。预计未来2小时内我校将出现(雷)阵雨天气。"
     }
 }
