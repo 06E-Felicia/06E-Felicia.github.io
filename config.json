@@ -9,7 +9,7 @@
         "p": "1011.7hPa"
     },
     "MANUAL_CONFIG": {
-        "low": "24°C",
+        "low": "21°C",
         "high": "29°C",
         "humidity": "潮湿",
         "rainProb": "阵雨",
