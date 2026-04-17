@@ -19,7 +19,7 @@
         "bg": "assets/images/background.jpg"
     },
     "ALERT_CONFIG": {
-        "enabled": true,
+        "enabled": false,
         "title": "Storm Watch",
         "image": "assets/images/warnings/预警图.png",
         "message": "【深中气象】粤西有飑线东移。预计中午前后我校可能有雷阵雨。"
