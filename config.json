@@ -9,17 +9,17 @@
         "p": "1009.4hPa"
     },
     "MANUAL_CONFIG": {
-        "low": "21°C",
-        "high": "29°C",
+        "low": "24°C",
+        "high": "30°C",
         "humidity": "潮湿",
-        "rainProb": "阵雨",
+        "rainProb": "0mm",
         "wind": "3-4级",
         "dir": "南风",
-        "icon": "assets/images/weather_icons/03.png",
+        "icon": "assets/images/weather_icons/02.png",
         "bg": "assets/images/background.jpg"
     },
     "ALERT_CONFIG": {
-        "enabled": true,
+        "enabled": false,
         "title": "Shower Watch",
         "image": "assets/images/warnings/预警图.png",
         "message": "【深中气象】在冷池激发下，珠西有散装对流回波东北移。预计未来2小时内我校将出现(雷)阵雨天气。"
