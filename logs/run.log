@@ -1,1 +1,130 @@
---- Logging started at 2026-04-20 03:55:48 ---
+--- Logging started at 2026-04-20 06:10:34 ---
+[2026-04-20 06:11:41] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: -0.004
+  (Session info: chrome=147.0.7727.55)
+Stacktrace:
+#0 0x5562b1326b6a <unknown>
+#1 0x5562b0d28265 <unknown>
+#2 0x5562b0d0fb1b <unknown>
+#3 0x5562b0d0f804 <unknown>
+#4 0x5562b0d0d54b <unknown>
+#5 0x5562b0d0decf <unknown>
+#6 0x5562b0d1ce90 <unknown>
+#7 0x5562b0d36c67 <unknown>
+#8 0x5562b0d3d79b <unknown>
+#9 0x5562b0d0e61f <unknown>
+#10 0x5562b0d369fd <unknown>
+#11 0x5562b0dc382c <unknown>
+#12 0x5562b0d6e5cf <unknown>
+#13 0x5562b0d6f391 <unknown>
+#14 0x5562b12ec04b <unknown>
+#15 0x5562b12ef00d <unknown>
+#16 0x5562b12d8808 <unknown>
+#17 0x5562b12efba0 <unknown>
+#18 0x5562b12bf280 <unknown>
+#19 0x5562b1313db8 <unknown>
+#20 0x5562b1313f88 <unknown>
+#21 0x5562b13255de <unknown>
+#22 0x7f270149caa4 <unknown>
+#23 0x7f2701529c6c <unknown>
+
+OUTPUT: page_snapshot: <html><head></head><body></body></html>
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/utils/util_updater.py", line 160, in fetch_live_data
+    driver.get(DATA_SOURCE_URL)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 470, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 450, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: -0.004
+  (Session info: chrome=147.0.7727.55)
+Stacktrace:
+#0 0x5562b1326b6a <unknown>
+#1 0x5562b0d28265 <unknown>
+#2 0x5562b0d0fb1b <unknown>
+#3 0x5562b0d0f804 <unknown>
+#4 0x5562b0d0d54b <unknown>
+#5 0x5562b0d0decf <unknown>
+#6 0x5562b0d1ce90 <unknown>
+#7 0x5562b0d36c67 <unknown>
+#8 0x5562b0d3d79b <unknown>
+#9 0x5562b0d0e61f <unknown>
+#10 0x5562b0d369fd <unknown>
+#11 0x5562b0dc382c <unknown>
+#12 0x5562b0d6e5cf <unknown>
+#13 0x5562b0d6f391 <unknown>
+#14 0x5562b12ec04b <unknown>
+#15 0x5562b12ef00d <unknown>
+#16 0x5562b12d8808 <unknown>
+#17 0x5562b12efba0 <unknown>
+#18 0x5562b12bf280 <unknown>
+#19 0x5562b1313db8 <unknown>
+#20 0x5562b1313f88 <unknown>
+#21 0x5562b13255de <unknown>
+#22 0x7f270149caa4 <unknown>
+#23 0x7f2701529c6c <unknown>
+[2026-04-20 06:11:41] autoupdate.main
+ERROR: Live data fetch failed, using fallback data.
+[2026-04-20 06:13:44] autoupdate.fetch_fallback_data
+ERROR: HTTPSConnectionPool(host='uapis.cn', port=443): Max retries exceeded with url: /api/v1/misc/weather?adcode=440300&extended=true&forecast=true (Caused by NewConnectionError("HTTPSConnection(host='uapis.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable"))
+TRACEBACK:
+Traceback (most recent call last):
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/urllib3/connection.py", line 204, in _new_conn
+    sock = connection.create_connection(
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/urllib3/util/connection.py", line 85, in create_connection
+    raise err
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/urllib3/util/connection.py", line 73, in create_connection
+    sock.connect(sa)
+OSError: [Errno 101] Network is unreachable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/urllib3/connectionpool.py", line 488, in _make_request
+    raise new_e
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/urllib3/connectionpool.py", line 464, in _make_request
+    self._validate_conn(conn)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/urllib3/connectionpool.py", line 1093, in _validate_conn
+    conn.connect()
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/urllib3/connection.py", line 759, in connect
+    self.sock = sock = self._new_conn()
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/urllib3/connection.py", line 219, in _new_conn
+    raise NewConnectionError(
+urllib3.exceptions.NewConnectionError: HTTPSConnection(host='uapis.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/requests/adapters.py", line 645, in send
+    resp = conn.urlopen(
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/urllib3/connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/urllib3/connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/urllib3/connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/urllib3/connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/urllib3/util/retry.py", line 535, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='uapis.cn', port=443): Max retries exceeded with url: /api/v1/misc/weather?adcode=440300&extended=true&forecast=true (Caused by NewConnectionError("HTTPSConnection(host='uapis.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable"))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/utils/util_updater.py", line 53, in fetch_fallback_data
+    response = session.get(FALLBACK_DATA_SOURCE_URL, timeout=HTTP_TIMEOUT)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/requests/sessions.py", line 605, in get
+    return self.request("GET", url, **kwargs)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/requests/sessions.py", line 592, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/requests/sessions.py", line 706, in send
+    r = adapter.send(request, **kwargs)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/requests/adapters.py", line 678, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='uapis.cn', port=443): Max retries exceeded with url: /api/v1/misc/weather?adcode=440300&extended=true&forecast=true (Caused by NewConnectionError("HTTPSConnection(host='uapis.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable"))
