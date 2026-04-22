@@ -581,7 +581,7 @@ body {
     .speech-bubble {
         left: auto;
         right: 12px;
-        bottom: 190px;
+        bottom: 220px;
         font-size: 13px;
         max-width: min(56vw, 180px);
         padding: 10px 14px;
