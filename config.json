@@ -20,8 +20,8 @@
     },
     "ALERT_CONFIG": {
         "enabled": true,
-        "title": "Shower Watch",
-        "image": "assets/images/weather_icons/05.png",
-        "message": "【深中气象】中午到下午我校有(雷)阵雨，部分时段雨势较大。"
+        "title": "Gale Warning",
+        "image": "assets/images/background.jpg",
+        "message": "【深中气象】受槽前南风输送影响，今天我校阵风可达6级以上。"
     }
 }
