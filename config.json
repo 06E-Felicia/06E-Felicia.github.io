@@ -9,19 +9,19 @@
         "p": "1011.7hPa"
     },
     "MANUAL_CONFIG": {
-        "low": "21°C",
-        "high": "30°C",
+        "low": "23°C",
+        "high": "29°C",
         "humidity": "潮湿",
-        "rainProb": "阵雨",
-        "wind": "3-4级",
-        "dir": "东南风",
-        "icon": "assets/images/weather_icons/02.png",
+        "rainProb": "雷阵雨",
+        "wind": "阵风6级以上",
+        "dir": "偏南风",
+        "icon": "assets/images/weather_icons/05.png",
         "bg": "assets/images/background.jpg"
     },
     "ALERT_CONFIG": {
-        "enabled": false,
-        "title": "Gale Warning",
-        "image": "assets/images/background.jpg",
-        "message": "【深中气象】受槽前南风输送影响，今天我校阵风可达6级以上。"
+        "enabled": true,
+        "title": "Storm Watch",
+        "image": "assets/images/weather_icons/05.png",
+        "message": "【深中气象】今天凌晨至上午，珠江口暖区可能有对流云团发展并北上影响我校。今天下午至夜间，暖区飑线可能扫过我校，雨时伴有6级以上阵风。"
     }
 }
