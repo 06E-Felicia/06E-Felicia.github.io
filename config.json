@@ -20,8 +20,8 @@
     },
     "ALERT_CONFIG": {
         "enabled": true,
-        "title": "Storm Watch",
-        "image": "assets/images/weather_icons/05.png",
-        "message": "【深中气象】今天凌晨至上午，珠江口暖区可能有对流云团发展并北上影响我校。今天下午至夜间，暖区飑线可能扫过我校，雨时伴有6级以上阵风。"
+        "title": "喜报！飑线没啦！！！",
+        "image": "assets/images/weather_icons/01.png",
+        "message": "【深中气象】受阳江暖区对流超预期发展影响，切变飑线已无可能组织。恭喜深圳再次风调雨顺，风平浪静！"
     }
 }
