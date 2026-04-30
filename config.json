@@ -9,17 +9,17 @@
         "p": "1016.9hPa"
     },
     "MANUAL_CONFIG": {
-        "low": "23°C",
-        "high": "29°C",
-        "humidity": "潮湿",
-        "rainProb": "雷阵雨",
-        "wind": "阵风6级以上",
-        "dir": "偏南风",
-        "icon": "assets/images/weather_icons/05.png",
+        "low": "18°C",
+        "high": "24°C",
+        "humidity": "舒适",
+        "rainProb": "0mm",
+        "wind": "4-5级",
+        "dir": "东北风",
+        "icon": "assets/images/weather_icons/03.png",
         "bg": "assets/images/background.jpg"
     },
     "ALERT_CONFIG": {
-        "enabled": true,
+        "enabled": false,
         "title": "喜报！飑线没啦！！！",
         "image": "assets/images/weather_icons/01.png",
         "message": "【深中气象】受阳江暖区对流超预期发展影响，切变飑线已无可能组织。恭喜深圳再次风调雨顺，风平浪静！"
