@@ -10,7 +10,7 @@
     },
     "MANUAL_CONFIG": {
         "low": "25°C",
-        "high": "32°C",
+        "high": "28°C",
         "humidity": "潮湿",
         "rainProb": "雷阵雨",
         "wind": "3-4级",
@@ -19,9 +19,9 @@
         "bg": "assets/images/background.jpg"
     },
     "ALERT_CONFIG": {
-        "enabled": false,
-        "title": "喜报！飑线没啦！！！",
-        "image": "assets/images/weather_icons/01.png",
-        "message": "【深中气象】受阳江暖区对流超预期发展影响，切变飑线已无可能组织。恭喜深圳再次风调雨顺，风平浪静！"
+        "enabled": true,
+        "title": "雷暴提示",
+        "image": "assets/images/weather_icons/05.png",
+        "message": "【深中气象】明天白天我市有雷阵雨，局地可达暴雨。"
     }
 }
