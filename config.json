@@ -22,6 +22,6 @@
         "enabled": true,
         "title": "雷暴提示",
         "image": "assets/images/weather_icons/05.png",
-        "message": "【深中气象】明天白天我市有雷阵雨，局地可达暴雨。"
+        "message": "【深中气象】今天白天我市有雷阵雨，局地可达暴雨。"
     }
 }
