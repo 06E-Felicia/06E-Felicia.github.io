@@ -9,7 +9,7 @@
         "p": "1008.4hPa"
     },
     "MANUAL_CONFIG": {
-        "low": "25°C",
+        "low": "24°C",
         "high": "28°C",
         "humidity": "潮湿",
         "rainProb": "雷阵雨",
@@ -22,6 +22,6 @@
         "enabled": true,
         "title": "雷暴提示",
         "image": "assets/images/weather_icons/05.png",
-        "message": "【深中气象】今天白天我市有雷阵雨，局地可达暴雨。"
+        "message": "【深中气象】今天我市有雷阵雨，部分时段雨势较大。"
     }
 }
