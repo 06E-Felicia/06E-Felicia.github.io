@@ -9,17 +9,17 @@
         "p": "1010.6hPa"
     },
     "MANUAL_CONFIG": {
-        "low": "24°C",
-        "high": "28°C",
+        "low": "26°C",
+        "high": "32°C",
         "humidity": "潮湿",
-        "rainProb": "雷阵雨",
+        "rainProb": "0mm",
         "wind": "3-4级",
         "dir": "西南风",
-        "icon": "assets/images/weather_icons/05.png",
+        "icon": "assets/images/weather_icons/02.png",
         "bg": "assets/images/background.jpg"
     },
     "ALERT_CONFIG": {
-        "enabled": true,
+        "enabled": false,
         "title": "雷暴提示",
         "image": "assets/images/weather_icons/05.png",
         "message": "【深中气象】今天我市有雷阵雨，部分时段雨势较大。"
