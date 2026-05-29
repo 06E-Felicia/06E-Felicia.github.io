@@ -10,10 +10,10 @@
     },
     "MANUAL_CONFIG": {
         "low": "28°C",
-        "high": "33°C",
+        "high": "35°C",
         "humidity": "潮湿",
         "rainProb": "0mm",
-        "wind": "3-4级",
+        "wind": "2-3级",
         "dir": "西南风",
         "icon": "assets/images/weather_icons/02.png",
         "bg": "assets/images/background.jpg"
