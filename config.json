@@ -10,18 +10,18 @@
     },
     "MANUAL_CONFIG": {
         "low": "25°C",
-        "high": "30°C",
+        "high": "29°C",
         "humidity": "舒适",
         "rainProb": "雷阵雨",
-        "wind": "2-3级",
+        "wind": "3-4级",
         "dir": "西南风",
-        "icon": "assets/images/weather_icons/03.png",
+        "icon": "assets/images/weather_icons/05.png",
         "bg": "assets/images/background.jpg"
     },
     "ALERT_CONFIG": {
-        "enabled": false,
-        "title": "高考天气提示",
-        "image": "assets/images/weather_icons/10.png",
-        "message": "高考第一天(6月7日)，多云，有雷阵雨，气温26-32度，部分时段雨势较大。高考第二天(6月8日)，大到暴雨，局地(特)大暴雨，气温26-29度，降水集中时段为凌晨至上午。高考第三天(6月9日)，中到大雨局地(大)暴雨，气温25-28度，降水集中时段为凌晨至上午。"
+        "enabled": true,
+        "title": "暖区暴雨提示",
+        "image": "assets/images/weather_icons/05.png",
+        "message": "14日-15日暖区暴雨风险高。"
     }
 }
