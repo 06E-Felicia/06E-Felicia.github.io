@@ -9,19 +9,19 @@
         "p": "1004.9hPa"
     },
     "MANUAL_CONFIG": {
-        "low": "26°C",
-        "high": "32°C",
+        "low": "29°C",
+        "high": "33°C",
         "humidity": "潮湿",
-        "rainProb": "0mm",
+        "rainProb": "雷阵雨",
         "wind": "3-4级",
         "dir": "西南风",
         "icon": "assets/images/weather_icons/02.png",
         "bg": "assets/images/background.jpg"
     },
     "ALERT_CONFIG": {
-        "enabled": false,
-        "title": "暖区暴雨提示",
+        "enabled": true,
+        "title": "雷阵雨提示",
         "image": "assets/images/weather_icons/05.png",
-        "message": "14日-15日暖区暴雨风险高。"
+        "message": "25-28日雷阵雨风险高。"
     }
 }
