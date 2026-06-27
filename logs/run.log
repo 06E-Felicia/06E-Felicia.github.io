@@ -1,5 +1,5 @@
---- Logging started at 2026-06-27 18:07:31 ---
-[2026-06-27 18:08:48] autoupdate.fetch_smca
+--- Logging started at 2026-06-27 19:50:58 ---
+[2026-06-27 19:52:11] autoupdate.fetch_smca
 ERROR: Message: 
 
 OUTPUT: page_snapshot: <html lang="zh-CN"><head>
@@ -30,5 +30,5 @@ Traceback (most recent call last):
   File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/support/wait.py", line 121, in until
     raise TimeoutException(message, screen, stacktrace)
 selenium.common.exceptions.TimeoutException: Message:
-[2026-06-27 18:08:48] autoupdate.main
+[2026-06-27 19:52:11] autoupdate.main
 ERROR: Live data fetch failed, using fallback data.
