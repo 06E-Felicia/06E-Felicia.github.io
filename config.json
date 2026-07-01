@@ -10,18 +10,18 @@
     },
     "MANUAL_CONFIG": {
         "low": "26°C",
-        "high": "32°C",
+        "high": "33°C",
         "humidity": "潮湿",
         "rainProb": "雷阵雨",
         "wind": "3-4级",
-        "dir": "西南风",
+        "dir": "南风",
         "icon": "assets/images/weather_icons/02.png",
         "bg": "assets/images/background.jpg"
     },
     "ALERT_CONFIG": {
         "enabled": true,
-        "title": "雷阵雨提示",
-        "image": "assets/images/weather_icons/05.png",
-        "message": "25-28日雷阵雨风险高。"
+        "title": "Typhoon Alert",
+        "image": "assets/images/warnings/warning.png",
+        "message": "【深中气象】南海热带低压今早8点中心位于菲律宾以西的洋面上。其将向西北方向移动，加强为今年南海首个台风后于7月3日在海南三亚至文昌一带沿海登陆，最强可达强热带风暴级。受其影响，我市东南风将加大至4-5级，海区及高地阵风7级以上，有中到大雨局地暴雨，可能发布台风蓝色及以上预警信号。"
     }
 }
