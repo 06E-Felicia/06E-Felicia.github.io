@@ -1,1 +1,80 @@
---- Logging started at 2026-07-27 05:03:48 ---
+--- Logging started at 2026-07-27 08:51:57 ---
+[2026-07-27 08:52:58] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 59.721
+  (Session info: chrome=150.0.7871.128)
+Stacktrace:
+#0 0x55fcc84ac44a <unknown>
+#1 0x55fcc7e848c9 <unknown>
+#2 0x55fcc7e6c35a <unknown>
+#3 0x55fcc7e6bfd6 <unknown>
+#4 0x55fcc7e69bbe <unknown>
+#5 0x55fcc7e6a53f <unknown>
+#6 0x55fcc7e79710 <unknown>
+#7 0x55fcc7e93617 <unknown>
+#8 0x55fcc7e9ae8b <unknown>
+#9 0x55fcc7e6ac99 <unknown>
+#10 0x55fcc7e93372 <unknown>
+#11 0x55fcc7f228b0 <unknown>
+#12 0x55fcc7ecd3ff <unknown>
+#13 0x55fcc7ece261 <unknown>
+#14 0x55fcc8471cc7 <unknown>
+#15 0x55fcc84704a8 <unknown>
+#16 0x55fcc845b196 <unknown>
+#17 0x55fcc847106a <unknown>
+#18 0x55fcc8443020 <unknown>
+#19 0x55fcc8497b98 <unknown>
+#20 0x55fcc8497d35 <unknown>
+#21 0x55fcc84aaffe <unknown>
+#22 0x7fb33769caa4 <unknown>
+#23 0x7fb337729c6c <unknown>
+
+OUTPUT: page_snapshot: <html lang="zh-CN"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+      
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <!-- <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script> -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/full.js"></script> -->
+  <script src="/library/leaflet.js"></script>
+  <script src="/library/full.js"></script></head></html>
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/utils/util_updater.py", line 160, in fetch_live_data
+    driver.get(DATA_SOURCE_URL)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 512, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 492, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 59.721
+  (Session info: chrome=150.0.7871.128)
+Stacktrace:
+#0 0x55fcc84ac44a <unknown>
+#1 0x55fcc7e848c9 <unknown>
+#2 0x55fcc7e6c35a <unknown>
+#3 0x55fcc7e6bfd6 <unknown>
+#4 0x55fcc7e69bbe <unknown>
+#5 0x55fcc7e6a53f <unknown>
+#6 0x55fcc7e79710 <unknown>
+#7 0x55fcc7e93617 <unknown>
+#8 0x55fcc7e9ae8b <unknown>
+#9 0x55fcc7e6ac99 <unknown>
+#10 0x55fcc7e93372 <unknown>
+#11 0x55fcc7f228b0 <unknown>
+#12 0x55fcc7ecd3ff <unknown>
+#13 0x55fcc7ece261 <unknown>
+#14 0x55fcc8471cc7 <unknown>
+#15 0x55fcc84704a8 <unknown>
+#16 0x55fcc845b196 <unknown>
+#17 0x55fcc847106a <unknown>
+#18 0x55fcc8443020 <unknown>
+#19 0x55fcc8497b98 <unknown>
+#20 0x55fcc8497d35 <unknown>
+#21 0x55fcc84aaffe <unknown>
+#22 0x7fb33769caa4 <unknown>
+#23 0x7fb337729c6c <unknown>
+[2026-07-27 08:52:58] autoupdate.main
+ERROR: Live data fetch failed, using fallback data.
