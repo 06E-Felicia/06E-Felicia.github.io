@@ -1,1 +1,70 @@
---- Logging started at 2026-08-11 18:49:57 ---
+--- Logging started at 2026-08-11 19:55:35 ---
+[2026-08-11 19:56:45] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: -0.003
+  (Session info: chrome=151.0.7922.108)
+Stacktrace:
+#0 0x55f9b542f82a <unknown>
+#1 0x55f9b4da2fc9 <unknown>
+#2 0x55f9b4d8aa2f <unknown>
+#3 0x55f9b4d8a6a6 <unknown>
+#4 0x55f9b4d88288 <unknown>
+#5 0x55f9b4d88c0f <unknown>
+#6 0x55f9b4d97d70 <unknown>
+#7 0x55f9b4db1d37 <unknown>
+#8 0x55f9b4db970b <unknown>
+#9 0x55f9b4d89369 <unknown>
+#10 0x55f9b4db1a92 <unknown>
+#11 0x55f9b4e41066 <unknown>
+#12 0x55f9b4debd32 <unknown>
+#13 0x55f9b4decbb1 <unknown>
+#14 0x55f9b53f4bb0 <unknown>
+#15 0x55f9b53f322a <unknown>
+#16 0x55f9b53ddc55 <unknown>
+#17 0x55f9b53f3eea <unknown>
+#18 0x55f9b53c5b50 <unknown>
+#19 0x55f9b541b208 <unknown>
+#20 0x55f9b541b3a5 <unknown>
+#21 0x55f9b542e3de <unknown>
+#22 0x7f7de309cb84 <unknown>
+#23 0x7f7de3129d6c <unknown>
+
+OUTPUT: page_snapshot: <html><head></head><body></body></html>
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/utils/util_updater.py", line 160, in fetch_live_data
+    driver.get(DATA_SOURCE_URL)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 524, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 504, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: -0.003
+  (Session info: chrome=151.0.7922.108)
+Stacktrace:
+#0 0x55f9b542f82a <unknown>
+#1 0x55f9b4da2fc9 <unknown>
+#2 0x55f9b4d8aa2f <unknown>
+#3 0x55f9b4d8a6a6 <unknown>
+#4 0x55f9b4d88288 <unknown>
+#5 0x55f9b4d88c0f <unknown>
+#6 0x55f9b4d97d70 <unknown>
+#7 0x55f9b4db1d37 <unknown>
+#8 0x55f9b4db970b <unknown>
+#9 0x55f9b4d89369 <unknown>
+#10 0x55f9b4db1a92 <unknown>
+#11 0x55f9b4e41066 <unknown>
+#12 0x55f9b4debd32 <unknown>
+#13 0x55f9b4decbb1 <unknown>
+#14 0x55f9b53f4bb0 <unknown>
+#15 0x55f9b53f322a <unknown>
+#16 0x55f9b53ddc55 <unknown>
+#17 0x55f9b53f3eea <unknown>
+#18 0x55f9b53c5b50 <unknown>
+#19 0x55f9b541b208 <unknown>
+#20 0x55f9b541b3a5 <unknown>
+#21 0x55f9b542e3de <unknown>
+#22 0x7f7de309cb84 <unknown>
+#23 0x7f7de3129d6c <unknown>
+[2026-08-11 19:56:45] autoupdate.main
+ERROR: Live data fetch failed, using fallback data.
