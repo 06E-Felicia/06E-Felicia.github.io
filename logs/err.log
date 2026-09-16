@@ -1,0 +1,2757 @@
+[2026-04-03 15:07:33] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 26.171
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x563d56610a6a <unknown>
+#1 0x563d5601fab5 <unknown>
+#2 0x563d560073bb <unknown>
+#3 0x563d560070a4 <unknown>
+#4 0x563d56004deb <unknown>
+#5 0x563d5600576f <unknown>
+#6 0x563d560147a0 <unknown>
+#7 0x563d5602e4b7 <unknown>
+#8 0x563d56034feb <unknown>
+#9 0x563d56005ebf <unknown>
+#10 0x563d5602e24b <unknown>
+#11 0x563d560baac6 <unknown>
+#12 0x563d56065cbf <unknown>
+#13 0x563d56066a81 <unknown>
+#14 0x563d565d6a64 <unknown>
+#15 0x563d565d9951 <unknown>
+#16 0x563d565c321e <unknown>
+#17 0x563d565da51e <unknown>
+#18 0x563d565a9be0 <unknown>
+#19 0x563d565fd9b8 <unknown>
+#20 0x563d565fdb88 <unknown>
+#21 0x563d5660f4de <unknown>
+#22 0x7efca349caa4 <unknown>
+#23 0x7efca3529c6c <unknown>
+
+OUTPUT: <html lang="zh-CN"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+      
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <!-- <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script> -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/full.js"></script> -->
+  <script src="/library/leaflet.js"></script>
+  <script src="/library/full.js"></script>
+
+  
+  <!-- SEO Meta Tags -->
+  <title>菜园子的气象栈</title>
+  <meta name="description" content="数值预报平台，为您的生活和工作提供准确的气象信息支持。">
+  <meta name="keywords" content="天气预报,气象数据,预警信息,气候分析,数值预报">
+  <meta name="author" content="气象站">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://weather-stati
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 97, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 26.171
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x563d56610a6a <unknown>
+#1 0x563d5601fab5 <unknown>
+#2 0x563d560073bb <unknown>
+#3 0x563d560070a4 <unknown>
+#4 0x563d56004deb <unknown>
+#5 0x563d5600576f <unknown>
+#6 0x563d560147a0 <unknown>
+#7 0x563d5602e4b7 <unknown>
+#8 0x563d56034feb <unknown>
+#9 0x563d56005ebf <unknown>
+#10 0x563d5602e24b <unknown>
+#11 0x563d560baac6 <unknown>
+#12 0x563d56065cbf <unknown>
+#13 0x563d56066a81 <unknown>
+#14 0x563d565d6a64 <unknown>
+#15 0x563d565d9951 <unknown>
+#16 0x563d565c321e <unknown>
+#17 0x563d565da51e <unknown>
+#18 0x563d565a9be0 <unknown>
+#19 0x563d565fd9b8 <unknown>
+#20 0x563d565fdb88 <unknown>
+#21 0x563d5660f4de <unknown>
+#22 0x7efca349caa4 <unknown>
+#23 0x7efca3529c6c <unknown>
+
+
+
+[2026-04-03 21:55:51] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 28.790
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55dbc9bd8a6a <unknown>
+#1 0x55dbc95e7ab5 <unknown>
+#2 0x55dbc95cf3bb <unknown>
+#3 0x55dbc95cf0a4 <unknown>
+#4 0x55dbc95ccdeb <unknown>
+#5 0x55dbc95cd76f <unknown>
+#6 0x55dbc95dc7a0 <unknown>
+#7 0x55dbc95f64b7 <unknown>
+#8 0x55dbc95fcfeb <unknown>
+#9 0x55dbc95cdebf <unknown>
+#10 0x55dbc95f624b <unknown>
+#11 0x55dbc9682ac6 <unknown>
+#12 0x55dbc962dcbf <unknown>
+#13 0x55dbc962ea81 <unknown>
+#14 0x55dbc9b9ea64 <unknown>
+#15 0x55dbc9ba1951 <unknown>
+#16 0x55dbc9b8b21e <unknown>
+#17 0x55dbc9ba251e <unknown>
+#18 0x55dbc9b71be0 <unknown>
+#19 0x55dbc9bc59b8 <unknown>
+#20 0x55dbc9bc5b88 <unknown>
+#21 0x55dbc9bd74de <unknown>
+#22 0x7fe5a1a9caa4 <unknown>
+#23 0x7fe5a1b29c6c <unknown>
+
+OUTPUT: <html lang="zh-CN"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+      
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <!-- <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script> -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/full.js"></script> -->
+  <script src="/library/leaflet.js"></script>
+  <script src="/library/full.js"></script>
+
+  
+  <!-- SEO Meta Tags -->
+  <title>菜园子的气象栈</title>
+  <meta name="description" content="数值预报平台，为您的生活和工作提供准确的气象信息支持。">
+  <meta name="keywords" content="天气预报,气象数据,预警信息,气候分析,数值预报">
+  <meta name="author" content="气象站">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://weather-stati
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 97, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 28.790
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55dbc9bd8a6a <unknown>
+#1 0x55dbc95e7ab5 <unknown>
+#2 0x55dbc95cf3bb <unknown>
+#3 0x55dbc95cf0a4 <unknown>
+#4 0x55dbc95ccdeb <unknown>
+#5 0x55dbc95cd76f <unknown>
+#6 0x55dbc95dc7a0 <unknown>
+#7 0x55dbc95f64b7 <unknown>
+#8 0x55dbc95fcfeb <unknown>
+#9 0x55dbc95cdebf <unknown>
+#10 0x55dbc95f624b <unknown>
+#11 0x55dbc9682ac6 <unknown>
+#12 0x55dbc962dcbf <unknown>
+#13 0x55dbc962ea81 <unknown>
+#14 0x55dbc9b9ea64 <unknown>
+#15 0x55dbc9ba1951 <unknown>
+#16 0x55dbc9b8b21e <unknown>
+#17 0x55dbc9ba251e <unknown>
+#18 0x55dbc9b71be0 <unknown>
+#19 0x55dbc9bc59b8 <unknown>
+#20 0x55dbc9bc5b88 <unknown>
+#21 0x55dbc9bd74de <unknown>
+#22 0x7fe5a1a9caa4 <unknown>
+#23 0x7fe5a1b29c6c <unknown>
+
+
+
+[2026-04-04 07:44:14] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 28.361
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x5596c43f2a6a <unknown>
+#1 0x5596c3e01ab5 <unknown>
+#2 0x5596c3de93bb <unknown>
+#3 0x5596c3de90a4 <unknown>
+#4 0x5596c3de6deb <unknown>
+#5 0x5596c3de776f <unknown>
+#6 0x5596c3df67a0 <unknown>
+#7 0x5596c3e104b7 <unknown>
+#8 0x5596c3e16feb <unknown>
+#9 0x5596c3de7ebf <unknown>
+#10 0x5596c3e1024b <unknown>
+#11 0x5596c3e9cac6 <unknown>
+#12 0x5596c3e47cbf <unknown>
+#13 0x5596c3e48a81 <unknown>
+#14 0x5596c43b8a64 <unknown>
+#15 0x5596c43bb951 <unknown>
+#16 0x5596c43a521e <unknown>
+#17 0x5596c43bc51e <unknown>
+#18 0x5596c438bbe0 <unknown>
+#19 0x5596c43df9b8 <unknown>
+#20 0x5596c43dfb88 <unknown>
+#21 0x5596c43f14de <unknown>
+#22 0x7fe6b3c9caa4 <unknown>
+#23 0x7fe6b3d29c6c <unknown>
+
+OUTPUT: <html lang="zh-CN"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+      
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <!-- <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script> -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/full.js"></script> -->
+  <script src="/library/leaflet.js"></script>
+  <script src="/library/full.js"></script></head></html>
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 97, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 28.361
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x5596c43f2a6a <unknown>
+#1 0x5596c3e01ab5 <unknown>
+#2 0x5596c3de93bb <unknown>
+#3 0x5596c3de90a4 <unknown>
+#4 0x5596c3de6deb <unknown>
+#5 0x5596c3de776f <unknown>
+#6 0x5596c3df67a0 <unknown>
+#7 0x5596c3e104b7 <unknown>
+#8 0x5596c3e16feb <unknown>
+#9 0x5596c3de7ebf <unknown>
+#10 0x5596c3e1024b <unknown>
+#11 0x5596c3e9cac6 <unknown>
+#12 0x5596c3e47cbf <unknown>
+#13 0x5596c3e48a81 <unknown>
+#14 0x5596c43b8a64 <unknown>
+#15 0x5596c43bb951 <unknown>
+#16 0x5596c43a521e <unknown>
+#17 0x5596c43bc51e <unknown>
+#18 0x5596c438bbe0 <unknown>
+#19 0x5596c43df9b8 <unknown>
+#20 0x5596c43dfb88 <unknown>
+#21 0x5596c43f14de <unknown>
+#22 0x7fe6b3c9caa4 <unknown>
+#23 0x7fe6b3d29c6c <unknown>
+
+
+
+[2026-04-04 09:30:37] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 27.119
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55b61fb28a6a <unknown>
+#1 0x55b61f537ab5 <unknown>
+#2 0x55b61f51f3bb <unknown>
+#3 0x55b61f51f0a4 <unknown>
+#4 0x55b61f51cdeb <unknown>
+#5 0x55b61f51d76f <unknown>
+#6 0x55b61f52c7a0 <unknown>
+#7 0x55b61f5464b7 <unknown>
+#8 0x55b61f54cfeb <unknown>
+#9 0x55b61f51debf <unknown>
+#10 0x55b61f54624b <unknown>
+#11 0x55b61f5d2ac6 <unknown>
+#12 0x55b61f57dcbf <unknown>
+#13 0x55b61f57ea81 <unknown>
+#14 0x55b61faeea64 <unknown>
+#15 0x55b61faf1951 <unknown>
+#16 0x55b61fadb21e <unknown>
+#17 0x55b61faf251e <unknown>
+#18 0x55b61fac1be0 <unknown>
+#19 0x55b61fb159b8 <unknown>
+#20 0x55b61fb15b88 <unknown>
+#21 0x55b61fb274de <unknown>
+#22 0x7f9fb269caa4 <unknown>
+#23 0x7f9fb2729c6c <unknown>
+
+OUTPUT: <html lang="zh-CN"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+      
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <!-- <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script> -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/full.js"></script> -->
+  <script src="/library/leaflet.js"></script>
+  <script src="/library/full.js"></script></head></html>
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 97, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 27.119
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55b61fb28a6a <unknown>
+#1 0x55b61f537ab5 <unknown>
+#2 0x55b61f51f3bb <unknown>
+#3 0x55b61f51f0a4 <unknown>
+#4 0x55b61f51cdeb <unknown>
+#5 0x55b61f51d76f <unknown>
+#6 0x55b61f52c7a0 <unknown>
+#7 0x55b61f5464b7 <unknown>
+#8 0x55b61f54cfeb <unknown>
+#9 0x55b61f51debf <unknown>
+#10 0x55b61f54624b <unknown>
+#11 0x55b61f5d2ac6 <unknown>
+#12 0x55b61f57dcbf <unknown>
+#13 0x55b61f57ea81 <unknown>
+#14 0x55b61faeea64 <unknown>
+#15 0x55b61faf1951 <unknown>
+#16 0x55b61fadb21e <unknown>
+#17 0x55b61faf251e <unknown>
+#18 0x55b61fac1be0 <unknown>
+#19 0x55b61fb159b8 <unknown>
+#20 0x55b61fb15b88 <unknown>
+#21 0x55b61fb274de <unknown>
+#22 0x7f9fb269caa4 <unknown>
+#23 0x7f9fb2729c6c <unknown>
+
+
+
+[2026-04-04 11:52:17] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 28.684
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55c7ed68aa6a <unknown>
+#1 0x55c7ed099ab5 <unknown>
+#2 0x55c7ed0813bb <unknown>
+#3 0x55c7ed0810a4 <unknown>
+#4 0x55c7ed07edeb <unknown>
+#5 0x55c7ed07f76f <unknown>
+#6 0x55c7ed08e7a0 <unknown>
+#7 0x55c7ed0a84b7 <unknown>
+#8 0x55c7ed0aefeb <unknown>
+#9 0x55c7ed07febf <unknown>
+#10 0x55c7ed0a824b <unknown>
+#11 0x55c7ed134ac6 <unknown>
+#12 0x55c7ed0dfcbf <unknown>
+#13 0x55c7ed0e0a81 <unknown>
+#14 0x55c7ed650a64 <unknown>
+#15 0x55c7ed653951 <unknown>
+#16 0x55c7ed63d21e <unknown>
+#17 0x55c7ed65451e <unknown>
+#18 0x55c7ed623be0 <unknown>
+#19 0x55c7ed6779b8 <unknown>
+#20 0x55c7ed677b88 <unknown>
+#21 0x55c7ed6894de <unknown>
+#22 0x7f64dc49caa4 <unknown>
+#23 0x7f64dc529c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 28.684
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55c7ed68aa6a <unknown>
+#1 0x55c7ed099ab5 <unknown>
+#2 0x55c7ed0813bb <unknown>
+#3 0x55c7ed0810a4 <unknown>
+#4 0x55c7ed07edeb <unknown>
+#5 0x55c7ed07f76f <unknown>
+#6 0x55c7ed08e7a0 <unknown>
+#7 0x55c7ed0a84b7 <unknown>
+#8 0x55c7ed0aefeb <unknown>
+#9 0x55c7ed07febf <unknown>
+#10 0x55c7ed0a824b <unknown>
+#11 0x55c7ed134ac6 <unknown>
+#12 0x55c7ed0dfcbf <unknown>
+#13 0x55c7ed0e0a81 <unknown>
+#14 0x55c7ed650a64 <unknown>
+#15 0x55c7ed653951 <unknown>
+#16 0x55c7ed63d21e <unknown>
+#17 0x55c7ed65451e <unknown>
+#18 0x55c7ed623be0 <unknown>
+#19 0x55c7ed6779b8 <unknown>
+#20 0x55c7ed677b88 <unknown>
+#21 0x55c7ed6894de <unknown>
+#22 0x7f64dc49caa4 <unknown>
+#23 0x7f64dc529c6c <unknown>
+
+
+
+[2026-04-04 11:53:21] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 28.953
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x556583477a6a <unknown>
+#1 0x556582e86ab5 <unknown>
+#2 0x556582e6e3bb <unknown>
+#3 0x556582e6e0a4 <unknown>
+#4 0x556582e6bdeb <unknown>
+#5 0x556582e6c76f <unknown>
+#6 0x556582e7b7a0 <unknown>
+#7 0x556582e954b7 <unknown>
+#8 0x556582e9bfeb <unknown>
+#9 0x556582e6cebf <unknown>
+#10 0x556582e9524b <unknown>
+#11 0x556582f21ac6 <unknown>
+#12 0x556582ecccbf <unknown>
+#13 0x556582ecda81 <unknown>
+#14 0x55658343da64 <unknown>
+#15 0x556583440951 <unknown>
+#16 0x55658342a21e <unknown>
+#17 0x55658344151e <unknown>
+#18 0x556583410be0 <unknown>
+#19 0x5565834649b8 <unknown>
+#20 0x556583464b88 <unknown>
+#21 0x5565834764de <unknown>
+#22 0x7f085609caa4 <unknown>
+#23 0x7f0856129c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 28.953
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x556583477a6a <unknown>
+#1 0x556582e86ab5 <unknown>
+#2 0x556582e6e3bb <unknown>
+#3 0x556582e6e0a4 <unknown>
+#4 0x556582e6bdeb <unknown>
+#5 0x556582e6c76f <unknown>
+#6 0x556582e7b7a0 <unknown>
+#7 0x556582e954b7 <unknown>
+#8 0x556582e9bfeb <unknown>
+#9 0x556582e6cebf <unknown>
+#10 0x556582e9524b <unknown>
+#11 0x556582f21ac6 <unknown>
+#12 0x556582ecccbf <unknown>
+#13 0x556582ecda81 <unknown>
+#14 0x55658343da64 <unknown>
+#15 0x556583440951 <unknown>
+#16 0x55658342a21e <unknown>
+#17 0x55658344151e <unknown>
+#18 0x556583410be0 <unknown>
+#19 0x5565834649b8 <unknown>
+#20 0x556583464b88 <unknown>
+#21 0x5565834764de <unknown>
+#22 0x7f085609caa4 <unknown>
+#23 0x7f0856129c6c <unknown>
+
+
+
+[2026-04-04 12:03:32] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 28.327
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55769750aa6a <unknown>
+#1 0x557696f19ab5 <unknown>
+#2 0x557696f013bb <unknown>
+#3 0x557696f010a4 <unknown>
+#4 0x557696efedeb <unknown>
+#5 0x557696eff76f <unknown>
+#6 0x557696f0e7a0 <unknown>
+#7 0x557696f284b7 <unknown>
+#8 0x557696f2efeb <unknown>
+#9 0x557696effebf <unknown>
+#10 0x557696f2824b <unknown>
+#11 0x557696fb4ac6 <unknown>
+#12 0x557696f5fcbf <unknown>
+#13 0x557696f60a81 <unknown>
+#14 0x5576974d0a64 <unknown>
+#15 0x5576974d3951 <unknown>
+#16 0x5576974bd21e <unknown>
+#17 0x5576974d451e <unknown>
+#18 0x5576974a3be0 <unknown>
+#19 0x5576974f79b8 <unknown>
+#20 0x5576974f7b88 <unknown>
+#21 0x5576975094de <unknown>
+#22 0x7f131ea9caa4 <unknown>
+#23 0x7f131eb29c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 28.327
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55769750aa6a <unknown>
+#1 0x557696f19ab5 <unknown>
+#2 0x557696f013bb <unknown>
+#3 0x557696f010a4 <unknown>
+#4 0x557696efedeb <unknown>
+#5 0x557696eff76f <unknown>
+#6 0x557696f0e7a0 <unknown>
+#7 0x557696f284b7 <unknown>
+#8 0x557696f2efeb <unknown>
+#9 0x557696effebf <unknown>
+#10 0x557696f2824b <unknown>
+#11 0x557696fb4ac6 <unknown>
+#12 0x557696f5fcbf <unknown>
+#13 0x557696f60a81 <unknown>
+#14 0x5576974d0a64 <unknown>
+#15 0x5576974d3951 <unknown>
+#16 0x5576974bd21e <unknown>
+#17 0x5576974d451e <unknown>
+#18 0x5576974a3be0 <unknown>
+#19 0x5576974f79b8 <unknown>
+#20 0x5576974f7b88 <unknown>
+#21 0x5576975094de <unknown>
+#22 0x7f131ea9caa4 <unknown>
+#23 0x7f131eb29c6c <unknown>
+
+
+
+[2026-04-04 12:37:15] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 28.939
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x5624bd581a6a <unknown>
+#1 0x5624bcf90ab5 <unknown>
+#2 0x5624bcf783bb <unknown>
+#3 0x5624bcf780a4 <unknown>
+#4 0x5624bcf75deb <unknown>
+#5 0x5624bcf7676f <unknown>
+#6 0x5624bcf857a0 <unknown>
+#7 0x5624bcf9f4b7 <unknown>
+#8 0x5624bcfa5feb <unknown>
+#9 0x5624bcf76ebf <unknown>
+#10 0x5624bcf9f24b <unknown>
+#11 0x5624bd02bac6 <unknown>
+#12 0x5624bcfd6cbf <unknown>
+#13 0x5624bcfd7a81 <unknown>
+#14 0x5624bd547a64 <unknown>
+#15 0x5624bd54a951 <unknown>
+#16 0x5624bd53421e <unknown>
+#17 0x5624bd54b51e <unknown>
+#18 0x5624bd51abe0 <unknown>
+#19 0x5624bd56e9b8 <unknown>
+#20 0x5624bd56eb88 <unknown>
+#21 0x5624bd5804de <unknown>
+#22 0x7f90d509caa4 <unknown>
+#23 0x7f90d5129c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 28.939
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x5624bd581a6a <unknown>
+#1 0x5624bcf90ab5 <unknown>
+#2 0x5624bcf783bb <unknown>
+#3 0x5624bcf780a4 <unknown>
+#4 0x5624bcf75deb <unknown>
+#5 0x5624bcf7676f <unknown>
+#6 0x5624bcf857a0 <unknown>
+#7 0x5624bcf9f4b7 <unknown>
+#8 0x5624bcfa5feb <unknown>
+#9 0x5624bcf76ebf <unknown>
+#10 0x5624bcf9f24b <unknown>
+#11 0x5624bd02bac6 <unknown>
+#12 0x5624bcfd6cbf <unknown>
+#13 0x5624bcfd7a81 <unknown>
+#14 0x5624bd547a64 <unknown>
+#15 0x5624bd54a951 <unknown>
+#16 0x5624bd53421e <unknown>
+#17 0x5624bd54b51e <unknown>
+#18 0x5624bd51abe0 <unknown>
+#19 0x5624bd56e9b8 <unknown>
+#20 0x5624bd56eb88 <unknown>
+#21 0x5624bd5804de <unknown>
+#22 0x7f90d509caa4 <unknown>
+#23 0x7f90d5129c6c <unknown>
+
+
+
+[2026-04-04 13:47:44] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 28.592
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55a0b6383a6a <unknown>
+#1 0x55a0b5d92ab5 <unknown>
+#2 0x55a0b5d7a3bb <unknown>
+#3 0x55a0b5d7a0a4 <unknown>
+#4 0x55a0b5d77deb <unknown>
+#5 0x55a0b5d7876f <unknown>
+#6 0x55a0b5d877a0 <unknown>
+#7 0x55a0b5da14b7 <unknown>
+#8 0x55a0b5da7feb <unknown>
+#9 0x55a0b5d78ebf <unknown>
+#10 0x55a0b5da124b <unknown>
+#11 0x55a0b5e2dac6 <unknown>
+#12 0x55a0b5dd8cbf <unknown>
+#13 0x55a0b5dd9a81 <unknown>
+#14 0x55a0b6349a64 <unknown>
+#15 0x55a0b634c951 <unknown>
+#16 0x55a0b633621e <unknown>
+#17 0x55a0b634d51e <unknown>
+#18 0x55a0b631cbe0 <unknown>
+#19 0x55a0b63709b8 <unknown>
+#20 0x55a0b6370b88 <unknown>
+#21 0x55a0b63824de <unknown>
+#22 0x7f31e0e9caa4 <unknown>
+#23 0x7f31e0f29c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 28.592
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55a0b6383a6a <unknown>
+#1 0x55a0b5d92ab5 <unknown>
+#2 0x55a0b5d7a3bb <unknown>
+#3 0x55a0b5d7a0a4 <unknown>
+#4 0x55a0b5d77deb <unknown>
+#5 0x55a0b5d7876f <unknown>
+#6 0x55a0b5d877a0 <unknown>
+#7 0x55a0b5da14b7 <unknown>
+#8 0x55a0b5da7feb <unknown>
+#9 0x55a0b5d78ebf <unknown>
+#10 0x55a0b5da124b <unknown>
+#11 0x55a0b5e2dac6 <unknown>
+#12 0x55a0b5dd8cbf <unknown>
+#13 0x55a0b5dd9a81 <unknown>
+#14 0x55a0b6349a64 <unknown>
+#15 0x55a0b634c951 <unknown>
+#16 0x55a0b633621e <unknown>
+#17 0x55a0b634d51e <unknown>
+#18 0x55a0b631cbe0 <unknown>
+#19 0x55a0b63709b8 <unknown>
+#20 0x55a0b6370b88 <unknown>
+#21 0x55a0b63824de <unknown>
+#22 0x7f31e0e9caa4 <unknown>
+#23 0x7f31e0f29c6c <unknown>
+
+
+
+[2026-04-04 14:27:52] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 28.913
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55726cadea6a <unknown>
+#1 0x55726c4edab5 <unknown>
+#2 0x55726c4d53bb <unknown>
+#3 0x55726c4d50a4 <unknown>
+#4 0x55726c4d2deb <unknown>
+#5 0x55726c4d376f <unknown>
+#6 0x55726c4e27a0 <unknown>
+#7 0x55726c4fc4b7 <unknown>
+#8 0x55726c502feb <unknown>
+#9 0x55726c4d3ebf <unknown>
+#10 0x55726c4fc24b <unknown>
+#11 0x55726c588ac6 <unknown>
+#12 0x55726c533cbf <unknown>
+#13 0x55726c534a81 <unknown>
+#14 0x55726caa4a64 <unknown>
+#15 0x55726caa7951 <unknown>
+#16 0x55726ca9121e <unknown>
+#17 0x55726caa851e <unknown>
+#18 0x55726ca77be0 <unknown>
+#19 0x55726cacb9b8 <unknown>
+#20 0x55726cacbb88 <unknown>
+#21 0x55726cadd4de <unknown>
+#22 0x7fe6fe09caa4 <unknown>
+#23 0x7fe6fe129c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 28.913
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55726cadea6a <unknown>
+#1 0x55726c4edab5 <unknown>
+#2 0x55726c4d53bb <unknown>
+#3 0x55726c4d50a4 <unknown>
+#4 0x55726c4d2deb <unknown>
+#5 0x55726c4d376f <unknown>
+#6 0x55726c4e27a0 <unknown>
+#7 0x55726c4fc4b7 <unknown>
+#8 0x55726c502feb <unknown>
+#9 0x55726c4d3ebf <unknown>
+#10 0x55726c4fc24b <unknown>
+#11 0x55726c588ac6 <unknown>
+#12 0x55726c533cbf <unknown>
+#13 0x55726c534a81 <unknown>
+#14 0x55726caa4a64 <unknown>
+#15 0x55726caa7951 <unknown>
+#16 0x55726ca9121e <unknown>
+#17 0x55726caa851e <unknown>
+#18 0x55726ca77be0 <unknown>
+#19 0x55726cacb9b8 <unknown>
+#20 0x55726cacbb88 <unknown>
+#21 0x55726cadd4de <unknown>
+#22 0x7fe6fe09caa4 <unknown>
+#23 0x7fe6fe129c6c <unknown>
+
+
+
+[2026-04-04 14:59:35] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 29.123
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x5617e86d3a6a <unknown>
+#1 0x5617e80e2ab5 <unknown>
+#2 0x5617e80ca3bb <unknown>
+#3 0x5617e80ca0a4 <unknown>
+#4 0x5617e80c7deb <unknown>
+#5 0x5617e80c876f <unknown>
+#6 0x5617e80d77a0 <unknown>
+#7 0x5617e80f14b7 <unknown>
+#8 0x5617e80f7feb <unknown>
+#9 0x5617e80c8ebf <unknown>
+#10 0x5617e80f124b <unknown>
+#11 0x5617e817dac6 <unknown>
+#12 0x5617e8128cbf <unknown>
+#13 0x5617e8129a81 <unknown>
+#14 0x5617e8699a64 <unknown>
+#15 0x5617e869c951 <unknown>
+#16 0x5617e868621e <unknown>
+#17 0x5617e869d51e <unknown>
+#18 0x5617e866cbe0 <unknown>
+#19 0x5617e86c09b8 <unknown>
+#20 0x5617e86c0b88 <unknown>
+#21 0x5617e86d24de <unknown>
+#22 0x7f209d49caa4 <unknown>
+#23 0x7f209d529c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 29.123
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x5617e86d3a6a <unknown>
+#1 0x5617e80e2ab5 <unknown>
+#2 0x5617e80ca3bb <unknown>
+#3 0x5617e80ca0a4 <unknown>
+#4 0x5617e80c7deb <unknown>
+#5 0x5617e80c876f <unknown>
+#6 0x5617e80d77a0 <unknown>
+#7 0x5617e80f14b7 <unknown>
+#8 0x5617e80f7feb <unknown>
+#9 0x5617e80c8ebf <unknown>
+#10 0x5617e80f124b <unknown>
+#11 0x5617e817dac6 <unknown>
+#12 0x5617e8128cbf <unknown>
+#13 0x5617e8129a81 <unknown>
+#14 0x5617e8699a64 <unknown>
+#15 0x5617e869c951 <unknown>
+#16 0x5617e868621e <unknown>
+#17 0x5617e869d51e <unknown>
+#18 0x5617e866cbe0 <unknown>
+#19 0x5617e86c09b8 <unknown>
+#20 0x5617e86c0b88 <unknown>
+#21 0x5617e86d24de <unknown>
+#22 0x7f209d49caa4 <unknown>
+#23 0x7f209d529c6c <unknown>
+
+
+
+[2026-04-04 15:35:49] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 29.006
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x559f24919a6a <unknown>
+#1 0x559f24328ab5 <unknown>
+#2 0x559f243103bb <unknown>
+#3 0x559f243100a4 <unknown>
+#4 0x559f2430ddeb <unknown>
+#5 0x559f2430e76f <unknown>
+#6 0x559f2431d7a0 <unknown>
+#7 0x559f243374b7 <unknown>
+#8 0x559f2433dfeb <unknown>
+#9 0x559f2430eebf <unknown>
+#10 0x559f2433724b <unknown>
+#11 0x559f243c3ac6 <unknown>
+#12 0x559f2436ecbf <unknown>
+#13 0x559f2436fa81 <unknown>
+#14 0x559f248dfa64 <unknown>
+#15 0x559f248e2951 <unknown>
+#16 0x559f248cc21e <unknown>
+#17 0x559f248e351e <unknown>
+#18 0x559f248b2be0 <unknown>
+#19 0x559f249069b8 <unknown>
+#20 0x559f24906b88 <unknown>
+#21 0x559f249184de <unknown>
+#22 0x7ff83489caa4 <unknown>
+#23 0x7ff834929c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 29.006
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x559f24919a6a <unknown>
+#1 0x559f24328ab5 <unknown>
+#2 0x559f243103bb <unknown>
+#3 0x559f243100a4 <unknown>
+#4 0x559f2430ddeb <unknown>
+#5 0x559f2430e76f <unknown>
+#6 0x559f2431d7a0 <unknown>
+#7 0x559f243374b7 <unknown>
+#8 0x559f2433dfeb <unknown>
+#9 0x559f2430eebf <unknown>
+#10 0x559f2433724b <unknown>
+#11 0x559f243c3ac6 <unknown>
+#12 0x559f2436ecbf <unknown>
+#13 0x559f2436fa81 <unknown>
+#14 0x559f248dfa64 <unknown>
+#15 0x559f248e2951 <unknown>
+#16 0x559f248cc21e <unknown>
+#17 0x559f248e351e <unknown>
+#18 0x559f248b2be0 <unknown>
+#19 0x559f249069b8 <unknown>
+#20 0x559f24906b88 <unknown>
+#21 0x559f249184de <unknown>
+#22 0x7ff83489caa4 <unknown>
+#23 0x7ff834929c6c <unknown>
+
+
+
+[2026-04-04 16:27:07] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 28.611
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55f613832a6a <unknown>
+#1 0x55f613241ab5 <unknown>
+#2 0x55f6132293bb <unknown>
+#3 0x55f6132290a4 <unknown>
+#4 0x55f613226deb <unknown>
+#5 0x55f61322776f <unknown>
+#6 0x55f6132367a0 <unknown>
+#7 0x55f6132504b7 <unknown>
+#8 0x55f613256feb <unknown>
+#9 0x55f613227ebf <unknown>
+#10 0x55f61325024b <unknown>
+#11 0x55f6132dcac6 <unknown>
+#12 0x55f613287cbf <unknown>
+#13 0x55f613288a81 <unknown>
+#14 0x55f6137f8a64 <unknown>
+#15 0x55f6137fb951 <unknown>
+#16 0x55f6137e521e <unknown>
+#17 0x55f6137fc51e <unknown>
+#18 0x55f6137cbbe0 <unknown>
+#19 0x55f61381f9b8 <unknown>
+#20 0x55f61381fb88 <unknown>
+#21 0x55f6138314de <unknown>
+#22 0x7fa25309caa4 <unknown>
+#23 0x7fa253129c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 28.611
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55f613832a6a <unknown>
+#1 0x55f613241ab5 <unknown>
+#2 0x55f6132293bb <unknown>
+#3 0x55f6132290a4 <unknown>
+#4 0x55f613226deb <unknown>
+#5 0x55f61322776f <unknown>
+#6 0x55f6132367a0 <unknown>
+#7 0x55f6132504b7 <unknown>
+#8 0x55f613256feb <unknown>
+#9 0x55f613227ebf <unknown>
+#10 0x55f61325024b <unknown>
+#11 0x55f6132dcac6 <unknown>
+#12 0x55f613287cbf <unknown>
+#13 0x55f613288a81 <unknown>
+#14 0x55f6137f8a64 <unknown>
+#15 0x55f6137fb951 <unknown>
+#16 0x55f6137e521e <unknown>
+#17 0x55f6137fc51e <unknown>
+#18 0x55f6137cbbe0 <unknown>
+#19 0x55f61381f9b8 <unknown>
+#20 0x55f61381fb88 <unknown>
+#21 0x55f6138314de <unknown>
+#22 0x7fa25309caa4 <unknown>
+#23 0x7fa253129c6c <unknown>
+
+
+
+[2026-04-04 17:01:34] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 28.976
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x560dd95cda6a <unknown>
+#1 0x560dd8fdcab5 <unknown>
+#2 0x560dd8fc43bb <unknown>
+#3 0x560dd8fc40a4 <unknown>
+#4 0x560dd8fc1deb <unknown>
+#5 0x560dd8fc276f <unknown>
+#6 0x560dd8fd17a0 <unknown>
+#7 0x560dd8feb4b7 <unknown>
+#8 0x560dd8ff1feb <unknown>
+#9 0x560dd8fc2ebf <unknown>
+#10 0x560dd8feb24b <unknown>
+#11 0x560dd9077ac6 <unknown>
+#12 0x560dd9022cbf <unknown>
+#13 0x560dd9023a81 <unknown>
+#14 0x560dd9593a64 <unknown>
+#15 0x560dd9596951 <unknown>
+#16 0x560dd958021e <unknown>
+#17 0x560dd959751e <unknown>
+#18 0x560dd9566be0 <unknown>
+#19 0x560dd95ba9b8 <unknown>
+#20 0x560dd95bab88 <unknown>
+#21 0x560dd95cc4de <unknown>
+#22 0x7f4e6f69caa4 <unknown>
+#23 0x7f4e6f729c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 28.976
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x560dd95cda6a <unknown>
+#1 0x560dd8fdcab5 <unknown>
+#2 0x560dd8fc43bb <unknown>
+#3 0x560dd8fc40a4 <unknown>
+#4 0x560dd8fc1deb <unknown>
+#5 0x560dd8fc276f <unknown>
+#6 0x560dd8fd17a0 <unknown>
+#7 0x560dd8feb4b7 <unknown>
+#8 0x560dd8ff1feb <unknown>
+#9 0x560dd8fc2ebf <unknown>
+#10 0x560dd8feb24b <unknown>
+#11 0x560dd9077ac6 <unknown>
+#12 0x560dd9022cbf <unknown>
+#13 0x560dd9023a81 <unknown>
+#14 0x560dd9593a64 <unknown>
+#15 0x560dd9596951 <unknown>
+#16 0x560dd958021e <unknown>
+#17 0x560dd959751e <unknown>
+#18 0x560dd9566be0 <unknown>
+#19 0x560dd95ba9b8 <unknown>
+#20 0x560dd95bab88 <unknown>
+#21 0x560dd95cc4de <unknown>
+#22 0x7f4e6f69caa4 <unknown>
+#23 0x7f4e6f729c6c <unknown>
+
+
+
+[2026-04-04 17:54:54] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 29.101
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x555b936b5a6a <unknown>
+#1 0x555b930c4ab5 <unknown>
+#2 0x555b930ac3bb <unknown>
+#3 0x555b930ac0a4 <unknown>
+#4 0x555b930a9deb <unknown>
+#5 0x555b930aa76f <unknown>
+#6 0x555b930b97a0 <unknown>
+#7 0x555b930d34b7 <unknown>
+#8 0x555b930d9feb <unknown>
+#9 0x555b930aaebf <unknown>
+#10 0x555b930d324b <unknown>
+#11 0x555b9315fac6 <unknown>
+#12 0x555b9310acbf <unknown>
+#13 0x555b9310ba81 <unknown>
+#14 0x555b9367ba64 <unknown>
+#15 0x555b9367e951 <unknown>
+#16 0x555b9366821e <unknown>
+#17 0x555b9367f51e <unknown>
+#18 0x555b9364ebe0 <unknown>
+#19 0x555b936a29b8 <unknown>
+#20 0x555b936a2b88 <unknown>
+#21 0x555b936b44de <unknown>
+#22 0x7f5c18e9caa4 <unknown>
+#23 0x7f5c18f29c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 29.101
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x555b936b5a6a <unknown>
+#1 0x555b930c4ab5 <unknown>
+#2 0x555b930ac3bb <unknown>
+#3 0x555b930ac0a4 <unknown>
+#4 0x555b930a9deb <unknown>
+#5 0x555b930aa76f <unknown>
+#6 0x555b930b97a0 <unknown>
+#7 0x555b930d34b7 <unknown>
+#8 0x555b930d9feb <unknown>
+#9 0x555b930aaebf <unknown>
+#10 0x555b930d324b <unknown>
+#11 0x555b9315fac6 <unknown>
+#12 0x555b9310acbf <unknown>
+#13 0x555b9310ba81 <unknown>
+#14 0x555b9367ba64 <unknown>
+#15 0x555b9367e951 <unknown>
+#16 0x555b9366821e <unknown>
+#17 0x555b9367f51e <unknown>
+#18 0x555b9364ebe0 <unknown>
+#19 0x555b936a29b8 <unknown>
+#20 0x555b936a2b88 <unknown>
+#21 0x555b936b44de <unknown>
+#22 0x7f5c18e9caa4 <unknown>
+#23 0x7f5c18f29c6c <unknown>
+
+
+
+[2026-04-04 18:31:23] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 28.948
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x5608d19f2a6a <unknown>
+#1 0x5608d1401ab5 <unknown>
+#2 0x5608d13e93bb <unknown>
+#3 0x5608d13e90a4 <unknown>
+#4 0x5608d13e6deb <unknown>
+#5 0x5608d13e776f <unknown>
+#6 0x5608d13f67a0 <unknown>
+#7 0x5608d14104b7 <unknown>
+#8 0x5608d1416feb <unknown>
+#9 0x5608d13e7ebf <unknown>
+#10 0x5608d141024b <unknown>
+#11 0x5608d149cac6 <unknown>
+#12 0x5608d1447cbf <unknown>
+#13 0x5608d1448a81 <unknown>
+#14 0x5608d19b8a64 <unknown>
+#15 0x5608d19bb951 <unknown>
+#16 0x5608d19a521e <unknown>
+#17 0x5608d19bc51e <unknown>
+#18 0x5608d198bbe0 <unknown>
+#19 0x5608d19df9b8 <unknown>
+#20 0x5608d19dfb88 <unknown>
+#21 0x5608d19f14de <unknown>
+#22 0x7f5a3729caa4 <unknown>
+#23 0x7f5a37329c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 28.948
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x5608d19f2a6a <unknown>
+#1 0x5608d1401ab5 <unknown>
+#2 0x5608d13e93bb <unknown>
+#3 0x5608d13e90a4 <unknown>
+#4 0x5608d13e6deb <unknown>
+#5 0x5608d13e776f <unknown>
+#6 0x5608d13f67a0 <unknown>
+#7 0x5608d14104b7 <unknown>
+#8 0x5608d1416feb <unknown>
+#9 0x5608d13e7ebf <unknown>
+#10 0x5608d141024b <unknown>
+#11 0x5608d149cac6 <unknown>
+#12 0x5608d1447cbf <unknown>
+#13 0x5608d1448a81 <unknown>
+#14 0x5608d19b8a64 <unknown>
+#15 0x5608d19bb951 <unknown>
+#16 0x5608d19a521e <unknown>
+#17 0x5608d19bc51e <unknown>
+#18 0x5608d198bbe0 <unknown>
+#19 0x5608d19df9b8 <unknown>
+#20 0x5608d19dfb88 <unknown>
+#21 0x5608d19f14de <unknown>
+#22 0x7f5a3729caa4 <unknown>
+#23 0x7f5a37329c6c <unknown>
+
+
+
+[2026-04-04 19:26:08] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 29.099
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x557f7b285a6a <unknown>
+#1 0x557f7ac94ab5 <unknown>
+#2 0x557f7ac7c3bb <unknown>
+#3 0x557f7ac7c0a4 <unknown>
+#4 0x557f7ac79deb <unknown>
+#5 0x557f7ac7a76f <unknown>
+#6 0x557f7ac897a0 <unknown>
+#7 0x557f7aca34b7 <unknown>
+#8 0x557f7aca9feb <unknown>
+#9 0x557f7ac7aebf <unknown>
+#10 0x557f7aca324b <unknown>
+#11 0x557f7ad2fac6 <unknown>
+#12 0x557f7acdacbf <unknown>
+#13 0x557f7acdba81 <unknown>
+#14 0x557f7b24ba64 <unknown>
+#15 0x557f7b24e951 <unknown>
+#16 0x557f7b23821e <unknown>
+#17 0x557f7b24f51e <unknown>
+#18 0x557f7b21ebe0 <unknown>
+#19 0x557f7b2729b8 <unknown>
+#20 0x557f7b272b88 <unknown>
+#21 0x557f7b2844de <unknown>
+#22 0x7f1d89e9caa4 <unknown>
+#23 0x7f1d89f29c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 29.099
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x557f7b285a6a <unknown>
+#1 0x557f7ac94ab5 <unknown>
+#2 0x557f7ac7c3bb <unknown>
+#3 0x557f7ac7c0a4 <unknown>
+#4 0x557f7ac79deb <unknown>
+#5 0x557f7ac7a76f <unknown>
+#6 0x557f7ac897a0 <unknown>
+#7 0x557f7aca34b7 <unknown>
+#8 0x557f7aca9feb <unknown>
+#9 0x557f7ac7aebf <unknown>
+#10 0x557f7aca324b <unknown>
+#11 0x557f7ad2fac6 <unknown>
+#12 0x557f7acdacbf <unknown>
+#13 0x557f7acdba81 <unknown>
+#14 0x557f7b24ba64 <unknown>
+#15 0x557f7b24e951 <unknown>
+#16 0x557f7b23821e <unknown>
+#17 0x557f7b24f51e <unknown>
+#18 0x557f7b21ebe0 <unknown>
+#19 0x557f7b2729b8 <unknown>
+#20 0x557f7b272b88 <unknown>
+#21 0x557f7b2844de <unknown>
+#22 0x7f1d89e9caa4 <unknown>
+#23 0x7f1d89f29c6c <unknown>
+
+
+
+[2026-04-04 19:52:03] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 28.945
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55636b0b7a6a <unknown>
+#1 0x55636aac6ab5 <unknown>
+#2 0x55636aaae3bb <unknown>
+#3 0x55636aaae0a4 <unknown>
+#4 0x55636aaabdeb <unknown>
+#5 0x55636aaac76f <unknown>
+#6 0x55636aabb7a0 <unknown>
+#7 0x55636aad54b7 <unknown>
+#8 0x55636aadbfeb <unknown>
+#9 0x55636aaacebf <unknown>
+#10 0x55636aad524b <unknown>
+#11 0x55636ab61ac6 <unknown>
+#12 0x55636ab0ccbf <unknown>
+#13 0x55636ab0da81 <unknown>
+#14 0x55636b07da64 <unknown>
+#15 0x55636b080951 <unknown>
+#16 0x55636b06a21e <unknown>
+#17 0x55636b08151e <unknown>
+#18 0x55636b050be0 <unknown>
+#19 0x55636b0a49b8 <unknown>
+#20 0x55636b0a4b88 <unknown>
+#21 0x55636b0b64de <unknown>
+#22 0x7f8dc569caa4 <unknown>
+#23 0x7f8dc5729c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 28.945
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55636b0b7a6a <unknown>
+#1 0x55636aac6ab5 <unknown>
+#2 0x55636aaae3bb <unknown>
+#3 0x55636aaae0a4 <unknown>
+#4 0x55636aaabdeb <unknown>
+#5 0x55636aaac76f <unknown>
+#6 0x55636aabb7a0 <unknown>
+#7 0x55636aad54b7 <unknown>
+#8 0x55636aadbfeb <unknown>
+#9 0x55636aaacebf <unknown>
+#10 0x55636aad524b <unknown>
+#11 0x55636ab61ac6 <unknown>
+#12 0x55636ab0ccbf <unknown>
+#13 0x55636ab0da81 <unknown>
+#14 0x55636b07da64 <unknown>
+#15 0x55636b080951 <unknown>
+#16 0x55636b06a21e <unknown>
+#17 0x55636b08151e <unknown>
+#18 0x55636b050be0 <unknown>
+#19 0x55636b0a49b8 <unknown>
+#20 0x55636b0a4b88 <unknown>
+#21 0x55636b0b64de <unknown>
+#22 0x7f8dc569caa4 <unknown>
+#23 0x7f8dc5729c6c <unknown>
+
+
+
+[2026-04-04 20:21:33] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 29.003
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x5605e0158a6a <unknown>
+#1 0x5605dfb67ab5 <unknown>
+#2 0x5605dfb4f3bb <unknown>
+#3 0x5605dfb4f0a4 <unknown>
+#4 0x5605dfb4cdeb <unknown>
+#5 0x5605dfb4d76f <unknown>
+#6 0x5605dfb5c7a0 <unknown>
+#7 0x5605dfb764b7 <unknown>
+#8 0x5605dfb7cfeb <unknown>
+#9 0x5605dfb4debf <unknown>
+#10 0x5605dfb7624b <unknown>
+#11 0x5605dfc02ac6 <unknown>
+#12 0x5605dfbadcbf <unknown>
+#13 0x5605dfbaea81 <unknown>
+#14 0x5605e011ea64 <unknown>
+#15 0x5605e0121951 <unknown>
+#16 0x5605e010b21e <unknown>
+#17 0x5605e012251e <unknown>
+#18 0x5605e00f1be0 <unknown>
+#19 0x5605e01459b8 <unknown>
+#20 0x5605e0145b88 <unknown>
+#21 0x5605e01574de <unknown>
+#22 0x7f1ab829caa4 <unknown>
+#23 0x7f1ab8329c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 29.003
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x5605e0158a6a <unknown>
+#1 0x5605dfb67ab5 <unknown>
+#2 0x5605dfb4f3bb <unknown>
+#3 0x5605dfb4f0a4 <unknown>
+#4 0x5605dfb4cdeb <unknown>
+#5 0x5605dfb4d76f <unknown>
+#6 0x5605dfb5c7a0 <unknown>
+#7 0x5605dfb764b7 <unknown>
+#8 0x5605dfb7cfeb <unknown>
+#9 0x5605dfb4debf <unknown>
+#10 0x5605dfb7624b <unknown>
+#11 0x5605dfc02ac6 <unknown>
+#12 0x5605dfbadcbf <unknown>
+#13 0x5605dfbaea81 <unknown>
+#14 0x5605e011ea64 <unknown>
+#15 0x5605e0121951 <unknown>
+#16 0x5605e010b21e <unknown>
+#17 0x5605e012251e <unknown>
+#18 0x5605e00f1be0 <unknown>
+#19 0x5605e01459b8 <unknown>
+#20 0x5605e0145b88 <unknown>
+#21 0x5605e01574de <unknown>
+#22 0x7f1ab829caa4 <unknown>
+#23 0x7f1ab8329c6c <unknown>
+
+
+
+[2026-04-04 20:55:40] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 29.013
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55fe89bcca6a <unknown>
+#1 0x55fe895dbab5 <unknown>
+#2 0x55fe895c33bb <unknown>
+#3 0x55fe895c30a4 <unknown>
+#4 0x55fe895c0deb <unknown>
+#5 0x55fe895c176f <unknown>
+#6 0x55fe895d07a0 <unknown>
+#7 0x55fe895ea4b7 <unknown>
+#8 0x55fe895f0feb <unknown>
+#9 0x55fe895c1ebf <unknown>
+#10 0x55fe895ea24b <unknown>
+#11 0x55fe89676ac6 <unknown>
+#12 0x55fe89621cbf <unknown>
+#13 0x55fe89622a81 <unknown>
+#14 0x55fe89b92a64 <unknown>
+#15 0x55fe89b95951 <unknown>
+#16 0x55fe89b7f21e <unknown>
+#17 0x55fe89b9651e <unknown>
+#18 0x55fe89b65be0 <unknown>
+#19 0x55fe89bb99b8 <unknown>
+#20 0x55fe89bb9b88 <unknown>
+#21 0x55fe89bcb4de <unknown>
+#22 0x7f2cc549caa4 <unknown>
+#23 0x7f2cc5529c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 29.013
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55fe89bcca6a <unknown>
+#1 0x55fe895dbab5 <unknown>
+#2 0x55fe895c33bb <unknown>
+#3 0x55fe895c30a4 <unknown>
+#4 0x55fe895c0deb <unknown>
+#5 0x55fe895c176f <unknown>
+#6 0x55fe895d07a0 <unknown>
+#7 0x55fe895ea4b7 <unknown>
+#8 0x55fe895f0feb <unknown>
+#9 0x55fe895c1ebf <unknown>
+#10 0x55fe895ea24b <unknown>
+#11 0x55fe89676ac6 <unknown>
+#12 0x55fe89621cbf <unknown>
+#13 0x55fe89622a81 <unknown>
+#14 0x55fe89b92a64 <unknown>
+#15 0x55fe89b95951 <unknown>
+#16 0x55fe89b7f21e <unknown>
+#17 0x55fe89b9651e <unknown>
+#18 0x55fe89b65be0 <unknown>
+#19 0x55fe89bb99b8 <unknown>
+#20 0x55fe89bb9b88 <unknown>
+#21 0x55fe89bcb4de <unknown>
+#22 0x7f2cc549caa4 <unknown>
+#23 0x7f2cc5529c6c <unknown>
+
+
+
+[2026-04-04 21:24:47] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 28.954
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55916f82ba6a <unknown>
+#1 0x55916f23aab5 <unknown>
+#2 0x55916f2223bb <unknown>
+#3 0x55916f2220a4 <unknown>
+#4 0x55916f21fdeb <unknown>
+#5 0x55916f22076f <unknown>
+#6 0x55916f22f7a0 <unknown>
+#7 0x55916f2494b7 <unknown>
+#8 0x55916f24ffeb <unknown>
+#9 0x55916f220ebf <unknown>
+#10 0x55916f24924b <unknown>
+#11 0x55916f2d5ac6 <unknown>
+#12 0x55916f280cbf <unknown>
+#13 0x55916f281a81 <unknown>
+#14 0x55916f7f1a64 <unknown>
+#15 0x55916f7f4951 <unknown>
+#16 0x55916f7de21e <unknown>
+#17 0x55916f7f551e <unknown>
+#18 0x55916f7c4be0 <unknown>
+#19 0x55916f8189b8 <unknown>
+#20 0x55916f818b88 <unknown>
+#21 0x55916f82a4de <unknown>
+#22 0x7f0f9a89caa4 <unknown>
+#23 0x7f0f9a929c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 28.954
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55916f82ba6a <unknown>
+#1 0x55916f23aab5 <unknown>
+#2 0x55916f2223bb <unknown>
+#3 0x55916f2220a4 <unknown>
+#4 0x55916f21fdeb <unknown>
+#5 0x55916f22076f <unknown>
+#6 0x55916f22f7a0 <unknown>
+#7 0x55916f2494b7 <unknown>
+#8 0x55916f24ffeb <unknown>
+#9 0x55916f220ebf <unknown>
+#10 0x55916f24924b <unknown>
+#11 0x55916f2d5ac6 <unknown>
+#12 0x55916f280cbf <unknown>
+#13 0x55916f281a81 <unknown>
+#14 0x55916f7f1a64 <unknown>
+#15 0x55916f7f4951 <unknown>
+#16 0x55916f7de21e <unknown>
+#17 0x55916f7f551e <unknown>
+#18 0x55916f7c4be0 <unknown>
+#19 0x55916f8189b8 <unknown>
+#20 0x55916f818b88 <unknown>
+#21 0x55916f82a4de <unknown>
+#22 0x7f0f9a89caa4 <unknown>
+#23 0x7f0f9a929c6c <unknown>
+
+
+
+[2026-04-04 21:53:23] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 28.964
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55d333012a6a <unknown>
+#1 0x55d332a21ab5 <unknown>
+#2 0x55d332a093bb <unknown>
+#3 0x55d332a090a4 <unknown>
+#4 0x55d332a06deb <unknown>
+#5 0x55d332a0776f <unknown>
+#6 0x55d332a167a0 <unknown>
+#7 0x55d332a304b7 <unknown>
+#8 0x55d332a36feb <unknown>
+#9 0x55d332a07ebf <unknown>
+#10 0x55d332a3024b <unknown>
+#11 0x55d332abcac6 <unknown>
+#12 0x55d332a67cbf <unknown>
+#13 0x55d332a68a81 <unknown>
+#14 0x55d332fd8a64 <unknown>
+#15 0x55d332fdb951 <unknown>
+#16 0x55d332fc521e <unknown>
+#17 0x55d332fdc51e <unknown>
+#18 0x55d332fabbe0 <unknown>
+#19 0x55d332fff9b8 <unknown>
+#20 0x55d332fffb88 <unknown>
+#21 0x55d3330114de <unknown>
+#22 0x7f01a4a9caa4 <unknown>
+#23 0x7f01a4b29c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 28.964
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55d333012a6a <unknown>
+#1 0x55d332a21ab5 <unknown>
+#2 0x55d332a093bb <unknown>
+#3 0x55d332a090a4 <unknown>
+#4 0x55d332a06deb <unknown>
+#5 0x55d332a0776f <unknown>
+#6 0x55d332a167a0 <unknown>
+#7 0x55d332a304b7 <unknown>
+#8 0x55d332a36feb <unknown>
+#9 0x55d332a07ebf <unknown>
+#10 0x55d332a3024b <unknown>
+#11 0x55d332abcac6 <unknown>
+#12 0x55d332a67cbf <unknown>
+#13 0x55d332a68a81 <unknown>
+#14 0x55d332fd8a64 <unknown>
+#15 0x55d332fdb951 <unknown>
+#16 0x55d332fc521e <unknown>
+#17 0x55d332fdc51e <unknown>
+#18 0x55d332fabbe0 <unknown>
+#19 0x55d332fff9b8 <unknown>
+#20 0x55d332fffb88 <unknown>
+#21 0x55d3330114de <unknown>
+#22 0x7f01a4a9caa4 <unknown>
+#23 0x7f01a4b29c6c <unknown>
+
+
+
+[2026-04-04 22:21:43] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 28.988
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x5615a63a8a6a <unknown>
+#1 0x5615a5db7ab5 <unknown>
+#2 0x5615a5d9f3bb <unknown>
+#3 0x5615a5d9f0a4 <unknown>
+#4 0x5615a5d9cdeb <unknown>
+#5 0x5615a5d9d76f <unknown>
+#6 0x5615a5dac7a0 <unknown>
+#7 0x5615a5dc64b7 <unknown>
+#8 0x5615a5dccfeb <unknown>
+#9 0x5615a5d9debf <unknown>
+#10 0x5615a5dc624b <unknown>
+#11 0x5615a5e52ac6 <unknown>
+#12 0x5615a5dfdcbf <unknown>
+#13 0x5615a5dfea81 <unknown>
+#14 0x5615a636ea64 <unknown>
+#15 0x5615a6371951 <unknown>
+#16 0x5615a635b21e <unknown>
+#17 0x5615a637251e <unknown>
+#18 0x5615a6341be0 <unknown>
+#19 0x5615a63959b8 <unknown>
+#20 0x5615a6395b88 <unknown>
+#21 0x5615a63a74de <unknown>
+#22 0x7f3bd7a9caa4 <unknown>
+#23 0x7f3bd7b29c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 28.988
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x5615a63a8a6a <unknown>
+#1 0x5615a5db7ab5 <unknown>
+#2 0x5615a5d9f3bb <unknown>
+#3 0x5615a5d9f0a4 <unknown>
+#4 0x5615a5d9cdeb <unknown>
+#5 0x5615a5d9d76f <unknown>
+#6 0x5615a5dac7a0 <unknown>
+#7 0x5615a5dc64b7 <unknown>
+#8 0x5615a5dccfeb <unknown>
+#9 0x5615a5d9debf <unknown>
+#10 0x5615a5dc624b <unknown>
+#11 0x5615a5e52ac6 <unknown>
+#12 0x5615a5dfdcbf <unknown>
+#13 0x5615a5dfea81 <unknown>
+#14 0x5615a636ea64 <unknown>
+#15 0x5615a6371951 <unknown>
+#16 0x5615a635b21e <unknown>
+#17 0x5615a637251e <unknown>
+#18 0x5615a6341be0 <unknown>
+#19 0x5615a63959b8 <unknown>
+#20 0x5615a6395b88 <unknown>
+#21 0x5615a63a74de <unknown>
+#22 0x7f3bd7a9caa4 <unknown>
+#23 0x7f3bd7b29c6c <unknown>
+
+
+
+[2026-04-04 22:55:50] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 28.982
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x56551e742a6a <unknown>
+#1 0x56551e151ab5 <unknown>
+#2 0x56551e1393bb <unknown>
+#3 0x56551e1390a4 <unknown>
+#4 0x56551e136deb <unknown>
+#5 0x56551e13776f <unknown>
+#6 0x56551e1467a0 <unknown>
+#7 0x56551e1604b7 <unknown>
+#8 0x56551e166feb <unknown>
+#9 0x56551e137ebf <unknown>
+#10 0x56551e16024b <unknown>
+#11 0x56551e1ecac6 <unknown>
+#12 0x56551e197cbf <unknown>
+#13 0x56551e198a81 <unknown>
+#14 0x56551e708a64 <unknown>
+#15 0x56551e70b951 <unknown>
+#16 0x56551e6f521e <unknown>
+#17 0x56551e70c51e <unknown>
+#18 0x56551e6dbbe0 <unknown>
+#19 0x56551e72f9b8 <unknown>
+#20 0x56551e72fb88 <unknown>
+#21 0x56551e7414de <unknown>
+#22 0x7f401149caa4 <unknown>
+#23 0x7f4011529c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 28.982
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x56551e742a6a <unknown>
+#1 0x56551e151ab5 <unknown>
+#2 0x56551e1393bb <unknown>
+#3 0x56551e1390a4 <unknown>
+#4 0x56551e136deb <unknown>
+#5 0x56551e13776f <unknown>
+#6 0x56551e1467a0 <unknown>
+#7 0x56551e1604b7 <unknown>
+#8 0x56551e166feb <unknown>
+#9 0x56551e137ebf <unknown>
+#10 0x56551e16024b <unknown>
+#11 0x56551e1ecac6 <unknown>
+#12 0x56551e197cbf <unknown>
+#13 0x56551e198a81 <unknown>
+#14 0x56551e708a64 <unknown>
+#15 0x56551e70b951 <unknown>
+#16 0x56551e6f521e <unknown>
+#17 0x56551e70c51e <unknown>
+#18 0x56551e6dbbe0 <unknown>
+#19 0x56551e72f9b8 <unknown>
+#20 0x56551e72fb88 <unknown>
+#21 0x56551e7414de <unknown>
+#22 0x7f401149caa4 <unknown>
+#23 0x7f4011529c6c <unknown>
+
+
+
+[2026-04-04 23:24:12] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 29.104
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55c33f7b2a6a <unknown>
+#1 0x55c33f1c1ab5 <unknown>
+#2 0x55c33f1a93bb <unknown>
+#3 0x55c33f1a90a4 <unknown>
+#4 0x55c33f1a6deb <unknown>
+#5 0x55c33f1a776f <unknown>
+#6 0x55c33f1b67a0 <unknown>
+#7 0x55c33f1d04b7 <unknown>
+#8 0x55c33f1d6feb <unknown>
+#9 0x55c33f1a7ebf <unknown>
+#10 0x55c33f1d024b <unknown>
+#11 0x55c33f25cac6 <unknown>
+#12 0x55c33f207cbf <unknown>
+#13 0x55c33f208a81 <unknown>
+#14 0x55c33f778a64 <unknown>
+#15 0x55c33f77b951 <unknown>
+#16 0x55c33f76521e <unknown>
+#17 0x55c33f77c51e <unknown>
+#18 0x55c33f74bbe0 <unknown>
+#19 0x55c33f79f9b8 <unknown>
+#20 0x55c33f79fb88 <unknown>
+#21 0x55c33f7b14de <unknown>
+#22 0x7f755e89caa4 <unknown>
+#23 0x7f755e929c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 29.104
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55c33f7b2a6a <unknown>
+#1 0x55c33f1c1ab5 <unknown>
+#2 0x55c33f1a93bb <unknown>
+#3 0x55c33f1a90a4 <unknown>
+#4 0x55c33f1a6deb <unknown>
+#5 0x55c33f1a776f <unknown>
+#6 0x55c33f1b67a0 <unknown>
+#7 0x55c33f1d04b7 <unknown>
+#8 0x55c33f1d6feb <unknown>
+#9 0x55c33f1a7ebf <unknown>
+#10 0x55c33f1d024b <unknown>
+#11 0x55c33f25cac6 <unknown>
+#12 0x55c33f207cbf <unknown>
+#13 0x55c33f208a81 <unknown>
+#14 0x55c33f778a64 <unknown>
+#15 0x55c33f77b951 <unknown>
+#16 0x55c33f76521e <unknown>
+#17 0x55c33f77c51e <unknown>
+#18 0x55c33f74bbe0 <unknown>
+#19 0x55c33f79f9b8 <unknown>
+#20 0x55c33f79fb88 <unknown>
+#21 0x55c33f7b14de <unknown>
+#22 0x7f755e89caa4 <unknown>
+#23 0x7f755e929c6c <unknown>
+
+
+
+[2026-04-04 23:53:53] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 28.647
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x556aa84f3a6a <unknown>
+#1 0x556aa7f02ab5 <unknown>
+#2 0x556aa7eea3bb <unknown>
+#3 0x556aa7eea0a4 <unknown>
+#4 0x556aa7ee7deb <unknown>
+#5 0x556aa7ee876f <unknown>
+#6 0x556aa7ef77a0 <unknown>
+#7 0x556aa7f114b7 <unknown>
+#8 0x556aa7f17feb <unknown>
+#9 0x556aa7ee8ebf <unknown>
+#10 0x556aa7f1124b <unknown>
+#11 0x556aa7f9dac6 <unknown>
+#12 0x556aa7f48cbf <unknown>
+#13 0x556aa7f49a81 <unknown>
+#14 0x556aa84b9a64 <unknown>
+#15 0x556aa84bc951 <unknown>
+#16 0x556aa84a621e <unknown>
+#17 0x556aa84bd51e <unknown>
+#18 0x556aa848cbe0 <unknown>
+#19 0x556aa84e09b8 <unknown>
+#20 0x556aa84e0b88 <unknown>
+#21 0x556aa84f24de <unknown>
+#22 0x7f5e1ec9caa4 <unknown>
+#23 0x7f5e1ed29c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 28.647
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x556aa84f3a6a <unknown>
+#1 0x556aa7f02ab5 <unknown>
+#2 0x556aa7eea3bb <unknown>
+#3 0x556aa7eea0a4 <unknown>
+#4 0x556aa7ee7deb <unknown>
+#5 0x556aa7ee876f <unknown>
+#6 0x556aa7ef77a0 <unknown>
+#7 0x556aa7f114b7 <unknown>
+#8 0x556aa7f17feb <unknown>
+#9 0x556aa7ee8ebf <unknown>
+#10 0x556aa7f1124b <unknown>
+#11 0x556aa7f9dac6 <unknown>
+#12 0x556aa7f48cbf <unknown>
+#13 0x556aa7f49a81 <unknown>
+#14 0x556aa84b9a64 <unknown>
+#15 0x556aa84bc951 <unknown>
+#16 0x556aa84a621e <unknown>
+#17 0x556aa84bd51e <unknown>
+#18 0x556aa848cbe0 <unknown>
+#19 0x556aa84e09b8 <unknown>
+#20 0x556aa84e0b88 <unknown>
+#21 0x556aa84f24de <unknown>
+#22 0x7f5e1ec9caa4 <unknown>
+#23 0x7f5e1ed29c6c <unknown>
+
+
+
+[2026-04-05 01:47:20] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 28.976
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x5608da52aa6a <unknown>
+#1 0x5608d9f39ab5 <unknown>
+#2 0x5608d9f213bb <unknown>
+#3 0x5608d9f210a4 <unknown>
+#4 0x5608d9f1edeb <unknown>
+#5 0x5608d9f1f76f <unknown>
+#6 0x5608d9f2e7a0 <unknown>
+#7 0x5608d9f484b7 <unknown>
+#8 0x5608d9f4efeb <unknown>
+#9 0x5608d9f1febf <unknown>
+#10 0x5608d9f4824b <unknown>
+#11 0x5608d9fd4ac6 <unknown>
+#12 0x5608d9f7fcbf <unknown>
+#13 0x5608d9f80a81 <unknown>
+#14 0x5608da4f0a64 <unknown>
+#15 0x5608da4f3951 <unknown>
+#16 0x5608da4dd21e <unknown>
+#17 0x5608da4f451e <unknown>
+#18 0x5608da4c3be0 <unknown>
+#19 0x5608da5179b8 <unknown>
+#20 0x5608da517b88 <unknown>
+#21 0x5608da5294de <unknown>
+#22 0x7fc34fc9caa4 <unknown>
+#23 0x7fc34fd29c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 28.976
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x5608da52aa6a <unknown>
+#1 0x5608d9f39ab5 <unknown>
+#2 0x5608d9f213bb <unknown>
+#3 0x5608d9f210a4 <unknown>
+#4 0x5608d9f1edeb <unknown>
+#5 0x5608d9f1f76f <unknown>
+#6 0x5608d9f2e7a0 <unknown>
+#7 0x5608d9f484b7 <unknown>
+#8 0x5608d9f4efeb <unknown>
+#9 0x5608d9f1febf <unknown>
+#10 0x5608d9f4824b <unknown>
+#11 0x5608d9fd4ac6 <unknown>
+#12 0x5608d9f7fcbf <unknown>
+#13 0x5608d9f80a81 <unknown>
+#14 0x5608da4f0a64 <unknown>
+#15 0x5608da4f3951 <unknown>
+#16 0x5608da4dd21e <unknown>
+#17 0x5608da4f451e <unknown>
+#18 0x5608da4c3be0 <unknown>
+#19 0x5608da5179b8 <unknown>
+#20 0x5608da517b88 <unknown>
+#21 0x5608da5294de <unknown>
+#22 0x7fc34fc9caa4 <unknown>
+#23 0x7fc34fd29c6c <unknown>
+
+
+
+[2026-04-05 04:31:53] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 29.297
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55af57016a6a <unknown>
+#1 0x55af56a25ab5 <unknown>
+#2 0x55af56a0d3bb <unknown>
+#3 0x55af56a0d0a4 <unknown>
+#4 0x55af56a0adeb <unknown>
+#5 0x55af56a0b76f <unknown>
+#6 0x55af56a1a7a0 <unknown>
+#7 0x55af56a344b7 <unknown>
+#8 0x55af56a3afeb <unknown>
+#9 0x55af56a0bebf <unknown>
+#10 0x55af56a3424b <unknown>
+#11 0x55af56ac0ac6 <unknown>
+#12 0x55af56a6bcbf <unknown>
+#13 0x55af56a6ca81 <unknown>
+#14 0x55af56fdca64 <unknown>
+#15 0x55af56fdf951 <unknown>
+#16 0x55af56fc921e <unknown>
+#17 0x55af56fe051e <unknown>
+#18 0x55af56fafbe0 <unknown>
+#19 0x55af570039b8 <unknown>
+#20 0x55af57003b88 <unknown>
+#21 0x55af570154de <unknown>
+#22 0x7f0e3ee9caa4 <unknown>
+#23 0x7f0e3ef29c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 29.297
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55af57016a6a <unknown>
+#1 0x55af56a25ab5 <unknown>
+#2 0x55af56a0d3bb <unknown>
+#3 0x55af56a0d0a4 <unknown>
+#4 0x55af56a0adeb <unknown>
+#5 0x55af56a0b76f <unknown>
+#6 0x55af56a1a7a0 <unknown>
+#7 0x55af56a344b7 <unknown>
+#8 0x55af56a3afeb <unknown>
+#9 0x55af56a0bebf <unknown>
+#10 0x55af56a3424b <unknown>
+#11 0x55af56ac0ac6 <unknown>
+#12 0x55af56a6bcbf <unknown>
+#13 0x55af56a6ca81 <unknown>
+#14 0x55af56fdca64 <unknown>
+#15 0x55af56fdf951 <unknown>
+#16 0x55af56fc921e <unknown>
+#17 0x55af56fe051e <unknown>
+#18 0x55af56fafbe0 <unknown>
+#19 0x55af570039b8 <unknown>
+#20 0x55af57003b88 <unknown>
+#21 0x55af570154de <unknown>
+#22 0x7f0e3ee9caa4 <unknown>
+#23 0x7f0e3ef29c6c <unknown>
+
+
+
+[2026-04-05 06:11:18] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 29.091
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55b2af525a6a <unknown>
+#1 0x55b2aef34ab5 <unknown>
+#2 0x55b2aef1c3bb <unknown>
+#3 0x55b2aef1c0a4 <unknown>
+#4 0x55b2aef19deb <unknown>
+#5 0x55b2aef1a76f <unknown>
+#6 0x55b2aef297a0 <unknown>
+#7 0x55b2aef434b7 <unknown>
+#8 0x55b2aef49feb <unknown>
+#9 0x55b2aef1aebf <unknown>
+#10 0x55b2aef4324b <unknown>
+#11 0x55b2aefcfac6 <unknown>
+#12 0x55b2aef7acbf <unknown>
+#13 0x55b2aef7ba81 <unknown>
+#14 0x55b2af4eba64 <unknown>
+#15 0x55b2af4ee951 <unknown>
+#16 0x55b2af4d821e <unknown>
+#17 0x55b2af4ef51e <unknown>
+#18 0x55b2af4bebe0 <unknown>
+#19 0x55b2af5129b8 <unknown>
+#20 0x55b2af512b88 <unknown>
+#21 0x55b2af5244de <unknown>
+#22 0x7fd06fc9caa4 <unknown>
+#23 0x7fd06fd29c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 29.091
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55b2af525a6a <unknown>
+#1 0x55b2aef34ab5 <unknown>
+#2 0x55b2aef1c3bb <unknown>
+#3 0x55b2aef1c0a4 <unknown>
+#4 0x55b2aef19deb <unknown>
+#5 0x55b2aef1a76f <unknown>
+#6 0x55b2aef297a0 <unknown>
+#7 0x55b2aef434b7 <unknown>
+#8 0x55b2aef49feb <unknown>
+#9 0x55b2aef1aebf <unknown>
+#10 0x55b2aef4324b <unknown>
+#11 0x55b2aefcfac6 <unknown>
+#12 0x55b2aef7acbf <unknown>
+#13 0x55b2aef7ba81 <unknown>
+#14 0x55b2af4eba64 <unknown>
+#15 0x55b2af4ee951 <unknown>
+#16 0x55b2af4d821e <unknown>
+#17 0x55b2af4ef51e <unknown>
+#18 0x55b2af4bebe0 <unknown>
+#19 0x55b2af5129b8 <unknown>
+#20 0x55b2af512b88 <unknown>
+#21 0x55b2af5244de <unknown>
+#22 0x7fd06fc9caa4 <unknown>
+#23 0x7fd06fd29c6c <unknown>
+
+
+
+[2026-04-05 07:36:24] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 28.988
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x557066e3ba6a <unknown>
+#1 0x55706684aab5 <unknown>
+#2 0x5570668323bb <unknown>
+#3 0x5570668320a4 <unknown>
+#4 0x55706682fdeb <unknown>
+#5 0x55706683076f <unknown>
+#6 0x55706683f7a0 <unknown>
+#7 0x5570668594b7 <unknown>
+#8 0x55706685ffeb <unknown>
+#9 0x557066830ebf <unknown>
+#10 0x55706685924b <unknown>
+#11 0x5570668e5ac6 <unknown>
+#12 0x557066890cbf <unknown>
+#13 0x557066891a81 <unknown>
+#14 0x557066e01a64 <unknown>
+#15 0x557066e04951 <unknown>
+#16 0x557066dee21e <unknown>
+#17 0x557066e0551e <unknown>
+#18 0x557066dd4be0 <unknown>
+#19 0x557066e289b8 <unknown>
+#20 0x557066e28b88 <unknown>
+#21 0x557066e3a4de <unknown>
+#22 0x7fec7449caa4 <unknown>
+#23 0x7fec74529c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 28.988
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x557066e3ba6a <unknown>
+#1 0x55706684aab5 <unknown>
+#2 0x5570668323bb <unknown>
+#3 0x5570668320a4 <unknown>
+#4 0x55706682fdeb <unknown>
+#5 0x55706683076f <unknown>
+#6 0x55706683f7a0 <unknown>
+#7 0x5570668594b7 <unknown>
+#8 0x55706685ffeb <unknown>
+#9 0x557066830ebf <unknown>
+#10 0x55706685924b <unknown>
+#11 0x5570668e5ac6 <unknown>
+#12 0x557066890cbf <unknown>
+#13 0x557066891a81 <unknown>
+#14 0x557066e01a64 <unknown>
+#15 0x557066e04951 <unknown>
+#16 0x557066dee21e <unknown>
+#17 0x557066e0551e <unknown>
+#18 0x557066dd4be0 <unknown>
+#19 0x557066e289b8 <unknown>
+#20 0x557066e28b88 <unknown>
+#21 0x557066e3a4de <unknown>
+#22 0x7fec7449caa4 <unknown>
+#23 0x7fec74529c6c <unknown>
+
+
+
+[2026-04-05 08:35:24] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 29.042
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x5637ad4d4a6a <unknown>
+#1 0x5637acee3ab5 <unknown>
+#2 0x5637acecb3bb <unknown>
+#3 0x5637acecb0a4 <unknown>
+#4 0x5637acec8deb <unknown>
+#5 0x5637acec976f <unknown>
+#6 0x5637aced87a0 <unknown>
+#7 0x5637acef24b7 <unknown>
+#8 0x5637acef8feb <unknown>
+#9 0x5637acec9ebf <unknown>
+#10 0x5637acef224b <unknown>
+#11 0x5637acf7eac6 <unknown>
+#12 0x5637acf29cbf <unknown>
+#13 0x5637acf2aa81 <unknown>
+#14 0x5637ad49aa64 <unknown>
+#15 0x5637ad49d951 <unknown>
+#16 0x5637ad48721e <unknown>
+#17 0x5637ad49e51e <unknown>
+#18 0x5637ad46dbe0 <unknown>
+#19 0x5637ad4c19b8 <unknown>
+#20 0x5637ad4c1b88 <unknown>
+#21 0x5637ad4d34de <unknown>
+#22 0x7f98bd89caa4 <unknown>
+#23 0x7f98bd929c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 29.042
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x5637ad4d4a6a <unknown>
+#1 0x5637acee3ab5 <unknown>
+#2 0x5637acecb3bb <unknown>
+#3 0x5637acecb0a4 <unknown>
+#4 0x5637acec8deb <unknown>
+#5 0x5637acec976f <unknown>
+#6 0x5637aced87a0 <unknown>
+#7 0x5637acef24b7 <unknown>
+#8 0x5637acef8feb <unknown>
+#9 0x5637acec9ebf <unknown>
+#10 0x5637acef224b <unknown>
+#11 0x5637acf7eac6 <unknown>
+#12 0x5637acf29cbf <unknown>
+#13 0x5637acf2aa81 <unknown>
+#14 0x5637ad49aa64 <unknown>
+#15 0x5637ad49d951 <unknown>
+#16 0x5637ad48721e <unknown>
+#17 0x5637ad49e51e <unknown>
+#18 0x5637ad46dbe0 <unknown>
+#19 0x5637ad4c19b8 <unknown>
+#20 0x5637ad4c1b88 <unknown>
+#21 0x5637ad4d34de <unknown>
+#22 0x7f98bd89caa4 <unknown>
+#23 0x7f98bd929c6c <unknown>
+
+
+
+[2026-04-05 09:32:53] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 29.136
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55d9c96eaa6a <unknown>
+#1 0x55d9c90f9ab5 <unknown>
+#2 0x55d9c90e13bb <unknown>
+#3 0x55d9c90e10a4 <unknown>
+#4 0x55d9c90dedeb <unknown>
+#5 0x55d9c90df76f <unknown>
+#6 0x55d9c90ee7a0 <unknown>
+#7 0x55d9c91084b7 <unknown>
+#8 0x55d9c910efeb <unknown>
+#9 0x55d9c90dfebf <unknown>
+#10 0x55d9c910824b <unknown>
+#11 0x55d9c9194ac6 <unknown>
+#12 0x55d9c913fcbf <unknown>
+#13 0x55d9c9140a81 <unknown>
+#14 0x55d9c96b0a64 <unknown>
+#15 0x55d9c96b3951 <unknown>
+#16 0x55d9c969d21e <unknown>
+#17 0x55d9c96b451e <unknown>
+#18 0x55d9c9683be0 <unknown>
+#19 0x55d9c96d79b8 <unknown>
+#20 0x55d9c96d7b88 <unknown>
+#21 0x55d9c96e94de <unknown>
+#22 0x7f55ff89caa4 <unknown>
+#23 0x7f55ff929c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 29.136
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55d9c96eaa6a <unknown>
+#1 0x55d9c90f9ab5 <unknown>
+#2 0x55d9c90e13bb <unknown>
+#3 0x55d9c90e10a4 <unknown>
+#4 0x55d9c90dedeb <unknown>
+#5 0x55d9c90df76f <unknown>
+#6 0x55d9c90ee7a0 <unknown>
+#7 0x55d9c91084b7 <unknown>
+#8 0x55d9c910efeb <unknown>
+#9 0x55d9c90dfebf <unknown>
+#10 0x55d9c910824b <unknown>
+#11 0x55d9c9194ac6 <unknown>
+#12 0x55d9c913fcbf <unknown>
+#13 0x55d9c9140a81 <unknown>
+#14 0x55d9c96b0a64 <unknown>
+#15 0x55d9c96b3951 <unknown>
+#16 0x55d9c969d21e <unknown>
+#17 0x55d9c96b451e <unknown>
+#18 0x55d9c9683be0 <unknown>
+#19 0x55d9c96d79b8 <unknown>
+#20 0x55d9c96d7b88 <unknown>
+#21 0x55d9c96e94de <unknown>
+#22 0x7f55ff89caa4 <unknown>
+#23 0x7f55ff929c6c <unknown>
+
+
+
+[2026-04-05 10:26:12] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 28.861
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x5607bc1bea6a <unknown>
+#1 0x5607bbbcdab5 <unknown>
+#2 0x5607bbbb53bb <unknown>
+#3 0x5607bbbb50a4 <unknown>
+#4 0x5607bbbb2deb <unknown>
+#5 0x5607bbbb376f <unknown>
+#6 0x5607bbbc27a0 <unknown>
+#7 0x5607bbbdc4b7 <unknown>
+#8 0x5607bbbe2feb <unknown>
+#9 0x5607bbbb3ebf <unknown>
+#10 0x5607bbbdc24b <unknown>
+#11 0x5607bbc68ac6 <unknown>
+#12 0x5607bbc13cbf <unknown>
+#13 0x5607bbc14a81 <unknown>
+#14 0x5607bc184a64 <unknown>
+#15 0x5607bc187951 <unknown>
+#16 0x5607bc17121e <unknown>
+#17 0x5607bc18851e <unknown>
+#18 0x5607bc157be0 <unknown>
+#19 0x5607bc1ab9b8 <unknown>
+#20 0x5607bc1abb88 <unknown>
+#21 0x5607bc1bd4de <unknown>
+#22 0x7f118009caa4 <unknown>
+#23 0x7f1180129c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 28.861
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x5607bc1bea6a <unknown>
+#1 0x5607bbbcdab5 <unknown>
+#2 0x5607bbbb53bb <unknown>
+#3 0x5607bbbb50a4 <unknown>
+#4 0x5607bbbb2deb <unknown>
+#5 0x5607bbbb376f <unknown>
+#6 0x5607bbbc27a0 <unknown>
+#7 0x5607bbbdc4b7 <unknown>
+#8 0x5607bbbe2feb <unknown>
+#9 0x5607bbbb3ebf <unknown>
+#10 0x5607bbbdc24b <unknown>
+#11 0x5607bbc68ac6 <unknown>
+#12 0x5607bbc13cbf <unknown>
+#13 0x5607bbc14a81 <unknown>
+#14 0x5607bc184a64 <unknown>
+#15 0x5607bc187951 <unknown>
+#16 0x5607bc17121e <unknown>
+#17 0x5607bc18851e <unknown>
+#18 0x5607bc157be0 <unknown>
+#19 0x5607bc1ab9b8 <unknown>
+#20 0x5607bc1abb88 <unknown>
+#21 0x5607bc1bd4de <unknown>
+#22 0x7f118009caa4 <unknown>
+#23 0x7f1180129c6c <unknown>
+
+
+
+[2026-04-05 11:01:23] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 28.755
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x562d1a065a6a <unknown>
+#1 0x562d19a74ab5 <unknown>
+#2 0x562d19a5c3bb <unknown>
+#3 0x562d19a5c0a4 <unknown>
+#4 0x562d19a59deb <unknown>
+#5 0x562d19a5a76f <unknown>
+#6 0x562d19a697a0 <unknown>
+#7 0x562d19a834b7 <unknown>
+#8 0x562d19a89feb <unknown>
+#9 0x562d19a5aebf <unknown>
+#10 0x562d19a8324b <unknown>
+#11 0x562d19b0fac6 <unknown>
+#12 0x562d19abacbf <unknown>
+#13 0x562d19abba81 <unknown>
+#14 0x562d1a02ba64 <unknown>
+#15 0x562d1a02e951 <unknown>
+#16 0x562d1a01821e <unknown>
+#17 0x562d1a02f51e <unknown>
+#18 0x562d19ffebe0 <unknown>
+#19 0x562d1a0529b8 <unknown>
+#20 0x562d1a052b88 <unknown>
+#21 0x562d1a0644de <unknown>
+#22 0x7fd489c9caa4 <unknown>
+#23 0x7fd489d29c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 28.755
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x562d1a065a6a <unknown>
+#1 0x562d19a74ab5 <unknown>
+#2 0x562d19a5c3bb <unknown>
+#3 0x562d19a5c0a4 <unknown>
+#4 0x562d19a59deb <unknown>
+#5 0x562d19a5a76f <unknown>
+#6 0x562d19a697a0 <unknown>
+#7 0x562d19a834b7 <unknown>
+#8 0x562d19a89feb <unknown>
+#9 0x562d19a5aebf <unknown>
+#10 0x562d19a8324b <unknown>
+#11 0x562d19b0fac6 <unknown>
+#12 0x562d19abacbf <unknown>
+#13 0x562d19abba81 <unknown>
+#14 0x562d1a02ba64 <unknown>
+#15 0x562d1a02e951 <unknown>
+#16 0x562d1a01821e <unknown>
+#17 0x562d1a02f51e <unknown>
+#18 0x562d19ffebe0 <unknown>
+#19 0x562d1a0529b8 <unknown>
+#20 0x562d1a052b88 <unknown>
+#21 0x562d1a0644de <unknown>
+#22 0x7fd489c9caa4 <unknown>
+#23 0x7fd489d29c6c <unknown>
+
+
+
+[2026-04-05 11:51:52] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 28.971
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x5600abc9ca6a <unknown>
+#1 0x5600ab6abab5 <unknown>
+#2 0x5600ab6933bb <unknown>
+#3 0x5600ab6930a4 <unknown>
+#4 0x5600ab690deb <unknown>
+#5 0x5600ab69176f <unknown>
+#6 0x5600ab6a07a0 <unknown>
+#7 0x5600ab6ba4b7 <unknown>
+#8 0x5600ab6c0feb <unknown>
+#9 0x5600ab691ebf <unknown>
+#10 0x5600ab6ba24b <unknown>
+#11 0x5600ab746ac6 <unknown>
+#12 0x5600ab6f1cbf <unknown>
+#13 0x5600ab6f2a81 <unknown>
+#14 0x5600abc62a64 <unknown>
+#15 0x5600abc65951 <unknown>
+#16 0x5600abc4f21e <unknown>
+#17 0x5600abc6651e <unknown>
+#18 0x5600abc35be0 <unknown>
+#19 0x5600abc899b8 <unknown>
+#20 0x5600abc89b88 <unknown>
+#21 0x5600abc9b4de <unknown>
+#22 0x7ff80e09caa4 <unknown>
+#23 0x7ff80e129c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 28.971
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x5600abc9ca6a <unknown>
+#1 0x5600ab6abab5 <unknown>
+#2 0x5600ab6933bb <unknown>
+#3 0x5600ab6930a4 <unknown>
+#4 0x5600ab690deb <unknown>
+#5 0x5600ab69176f <unknown>
+#6 0x5600ab6a07a0 <unknown>
+#7 0x5600ab6ba4b7 <unknown>
+#8 0x5600ab6c0feb <unknown>
+#9 0x5600ab691ebf <unknown>
+#10 0x5600ab6ba24b <unknown>
+#11 0x5600ab746ac6 <unknown>
+#12 0x5600ab6f1cbf <unknown>
+#13 0x5600ab6f2a81 <unknown>
+#14 0x5600abc62a64 <unknown>
+#15 0x5600abc65951 <unknown>
+#16 0x5600abc4f21e <unknown>
+#17 0x5600abc6651e <unknown>
+#18 0x5600abc35be0 <unknown>
+#19 0x5600abc899b8 <unknown>
+#20 0x5600abc89b88 <unknown>
+#21 0x5600abc9b4de <unknown>
+#22 0x7ff80e09caa4 <unknown>
+#23 0x7ff80e129c6c <unknown>
+
+
+
+[2026-04-05 12:39:40] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 29.197
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55b571466a6a <unknown>
+#1 0x55b570e75ab5 <unknown>
+#2 0x55b570e5d3bb <unknown>
+#3 0x55b570e5d0a4 <unknown>
+#4 0x55b570e5adeb <unknown>
+#5 0x55b570e5b76f <unknown>
+#6 0x55b570e6a7a0 <unknown>
+#7 0x55b570e844b7 <unknown>
+#8 0x55b570e8afeb <unknown>
+#9 0x55b570e5bebf <unknown>
+#10 0x55b570e8424b <unknown>
+#11 0x55b570f10ac6 <unknown>
+#12 0x55b570ebbcbf <unknown>
+#13 0x55b570ebca81 <unknown>
+#14 0x55b57142ca64 <unknown>
+#15 0x55b57142f951 <unknown>
+#16 0x55b57141921e <unknown>
+#17 0x55b57143051e <unknown>
+#18 0x55b5713ffbe0 <unknown>
+#19 0x55b5714539b8 <unknown>
+#20 0x55b571453b88 <unknown>
+#21 0x55b5714654de <unknown>
+#22 0x7fed95a9caa4 <unknown>
+#23 0x7fed95b29c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 29.197
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x55b571466a6a <unknown>
+#1 0x55b570e75ab5 <unknown>
+#2 0x55b570e5d3bb <unknown>
+#3 0x55b570e5d0a4 <unknown>
+#4 0x55b570e5adeb <unknown>
+#5 0x55b570e5b76f <unknown>
+#6 0x55b570e6a7a0 <unknown>
+#7 0x55b570e844b7 <unknown>
+#8 0x55b570e8afeb <unknown>
+#9 0x55b570e5bebf <unknown>
+#10 0x55b570e8424b <unknown>
+#11 0x55b570f10ac6 <unknown>
+#12 0x55b570ebbcbf <unknown>
+#13 0x55b570ebca81 <unknown>
+#14 0x55b57142ca64 <unknown>
+#15 0x55b57142f951 <unknown>
+#16 0x55b57141921e <unknown>
+#17 0x55b57143051e <unknown>
+#18 0x55b5713ffbe0 <unknown>
+#19 0x55b5714539b8 <unknown>
+#20 0x55b571453b88 <unknown>
+#21 0x55b5714654de <unknown>
+#22 0x7fed95a9caa4 <unknown>
+#23 0x7fed95b29c6c <unknown>
+
+
+
+[2026-04-05 13:50:01] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 28.227
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x559f849dba6a <unknown>
+#1 0x559f843eaab5 <unknown>
+#2 0x559f843d23bb <unknown>
+#3 0x559f843d20a4 <unknown>
+#4 0x559f843cfdeb <unknown>
+#5 0x559f843d076f <unknown>
+#6 0x559f843df7a0 <unknown>
+#7 0x559f843f94b7 <unknown>
+#8 0x559f843fffeb <unknown>
+#9 0x559f843d0ebf <unknown>
+#10 0x559f843f924b <unknown>
+#11 0x559f84485ac6 <unknown>
+#12 0x559f84430cbf <unknown>
+#13 0x559f84431a81 <unknown>
+#14 0x559f849a1a64 <unknown>
+#15 0x559f849a4951 <unknown>
+#16 0x559f8498e21e <unknown>
+#17 0x559f849a551e <unknown>
+#18 0x559f84974be0 <unknown>
+#19 0x559f849c89b8 <unknown>
+#20 0x559f849c8b88 <unknown>
+#21 0x559f849da4de <unknown>
+#22 0x7f233989caa4 <unknown>
+#23 0x7f2339929c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 28.227
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x559f849dba6a <unknown>
+#1 0x559f843eaab5 <unknown>
+#2 0x559f843d23bb <unknown>
+#3 0x559f843d20a4 <unknown>
+#4 0x559f843cfdeb <unknown>
+#5 0x559f843d076f <unknown>
+#6 0x559f843df7a0 <unknown>
+#7 0x559f843f94b7 <unknown>
+#8 0x559f843fffeb <unknown>
+#9 0x559f843d0ebf <unknown>
+#10 0x559f843f924b <unknown>
+#11 0x559f84485ac6 <unknown>
+#12 0x559f84430cbf <unknown>
+#13 0x559f84431a81 <unknown>
+#14 0x559f849a1a64 <unknown>
+#15 0x559f849a4951 <unknown>
+#16 0x559f8498e21e <unknown>
+#17 0x559f849a551e <unknown>
+#18 0x559f84974be0 <unknown>
+#19 0x559f849c89b8 <unknown>
+#20 0x559f849c8b88 <unknown>
+#21 0x559f849da4de <unknown>
+#22 0x7f233989caa4 <unknown>
+#23 0x7f2339929c6c <unknown>
+
+
+
+[2026-04-05 14:29:46] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 27.668
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x5573413b5a6a <unknown>
+#1 0x557340dc4ab5 <unknown>
+#2 0x557340dac3bb <unknown>
+#3 0x557340dac0a4 <unknown>
+#4 0x557340da9deb <unknown>
+#5 0x557340daa76f <unknown>
+#6 0x557340db97a0 <unknown>
+#7 0x557340dd34b7 <unknown>
+#8 0x557340dd9feb <unknown>
+#9 0x557340daaebf <unknown>
+#10 0x557340dd324b <unknown>
+#11 0x557340e5fac6 <unknown>
+#12 0x557340e0acbf <unknown>
+#13 0x557340e0ba81 <unknown>
+#14 0x55734137ba64 <unknown>
+#15 0x55734137e951 <unknown>
+#16 0x55734136821e <unknown>
+#17 0x55734137f51e <unknown>
+#18 0x55734134ebe0 <unknown>
+#19 0x5573413a29b8 <unknown>
+#20 0x5573413a2b88 <unknown>
+#21 0x5573413b44de <unknown>
+#22 0x7ffa3e89caa4 <unknown>
+#23 0x7ffa3e929c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 27.668
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x5573413b5a6a <unknown>
+#1 0x557340dc4ab5 <unknown>
+#2 0x557340dac3bb <unknown>
+#3 0x557340dac0a4 <unknown>
+#4 0x557340da9deb <unknown>
+#5 0x557340daa76f <unknown>
+#6 0x557340db97a0 <unknown>
+#7 0x557340dd34b7 <unknown>
+#8 0x557340dd9feb <unknown>
+#9 0x557340daaebf <unknown>
+#10 0x557340dd324b <unknown>
+#11 0x557340e5fac6 <unknown>
+#12 0x557340e0acbf <unknown>
+#13 0x557340e0ba81 <unknown>
+#14 0x55734137ba64 <unknown>
+#15 0x55734137e951 <unknown>
+#16 0x55734136821e <unknown>
+#17 0x55734137f51e <unknown>
+#18 0x55734134ebe0 <unknown>
+#19 0x5573413a29b8 <unknown>
+#20 0x5573413a2b88 <unknown>
+#21 0x5573413b44de <unknown>
+#22 0x7ffa3e89caa4 <unknown>
+#23 0x7ffa3e929c6c <unknown>
+
+
+
+[2026-04-05 15:02:59] autoupdate.fetch_smca
+ERROR: Message: timeout: Timed out receiving message from renderer: 28.578
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x5587971aca6a <unknown>
+#1 0x558796bbbab5 <unknown>
+#2 0x558796ba33bb <unknown>
+#3 0x558796ba30a4 <unknown>
+#4 0x558796ba0deb <unknown>
+#5 0x558796ba176f <unknown>
+#6 0x558796bb07a0 <unknown>
+#7 0x558796bca4b7 <unknown>
+#8 0x558796bd0feb <unknown>
+#9 0x558796ba1ebf <unknown>
+#10 0x558796bca24b <unknown>
+#11 0x558796c56ac6 <unknown>
+#12 0x558796c01cbf <unknown>
+#13 0x558796c02a81 <unknown>
+#14 0x558797172a64 <unknown>
+#15 0x558797175951 <unknown>
+#16 0x55879715f21e <unknown>
+#17 0x55879717651e <unknown>
+#18 0x558797145be0 <unknown>
+#19 0x5587971999b8 <unknown>
+#20 0x558797199b88 <unknown>
+#21 0x5587971ab4de <unknown>
+#22 0x7fb80b49caa4 <unknown>
+#23 0x7fb80b529c6c <unknown>
+
+TRACEBACK:
+Traceback (most recent call last):
+  File "/home/runner/work/06E-Felicia.github.io/06E-Felicia.github.io/auto_update/autoupdate.py", line 115, in fetch_smca
+    driver.get(settings["source_url"])
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 466, in get
+    self.execute(Command.GET, {"url": url})
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 28.578
+  (Session info: chrome=146.0.7680.164)
+Stacktrace:
+#0 0x5587971aca6a <unknown>
+#1 0x558796bbbab5 <unknown>
+#2 0x558796ba33bb <unknown>
+#3 0x558796ba30a4 <unknown>
+#4 0x558796ba0deb <unknown>
+#5 0x558796ba176f <unknown>
+#6 0x558796bb07a0 <unknown>
+#7 0x558796bca4b7 <unknown>
+#8 0x558796bd0feb <unknown>
+#9 0x558796ba1ebf <unknown>
+#10 0x558796bca24b <unknown>
+#11 0x558796c56ac6 <unknown>
+#12 0x558796c01cbf <unknown>
+#13 0x558796c02a81 <unknown>
+#14 0x558797172a64 <unknown>
+#15 0x558797175951 <unknown>
+#16 0x55879715f21e <unknown>
+#17 0x55879717651e <unknown>
+#18 0x558797145be0 <unknown>
+#19 0x5587971999b8 <unknown>
+#20 0x558797199b88 <unknown>
+#21 0x5587971ab4de <unknown>
+#22 0x7fb80b49caa4 <unknown>
+#23 0x7fb80b529c6c <unknown>
+
+
+

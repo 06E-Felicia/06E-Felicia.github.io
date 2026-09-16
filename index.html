@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深中气象</title>
+    <link rel="stylesheet" href="assets/styles/style.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <meta name="description" content="深中气象 - 提供深圳市最新天气实况、预报和预警信息，助您做好出行和生活安排。">
+    <meta name="keywords" content="深中气象, 深圳天气, 天气预报, 天气实况, 天气预警, 台风预报, 卫星云图, 气象信息">
+</head>
+
+<body>
+    <div id="alert-overlay" class="alert-overlay">
+        <div class="alert-modal">
+            <div class="alert-header">
+                <h2 id="alert-title">-- 预警标题 --</h2>
+            </div>
+
+            <div class="alert-main-body">
+                <div class="alert-image-side">
+                    <img id="alert-img" src="" alt="预警雷达图">
+                </div>
+
+                <div class="alert-text-side">
+                    <p id="alert-msg">-- 预警详细内容 --</p>
+                </div>
+            </div>
+
+            <div class="alert-footer">
+                <button class="alert-close-btn" onclick="closeAlert()">我知道了 (点击关闭)</button>
+            </div>
+        </div>
+    </div>
+
+    <nav class="nav-bar">
+        <div class="nav-logo-wrapper">
+            <div class="nav-logo" onclick="toggleAvatarMenu(event)">
+                <img src="assets/images/profile_photo.jpg" alt="Avatar">
+            </div>
+            <div id="avatar-menu" class="dropdown-menu">
+                <a href="https://github.com/06E-Felicia" target="_blank">项目主页</a>
+                <a href="javascript:void(0)" onclick="checkAndShowAlert()">显示最新预警</a>
+                <a href="https://06e-felicia.github.io/index.html" target="_blank">深中气象公众号</a>
+                <a href="https://06e-felicia.github.io/agent.html" target="_blank">深中气象智能体</a>
+                <a href="https://06e-felicia.github.io/index.html" target="_blank">空门苍の咖啡馆</a>
+            </div>
+        </div>
+        <div class="nav-menus">
+            <ul class="nav-group">
+                <li><a href="index.html" class="nav-item active">今日天气</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-item">预报</a>
+                    <div class="dropdown-menu">
+                        <a href="forecast.html">一周天气</a>
+                        <a href="https://smca.fun/#/tc_forecast?type=fnv3_attack" target="_blank">台风路径预报</a>
+                    </div>
+                </li>
+                <li><a href="warnings.html" class="nav-item">预警</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-item">卫星云图</a>
+                    <div class="dropdown-menu">
+                        <a href="https://www.nmc.cn/publish/radar/huanan.html" target="_blank">华南雷达</a>
+                        <a href="https://www.dapiya.top/satellite/floater/" target="_blank">台风卫星云图</a>
+                        <a href="https://www.storm-chasers.cn/wp-content/uploads/satimgs/Composite_TVIS_FDLK.jpg"
+                            target="_blank">向日葵圆盘图</a>
+                    </div>
+                </li>
+            </ul>
+            <ul class="nav-group">
+                <li class="dropdown">
+                    <a href="#" class="nav-item">友情链接</a>
+                    <div class="dropdown-menu" style="left: auto; right: 0;">
+                        <a href="https://www.tyboard.net/" target="_blank">台风论坛</a>
+                        <a href="https://smca.fun/" target="_blank">菜园子的气象栈</a>
+                        <a href="https://weather.sz.gov.cn/" target="_blank">深圳气象台</a>
+                    </div>
+                </li>
+                <li><a href="assets/images/crazy_thursday.jpg"
+                        class="nav-item" target="_blank">支持我们</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="weather-mega-card">
+            <div class="section forecast-side">
+                <img id="ui-icon" class="weather-icon" src="" alt=" ">
+                <div class="temp-row">
+                    <span id="ui-low" style="color:var(--temp-blue)">--</span>
+                    <span style="opacity: 0.15; font-weight: 200;">-</span>
+                    <span id="ui-high" style="color:var(--temp-red)">--</span>
+                </div>
+                <div class="info-grid">
+                    <div class="item"><span class="label">湿度</span><span id="ui-hum" class="val">--</span></div>
+                    <div class="item"><span class="label">天气</span><span id="ui-rain-pre"
+                            class="val rain-val">--</span></div>
+                    <div class="item"><span class="label">风力</span><span id="ui-wind" class="val">--</span></div>
+                    <div class="item"><span class="label">风向</span><span id="ui-dir" class="val">--</span></div>
+                </div>
+            </div>
+            <div class="section live-side">
+                <div class="live-header">
+                    <div class="live-dot"></div>
+                    <div class="live-title">深圳市实况</div>
+                </div>
+                <div class="info-grid live-grid">
+                    <div class="item"><span class="label">当前气温</span><span id="t" class="val">--</span></div>
+                    <div class="item"><span class="label">日雨量</span><span id="r_day" class="val rain-val">--</span>
+                    </div>
+                    <div class="item"><span class="label">1h 滑动雨量</span><span id="r_1h" class="val rain-val">--</span>
+                    </div>
+                    <div class="item"><span class="label">气压</span><span id="p" class="val"
+                            style="font-size: 18px;">--</span></div>
+                </div>
+                <div id="ltime" class="update-time">UPDATE: --</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="dialog-bubble" class="speech-bubble">内容加载中...</div>
+
+    <div class="floating-display" onclick="showRandomDialog()">
+        <img src="assets/images/cursor.png" alt="Display">
+    </div>
+
+    <script src="assets/scripts/script.js"></script>
+
+</body>
+
+</html>

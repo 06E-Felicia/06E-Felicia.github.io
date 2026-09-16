@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一周预报｜深中气象</title>
+    <meta name="description" content="深圳市未来一周天气预报，由深圳市气象台数据自动更新。">
+    <link rel="stylesheet" href="assets/styles/style.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body class="page-body">
+    <nav class="nav-bar">
+        <div class="nav-logo-wrapper">
+            <a class="nav-logo" href="index.html" aria-label="返回首页"><img src="assets/images/profile_photo.jpg" alt="深中气象"></a>
+        </div>
+        <div class="nav-menus">
+            <ul class="nav-group">
+                <li><a href="index.html" class="nav-item">今日天气</a></li>
+                <li><a href="forecast.html" class="nav-item active">一周预报</a></li>
+                <li><a href="warnings.html" class="nav-item">预警</a></li>
+            </ul>
+            <ul class="nav-group">
+                <li><a href="https://weather.sz.gov.cn/" class="nav-item" target="_blank" rel="noopener">深圳气象台</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="page-content">
+        <section class="page-heading">
+            <p class="eyebrow">SHENZHEN WEATHER</p>
+            <h1>未来一周天气预报</h1>
+            <p id="forecast-update" class="page-subtitle">正在读取深圳市气象台数据…</p>
+        </section>
+        <section id="forecast-list" class="forecast-list" aria-live="polite"></section>
+        <p class="source-note">数据来源：深圳市气象台。预报具有时效性，请以官方最新发布为准。</p>
+    </main>
+    <script src="assets/scripts/forecast.js"></script>
+</body>
+</html>
