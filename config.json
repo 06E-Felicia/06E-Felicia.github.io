@@ -1,18 +1,18 @@
 {
     "LIVE_DATA": {
-        "time": "2026-09-17 07:56",
-        "t": "26.2°C",
-        "th": "27.5°C",
+        "time": "2026-09-17 13:00",
+        "t": "31.3°C",
+        "th": "31.3°C",
         "tl": "25.4°C",
         "r_day": "0mm",
         "r_1h": "0mm",
-        "p": "1006.4hPa"
+        "p": "1005hPa"
     },
     "MANUAL_CONFIG": {
         "low": "25°C",
-        "high": "32°C",
+        "high": "31°C",
         "humidity": "55%-90%",
-        "rainProb": "多云间晴天，局地有短时阵雨",
+        "rainProb": "多云为主，局地有短时阵雨",
         "wind": "2-3级",
         "dir": "东风",
         "icon": "assets/images/weather_icons/02.png",
@@ -26,17 +26,6 @@
     },
     "FORECAST": [
         {
-            "date": "9月17日",
-            "weekday": "周四",
-            "weather": "多云间晴天，局地有短时阵雨",
-            "low": "25°C",
-            "high": "32°C",
-            "humidity": "55%-90%",
-            "wind": "东风 2-3级",
-            "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-09-17 05:38:00"
-        },
-        {
             "date": "9月18日",
             "weekday": "周五",
             "weather": "晴天间多云",
@@ -45,7 +34,7 @@
             "humidity": "55%-90%",
             "wind": "东风 3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-09-17 05:38:07"
+            "published_at": "2026-09-17 10:13:32"
         },
         {
             "date": "9月19日",
@@ -56,7 +45,7 @@
             "humidity": "55%-90%",
             "wind": "东风 3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-09-17 05:38:07"
+            "published_at": "2026-09-17 10:13:32"
         },
         {
             "date": "9月20日",
@@ -67,7 +56,7 @@
             "humidity": "60%-90%",
             "wind": "东风 2级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-09-17 05:38:07"
+            "published_at": "2026-09-17 10:13:32"
         },
         {
             "date": "9月21日",
@@ -78,7 +67,7 @@
             "humidity": "65%-95%",
             "wind": "东南风 2级",
             "icon": "assets/images/weather_icons/04.png",
-            "published_at": "2026-09-17 05:38:07"
+            "published_at": "2026-09-17 10:13:32"
         },
         {
             "date": "9月22日",
@@ -89,7 +78,7 @@
             "humidity": "70%-95%",
             "wind": "东风 2-3级",
             "icon": "assets/images/weather_icons/06.png",
-            "published_at": "2026-09-17 05:38:07"
+            "published_at": "2026-09-17 10:13:32"
         },
         {
             "date": "9月23日",
@@ -100,14 +89,25 @@
             "humidity": "65%-95%",
             "wind": "东风 2-3级",
             "icon": "assets/images/weather_icons/04.png",
-            "published_at": "2026-09-17 05:38:07"
+            "published_at": "2026-09-17 10:13:32"
+        },
+        {
+            "date": "9月24日",
+            "weekday": "周四",
+            "weather": "多云",
+            "low": "26°C",
+            "high": "32°C",
+            "humidity": "55%-90%",
+            "wind": "东风 2-3级",
+            "icon": "assets/images/weather_icons/02.png",
+            "published_at": "2026-09-17 10:13:32"
         }
     ],
     "WARNINGS": [],
     "META": {
         "source": "深圳市气象台",
-        "forecast_updated_at": "9月17日 05:38",
-        "updated_at": "2026-09-17 07:56",
+        "forecast_updated_at": "9月17日 10:13",
+        "updated_at": "2026-09-17 13:00",
         "warnings_updated_at": "2026-09-14 19:55:00"
     }
 }
