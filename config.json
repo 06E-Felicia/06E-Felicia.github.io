@@ -1,12 +1,12 @@
 {
     "LIVE_DATA": {
-        "time": "2026-09-21 05:38",
-        "t": "26.6°C",
+        "time": "2026-09-21 07:42",
+        "t": "26.5°C",
         "th": "28.5°C",
         "tl": "26.1°C",
-        "r_day": "0mm",
-        "r_1h": "0mm",
-        "p": "1005.8hPa"
+        "r_day": "0.5mm",
+        "r_1h": "0.5mm",
+        "p": "1006.9hPa"
     },
     "MANUAL_CONFIG": {
         "low": "26°C",
@@ -19,10 +19,10 @@
         "bg": "assets/images/background.jpg"
     },
     "ALERT_CONFIG": {
-        "enabled": false,
-        "title": "",
-        "image": "",
-        "message": ""
+        "enabled": true,
+        "title": "深圳市雷电预警",
+        "image": "https://weather.sz.gov.cn/alarmIcon/leidian.png",
+        "message": "【深圳市分区雷电预警信号】深圳市气象台于2026年09月21日07时29分发布罗湖区、南山区、福田区、宝安区、光明区、龙华区、龙岗区、珠江口和深圳湾雷电预警信号，预计2小时内上述区域将受雷电影响，并伴有短时强降水。市民停留在安全地方。"
     },
     "FORECAST": [
         {
@@ -103,11 +103,21 @@
             "published_at": "2026-09-21 05:39:51"
         }
     ],
-    "WARNINGS": [],
+    "WARNINGS": [
+        {
+            "title": "深圳市雷电预警",
+            "type": "雷电",
+            "color": "",
+            "message": "【深圳市分区雷电预警信号】深圳市气象台于2026年09月21日07时29分发布罗湖区、南山区、福田区、宝安区、光明区、龙华区、龙岗区、珠江口和深圳湾雷电预警信号，预计2小时内上述区域将受雷电影响，并伴有短时强降水。市民停留在安全地方。",
+            "published_at": "2026-09-21 07:29:00",
+            "area": "罗湖区、南山区、福田区、宝安区、光明区、龙华区、龙岗区、珠江口、深圳湾",
+            "icon": "https://weather.sz.gov.cn/alarmIcon/leidian.png"
+        }
+    ],
     "META": {
         "source": "深圳市气象台",
         "forecast_updated_at": "9月21日 05:39",
-        "updated_at": "2026-09-21 05:38",
-        "warnings_updated_at": "2026-09-14 19:55:00"
+        "updated_at": "2026-09-21 07:42",
+        "warnings_updated_at": "2026-09-21 07:29:00"
     }
 }
