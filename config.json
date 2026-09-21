@@ -1,12 +1,12 @@
 {
     "LIVE_DATA": {
-        "time": "2026-09-21 16:20",
-        "t": "31.7°C",
-        "th": "33°C",
-        "tl": "25.5°C",
-        "r_day": "0.5mm",
+        "time": "2026-09-21 23:10",
+        "t": "27.6°C",
+        "th": "28.8°C",
+        "tl": "27.6°C",
+        "r_day": "0mm",
         "r_1h": "0mm",
-        "p": "1002.9hPa"
+        "p": "1005.5hPa"
     },
     "MANUAL_CONFIG": {
         "low": "25°C",
@@ -19,10 +19,10 @@
         "bg": "assets/images/background.jpg"
     },
     "ALERT_CONFIG": {
-        "enabled": true,
-        "title": "深圳市雷电预警",
-        "image": "https://weather.sz.gov.cn/alarmIcon/leidian.png",
-        "message": "【深圳市分区雷电预警信号】深圳市气象台于2026年09月21日15时45分发布宝安区和光明区雷电预警信号，预计2小时内上述区域将受雷电影响。市民停留在安全地方。"
+        "enabled": false,
+        "title": "",
+        "image": "",
+        "message": ""
     },
     "FORECAST": [
         {
@@ -103,21 +103,11 @@
             "published_at": "2026-09-21 15:32:35"
         }
     ],
-    "WARNINGS": [
-        {
-            "title": "深圳市雷电预警",
-            "type": "雷电",
-            "color": "",
-            "message": "【深圳市分区雷电预警信号】深圳市气象台于2026年09月21日15时45分发布宝安区和光明区雷电预警信号，预计2小时内上述区域将受雷电影响。市民停留在安全地方。",
-            "published_at": "2026-09-21 15:45:00",
-            "area": "宝安区、光明区",
-            "icon": "https://weather.sz.gov.cn/alarmIcon/leidian.png"
-        }
-    ],
+    "WARNINGS": [],
     "META": {
         "source": "深圳市气象台",
         "forecast_updated_at": "9月21日 15:32",
-        "updated_at": "2026-09-21 16:20",
-        "warnings_updated_at": "2026-09-21 15:45:00"
+        "updated_at": "2026-09-21 23:10",
+        "warnings_updated_at": "2026-09-21 17:30:00"
     }
 }
