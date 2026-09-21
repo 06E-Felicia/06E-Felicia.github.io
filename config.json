@@ -1,15 +1,15 @@
 {
     "LIVE_DATA": {
-        "time": "2026-09-21 10:30",
-        "t": "30.2°C",
-        "th": "30.3°C",
+        "time": "2026-09-21 16:20",
+        "t": "31.7°C",
+        "th": "33°C",
         "tl": "25.5°C",
         "r_day": "0.5mm",
         "r_1h": "0mm",
-        "p": "1007hPa"
+        "p": "1002.9hPa"
     },
     "MANUAL_CONFIG": {
-        "low": "28°C",
+        "low": "25°C",
         "high": "31°C",
         "humidity": "55%-95%",
         "rainProb": "多云间阴天，有（雷）阵雨，局地雨势较大",
@@ -19,10 +19,10 @@
         "bg": "assets/images/background.jpg"
     },
     "ALERT_CONFIG": {
-        "enabled": false,
-        "title": "",
-        "image": "",
-        "message": ""
+        "enabled": true,
+        "title": "深圳市雷电预警",
+        "image": "https://weather.sz.gov.cn/alarmIcon/leidian.png",
+        "message": "【深圳市分区雷电预警信号】深圳市气象台于2026年09月21日15时45分发布宝安区和光明区雷电预警信号，预计2小时内上述区域将受雷电影响。市民停留在安全地方。"
     },
     "FORECAST": [
         {
@@ -30,84 +30,94 @@
             "weekday": "周二",
             "weather": "多云间阴天，有（雷）阵雨，局地雨势较大",
             "low": "25°C",
-            "high": "30°C",
-            "humidity": "70%-95%",
+            "high": "31°C",
+            "humidity": "55%-95%",
             "wind": "东风 2-3级",
             "icon": "assets/images/weather_icons/06.png",
-            "published_at": "2026-09-21 10:17:44"
+            "published_at": "2026-09-21 15:32:00"
         },
         {
             "date": "9月23日",
             "weekday": "周三",
-            "weather": "多云间阴天，有短时（雷）阵雨",
+            "weather": "多云间阴天，有（雷）阵雨",
             "low": "25°C",
-            "high": "30°C",
-            "humidity": "70%-95%",
-            "wind": "东风 3级",
+            "high": "31°C",
+            "humidity": "60%-95%",
+            "wind": "东风 2-3级",
             "icon": "assets/images/weather_icons/04.png",
-            "published_at": "2026-09-21 10:17:44"
+            "published_at": "2026-09-21 15:32:35"
         },
         {
             "date": "9月24日",
             "weekday": "周四",
-            "weather": "多云",
+            "weather": "多云，偶有短时（雷）阵雨",
             "low": "25°C",
-            "high": "31°C",
+            "high": "32°C",
             "humidity": "60%-90%",
             "wind": "东风 2-3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-09-21 10:17:44"
+            "published_at": "2026-09-21 15:32:35"
         },
         {
             "date": "9月25日",
             "weekday": "周五",
             "weather": "多云间晴天",
             "low": "25°C",
-            "high": "31°C",
-            "humidity": "65%-90%",
+            "high": "33°C",
+            "humidity": "55%-90%",
             "wind": "东风 2-3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-09-21 10:17:44"
+            "published_at": "2026-09-21 15:32:35"
         },
         {
             "date": "9月26日",
             "weekday": "周六",
-            "weather": "多云，局地有短时（雷）阵雨",
+            "weather": "多云，局地偶有短时（雷）阵雨",
             "low": "26°C",
-            "high": "31°C",
-            "humidity": "70%-90%",
+            "high": "33°C",
+            "humidity": "60%-90%",
             "wind": "东风 2-3级",
             "icon": "assets/images/weather_icons/04.png",
-            "published_at": "2026-09-21 10:17:44"
+            "published_at": "2026-09-21 15:32:35"
         },
         {
             "date": "9月27日",
             "weekday": "周日",
             "weather": "多云",
             "low": "26°C",
-            "high": "32°C",
-            "humidity": "70%-90%",
+            "high": "33°C",
+            "humidity": "60%-90%",
             "wind": "南风 2-3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-09-21 10:17:44"
+            "published_at": "2026-09-21 15:32:35"
         },
         {
             "date": "9月28日",
             "weekday": "周一",
             "weather": "多云",
             "low": "26°C",
-            "high": "32°C",
-            "humidity": "65%-80%",
+            "high": "33°C",
+            "humidity": "60%-90%",
             "wind": "东南风 2-3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-09-21 10:17:44"
+            "published_at": "2026-09-21 15:32:35"
         }
     ],
-    "WARNINGS": [],
+    "WARNINGS": [
+        {
+            "title": "深圳市雷电预警",
+            "type": "雷电",
+            "color": "",
+            "message": "【深圳市分区雷电预警信号】深圳市气象台于2026年09月21日15时45分发布宝安区和光明区雷电预警信号，预计2小时内上述区域将受雷电影响。市民停留在安全地方。",
+            "published_at": "2026-09-21 15:45:00",
+            "area": "宝安区、光明区",
+            "icon": "https://weather.sz.gov.cn/alarmIcon/leidian.png"
+        }
+    ],
     "META": {
         "source": "深圳市气象台",
-        "forecast_updated_at": "9月21日 10:17",
-        "updated_at": "2026-09-21 10:30",
-        "warnings_updated_at": "2026-09-21 08:45:00"
+        "forecast_updated_at": "9月21日 15:32",
+        "updated_at": "2026-09-21 16:20",
+        "warnings_updated_at": "2026-09-21 15:45:00"
     }
 }
