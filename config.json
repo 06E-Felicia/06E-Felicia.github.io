@@ -1,12 +1,12 @@
 {
     "LIVE_DATA": {
-        "time": "2026-09-28 08:06",
-        "t": "28.6°C",
-        "th": "28.6°C",
+        "time": "2026-09-28 13:36",
+        "t": "31.7°C",
+        "th": "32°C",
         "tl": "25.9°C",
         "r_day": "0.6mm",
         "r_1h": "0mm",
-        "p": "1005.1hPa"
+        "p": "1003.2hPa"
     },
     "MANUAL_CONFIG": {
         "low": "26°C",
@@ -15,27 +15,16 @@
         "rainProb": "多云间晴天，天气炎热，局地有短时（雷）阵雨",
         "wind": "3级",
         "dir": "西南风",
-        "icon": "assets/images/weather_icons/02.png",
+        "icon": "assets/images/weather_icons/16.png",
         "bg": "assets/images/background.jpg"
     },
     "ALERT_CONFIG": {
-        "enabled": false,
-        "title": "",
-        "image": "",
-        "message": ""
+        "enabled": true,
+        "title": "深圳市高温黄色预警",
+        "image": "https://weather.sz.gov.cn/alarmIcon/gaowenhuangse.png",
+        "message": "【深圳市高温黄色预警信号】深圳市气象台2026年09月28日09时00分发布全市陆地高温黄色预警信号，预计28日我市最高气温将升至35℃以上，信号可能持续3-4天。注意防暑降温，避免长时间户外活动。"
     },
     "FORECAST": [
-        {
-            "date": "9月28日",
-            "weekday": "周一",
-            "weather": "多云间晴天，天气炎热，局地有短时（雷）阵雨",
-            "low": "26°C",
-            "high": "33°C",
-            "humidity": "50%-95%",
-            "wind": "西南风 3级",
-            "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-09-28 05:29:00"
-        },
         {
             "date": "9月29日",
             "weekday": "周二",
@@ -44,8 +33,8 @@
             "high": "34°C",
             "humidity": "50%-90%",
             "wind": "西南风 3级",
-            "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-09-28 05:29:51"
+            "icon": "assets/images/weather_icons/16.png",
+            "published_at": "2026-09-28 10:33:03"
         },
         {
             "date": "9月30日",
@@ -56,7 +45,7 @@
             "humidity": "50%-90%",
             "wind": "西南风 2-3级",
             "icon": "assets/images/weather_icons/16.png",
-            "published_at": "2026-09-28 05:29:51"
+            "published_at": "2026-09-28 10:33:03"
         },
         {
             "date": "10月1日",
@@ -67,18 +56,18 @@
             "humidity": "65%-95%",
             "wind": "西南风 2-3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-09-28 05:29:51"
+            "published_at": "2026-09-28 10:33:03"
         },
         {
             "date": "10月2日",
             "weekday": "周五",
-            "weather": "多云到阴天，有（雷）阵雨",
+            "weather": "多云到阴天，有（雷）阵雨，局部雨势较大",
             "low": "24°C",
             "high": "30°C",
             "humidity": "70%-95%",
             "wind": "东风 3级",
-            "icon": "assets/images/weather_icons/07.png",
-            "published_at": "2026-09-28 05:29:51"
+            "icon": "assets/images/weather_icons/06.png",
+            "published_at": "2026-09-28 10:33:03"
         },
         {
             "date": "10月3日",
@@ -88,8 +77,8 @@
             "high": "30°C",
             "humidity": "70%-95%",
             "wind": "东风 2-3级",
-            "icon": "assets/images/weather_icons/04.png",
-            "published_at": "2026-09-28 05:29:51"
+            "icon": "assets/images/weather_icons/07.png",
+            "published_at": "2026-09-28 10:33:03"
         },
         {
             "date": "10月4日",
@@ -99,15 +88,36 @@
             "high": "31°C",
             "humidity": "65%-95%",
             "wind": "东风 3级",
-            "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-09-28 05:29:51"
+            "icon": "assets/images/weather_icons/04.png",
+            "published_at": "2026-09-28 10:33:03"
+        },
+        {
+            "date": "10月5日",
+            "weekday": "周一",
+            "weather": "多云间阴天，有短时（雷）阵雨",
+            "low": "25°C",
+            "high": "31°C",
+            "humidity": "70%-95%",
+            "wind": "东北风 3级",
+            "icon": "assets/images/weather_icons/04.png",
+            "published_at": "2026-09-28 10:33:03"
         }
     ],
-    "WARNINGS": [],
+    "WARNINGS": [
+        {
+            "title": "深圳市高温黄色预警",
+            "type": "高温",
+            "color": "黄色",
+            "message": "【深圳市高温黄色预警信号】深圳市气象台2026年09月28日09时00分发布全市陆地高温黄色预警信号，预计28日我市最高气温将升至35℃以上，信号可能持续3-4天。注意防暑降温，避免长时间户外活动。",
+            "published_at": "2026-09-28 09:00:00",
+            "area": "全市陆地",
+            "icon": "https://weather.sz.gov.cn/alarmIcon/gaowenhuangse.png"
+        }
+    ],
     "META": {
         "source": "深圳市气象台",
-        "forecast_updated_at": "9月28日 05:29",
-        "updated_at": "2026-09-28 08:06",
-        "warnings_updated_at": "2026-09-22 14:03:00"
+        "forecast_updated_at": "9月28日 10:33",
+        "updated_at": "2026-09-28 13:36",
+        "warnings_updated_at": "2026-09-28 09:00:00"
     }
 }
