@@ -1,62 +1,62 @@
 {
     "LIVE_DATA": {
-        "time": "2026-10-01 15:20",
-        "t": "33.2°C",
-        "th": "34.1°C",
-        "tl": "27.1°C",
+        "time": "2026-10-01 22:34",
+        "t": "28.5°C",
+        "th": "29.2°C",
+        "tl": "28.3°C",
         "r_day": "0mm",
         "r_1h": "0mm",
-        "p": "1003.3hPa"
+        "p": "1007hPa"
     },
     "MANUAL_CONFIG": {
-        "low": "28°C",
-        "high": "33°C",
-        "humidity": "55%-90%",
-        "rainProb": "多云转短时（雷）阵雨，天气炎热",
-        "wind": "2-3级",
-        "dir": "西南风",
-        "icon": "assets/images/weather_icons/04.png",
+        "low": "25°C",
+        "high": "30°C",
+        "humidity": "65%-95%",
+        "rainProb": "阴天间多云，有（雷）阵雨，局部暴雨，雷雨时伴有7-8级短时阵风",
+        "wind": "2级",
+        "dir": "东风",
+        "icon": "assets/images/weather_icons/05.png",
         "bg": "assets/images/background.jpg"
     },
     "ALERT_CONFIG": {
         "enabled": true,
-        "title": "深圳市高温黄色预警",
-        "image": "https://weather.sz.gov.cn/alarmIcon/gaowenhuangse.png",
-        "message": "【深圳市高温黄色预警信号】深圳市气象台2026年09月28日09时00分发布全市陆地高温黄色预警信号，预计28日我市最高气温将升至35℃以上，信号可能持续3-4天。注意防暑降温，避免长时间户外活动。"
+        "title": "深圳市暴雨橙色预警",
+        "image": "https://weather.sz.gov.cn/alarmIcon/baoyuchengse.png",
+        "message": "【深圳市分区暴雨黄色预警信号升级为橙色】过去3小时，坪山区（坪山、马峦、石井、龙田街道）已出现强降雨，预计未来1-2小时还将出现30毫米左右降水，深圳市气象台2026年10月01日22时31分将上述区域暴雨预警信号升级为橙色，该区域进入暴雨防御状态，请远离低洼易涝等危险区域，山洪风险较大，注意防御暴雨可能引发的局部内涝、山洪、滑坡、泥石流等灾害。"
     },
     "FORECAST": [
         {
             "date": "10月2日",
             "weekday": "周五",
-            "weather": "阴天间多云，有（雷）阵雨，局地雨势较大",
-            "low": "26°C",
+            "weather": "阴天间多云，有（雷）阵雨，局部暴雨，雷雨时伴有7-8级短时阵风",
+            "low": "25°C",
             "high": "30°C",
             "humidity": "65%-95%",
-            "wind": "东风 2-3级",
+            "wind": "东风 2级",
             "icon": "assets/images/weather_icons/05.png",
-            "published_at": "2026-10-01 10:28:33"
+            "published_at": "2026-10-01 15:33:00"
         },
         {
             "date": "10月3日",
             "weekday": "周六",
-            "weather": "阴天间多云，局地有短时阵雨",
+            "weather": "阴天间多云，有短时（雷）阵雨",
             "low": "25°C",
-            "high": "30°C",
-            "humidity": "70%-95%",
+            "high": "31°C",
+            "humidity": "65%-95%",
             "wind": "东风 2-3级",
             "icon": "assets/images/weather_icons/06.png",
-            "published_at": "2026-10-01 10:28:33"
+            "published_at": "2026-10-01 15:33:07"
         },
         {
             "date": "10月4日",
             "weekday": "周日",
-            "weather": "多云，有分散阵雨",
+            "weather": "多云到阴天，有分散（雷）阵雨",
             "low": "25°C",
-            "high": "30°C",
+            "high": "31°C",
             "humidity": "65%-95%",
             "wind": "东风 3级",
-            "icon": "assets/images/weather_icons/04.png",
-            "published_at": "2026-10-01 10:28:33"
+            "icon": "assets/images/weather_icons/05.png",
+            "published_at": "2026-10-01 15:33:07"
         },
         {
             "date": "10月5日",
@@ -65,59 +65,86 @@
             "low": "24°C",
             "high": "29°C",
             "humidity": "60%-95%",
-            "wind": "北风 3-4级",
+            "wind": "北转东北风 3-4级",
             "icon": "assets/images/weather_icons/04.png",
-            "published_at": "2026-10-01 10:28:33"
+            "published_at": "2026-10-01 15:33:07"
         },
         {
             "date": "10月6日",
             "weekday": "周二",
-            "weather": "晴天干燥",
+            "weather": "晴天间多云，天气干燥",
             "low": "21°C",
             "high": "27°C",
-            "humidity": "50%-80%",
+            "humidity": "45%-80%",
             "wind": "东北风 3-4级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-01 10:28:33"
+            "published_at": "2026-10-01 15:33:07"
         },
         {
             "date": "10月7日",
             "weekday": "周三",
             "weather": "晴天干燥",
             "low": "20°C",
-            "high": "29°C",
-            "humidity": "45%-80%",
+            "high": "28°C",
+            "humidity": "40%-75%",
             "wind": "东北风 3级",
-            "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-01 10:28:33"
+            "icon": "assets/images/weather_icons/01.png",
+            "published_at": "2026-10-01 15:33:07"
         },
         {
             "date": "10月8日",
             "weekday": "周四",
             "weather": "晴天干燥",
             "low": "21°C",
-            "high": "30°C",
-            "humidity": "45%-80%",
-            "wind": "东北风 3级",
-            "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-01 10:28:33"
+            "high": "29°C",
+            "humidity": "40%-75%",
+            "wind": "东北风 2-3级",
+            "icon": "assets/images/weather_icons/01.png",
+            "published_at": "2026-10-01 15:33:07"
         }
     ],
     "WARNINGS": [
         {
-            "title": "深圳市高温黄色预警",
-            "type": "高温",
+            "title": "深圳市暴雨橙色预警",
+            "type": "暴雨",
+            "color": "橙色",
+            "message": "【深圳市分区暴雨黄色预警信号升级为橙色】过去3小时，坪山区（坪山、马峦、石井、龙田街道）已出现强降雨，预计未来1-2小时还将出现30毫米左右降水，深圳市气象台2026年10月01日22时31分将上述区域暴雨预警信号升级为橙色，该区域进入暴雨防御状态，请远离低洼易涝等危险区域，山洪风险较大，注意防御暴雨可能引发的局部内涝、山洪、滑坡、泥石流等灾害。",
+            "published_at": "2026-10-01 22:31:00",
+            "area": "坑梓、坪山、马峦、石井、龙田",
+            "icon": "https://weather.sz.gov.cn/alarmIcon/baoyuchengse.png"
+        },
+        {
+            "title": "深圳市雷雨大风黄色预警",
+            "type": "雷雨大风",
             "color": "黄色",
-            "message": "【深圳市高温黄色预警信号】深圳市气象台2026年09月28日09时00分发布全市陆地高温黄色预警信号，预计28日我市最高气温将升至35℃以上，信号可能持续3-4天。注意防暑降温，避免长时间户外活动。",
-            "published_at": "2026-09-28 09:00:00",
-            "area": "全市陆地",
-            "icon": "https://weather.sz.gov.cn/alarmIcon/gaowenhuangse.png"
+            "message": "【深圳市扩展分区雷雨大风黄色预警信号】深圳市气象台2026年10月01日22时20分将分区雷雨大风黄色预警信号扩展至罗湖区、盐田区、坪山区和龙岗区（横岗、龙岗、坪地、龙城、园山、宝龙街道），预计未来1-2小时上述地区最大阵风8级或以上，并伴有强雷电。请落实各项防风防雨防雷电措施。",
+            "published_at": "2026-10-01 22:20:00",
+            "area": "罗湖区、盐田区、横岗、龙岗、坪地、龙城、园山、宝龙、坪山区、大鹏新区、大鹏湾、大亚湾",
+            "icon": "https://weather.sz.gov.cn/alarmIcon/leiyudafenghuangse.png"
+        },
+        {
+            "title": "深圳市暴雨黄色预警",
+            "type": "暴雨",
+            "color": "黄色",
+            "message": "【深圳市分区暴雨黄色预警信号】目前坪山区局地已出现强降水，预计未来2小时坪山区和大鹏新区（葵涌街道）还将出现30-50毫米降水，深圳市气象台2026年10月01日21时58分在上述区域发布暴雨黄色预警信号，该区域进入暴雨戒备状态，存在山洪风险，请注意防御暴雨可能引发的局部内涝、山洪等灾害。",
+            "published_at": "2026-10-01 21:58:00",
+            "area": "碧岭、葵涌",
+            "icon": "https://weather.sz.gov.cn/alarmIcon/baoyuhuangse.png"
+        },
+        {
+            "title": "深圳市雷电预警",
+            "type": "雷电",
+            "color": "",
+            "message": "【深圳市发布分区雷电预警信号、同时解除全市高温黄色预警信号】深圳市气象台于2026年10月01日21时20分发布盐田区、坪山区、大鹏新区、大鹏湾、大亚湾和龙岗区（横岗、龙岗、坪地、龙城、园山、宝龙街道）雷电预警信号，预计2-3小时内上述区域将受雷电影响。市民停留在安全地方。高温天气缓解，深圳市气象台2026年10月01日21时20分解除全市陆地高温黄色预警信号。",
+            "published_at": "2026-10-01 21:20:00",
+            "area": "盐田区、横岗、龙岗、坪地、龙城、园山、宝龙、坪山区、大鹏新区、大鹏湾、大亚湾",
+            "icon": "https://weather.sz.gov.cn/alarmIcon/leidian.png"
         }
     ],
     "META": {
         "source": "深圳市气象台",
-        "forecast_updated_at": "10月1日 10:28",
-        "updated_at": "2026-10-01 15:20",
-        "warnings_updated_at": "2026-09-28 18:45:00"
+        "forecast_updated_at": "10月1日 15:33",
+        "updated_at": "2026-10-01 22:34",
+        "warnings_updated_at": "2026-10-01 22:31:00"
     }
 }
