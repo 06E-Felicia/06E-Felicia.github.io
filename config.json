@@ -1,73 +1,62 @@
 {
     "LIVE_DATA": {
-        "time": "2026-10-02 07:42",
-        "t": "27°C",
-        "th": "29.2°C",
+        "time": "2026-10-02 11:18",
+        "t": "30.5°C",
+        "th": "30.9°C",
         "tl": "26.8°C",
-        "r_day": "0.1mm",
-        "r_1h": "0.2mm",
-        "p": "1006.8hPa"
+        "r_day": "2.7mm",
+        "r_1h": "0mm",
+        "p": "1008hPa"
     },
     "MANUAL_CONFIG": {
-        "low": "25°C",
-        "high": "30°C",
+        "low": "27°C",
+        "high": "31°C",
         "humidity": "65%-95%",
-        "rainProb": "阴天间多云，有（雷）阵雨，局部暴雨，雷雨时伴有7-8级短时阵风",
+        "rainProb": "多云间阴天，有短时（雷）阵雨，局部暴雨，雷雨时伴有7-8级短时阵风",
         "wind": "3级",
         "dir": "东风",
-        "icon": "assets/images/weather_icons/05.png",
+        "icon": "assets/images/weather_icons/04.png",
         "bg": "assets/images/background.jpg"
     },
     "ALERT_CONFIG": {
-        "enabled": true,
-        "title": "深圳市雷电预警",
-        "image": "https://weather.sz.gov.cn/alarmIcon/leidian.png",
-        "message": "【深圳市分区暴雨黄色预警信号升级为橙色、扩展分区暴雨黄色和雷电预警信号】过去3小时，光明区和宝安区（福永、沙井、松岗、石岩、航城、福海、燕罗、新桥街道）已出现强降雨，预计未来2-3小时还将出现30毫米左右降水，深圳市气象台2026年10月02日06时10分在上述区域发布暴雨橙色预警信号，同时将暴雨黄色预警信号扩展至南山区、珠江口、深圳湾和宝安区（西乡、新安街道），雷电预警信号扩展至罗湖区、南山区、福田区、龙岗区、珠江口和深圳湾。市民停留在安全地方。注意防御暴雨可能引发的内涝、山洪、滑坡、泥石流等灾害。"
+        "enabled": false,
+        "title": "",
+        "image": "",
+        "message": ""
     },
     "FORECAST": [
         {
-            "date": "10月2日",
-            "weekday": "周五",
-            "weather": "阴天间多云，有（雷）阵雨，局部暴雨，雷雨时伴有7-8级短时阵风",
-            "low": "25°C",
-            "high": "30°C",
-            "humidity": "65%-95%",
-            "wind": "东风 3级",
-            "icon": "assets/images/weather_icons/05.png",
-            "published_at": "2026-10-02 05:31:00"
-        },
-        {
             "date": "10月3日",
             "weekday": "周六",
-            "weather": "阴天间多云，有短时（雷）阵雨",
+            "weather": "多云间阴天，有短时（雷）阵雨",
             "low": "25°C",
             "high": "31°C",
             "humidity": "65%-95%",
             "wind": "东风 2-3级",
-            "icon": "assets/images/weather_icons/06.png",
-            "published_at": "2026-10-02 05:31:26"
+            "icon": "assets/images/weather_icons/04.png",
+            "published_at": "2026-10-02 10:24:20"
         },
         {
             "date": "10月4日",
             "weekday": "周日",
-            "weather": "多云到阴天，有分散（雷）阵雨",
+            "weather": "多云间阴天，有分散（雷）阵雨",
             "low": "25°C",
             "high": "31°C",
             "humidity": "65%-95%",
             "wind": "东风 3级",
-            "icon": "assets/images/weather_icons/05.png",
-            "published_at": "2026-10-02 05:31:26"
+            "icon": "assets/images/weather_icons/04.png",
+            "published_at": "2026-10-02 10:24:20"
         },
         {
             "date": "10月5日",
             "weekday": "周一",
             "weather": "阵雨转多云",
             "low": "24°C",
-            "high": "29°C",
+            "high": "30°C",
             "humidity": "60%-95%",
             "wind": "北转东北风 3-4级",
-            "icon": "assets/images/weather_icons/04.png",
-            "published_at": "2026-10-02 05:31:26"
+            "icon": "assets/images/weather_icons/02.png",
+            "published_at": "2026-10-02 10:24:20"
         },
         {
             "date": "10月6日",
@@ -78,7 +67,7 @@
             "humidity": "45%-80%",
             "wind": "东北风 3-4级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-02 05:31:26"
+            "published_at": "2026-10-02 10:24:20"
         },
         {
             "date": "10月7日",
@@ -89,7 +78,7 @@
             "humidity": "40%-75%",
             "wind": "东北风 3级",
             "icon": "assets/images/weather_icons/01.png",
-            "published_at": "2026-10-02 05:31:26"
+            "published_at": "2026-10-02 10:24:20"
         },
         {
             "date": "10月8日",
@@ -100,24 +89,25 @@
             "humidity": "40%-75%",
             "wind": "东北风 2-3级",
             "icon": "assets/images/weather_icons/01.png",
-            "published_at": "2026-10-02 05:31:26"
-        }
-    ],
-    "WARNINGS": [
+            "published_at": "2026-10-02 10:24:20"
+        },
         {
-            "title": "深圳市雷电预警",
-            "type": "雷电",
-            "color": "",
-            "message": "【深圳市分区暴雨黄色预警信号升级为橙色、扩展分区暴雨黄色和雷电预警信号】过去3小时，光明区和宝安区（福永、沙井、松岗、石岩、航城、福海、燕罗、新桥街道）已出现强降雨，预计未来2-3小时还将出现30毫米左右降水，深圳市气象台2026年10月02日06时10分在上述区域发布暴雨橙色预警信号，同时将暴雨黄色预警信号扩展至南山区、珠江口、深圳湾和宝安区（西乡、新安街道），雷电预警信号扩展至罗湖区、南山区、福田区、龙岗区、珠江口和深圳湾。市民停留在安全地方。注意防御暴雨可能引发的内涝、山洪、滑坡、泥石流等灾害。",
-            "published_at": "2026-10-02 06:10:00",
-            "area": "罗湖区、南山区、福田区、宝安区、光明区、龙华区、龙岗区、珠江口、深圳湾",
-            "icon": "https://weather.sz.gov.cn/alarmIcon/leidian.png"
+            "date": "10月9日",
+            "weekday": "周五",
+            "weather": "晴天干燥",
+            "low": "22°C",
+            "high": "30°C",
+            "humidity": "45%-80%",
+            "wind": "东北转东风 2-3级",
+            "icon": "assets/images/weather_icons/01.png",
+            "published_at": "2026-10-02 10:24:20"
         }
     ],
+    "WARNINGS": [],
     "META": {
         "source": "深圳市气象台",
-        "forecast_updated_at": "10月2日 05:31",
-        "updated_at": "2026-10-02 07:42",
-        "warnings_updated_at": "2026-10-02 07:30:00"
+        "forecast_updated_at": "10月2日 10:24",
+        "updated_at": "2026-10-02 11:18",
+        "warnings_updated_at": "2026-10-02 11:15:00"
     }
 }
