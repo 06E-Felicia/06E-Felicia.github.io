@@ -1,12 +1,12 @@
 {
     "LIVE_DATA": {
-        "time": "2026-10-03 18:48",
-        "t": "27.4°C",
-        "th": "30.3°C",
-        "tl": "25.2°C",
-        "r_day": "2.1mm",
+        "time": "2026-10-03 22:58",
+        "t": "26.8°C",
+        "th": "27.1°C",
+        "tl": "26.3°C",
+        "r_day": "0mm",
         "r_1h": "0mm",
-        "p": "1004.8hPa"
+        "p": "1006.2hPa"
     },
     "MANUAL_CONFIG": {
         "low": "25°C",
@@ -19,10 +19,10 @@
         "bg": "assets/images/background.jpg"
     },
     "ALERT_CONFIG": {
-        "enabled": true,
-        "title": "深圳市地质灾害黄色预警",
-        "image": "https://weather.sz.gov.cn/alarmIcon/dizhizaihaihuangse.png",
-        "message": "【深圳市地质灾害气象风险预警2026年第38号】根据目前降雨情况，结合我市地质环境条件，现对坪山区（石井、坑梓街道）、大鹏新区（南澳街道）发布地质灾害气象风险黄色预警，请相关部门和单位做好防御工作。市规划和自然资源局与市气象局2026年10月02日21时联合发布，有效期至2026年10月03日21时。"
+        "enabled": false,
+        "title": "",
+        "image": "",
+        "message": ""
     },
     "FORECAST": [
         {
@@ -103,21 +103,11 @@
             "published_at": "2026-10-03 15:25:00"
         }
     ],
-    "WARNINGS": [
-        {
-            "title": "深圳市地质灾害黄色预警",
-            "type": "地质灾害",
-            "color": "黄色",
-            "message": "【深圳市地质灾害气象风险预警2026年第38号】根据目前降雨情况，结合我市地质环境条件，现对坪山区（石井、坑梓街道）、大鹏新区（南澳街道）发布地质灾害气象风险黄色预警，请相关部门和单位做好防御工作。市规划和自然资源局与市气象局2026年10月02日21时联合发布，有效期至2026年10月03日21时。",
-            "published_at": "2026-10-02 21:49:38",
-            "area": "南澳、石井、坑梓",
-            "icon": "https://weather.sz.gov.cn/alarmIcon/dizhizaihaihuangse.png"
-        }
-    ],
+    "WARNINGS": [],
     "META": {
         "source": "深圳市气象台",
         "forecast_updated_at": "10月3日 15:25",
-        "updated_at": "2026-10-03 18:48",
+        "updated_at": "2026-10-03 22:58",
         "warnings_updated_at": "2026-10-03 11:15:00"
     }
 }
