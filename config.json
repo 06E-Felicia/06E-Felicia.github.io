@@ -1,40 +1,40 @@
 {
     "LIVE_DATA": {
-        "time": "2026-10-03 04:46",
-        "t": "26.4°C",
+        "time": "2026-10-03 08:02",
+        "t": "25.9°C",
         "th": "27.1°C",
         "tl": "25.8°C",
-        "r_day": "0.4mm",
-        "r_1h": "0mm",
-        "p": "1006.2hPa"
+        "r_day": "1.4mm",
+        "r_1h": "1mm",
+        "p": "1008.3hPa"
     },
     "MANUAL_CONFIG": {
-        "low": "25°C",
-        "high": "32°C",
+        "low": "26°C",
+        "high": "31°C",
         "humidity": "65%-95%",
-        "rainProb": "多云间阴天，有短时（雷）阵雨，局地雨势较大",
-        "wind": "3级",
+        "rainProb": "阴天间多云，有短时（雷）阵雨，局地雨势较大",
+        "wind": "2-3级",
         "dir": "东风",
         "icon": "assets/images/weather_icons/04.png",
         "bg": "assets/images/background.jpg"
     },
     "ALERT_CONFIG": {
         "enabled": true,
-        "title": "深圳市暴雨橙色预警",
-        "image": "https://weather.sz.gov.cn/alarmIcon/baoyuchengse.png",
-        "message": "【深圳市分区暴雨黄色预警信号升级为橙色】过去3小时，大鹏湾、大亚湾和大鹏新区（大鹏、南澳街道）已出现暴雨，预计未来2小时还将出现30-60毫米降水，深圳市气象台2026年10月03日03时15分在上述区域发布暴雨橙色预警信号，该区域进入暴雨防御状态，请远离低洼易涝等危险区域，山洪风险较大，注意防御暴雨可能引发的局部内涝、山洪、滑坡、泥石流等灾害。"
+        "title": "深圳市暴雨黄色预警",
+        "image": "https://weather.sz.gov.cn/alarmIcon/baoyuhuangse.png",
+        "message": "【深圳市分区暴雨黄色预警信号】预计大鹏新区、珠江口、大鹏湾、大亚湾、盐田区（梅沙街道）和宝安区（航城街道）2小时内将出现30-50毫米降水，深圳市气象台2026年10月03日07时50分在上述区域发布暴雨黄色预警信号，该区域进入暴雨戒备状态，存在山洪风险，请注意防御暴雨可能引发的局部内涝、山洪等灾害。"
     },
     "FORECAST": [
         {
             "date": "10月3日",
             "weekday": "周六",
-            "weather": "多云间阴天，有短时（雷）阵雨，局地雨势较大",
-            "low": "25°C",
-            "high": "32°C",
+            "weather": "阴天间多云，有短时（雷）阵雨，局地雨势较大",
+            "low": "26°C",
+            "high": "31°C",
             "humidity": "65%-95%",
-            "wind": "东风 3级",
-            "icon": "assets/images/weather_icons/04.png",
-            "published_at": "2026-10-02 15:23:00"
+            "wind": "东风 2-3级",
+            "icon": "assets/images/weather_icons/06.png",
+            "published_at": "2026-10-03 05:01:00"
         },
         {
             "date": "10月4日",
@@ -45,7 +45,7 @@
             "humidity": "65%-95%",
             "wind": "东风 2-3级",
             "icon": "assets/images/weather_icons/04.png",
-            "published_at": "2026-10-02 15:23:49"
+            "published_at": "2026-10-03 05:01:52"
         },
         {
             "date": "10月5日",
@@ -56,40 +56,40 @@
             "humidity": "55%-95%",
             "wind": "北风 3-4级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-02 15:23:49"
+            "published_at": "2026-10-03 05:01:52"
         },
         {
             "date": "10月6日",
             "weekday": "周二",
             "weather": "多云间晴天，天气干燥",
-            "low": "21°C",
+            "low": "22°C",
             "high": "28°C",
             "humidity": "45%-75%",
             "wind": "北风 3-4级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-02 15:23:49"
+            "published_at": "2026-10-03 05:01:52"
         },
         {
             "date": "10月7日",
             "weekday": "周三",
-            "weather": "晴天干燥",
+            "weather": "晴天间多云，空气干燥",
             "low": "21°C",
             "high": "28°C",
             "humidity": "40%-70%",
             "wind": "东北风 2-3级",
-            "icon": "assets/images/weather_icons/01.png",
-            "published_at": "2026-10-02 15:23:49"
+            "icon": "assets/images/weather_icons/02.png",
+            "published_at": "2026-10-03 05:01:52"
         },
         {
             "date": "10月8日",
             "weekday": "周四",
-            "weather": "晴天干燥",
+            "weather": "晴天间多云，空气干燥",
             "low": "21°C",
             "high": "29°C",
             "humidity": "40%-70%",
             "wind": "东北风 2-3级",
-            "icon": "assets/images/weather_icons/01.png",
-            "published_at": "2026-10-02 15:23:49"
+            "icon": "assets/images/weather_icons/02.png",
+            "published_at": "2026-10-03 05:01:52"
         },
         {
             "date": "10月9日",
@@ -100,26 +100,17 @@
             "humidity": "40%-70%",
             "wind": "东北风 2-3级",
             "icon": "assets/images/weather_icons/01.png",
-            "published_at": "2026-10-02 15:23:49"
+            "published_at": "2026-10-03 05:01:52"
         }
     ],
     "WARNINGS": [
         {
-            "title": "深圳市暴雨橙色预警",
-            "type": "暴雨",
-            "color": "橙色",
-            "message": "【深圳市分区暴雨黄色预警信号升级为橙色】过去3小时，大鹏湾、大亚湾和大鹏新区（大鹏、南澳街道）已出现暴雨，预计未来2小时还将出现30-60毫米降水，深圳市气象台2026年10月03日03时15分在上述区域发布暴雨橙色预警信号，该区域进入暴雨防御状态，请远离低洼易涝等危险区域，山洪风险较大，注意防御暴雨可能引发的局部内涝、山洪、滑坡、泥石流等灾害。",
-            "published_at": "2026-10-03 03:15:00",
-            "area": "南澳、大鹏、大鹏湾、大亚湾",
-            "icon": "https://weather.sz.gov.cn/alarmIcon/baoyuchengse.png"
-        },
-        {
             "title": "深圳市暴雨黄色预警",
             "type": "暴雨",
             "color": "黄色",
-            "message": "【深圳市分区暴雨黄色预警信号】预计大鹏新区、大鹏湾和大亚湾2小时内将出现30-50毫米降水，深圳市气象台2026年10月03日02时40分在上述区域发布暴雨黄色预警信号，该区域进入暴雨戒备状态，存在山洪风险，请注意防御暴雨可能引发的局部内涝、山洪等灾害。",
-            "published_at": "2026-10-03 02:40:00",
-            "area": "葵涌",
+            "message": "【深圳市分区暴雨黄色预警信号】预计大鹏新区、珠江口、大鹏湾、大亚湾、盐田区（梅沙街道）和宝安区（航城街道）2小时内将出现30-50毫米降水，深圳市气象台2026年10月03日07时50分在上述区域发布暴雨黄色预警信号，该区域进入暴雨戒备状态，存在山洪风险，请注意防御暴雨可能引发的局部内涝、山洪等灾害。",
+            "published_at": "2026-10-03 07:50:00",
+            "area": "梅沙、航城、大鹏新区、珠江口、大鹏湾、大亚湾",
             "icon": "https://weather.sz.gov.cn/alarmIcon/baoyuhuangse.png"
         },
         {
@@ -143,8 +134,8 @@
     ],
     "META": {
         "source": "深圳市气象台",
-        "forecast_updated_at": "10月2日 15:23",
-        "updated_at": "2026-10-03 04:46",
-        "warnings_updated_at": "2026-10-03 03:15:00"
+        "forecast_updated_at": "10月3日 05:01",
+        "updated_at": "2026-10-03 08:02",
+        "warnings_updated_at": "2026-10-03 07:50:00"
     }
 }
