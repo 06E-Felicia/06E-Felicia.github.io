@@ -1,18 +1,18 @@
 {
     "LIVE_DATA": {
-        "time": "2026-10-05 07:18",
-        "t": "24°C",
+        "time": "2026-10-05 10:08",
+        "t": "27.2°C",
         "th": "28.1°C",
         "tl": "23.5°C",
         "r_day": "7.9mm",
         "r_1h": "0mm",
-        "p": "1006.8hPa"
+        "p": "1007.7hPa"
     },
     "MANUAL_CONFIG": {
-        "low": "24°C",
+        "low": "26°C",
         "high": "30°C",
-        "humidity": "50%-90%",
-        "rainProb": "多云为主",
+        "humidity": "50%-70%",
+        "rainProb": "多云间晴天",
         "wind": "3-4级",
         "dir": "东北风",
         "icon": "assets/images/weather_icons/02.png",
@@ -26,26 +26,15 @@
     },
     "FORECAST": [
         {
-            "date": "10月5日",
-            "weekday": "周一",
-            "weather": "多云为主",
-            "low": "24°C",
-            "high": "30°C",
-            "humidity": "50%-90%",
-            "wind": "东北风 3-4级",
-            "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-05 05:54:00"
-        },
-        {
             "date": "10月6日",
             "weekday": "周二",
-            "weather": "多云",
+            "weather": "晴天间多云，空气干燥",
             "low": "22°C",
             "high": "28°C",
             "humidity": "50%-75%",
             "wind": "东北风 3-4级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-05 05:54:58"
+            "published_at": "2026-10-05 09:57:18"
         },
         {
             "date": "10月7日",
@@ -56,18 +45,18 @@
             "humidity": "45%-70%",
             "wind": "东北风 3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-05 05:54:58"
+            "published_at": "2026-10-05 09:57:18"
         },
         {
             "date": "10月8日",
             "weekday": "周四",
-            "weather": "晴天干燥",
+            "weather": "晴天间多云，空气干燥",
             "low": "22°C",
             "high": "29°C",
             "humidity": "40%-75%",
-            "wind": "东北风 2-3级",
-            "icon": "assets/images/weather_icons/01.png",
-            "published_at": "2026-10-05 05:54:58"
+            "wind": "东北风 3级",
+            "icon": "assets/images/weather_icons/02.png",
+            "published_at": "2026-10-05 09:57:18"
         },
         {
             "date": "10月9日",
@@ -76,9 +65,9 @@
             "low": "22°C",
             "high": "30°C",
             "humidity": "40%-80%",
-            "wind": "东北风 2-3级",
+            "wind": "东北风 3级",
             "icon": "assets/images/weather_icons/01.png",
-            "published_at": "2026-10-05 05:54:58"
+            "published_at": "2026-10-05 09:57:18"
         },
         {
             "date": "10月10日",
@@ -87,27 +76,38 @@
             "low": "22°C",
             "high": "31°C",
             "humidity": "40%-80%",
-            "wind": "东北风 2-3级",
+            "wind": "东北风 3级",
             "icon": "assets/images/weather_icons/01.png",
-            "published_at": "2026-10-05 05:54:58"
+            "published_at": "2026-10-05 09:57:18"
         },
         {
             "date": "10月11日",
             "weekday": "周日",
-            "weather": "晴天间多云，空气干燥",
+            "weather": "晴天干燥",
             "low": "23°C",
             "high": "32°C",
             "humidity": "45%-80%",
             "wind": "东北风 2-3级",
+            "icon": "assets/images/weather_icons/01.png",
+            "published_at": "2026-10-05 09:57:18"
+        },
+        {
+            "date": "10月12日",
+            "weekday": "周一",
+            "weather": "晴天间多云，空气干燥",
+            "low": "24°C",
+            "high": "32°C",
+            "humidity": "45%-85%",
+            "wind": "东风 2-3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-05 05:54:58"
+            "published_at": "2026-10-05 09:57:18"
         }
     ],
     "WARNINGS": [],
     "META": {
         "source": "深圳市气象台",
-        "forecast_updated_at": "10月5日 05:54",
-        "updated_at": "2026-10-05 07:18",
+        "forecast_updated_at": "10月5日 09:57",
+        "updated_at": "2026-10-05 10:08",
         "warnings_updated_at": "2026-10-04 21:20:00"
     }
 }
