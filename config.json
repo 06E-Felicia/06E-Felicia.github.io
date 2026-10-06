@@ -1,18 +1,18 @@
 {
     "LIVE_DATA": {
-        "time": "2026-10-06 02:36",
+        "time": "2026-10-06 08:28",
         "t": "22.7°C",
         "th": "25°C",
-        "tl": "22.7°C",
+        "tl": "22.1°C",
         "r_day": "0mm",
         "r_1h": "0mm",
-        "p": "1007.9hPa"
+        "p": "1010.7hPa"
     },
     "MANUAL_CONFIG": {
-        "low": "21°C",
-        "high": "27°C",
+        "low": "22°C",
+        "high": "26°C",
         "humidity": "50%-70%",
-        "rainProb": "晴天间多云，空气干燥",
+        "rainProb": "阴天间多云，空气干燥",
         "wind": "3-4级",
         "dir": "东北风",
         "icon": "assets/images/weather_icons/02.png",
@@ -28,24 +28,24 @@
         {
             "date": "10月6日",
             "weekday": "周二",
-            "weather": "晴天间多云，空气干燥",
-            "low": "21°C",
-            "high": "27°C",
+            "weather": "阴天间多云，空气干燥",
+            "low": "22°C",
+            "high": "26°C",
             "humidity": "50%-70%",
             "wind": "东北风 3-4级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-05 15:23:00"
+            "published_at": "2026-10-06 07:10:00"
         },
         {
             "date": "10月7日",
             "weekday": "周三",
             "weather": "晴天间多云，空气干燥",
-            "low": "21°C",
+            "low": "22°C",
             "high": "29°C",
             "humidity": "45%-70%",
-            "wind": "东北风 3级",
+            "wind": "东北风 3-4级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-05 15:23:19"
+            "published_at": "2026-10-06 07:10:14"
         },
         {
             "date": "10月8日",
@@ -56,29 +56,29 @@
             "humidity": "40%-75%",
             "wind": "东北风 3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-05 15:23:19"
+            "published_at": "2026-10-06 07:10:14"
         },
         {
             "date": "10月9日",
             "weekday": "周五",
             "weather": "晴天干燥",
-            "low": "22°C",
+            "low": "23°C",
             "high": "30°C",
             "humidity": "40%-80%",
             "wind": "东北风 3级",
             "icon": "assets/images/weather_icons/01.png",
-            "published_at": "2026-10-05 15:23:19"
+            "published_at": "2026-10-06 07:10:14"
         },
         {
             "date": "10月10日",
             "weekday": "周六",
             "weather": "晴天干燥",
-            "low": "22°C",
+            "low": "23°C",
             "high": "31°C",
             "humidity": "40%-80%",
             "wind": "东北风 3级",
             "icon": "assets/images/weather_icons/01.png",
-            "published_at": "2026-10-05 15:23:19"
+            "published_at": "2026-10-06 07:10:14"
         },
         {
             "date": "10月11日",
@@ -89,7 +89,7 @@
             "humidity": "45%-80%",
             "wind": "东北风 2-3级",
             "icon": "assets/images/weather_icons/01.png",
-            "published_at": "2026-10-05 15:23:19"
+            "published_at": "2026-10-06 07:10:14"
         },
         {
             "date": "10月12日",
@@ -100,14 +100,14 @@
             "humidity": "45%-85%",
             "wind": "东风 2-3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-05 15:23:19"
+            "published_at": "2026-10-06 07:10:14"
         }
     ],
     "WARNINGS": [],
     "META": {
         "source": "深圳市气象台",
-        "forecast_updated_at": "10月5日 15:23",
-        "updated_at": "2026-10-06 02:36",
+        "forecast_updated_at": "10月6日 07:10",
+        "updated_at": "2026-10-06 08:28",
         "warnings_updated_at": "2026-10-04 21:20:00"
     }
 }
