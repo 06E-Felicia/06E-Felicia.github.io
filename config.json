@@ -1,21 +1,21 @@
 {
     "LIVE_DATA": {
-        "time": "2026-10-07 10:32",
-        "t": "26.7°C",
-        "th": "27°C",
+        "time": "2026-10-07 17:32",
+        "t": "26.5°C",
+        "th": "29.1°C",
         "tl": "22.1°C",
         "r_day": "0mm",
         "r_1h": "0mm",
-        "p": "1012.5hPa"
+        "p": "1009.8hPa"
     },
     "MANUAL_CONFIG": {
-        "low": "24°C",
-        "high": "29°C",
-        "humidity": "35%-65%",
-        "rainProb": "晴天间多云，空气干燥",
+        "low": "23°C",
+        "high": "30°C",
+        "humidity": "40%-75%",
+        "rainProb": "晴天干燥",
         "wind": "3级",
         "dir": "东北风",
-        "icon": "assets/images/weather_icons/02.png",
+        "icon": "assets/images/weather_icons/01.png",
         "bg": "assets/images/background.jpg"
     },
     "ALERT_CONFIG": {
@@ -28,35 +28,35 @@
         {
             "date": "10月8日",
             "weekday": "周四",
-            "weather": "晴天间多云，空气干燥",
-            "low": "22°C",
+            "weather": "晴天干燥",
+            "low": "23°C",
             "high": "30°C",
-            "humidity": "40%-80%",
+            "humidity": "40%-75%",
             "wind": "东北风 3级",
-            "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-07 10:00:40"
+            "icon": "assets/images/weather_icons/01.png",
+            "published_at": "2026-10-07 14:58:00"
         },
         {
             "date": "10月9日",
             "weekday": "周五",
             "weather": "晴天间多云，空气干燥",
             "low": "23°C",
-            "high": "30°C",
+            "high": "31°C",
             "humidity": "40%-80%",
             "wind": "东北风 3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-07 10:00:40"
+            "published_at": "2026-10-07 14:58:07"
         },
         {
             "date": "10月10日",
             "weekday": "周六",
             "weather": "晴天干燥",
             "low": "23°C",
-            "high": "31°C",
+            "high": "32°C",
             "humidity": "40%-85%",
             "wind": "东北风 3级",
             "icon": "assets/images/weather_icons/01.png",
-            "published_at": "2026-10-07 10:00:40"
+            "published_at": "2026-10-07 14:58:07"
         },
         {
             "date": "10月11日",
@@ -67,18 +67,18 @@
             "humidity": "45%-85%",
             "wind": "东北风 2-3级",
             "icon": "assets/images/weather_icons/01.png",
-            "published_at": "2026-10-07 10:00:40"
+            "published_at": "2026-10-07 14:58:07"
         },
         {
             "date": "10月12日",
             "weekday": "周一",
             "weather": "晴天间多云，空气干燥",
             "low": "24°C",
-            "high": "32°C",
+            "high": "33°C",
             "humidity": "45%-85%",
             "wind": "东风 2-3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-07 10:00:40"
+            "published_at": "2026-10-07 14:58:07"
         },
         {
             "date": "10月13日",
@@ -89,18 +89,18 @@
             "humidity": "50%-90%",
             "wind": "东风 2-3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-07 10:00:40"
+            "published_at": "2026-10-07 14:58:07"
         },
         {
             "date": "10月14日",
             "weekday": "周三",
             "weather": "晴天间多云，空气干燥",
             "low": "25°C",
-            "high": "33°C",
+            "high": "32°C",
             "humidity": "45%-90%",
             "wind": "东风 2-3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-07 10:00:40"
+            "published_at": "2026-10-07 14:58:07"
         }
     ],
     "WARNINGS": [
@@ -116,8 +116,8 @@
     ],
     "META": {
         "source": "深圳市气象台",
-        "forecast_updated_at": "10月7日 10:00",
-        "updated_at": "2026-10-07 10:32",
+        "forecast_updated_at": "10月7日 14:58",
+        "updated_at": "2026-10-07 17:32",
         "warnings_updated_at": "2026-10-07 10:00:00"
     }
 }
