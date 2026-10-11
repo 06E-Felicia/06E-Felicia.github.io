@@ -1,20 +1,20 @@
 {
     "LIVE_DATA": {
-        "time": "2026-10-11 14:02",
-        "t": "31.2°C",
-        "th": "32.3°C",
-        "tl": "23.4°C",
+        "time": "2026-10-11 21:08",
+        "t": "26.6°C",
+        "th": "27.3°C",
+        "tl": "26.6°C",
         "r_day": "0mm",
         "r_1h": "0mm",
-        "p": "1007.9hPa"
+        "p": "1009.2hPa"
     },
     "MANUAL_CONFIG": {
-        "low": "29°C",
+        "low": "24°C",
         "high": "32°C",
-        "humidity": "45%-65%",
+        "humidity": "45%-85%",
         "rainProb": "晴天间多云，空气干燥",
         "wind": "3级",
-        "dir": "东北风",
+        "dir": "东风",
         "icon": "assets/images/weather_icons/02.png",
         "bg": "assets/images/background.jpg"
     },
@@ -26,48 +26,37 @@
     },
     "FORECAST": [
         {
-            "date": "10月11日",
-            "weekday": "周日",
-            "weather": "晴天间多云，空气干燥",
-            "low": "29°C",
-            "high": "32°C",
-            "humidity": "45%-65%",
-            "wind": "东北风 3级",
-            "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-11 10:03:00"
-        },
-        {
             "date": "10月12日",
             "weekday": "周一",
-            "weather": "晴天干燥",
-            "low": "25°C",
+            "weather": "晴天间多云，空气干燥",
+            "low": "24°C",
             "high": "32°C",
             "humidity": "45%-85%",
-            "wind": "东风 2-3级",
+            "wind": "东风 3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-11 10:03:25"
+            "published_at": "2026-10-11 14:43:00"
         },
         {
             "date": "10月13日",
             "weekday": "周二",
             "weather": "晴天干燥",
-            "low": "25°C",
+            "low": "24°C",
             "high": "33°C",
             "humidity": "50%-85%",
             "wind": "东风 2-3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-11 10:03:25"
+            "published_at": "2026-10-11 14:43:19"
         },
         {
             "date": "10月14日",
             "weekday": "周三",
-            "weather": "晴天间多云，空气干燥",
+            "weather": "晴天间多云",
             "low": "25°C",
             "high": "32°C",
             "humidity": "50%-90%",
             "wind": "东风 3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-11 10:03:25"
+            "published_at": "2026-10-11 14:43:19"
         },
         {
             "date": "10月15日",
@@ -78,7 +67,7 @@
             "humidity": "55%-95%",
             "wind": "东风 3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-11 10:03:25"
+            "published_at": "2026-10-11 14:43:19"
         },
         {
             "date": "10月16日",
@@ -89,7 +78,7 @@
             "humidity": "55%-90%",
             "wind": "东风 3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-11 10:03:25"
+            "published_at": "2026-10-11 14:43:19"
         },
         {
             "date": "10月17日",
@@ -100,7 +89,18 @@
             "humidity": "50%-85%",
             "wind": "东风 2-3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-11 10:03:25"
+            "published_at": "2026-10-11 14:43:19"
+        },
+        {
+            "date": "10月18日",
+            "weekday": "周日",
+            "weather": "晴天间多云",
+            "low": "25°C",
+            "high": "32°C",
+            "humidity": "50%-85%",
+            "wind": "东风 2-3级",
+            "icon": "assets/images/weather_icons/02.png",
+            "published_at": "2026-10-11 14:43:19"
         }
     ],
     "WARNINGS": [
@@ -116,8 +116,8 @@
     ],
     "META": {
         "source": "深圳市气象台",
-        "forecast_updated_at": "10月11日 10:03",
-        "updated_at": "2026-10-11 14:02",
+        "forecast_updated_at": "10月11日 14:43",
+        "updated_at": "2026-10-11 21:08",
         "warnings_updated_at": "2026-10-07 10:00:00"
     }
 }
