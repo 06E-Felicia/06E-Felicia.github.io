@@ -303,7 +303,7 @@ body {
     transition: transform 0.2s ease;
 }
 
-.dropdown:hover>.nav-item::before {
+.dropdown.is-open>.nav-item::before {
     transform: translateY(-50%) rotate(180deg);
 }
 
@@ -323,16 +323,26 @@ body {
     pointer-events: none;
     transform: translateY(8px) scale(0.98);
     transform-origin: top;
-    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+    transition: opacity 0.2s ease, transform 0.2s ease;
     box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
     z-index: 10003;
 }
 
-.dropdown:hover .dropdown-menu {
+.dropdown.is-open > .dropdown-menu {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
     transform: translateY(0) scale(1);
+}
+
+/* Bridge the visual gap too; the JS disclosure remains pinned after hover. */
+.dropdown > .dropdown-menu::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -12px;
+    height: 12px;
 }
 
 .dropdown-menu a {
@@ -397,11 +407,13 @@ body {
     font-size: 15px;
     font-weight: 600;
     max-width: 200px;
+    box-sizing: border-box;
+    line-height: 1.55;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     z-index: 10001;
     opacity: 0;
     transform: translateY(20px);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: opacity 0.25s ease, transform 0.25s ease;
     pointer-events: none;
 }
 
@@ -418,6 +430,15 @@ body {
 .speech-bubble.active {
     opacity: 1;
     transform: translateY(0);
+    pointer-events: auto;
+}
+
+.speech-bubble-text {
+    overflow-y: auto;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
 }
 
 .floating-display {
@@ -930,6 +951,35 @@ body {
     transform: translateY(-3px);
     box-shadow: 0 15px 30px rgba(64, 123, 226, 0.4);
 }
+
+/* The upstream estimate is a separate, higher-priority step in the alert queue. */
+.thunder-overlay { z-index: 30001; }
+.thunder-modal { max-height: calc(100dvh - 40px); }
+.thunder-modal .alert-main-body { min-height: 0; overflow-y: auto; }
+.thunder-label { color: #ffcf81; margin: 0 0 8px; font-size: 13px; }
+.thunder-modal h2 { color: #ffcf81; font-size: 26px; letter-spacing: 0; }
+.thunder-image-side { flex-direction: column; gap: 12px; padding: 16px; box-sizing: border-box; }
+.thunder-image-side img { max-height: 48vh; }
+.thunder-image-side img[hidden] { display: none; }
+.thunder-image-side:has(img[hidden]) { min-height: 80px; flex-basis: auto; }
+.thunder-image-side p { color: #cbd8e4; font-size: 12px; margin: 0; }
+.thunder-modal a { color: #8edbff; font-size: 13px; }
+.thunder-text-side { padding: 24px; justify-content: flex-start; gap: 14px; min-width: 0; }
+.thunder-text-side p { font-size: 15px; line-height: 1.7; white-space: pre-line; overflow-wrap: anywhere; }
+.thunder-text-side .thunder-arrival { color: #ffcf81; font-size: 20px; font-weight: 700; }
+.thunder-text-side .thunder-caveat { color: #b8c8d7; font-size: 12px; }
+.thunder-details { color: #e8f3ff; font-size: 13px; }
+.thunder-details summary { cursor: pointer; color: #8edbff; padding: 8px 0; }
+.thunder-details article { padding: 12px 0; border-top: 1px solid #ffffff20; }
+.thunder-details h3 { margin: 0 0 8px; font-size: 14px; }
+.thunder-details p { font-size: 12px; margin: 8px 0; }
+.thunder-control { position: fixed; right: 16px; bottom: 16px; z-index: 1000; width: min(290px, calc(100vw - 56px)); padding: 12px; border: 1px solid #ffffff30; border-radius: 16px; color: #e8f3ff; background: #152637f2; box-shadow: 0 8px 30px #0005; }
+.thunder-control summary { cursor: pointer; font-size: 14px; color: #ffcf81; }
+.thunder-control label { display: block; margin: 12px 0 6px; font-size: 12px; }
+.thunder-control select { width: 100%; padding: 8px; background: #233d54; color: white; border: 1px solid #ffffff40; border-radius: 8px; font-size: 14px; }
+.thunder-control p { font-size: 12px; line-height: 1.6; margin: 8px 0 0; }
+.thunder-control-note { color: #b8c8d7; }
+@media (max-width: 768px) { .thunder-control { right: 8px; bottom: 8px; } }
 
 /* ✨ 巨型预警手机端适配 ✨ */
 @media (max-width: 768px) {

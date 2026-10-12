@@ -12,6 +12,36 @@
 </head>
 
 <body>
+    <div id="thunder-overlay" class="alert-overlay thunder-overlay">
+        <div class="alert-modal thunder-modal" role="dialog" aria-modal="true" aria-labelledby="thunder-title">
+            <div class="alert-header">
+                <p class="thunder-label">深中气象 · 默认 3–5 月上游雷暴监测</p>
+                <h2 id="thunder-title">上游雷暴抵达估测（非官方预警）</h2>
+            </div>
+            <div class="alert-main-body">
+                <div class="alert-image-side thunder-image-side">
+                    <img id="thunder-img" alt="中央气象台最新华南雷达拼图" referrerpolicy="no-referrer">
+                    <p id="thunder-radar-status"></p>
+                    <a href="https://www.nmc.cn/publish/radar/huanan.html" target="_blank" rel="noopener">查看中央气象台华南雷达 ↗</a>
+                </div>
+                <div class="alert-text-side thunder-text-side">
+                    <p id="thunder-arrival" class="thunder-arrival"></p>
+                    <p id="thunder-countdown" class="thunder-arrival" role="timer" aria-live="off"></p>
+                    <p id="thunder-confidence"></p>
+                    <p id="thunder-message"></p>
+                    <p class="thunder-caveat">统一按 50 km/h、城市中心经线投影估算。城市中心不等于雷暴位置；假设南北向飑线向东推进并覆盖深圳纬度。雷达图仅供人工核验，系统未追踪回波。飑线可能转向或减弱；可信度仅按距离分级，不代表命中概率。暴雨预警也不必然意味着雷暴。</p>
+                    <details class="thunder-details">
+                        <summary>核验距离、速度和预警原文</summary>
+                        <p id="thunder-formula"></p>
+                        <div id="thunder-evidence"></div>
+                    </details>
+                </div>
+            </div>
+            <div class="alert-footer">
+                <button id="thunder-close" class="alert-close-btn" onclick="closeThunderAlert()">我知道了 · 继续查看深圳官方预警</button>
+            </div>
+        </div>
+    </div>
     <div id="alert-overlay" class="alert-overlay">
         <div class="alert-modal">
             <div class="alert-header">
@@ -33,6 +63,18 @@
             </div>
         </div>
     </div>
+
+    <details class="thunder-control" open>
+        <summary>上游雷暴监测 · 控制窗</summary>
+        <label for="thunder-mode">弹窗模式（仅此浏览器）</label>
+        <select id="thunder-mode">
+            <option value="auto">自动 · 北京时间 3–5 月</option>
+            <option value="on">手动开启 · 全年</option>
+            <option value="off">手动关闭</option>
+        </select>
+        <p id="thunder-control-status" role="status">正在读取监测数据…</p>
+        <p class="thunder-control-note">手动开启仍需有新鲜有效的上游预警，不强制生成预警。深圳官方预警不受此开关影响。</p>
+    </details>
 
     <nav class="nav-bar">
         <div class="nav-logo-wrapper">
@@ -119,12 +161,15 @@
         </div>
     </div>
 
-    <div id="dialog-bubble" class="speech-bubble">内容加载中...</div>
+    <div id="dialog-bubble" class="speech-bubble" aria-live="polite">
+        <div id="dialog-text" class="speech-bubble-text" tabindex="0">内容加载中...</div>
+    </div>
 
     <div class="floating-display" onclick="showRandomDialog()">
         <img src="assets/images/cursor.png" alt="Display">
     </div>
 
+    <script src="assets/scripts/thunder.js"></script>
     <script src="assets/scripts/script.js"></script>
 
 </body>

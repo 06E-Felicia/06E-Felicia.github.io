@@ -61,6 +61,8 @@ const DEFAULT_APP_CONFIG = {
         message: ""
     },
     WARNINGS: [],
+    THUNDER_ALERT_CONFIG: { enabled: false },
+    THUNDER_MONITOR_CONFIG: { default_mode: "auto" },
     FORECAST: [],
     META: {}
 };
@@ -69,6 +71,9 @@ let LIVE_DATA = { ...DEFAULT_APP_CONFIG.LIVE_DATA };
 let MANUAL_CONFIG = { ...DEFAULT_APP_CONFIG.MANUAL_CONFIG };
 let ALERT_CONFIG = { ...DEFAULT_APP_CONFIG.ALERT_CONFIG };
 let WARNINGS = [...DEFAULT_APP_CONFIG.WARNINGS];
+let lastAlertSignature = "";
+let configRefreshing = false;
+let currentThunderEvent = "";
 
 let dialogTimer = null;
 let currentIndex = 0;
@@ -91,6 +96,8 @@ function mergeConfig(fileConfig = {}) {
         WARNINGS: Array.isArray(fileConfig.WARNINGS)
             ? fileConfig.WARNINGS
             : DEFAULT_APP_CONFIG.WARNINGS,
+        THUNDER_ALERT_CONFIG: fileConfig.THUNDER_ALERT_CONFIG || DEFAULT_APP_CONFIG.THUNDER_ALERT_CONFIG,
+        THUNDER_MONITOR_CONFIG: fileConfig.THUNDER_MONITOR_CONFIG || DEFAULT_APP_CONFIG.THUNDER_MONITOR_CONFIG,
         FORECAST: Array.isArray(fileConfig.FORECAST)
             ? fileConfig.FORECAST
             : DEFAULT_APP_CONFIG.FORECAST,
@@ -117,6 +124,8 @@ function applyRuntimeConfig(appConfig) {
     MANUAL_CONFIG = appConfig.MANUAL_CONFIG;
     ALERT_CONFIG = appConfig.ALERT_CONFIG;
     WARNINGS = appConfig.WARNINGS;
+    currentThunderEvent = appConfig.THUNDER_ALERT_CONFIG.event_id || "";
+    ThunderAlerts.update(appConfig.THUNDER_ALERT_CONFIG, appConfig.THUNDER_MONITOR_CONFIG);
 }
 
 function showRandomDialog() {
@@ -132,15 +141,98 @@ function showRandomDialog() {
         targetText = dialogs[randomIdx];
     }
 
-    bubble.innerText = targetText;
+    document.getElementById('dialog-text').textContent = targetText;
     bubble.classList.add('active');
+    fitDialogBubble();
 
     if (dialogTimer) clearTimeout(dialogTimer);
     dialogTimer = setTimeout(() => {
         bubble.classList.remove('active');
         dialogTimer = null;
-    }, 3000);
+    }, Math.min(30000, Math.max(3000, targetText.length * 70)));
 }
+
+function fitDialogBubble() {
+    const bubble = document.getElementById('dialog-bubble');
+    if (!bubble?.classList.contains('active')) return;
+    const content = document.getElementById('dialog-text');
+    const viewportHeight = window.innerHeight, viewportWidth = window.innerWidth;
+    const navBottom = document.querySelector('.nav-bar')?.getBoundingClientRect().bottom || 0;
+    const safeTop = Math.min(Math.max(12, navBottom + 12), Math.max(12, viewportHeight - 120));
+    const characterTop = document.querySelector('.floating-display')?.getBoundingClientRect().top;
+    const anchorBottom = Number.isFinite(characterTop) ? viewportHeight - characterTop + 12 : 160;
+    // Keep the bubble near the character, but let it move down on short screens.
+    const bottom = Math.max(12, Math.min(anchorBottom, viewportHeight - safeTop - 120));
+    const styles = getComputedStyle(bubble);
+    // Computed 'auto' insets may resolve to pixels (even negative after resize).
+    // Follow the same anchor breakpoint as CSS rather than inferring it from left.
+    const side = parseFloat(viewportWidth <= 768 ? styles.right : styles.left) || 12;
+    const preferredWidth = content.textContent.length > 100 ? 360 : 240;
+    bubble.style.width = `${Math.max(40, Math.min(preferredWidth, viewportWidth - side - 12))}px`;
+    bubble.style.maxWidth = bubble.style.width;
+    bubble.style.bottom = `${bottom}px`;
+    const padding = parseFloat(styles.paddingTop) + parseFloat(styles.paddingBottom);
+    const maxTextHeight = Math.max(16, viewportHeight - safeTop - bottom - padding - 12);
+    content.style.maxHeight = '';
+    let fontSize = viewportWidth <= 480 ? 12 : viewportWidth <= 768 ? 13 : 15;
+    bubble.style.fontSize = `${fontSize}px`;
+    while (content.scrollHeight > maxTextHeight && fontSize > 12) {
+        bubble.style.fontSize = `${--fontSize}px`;
+    }
+    content.style.maxHeight = `${Math.floor(maxTextHeight)}px`;
+}
+
+window.addEventListener('resize', fitDialogBubble);
+
+function initDropdownMenus() {
+    const items = [...document.querySelectorAll('.nav-bar .dropdown')];
+    function closeMenus(except = null) {
+        items.forEach(item => {
+            if (item === except) return;
+            item.classList.remove('is-open');
+            item.querySelector('.nav-item').setAttribute('aria-expanded', 'false');
+        });
+    }
+    items.forEach((item, index) => {
+        const trigger = item.querySelector('.nav-item'), menu = item.querySelector('.dropdown-menu');
+        menu.id ||= `nav-dropdown-${index}`;
+        trigger.setAttribute('aria-controls', menu.id);
+        trigger.setAttribute('aria-expanded', 'false');
+        function openMenu() {
+            closeMenus(item);
+            item.classList.add('is-open');
+            trigger.setAttribute('aria-expanded', 'true');
+        }
+        // No mouseleave handler: crossing the gap must not close the disclosure.
+        item.addEventListener('mouseenter', openMenu);
+        trigger.addEventListener('focus', openMenu);
+        trigger.addEventListener('click', event => { event.preventDefault(); openMenu(); });
+        trigger.addEventListener('keydown', event => {
+            if (event.key === ' ' || event.key === 'ArrowDown') {
+                event.preventDefault(); openMenu();
+                menu.querySelector('a')?.focus();
+            }
+        });
+        menu.addEventListener('click', event => { if (event.target.closest('a')) closeMenus(); });
+        item.addEventListener('focusout', event => {
+            if (!item.contains(event.relatedTarget)) closeMenus();
+        });
+    });
+    document.addEventListener('click', event => {
+        if (!event.target.closest('.nav-bar .dropdown')) closeMenus();
+    });
+    document.addEventListener('keydown', event => {
+        if (event.key !== 'Escape') return;
+        const opened = items.find(item => item.classList.contains('is-open'));
+        if (opened) {
+            // Focusing first avoids a focus handler reopening the dismissed menu.
+            opened.querySelector('.nav-item').focus();
+            closeMenus();
+        }
+    });
+}
+
+initDropdownMenus();
 
 function generateECUrl(offsetHours = 0) {
     // 1. 获取基础时间（减去偏移量）
@@ -177,6 +269,21 @@ function updateECForecastImage() {
 }
 
 function checkAndShowAlert() {
+    document.getElementById('alert-overlay').style.display = 'none';
+    if (!ThunderAlerts.show()) showShenzhenAlert();
+}
+
+function closeThunderAlert() {
+    ThunderAlerts.hide();
+    showShenzhenAlert();
+}
+
+function handleThunderModeChange() {
+    checkAndShowAlert();
+    lastAlertSignature = JSON.stringify([ThunderAlerts.valid() ? currentThunderEvent : "", ALERT_CONFIG]);
+}
+
+function showShenzhenAlert() {
     const overlay = document.getElementById('alert-overlay');
     if (!ALERT_CONFIG.enabled || !ALERT_CONFIG.title || !ALERT_CONFIG.message) {
         overlay.style.display = 'none';
@@ -209,13 +316,47 @@ function render() {
     document.getElementById('p').innerText = LIVE_DATA.p;
     document.getElementById('ltime').innerText = "UPDATE: " + LIVE_DATA.time;
 
-    checkAndShowAlert();
 }
 
 async function initPage() {
     const appConfig = await loadAppConfig();
     applyRuntimeConfig(appConfig);
     render();
+    lastAlertSignature = alertSignature(appConfig);
+    checkAndShowAlert();
+    // Re-read the static snapshot while a visitor keeps the page open.
+    setInterval(refreshPageConfig, 5 * 60 * 1000);
+    setInterval(() => {
+        if (ThunderAlerts.expire()) showShenzhenAlert();
+    }, 1000);
+    setInterval(() => ThunderAlerts.renderControl(), 30 * 1000);
+    // Timers may be throttled in background tabs; recheck immediately on return.
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && ThunderAlerts.expire()) showShenzhenAlert();
+        ThunderAlerts.renderControl();
+    });
+}
+
+function alertSignature(appConfig) {
+    const thunder = ThunderAlerts.valid() ? (appConfig.THUNDER_ALERT_CONFIG.event_id || "") : "";
+    return JSON.stringify([thunder, appConfig.ALERT_CONFIG]);
+}
+
+async function refreshPageConfig() {
+    if (configRefreshing) return;
+    configRefreshing = true;
+    try {
+        const appConfig = await loadAppConfig();
+        applyRuntimeConfig(appConfig);
+        render();
+        const signature = alertSignature(appConfig);
+        if (signature !== lastAlertSignature) {
+            lastAlertSignature = signature;
+            checkAndShowAlert();
+        }
+    } finally {
+        configRefreshing = false;
+    }
 }
 
 window.onload = initPage;
