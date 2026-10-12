@@ -1,12 +1,12 @@
 {
     "LIVE_DATA": {
-        "time": "2026-10-12 21:00",
-        "t": "26.7°C",
+        "time": "2026-10-13 01:08",
+        "t": "25.4°C",
         "th": "27.6°C",
-        "tl": "26.7°C",
+        "tl": "25.4°C",
         "r_day": "0mm",
         "r_1h": "0mm",
-        "p": "1009.5hPa"
+        "p": "1009.4hPa"
     },
     "MANUAL_CONFIG": {
         "low": "25°C",
@@ -128,12 +128,8 @@
     },
     "THUNDER_ALERT_CONFIG": {
         "enabled": false,
-        "status": "outside_season",
-        "generated_at": "2026-10-12T21:04:05+08:00",
-        "valid_until": "2026-10-12T21:49:05+08:00",
-        "title": "上游雷暴抵达估测（非官方预警）",
-        "source_url": "https://www.gd121.cn/api/ftproot/ActiveYJ.json",
-        "method": "city_centre_meridian_projection_50kmh",
+        "status": "source_error",
+        "generated_at": "2026-10-13T01:10:23+08:00",
         "settings": {
             "default_mode": "auto",
             "speed_kmh": 50,
@@ -147,23 +143,12 @@
             "medium_confidence_distance_km": 150
         },
         "candidates": [],
-        "audit": {
-            "source_rows": 131,
-            "outside_region_or_type": 114,
-            "invalid_time": 0,
-            "superseded": 1,
-            "cancelled": 1,
-            "stale": 15,
-            "future": 0,
-            "east_of_target": 0,
-            "elapsed_window": 0
-        },
         "radar": {}
     },
     "META": {
         "source": "深圳市气象台",
         "forecast_updated_at": "10月12日 15:32",
-        "updated_at": "2026-10-12 21:00",
+        "updated_at": "2026-10-13 01:08",
         "warnings_updated_at": "2026-10-07 10:00:00"
     }
 }
