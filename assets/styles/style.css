@@ -973,13 +973,6 @@ body {
 .thunder-details article { padding: 12px 0; border-top: 1px solid #ffffff20; }
 .thunder-details h3 { margin: 0 0 8px; font-size: 14px; }
 .thunder-details p { font-size: 12px; margin: 8px 0; }
-.thunder-control { position: fixed; right: 16px; bottom: 16px; z-index: 1000; width: min(290px, calc(100vw - 56px)); padding: 12px; border: 1px solid #ffffff30; border-radius: 16px; color: #e8f3ff; background: #152637f2; box-shadow: 0 8px 30px #0005; }
-.thunder-control summary { cursor: pointer; font-size: 14px; color: #ffcf81; }
-.thunder-control label { display: block; margin: 12px 0 6px; font-size: 12px; }
-.thunder-control select { width: 100%; padding: 8px; background: #233d54; color: white; border: 1px solid #ffffff40; border-radius: 8px; font-size: 14px; }
-.thunder-control p { font-size: 12px; line-height: 1.6; margin: 8px 0 0; }
-.thunder-control-note { color: #b8c8d7; }
-@media (max-width: 768px) { .thunder-control { right: 8px; bottom: 8px; } }
 
 /* ✨ 巨型预警手机端适配 ✨ */
 @media (max-width: 768px) {

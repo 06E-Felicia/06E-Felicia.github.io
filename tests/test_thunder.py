@@ -116,13 +116,15 @@ class ThunderTests(unittest.TestCase):
         ):
             self.assertEqual(self.build([], now)["status"], expected)
 
-    def test_collect_all_year_and_manual_modes(self):
+    def test_backend_modes_and_disabled_snapshots_have_no_candidates(self):
         october = datetime(2026, 10, 12, 12, 5, tzinfo=CHINA_TZ)
         row = self.warning(PUBLISHDATE="2026-10-12 12:00:00")
         self.assertFalse(self.build([row], october)["enabled"])
-        self.assertEqual(len(self.build([row], october)["candidates"]), 1)
+        self.assertEqual(self.build([row], october)["candidates"], [])
+        self.assertEqual(self.build([row], october)["audit"]["valid_candidates"], 1)
         self.assertTrue(self.build([row], october, {"default_mode": "on"})["enabled"])
         self.assertFalse(self.build([self.warning()], settings={"default_mode": "off"})["enabled"])
+        self.assertEqual(self.build([self.warning()], settings={"default_mode": "off"})["candidates"], [])
         with patch("auto_update.utils.util_thunder._read_url", return_value=json.dumps({"DATA": []})) as fetch:
             fetch_thunder_alert({}, Mock(), october)
             fetch.assert_called_once()

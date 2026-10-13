@@ -1,25 +1,19 @@
 /* City-centre meridian projection at 50 km/h, not official radar tracking. */
 const ThunderAlerts = (() => {
-    let config = {}, defaultMode = "auto", manualMode = null, returnFocus = null;
+    let config = {}, defaultMode = "auto", returnFocus = null;
     let failedRadarImage = "";
-    const storageKey = "shenzhen-thunder-mode-v1";
     const modes = ["auto", "on", "off"];
-    try {
-        const saved = localStorage.getItem(storageKey);
-        if (modes.includes(saved)) manualMode = saved;
-    } catch (_) { /* Storage may be disabled; keep a session-only selection. */ }
     const overlay = () => document.getElementById("thunder-overlay");
     const text = (id, value) => { document.getElementById(id).textContent = value; };
     const formatTime = value => new Intl.DateTimeFormat("zh-CN", {
         timeZone: "Asia/Shanghai", month: "2-digit", day: "2-digit",
         hour: "2-digit", minute: "2-digit", hourCycle: "h23"
     }).format(new Date(value));
-    const mode = () => manualMode || defaultMode;
     function active(now = new Date()) {
         const month = Number(new Intl.DateTimeFormat("en", {
             timeZone: "Asia/Shanghai", month: "numeric"
         }).format(now));
-        return mode() === "on" || (mode() === "auto" && month >= 3 && month <= 5);
+        return defaultMode === "on" || (defaultMode === "auto" && month >= 3 && month <= 5);
     }
     function fresh(now = new Date()) {
         const generated = Date.parse(config.generated_at), expiry = Date.parse(config.valid_until);
@@ -29,27 +23,16 @@ const ThunderAlerts = (() => {
     }
     function valid(now = new Date()) {
         const primary = config.candidates?.[0];
-        // A browser override may enable an out-of-season server snapshot.
-        return active(now) && fresh(now) && !!primary && config.settings?.speed_kmh === 50
+        // Only the centrally generated snapshot may authorize a popup.
+        return config.enabled === true && active(now) && fresh(now) && !!primary && config.settings?.speed_kmh === 50
             && Number.isFinite(Date.parse(primary.estimated_arrival))
             && Date.parse(primary.expires_at) > now.getTime();
     }
-    function renderControl(now = new Date()) {
-        document.getElementById("thunder-mode").value = mode();
-        const state = mode() === "off" ? "手动关闭" : !active(now) ? "自动模式：当前非 3–5 月，不弹出估测"
-            : !fresh(now) ? "监测开启，但数据过期或不可用，不弹出估测"
-            : valid(now) ? `监测开启：${config.candidates.length} 条有效上游信号`
-            : "监测开启：暂无有效上游信号（不等于深圳无雷暴风险）";
-        const fetched = Number.isFinite(Date.parse(config.generated_at))
-            ? `；数据更新 ${formatTime(config.generated_at)}` : "";
-        text("thunder-control-status", state + fetched);
-        if (overlay().style.display === "flex" && valid(now)) renderRadar();
-    }
     function update(value, settings = {}) {
         config = value || {};
-        defaultMode = modes.includes(config.settings?.default_mode || settings.default_mode)
-            ? (config.settings?.default_mode || settings.default_mode) : "auto";
-        renderControl();
+        const requestedMode = settings.default_mode ?? config.settings?.default_mode ?? "auto";
+        defaultMode = modes.includes(requestedMode) ? requestedMode : "off";
+        refreshRadar();
     }
     function hide() {
         overlay().style.display = "none";
@@ -108,18 +91,14 @@ const ThunderAlerts = (() => {
         text("thunder-radar-status", radarValid ? `华南雷达 · ${formatTime(radar.observed_at)}（最新成功获取时次）`
             : "最新雷达暂时不可用，请打开官方雷达页核验。");
     }
+    function refreshRadar() {
+        if (overlay().style.display === "flex" && valid()) renderRadar();
+    }
     function expire() {
         if (overlay().style.display === "flex" && !valid()) { hide(); return true; }
         if (overlay().style.display === "flex") countdown();
         return false;
     }
-    document.getElementById("thunder-mode").addEventListener("change", event => {
-        if (!modes.includes(event.target.value)) return;
-        manualMode = event.target.value;
-        try { localStorage.setItem(storageKey, manualMode); } catch (_) { /* Session-only. */ }
-        renderControl();
-        handleThunderModeChange();
-    });
     overlay().addEventListener("keydown", event => {
         if (event.key === "Escape") { event.preventDefault(); closeThunderAlert(); }
         if (event.key !== "Tab") return;
@@ -129,5 +108,5 @@ const ThunderAlerts = (() => {
         if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
         else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
     });
-    return { update, show, hide, valid, expire, renderControl };
+    return { update, show, hide, valid, expire, refreshRadar };
 })();

@@ -73,7 +73,6 @@ let ALERT_CONFIG = { ...DEFAULT_APP_CONFIG.ALERT_CONFIG };
 let WARNINGS = [...DEFAULT_APP_CONFIG.WARNINGS];
 let lastAlertSignature = "";
 let configRefreshing = false;
-let currentThunderEvent = "";
 
 let dialogTimer = null;
 let currentIndex = 0;
@@ -124,7 +123,6 @@ function applyRuntimeConfig(appConfig) {
     MANUAL_CONFIG = appConfig.MANUAL_CONFIG;
     ALERT_CONFIG = appConfig.ALERT_CONFIG;
     WARNINGS = appConfig.WARNINGS;
-    currentThunderEvent = appConfig.THUNDER_ALERT_CONFIG.event_id || "";
     ThunderAlerts.update(appConfig.THUNDER_ALERT_CONFIG, appConfig.THUNDER_MONITOR_CONFIG);
 }
 
@@ -278,11 +276,6 @@ function closeThunderAlert() {
     showShenzhenAlert();
 }
 
-function handleThunderModeChange() {
-    checkAndShowAlert();
-    lastAlertSignature = JSON.stringify([ThunderAlerts.valid() ? currentThunderEvent : "", ALERT_CONFIG]);
-}
-
 function showShenzhenAlert() {
     const overlay = document.getElementById('alert-overlay');
     if (!ALERT_CONFIG.enabled || !ALERT_CONFIG.title || !ALERT_CONFIG.message) {
@@ -329,11 +322,11 @@ async function initPage() {
     setInterval(() => {
         if (ThunderAlerts.expire()) showShenzhenAlert();
     }, 1000);
-    setInterval(() => ThunderAlerts.renderControl(), 30 * 1000);
+    setInterval(() => ThunderAlerts.refreshRadar(), 30 * 1000);
     // Timers may be throttled in background tabs; recheck immediately on return.
     document.addEventListener('visibilitychange', () => {
         if (!document.hidden && ThunderAlerts.expire()) showShenzhenAlert();
-        ThunderAlerts.renderControl();
+        ThunderAlerts.refreshRadar();
     });
 }
 

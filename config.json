@@ -1,12 +1,12 @@
 {
     "LIVE_DATA": {
-        "time": "2026-10-13 07:38",
-        "t": "25.6°C",
+        "time": "2026-10-12 21:00",
+        "t": "26.7°C",
         "th": "27.6°C",
-        "tl": "24.1°C",
+        "tl": "26.7°C",
         "r_day": "0mm",
         "r_1h": "0mm",
-        "p": "1010.4hPa"
+        "p": "1009.5hPa"
     },
     "MANUAL_CONFIG": {
         "low": "25°C",
@@ -34,73 +34,73 @@
             "humidity": "45%-85%",
             "wind": "东风 3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-13 05:40:00"
+            "published_at": "2026-10-12 15:32:00"
         },
         {
             "date": "10月14日",
             "weekday": "周三",
             "weather": "晴天间多云",
             "low": "25°C",
-            "high": "31°C",
+            "high": "32°C",
             "humidity": "50%-90%",
             "wind": "东风 3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-13 05:40:35"
+            "published_at": "2026-10-12 15:32:32"
         },
         {
             "date": "10月15日",
             "weekday": "周四",
-            "weather": "多云，偶有零星小雨",
+            "weather": "多云",
             "low": "25°C",
-            "high": "30°C",
+            "high": "31°C",
             "humidity": "55%-95%",
             "wind": "东风 3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-13 05:40:35"
+            "published_at": "2026-10-12 15:32:32"
         },
         {
             "date": "10月16日",
             "weekday": "周五",
-            "weather": "多云，偶有零星小雨",
+            "weather": "多云间晴天，偶有零星小雨",
             "low": "25°C",
-            "high": "30°C",
+            "high": "32°C",
             "humidity": "55%-90%",
             "wind": "东风 3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-13 05:40:35"
+            "published_at": "2026-10-12 15:32:32"
         },
         {
             "date": "10月17日",
             "weekday": "周六",
-            "weather": "多云，偶有零星小雨",
+            "weather": "多云间晴天，偶有零星小雨",
             "low": "25°C",
-            "high": "30°C",
+            "high": "32°C",
             "humidity": "50%-85%",
             "wind": "东风 2-3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-13 05:40:35"
+            "published_at": "2026-10-12 15:32:32"
         },
         {
             "date": "10月18日",
             "weekday": "周日",
             "weather": "晴天间多云",
             "low": "25°C",
-            "high": "31°C",
+            "high": "32°C",
             "humidity": "50%-85%",
             "wind": "东风 2-3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-13 05:40:35"
+            "published_at": "2026-10-12 15:32:32"
         },
         {
             "date": "10月19日",
             "weekday": "周一",
             "weather": "晴天间多云",
             "low": "25°C",
-            "high": "32°C",
+            "high": "33°C",
             "humidity": "50%-85%",
             "wind": "东风 2-3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-13 05:40:35"
+            "published_at": "2026-10-12 15:32:32"
         }
     ],
     "WARNINGS": [
@@ -128,8 +128,12 @@
     },
     "THUNDER_ALERT_CONFIG": {
         "enabled": false,
-        "status": "source_error",
-        "generated_at": "2026-10-13T07:40:52+08:00",
+        "status": "outside_season",
+        "generated_at": "2026-10-12T21:04:05+08:00",
+        "valid_until": "2026-10-12T21:49:05+08:00",
+        "title": "上游雷暴抵达估测（非官方预警）",
+        "source_url": "https://www.gd121.cn/api/ftproot/ActiveYJ.json",
+        "method": "city_centre_meridian_projection_50kmh",
         "settings": {
             "default_mode": "auto",
             "speed_kmh": 50,
@@ -143,12 +147,23 @@
             "medium_confidence_distance_km": 150
         },
         "candidates": [],
+        "audit": {
+            "source_rows": 131,
+            "outside_region_or_type": 114,
+            "invalid_time": 0,
+            "superseded": 1,
+            "cancelled": 1,
+            "stale": 15,
+            "future": 0,
+            "east_of_target": 0,
+            "elapsed_window": 0
+        },
         "radar": {}
     },
     "META": {
         "source": "深圳市气象台",
-        "forecast_updated_at": "10月13日 05:40",
-        "updated_at": "2026-10-13 07:38",
+        "forecast_updated_at": "10月12日 15:32",
+        "updated_at": "2026-10-12 21:00",
         "warnings_updated_at": "2026-10-07 10:00:00"
     }
 }

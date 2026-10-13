@@ -1,12 +1,21 @@
-from utils import ConfigurationService, LoggingService, fetch_shenzhen_weather
-from utils.util_thunder import fetch_thunder_alert
+import os
 
-# Initialize services
-logging_service = LoggingService()
-config_service = ConfigurationService(logger=logging_service)
+if __package__:
+    from .utils import ConfigurationService, LoggingService, fetch_shenzhen_weather
+    from .utils.util_thunder import apply_monitor_mode, fetch_thunder_alert
+else:
+    from utils import ConfigurationService, LoggingService, fetch_shenzhen_weather
+    from utils.util_thunder import apply_monitor_mode, fetch_thunder_alert
 
 
 def main():
+    logging_service = LoggingService()
+    config_service = ConfigurationService(logger=logging_service)
+    monitor_settings = apply_monitor_mode(
+        config_service.get_value("THUNDER_MONITOR_CONFIG", {}),
+        os.environ.get("THUNDER_MONITOR_MODE", "keep"),
+    )
+    print("全站上游雷暴监测模式:", monitor_settings["default_mode"])
     try:
         weather_data = fetch_shenzhen_weather(logging_service)
     except Exception as e:
@@ -19,8 +28,9 @@ def main():
 
     # A Shenzhen-source failure must not prevent the regional monitor from running.
     weather_data["THUNDER_ALERT_CONFIG"] = fetch_thunder_alert(
-        config_service.get_value("THUNDER_MONITOR_CONFIG", {}), logging_service
+        monitor_settings, logging_service
     )
+    weather_data["THUNDER_MONITOR_CONFIG"] = monitor_settings
 
     # Keep all front-end weather blocks in sync from the official Shenzhen source.
     config_service.set_values(weather_data)

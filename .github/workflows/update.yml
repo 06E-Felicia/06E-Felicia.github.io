@@ -6,11 +6,22 @@ on:
     # 错开整点高峰，GitHub 调度仍可能延迟。
     - cron: '7,17,27,37,47,57 * * * *'
     - cron: '*/30 * * * *'
-  workflow_dispatch: # 允许手动点击按钮立即运行
+  workflow_dispatch:
+    inputs:
+      monitor_mode:
+        description: '全站上游雷暴监测模式（仅管理员控制；深圳官方预警不受影响）'
+        type: choice
+        required: true
+        default: '保持当前设置'
+        options:
+          - '保持当前设置'
+          - '自动（3–5 月）'
+          - '开启'
+          - '关闭'
 
 concurrency:
   group: weather-update-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false # 定时任务不能中断正在保存开关设置的管理员操作。
 
 jobs:
   update-weather:
@@ -63,9 +74,25 @@ jobs:
 
       - name: 获取天气数据更新
         if: steps.frequency.outputs.run == 'true'
-        continue-on-error: true
+        env:
+          THUNDER_MONITOR_MODE: ${{ inputs.monitor_mode || 'keep' }}
         run: |
           python auto_update/updater.py
+
+      - name: 显示后台开关状态
+        if: steps.frequency.outputs.run == 'true'
+        run: |
+          python3 - <<'PY'
+          import json, os
+          with open("config.json", encoding="utf-8") as source:
+              config = json.load(source)
+          mode = config["THUNDER_MONITOR_CONFIG"]["default_mode"]
+          labels = {"auto": "自动（北京时间 3–5 月）", "on": "开启（全年）", "off": "关闭"}
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
+              summary.write("## 上游雷暴监测后台开关\n\n")
+              summary.write(f"当前全站模式：**{labels[mode]}**\n\n")
+              summary.write("设置保存在 config.json；后续定时运行保持此设置。\n")
+          PY
 
       - name: 提交并推送到仓库
         if: steps.frequency.outputs.run == 'true'

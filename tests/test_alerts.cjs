@@ -38,7 +38,7 @@ function browser(iso = '2026-05-20T12:05:00+08:00', stored = null, storageBlocke
             setItem(key, value) { if (storageBlocked) throw Error('blocked'); storage.set(key, value); }
         },
         setInterval(fn, ms) { intervals.push({ fn, ms }); },
-        fetch: async () => ({ ok: true, json: async () => snapshot() })
+        fetch: async () => ({ ok: true, json: async () => context.fixture })
     });
     for (const file of ['thunder.js', 'script.js'])
         vm.runInContext(fs.readFileSync(`assets/scripts/${file}`, 'utf8'), context);
@@ -59,13 +59,19 @@ function browser(iso = '2026-05-20T12:05:00+08:00', stored = null, storageBlocke
         };
     }
     context.fixture = snapshot();
+    context.fixture.THUNDER_ALERT_CONFIG.enabled = iso.slice(5, 7) >= '03' && iso.slice(5, 7) <= '05';
     vm.runInContext('applyRuntimeConfig(mergeConfig(fixture))', context);
     return {
         run: code => vm.runInContext(code, context),
         el: id => document.getElementById(id), context, storage, intervals, listeners,
         advance(ms) { clock += ms; },
-        select(value) { const select = document.getElementById('thunder-mode'); select.value = value;
-            select.handlers.change({ target: select }); }
+        async backendMode(value) {
+            context.fixture.THUNDER_MONITOR_CONFIG.default_mode = value;
+            context.fixture.THUNDER_ALERT_CONFIG.settings.default_mode = value;
+            context.fixture.THUNDER_ALERT_CONFIG.enabled = value === 'on'
+                || (value === 'auto' && iso.slice(5, 7) >= '03' && iso.slice(5, 7) <= '05');
+            await vm.runInContext('refreshPageConfig()', context);
+        }
     };
 }
 
@@ -83,11 +89,11 @@ function browser(iso = '2026-05-20T12:05:00+08:00', stored = null, storageBlocke
     assert.equal(b.el('alert-overlay').style.display, 'flex');
     await b.run('refreshPageConfig()');
     assert.equal(b.el('thunder-overlay').style.display, 'none', 'same snapshot must not reopen');
-    b.select('off');
+    await b.backendMode('off');
     assert.equal(b.run('ThunderAlerts.valid()'), false);
     assert.equal(b.el('alert-overlay').style.display, 'flex');
-    assert.equal(b.storage.get('shenzhen-thunder-mode-v1'), 'off');
-    b.select('on');
+    assert.equal(b.storage.size, 0, 'backend changes never write browser preferences');
+    await b.backendMode('on');
     assert.equal(b.el('thunder-overlay').style.display, 'flex');
     b.advance(13 * 60000 - 1000); // Exactly 12:19:00 (zero remaining).
     b.intervals.find(timer => timer.ms === 1000).fn();
@@ -98,17 +104,26 @@ function browser(iso = '2026-05-20T12:05:00+08:00', stored = null, storageBlocke
     assert.equal(b.el('thunder-overlay').style.display, 'none');
     assert.equal(b.el('alert-overlay').style.display, 'flex');
 
-    const october = browser('2026-10-12T12:05:00+08:00');
+    const october = browser('2026-10-12T12:05:00+08:00', 'on');
     october.run('checkAndShowAlert()');
     assert.equal(october.run('ThunderAlerts.valid()'), false);
-    october.select('on');
+    await october.backendMode('on');
     assert.equal(october.run('ThunderAlerts.valid()'), true);
     october.advance(3600000);
-    assert.equal(october.run('ThunderAlerts.show()'), false, 'manual ON cannot revive expired data');
-    assert.equal(browser(undefined, 'off').run('ThunderAlerts.valid()'), false);
+    assert.equal(october.run('ThunderAlerts.show()'), false, 'backend ON cannot revive expired data');
+    assert.equal(browser(undefined, 'off').run('ThunderAlerts.valid()'), true, 'old local OFF must not override global AUTO');
+    const legacy = browser(undefined, 'on');
+    await legacy.backendMode('off');
+    assert.equal(legacy.run('ThunderAlerts.valid()'), false, 'old local ON must not override global OFF');
+    // Even a stale/inconsistent enabled flag cannot override the authoritative mode.
+    legacy.context.fixture.THUNDER_ALERT_CONFIG.enabled = true;
+    legacy.context.fixture.THUNDER_ALERT_CONFIG.settings.default_mode = 'on';
+    legacy.run('applyRuntimeConfig(mergeConfig(fixture))');
+    assert.equal(legacy.run('ThunderAlerts.valid()'), false);
     const blocked = browser(undefined, null, true);
-    blocked.select('off');
-    assert.equal(blocked.run('ThunderAlerts.valid()'), false, 'blocked storage still supports session mode');
+    assert.equal(blocked.run('ThunderAlerts.valid()'), true, 'storage is no longer used');
+    await blocked.backendMode('off');
+    assert.equal(blocked.run('ThunderAlerts.valid()'), false);
     const stale = browser(); stale.advance(46 * 60000);
     assert.equal(stale.run('ThunderAlerts.valid()'), false);
     const future = browser(); future.context.fixture.THUNDER_ALERT_CONFIG.generated_at = '2026-05-20T13:00:00+08:00';
@@ -126,5 +141,7 @@ function browser(iso = '2026-05-20T12:05:00+08:00', stored = null, storageBlocke
     assert.equal(radar.el('thunder-img').src, 'https://image.nmc.cn/product/new.PNG', 'visible radar refreshes without reopening event');
     radar.el('thunder-img').onerror();
     assert.equal(radar.el('thunder-img').hidden, true);
-    console.log('PASS: popup order, per-second countdown, 30-minute grace/expiry, unchanged snapshot, manual modes, storage, freshness.');
+    assert.equal(fs.readFileSync('index.html', 'utf8').includes('thunder-control'), false);
+    assert.equal(fs.readFileSync('assets/scripts/thunder.js', 'utf8').includes('localStorage'), false);
+    console.log('PASS: backend-only global modes, no browser controls/overrides, popup order, countdown, grace/expiry, freshness and radar.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

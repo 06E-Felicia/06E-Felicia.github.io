@@ -81,6 +81,18 @@ def settings_from_config(config):
     return settings
 
 
+def apply_monitor_mode(config, requested="keep"):
+    """GitHub's admin-only workflow input; scheduled runs preserve the last mode."""
+    aliases = {"保持当前设置": "keep", "自动（3–5 月）": "auto", "开启": "on", "关闭": "off"}
+    requested = aliases.get(requested, requested)
+    if requested not in {"keep", "auto", "on", "off"}:
+        raise ValueError("Unknown backend monitor mode")
+    settings = settings_from_config(config)
+    if requested != "keep":
+        settings["default_mode"] = requested
+    return settings
+
+
 def _read_url(url):
     request = Request(url, headers={
         "User-Agent": "ShenzhenWeatherBoard/1.0",
@@ -218,6 +230,11 @@ def build_thunder_alert(feed, settings, now):
     result["status"] = ("disabled" if settings["default_mode"] == "off" else
                         "outside_season" if not active_mode else
                         "estimated_risk" if result["candidates"] else "no_recent_candidate")
+    # Do not publish actionable candidates while centrally disabled. This also
+    # prevents older cached front-end code from reviving them with a local switch.
+    audit["valid_candidates"] = len(result["candidates"])
+    if not active_mode:
+        result["candidates"] = []
     if result["candidates"]:
         primary = result["candidates"][0]
         result["valid_until"] = timestamp(min(parse_time(result["valid_until"]), parse_time(primary["expires_at"])))
@@ -236,7 +253,7 @@ def fetch_thunder_alert(config, logger, now=None):
         logger.log_error("thunder.settings", str(error))
         return {"enabled": False, "status": "source_error", "generated_at": timestamp(now),
                 "settings": DEFAULT_SETTINGS.copy(), "candidates": [], "radar": {}}
-    # Fetch all year so a browser's manual ON works outside the auto season too.
+    # Backend ON is allowed all year; OFF/auto outside season publish no candidates.
     try:
         feed = json.loads(_read_url(WARNING_URL))
         result = build_thunder_alert(feed, settings, now)

@@ -10,11 +10,13 @@ const { chromium } = require('playwright');
         ...(process.env.TEST_BROWSER_CHANNEL ? { channel: process.env.TEST_BROWSER_CHANNEL } : {}) });
     try {
         const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+        await context.addInitScript(() => localStorage.setItem('shenzhen-thunder-mode-v1', 'off'));
         const page = await context.newPage();
         const errors = [];
         page.on('pageerror', error => errors.push(error.message));
         await page.clock.install({ time: new Date('2026-05-20T12:05:00+08:00') });
         const fixture = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+        fixture.THUNDER_MONITOR_CONFIG.default_mode = 'auto';
         fixture.ALERT_CONFIG = { enabled: true, title: '测试 · 深圳官方预警', message: '浏览器隔离测试，不是真实预警', image: '' };
         fixture.THUNDER_ALERT_CONFIG = {
             enabled: true, status: 'estimated_risk', event_id: 'test-browser',
@@ -38,6 +40,7 @@ const { chromium } = require('playwright');
         });
         await page.goto('http://127.0.0.1:14331/');
         await page.locator('#thunder-overlay').waitFor({ state: 'visible' });
+        assert.equal(await page.locator('#thunder-mode, .thunder-control').count(), 0, 'no visitor switch');
         assert.match(await page.locator('#thunder-countdown').innerText(), /14 分/);
         await page.locator('.thunder-details summary').click();
         assert.match(await page.locator('#thunder-evidence').innerText(), /49.4 km ÷ 50 km\/h/);
@@ -57,11 +60,15 @@ const { chromium } = require('playwright');
         await page.locator('#thunder-close').click();
         assert.equal(await page.locator('#alert-overlay').isVisible(), true);
         await page.getByRole('button', { name: '我知道了 (点击关闭)' }).click();
-        await page.locator('#thunder-mode').selectOption('off');
-        assert.match(await page.locator('#thunder-control-status').innerText(), /手动关闭/);
-        // Official warning may open again following a control change; close it.
+        fixture.THUNDER_MONITOR_CONFIG.default_mode = 'off';
+        fixture.THUNDER_ALERT_CONFIG.enabled = false;
+        await page.evaluate(() => refreshPageConfig());
+        assert.equal(await page.locator('#thunder-overlay').isVisible(), false);
+        assert.equal(await page.locator('#alert-overlay').isVisible(), true);
         await page.getByRole('button', { name: '我知道了 (点击关闭)' }).click();
-        await page.locator('#thunder-mode').selectOption('on');
+        fixture.THUNDER_MONITOR_CONFIG.default_mode = 'on';
+        fixture.THUNDER_ALERT_CONFIG.enabled = true;
+        await page.evaluate(() => refreshPageConfig());
         assert.equal(await page.locator('#thunder-overlay').isVisible(), true);
         await page.clock.runFor(14 * 60000);
         assert.equal(await page.locator('#thunder-overlay').isVisible(), true);
@@ -70,6 +77,6 @@ const { chromium } = require('playwright');
         assert.equal(await page.locator('#thunder-overlay').isVisible(), false);
         assert.equal(await page.locator('#alert-overlay').isVisible(), true);
         assert.deepEqual(errors, []);
-        console.log('PASS: desktop/mobile layout, calculation details, controls, popup queue, live countdown + 30-minute grace; no page JS errors.');
+        console.log('PASS: desktop/mobile layout, no visitor controls, old local preference ignored, backend modes, popup queue, countdown + grace; no page JS errors.');
     } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });
