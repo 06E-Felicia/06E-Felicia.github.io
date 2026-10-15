@@ -1,0 +1,100 @@
+name: 运行强对流模拟
+on:
+  workflow_dispatch:
+    inputs:
+      seed:
+        description: '主随机种子（1–2147483646；不同值产生不同过程）'
+        required: true
+        default: '20260421'
+      hours:
+        description: '模拟小时数（最长 96 小时）'
+        required: true
+        default: '72'
+      grid_km:
+        description: '网格间距；4 km 较细、8 km 更省计算额度'
+        type: choice
+        options: ['4', '6', '8']
+        default: '6'
+      frame_minutes:
+        description: '输出间隔（分钟）；不影响内部自适应时间步'
+        type: choice
+        options: ['30', '60', '120']
+        default: '60'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: convection-compute-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  calculate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 170
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: simulation/requirements.txt
+      - run: pip install -r simulation/requirements.txt
+      - name: 物理与再现性测试
+        run: |
+          python -m unittest discover -s tests -p 'test_physics.py' -v
+          python -m unittest discover -s tests -p 'test_coldpool.py' -v
+          python -m unittest discover -s tests -p 'test_stratiform.py' -v
+      - name: 后台逐步积分（不使用 WRF 或额外服务器）
+        env:
+          SIM_SEED: ${{ inputs.seed }}
+          SIM_HOURS: ${{ inputs.hours }}
+          SIM_GRID: ${{ inputs.grid_km }}
+          SIM_INTERVAL: ${{ inputs.frame_minutes }}
+          OPENBLAS_NUM_THREADS: '1'
+          OMP_NUM_THREADS: '1'
+        run: >-
+          python -m simulation.run --output assets/simulation
+          --seed "$SIM_SEED" --hours "$SIM_HOURS"
+          --grid-km "$SIM_GRID" --frame-minutes "$SIM_INTERVAL"
+      - name: 保存完整可部署结果
+        uses: actions/upload-artifact@v4
+        with:
+          name: simulation-results
+          path: assets/simulation/
+          retention-days: 90
+          compression-level: 0
+          if-no-files-found: error
+      - name: 核验摘要
+        run: python -m simulation.report assets/simulation/manifest.json
+
+  publish:
+    needs: calculate
+    runs-on: ubuntu-latest
+    # Same deployment lock as weather update, without blocking weather while
+    # the computationally expensive model is running.
+    concurrency:
+      group: weather-update-${{ github.ref }}
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      actions: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: simulation-results
+          path: assets/simulation
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: '.'
+      - uses: actions/deploy-pages@v4
+        id: deployment

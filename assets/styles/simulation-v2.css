@@ -1,0 +1,219 @@
+/* V1 presentation only: moon-white, dusk violet and restrained sakura accents. */
+:root {
+  color-scheme: light;
+  --bg: #f4f2f8;
+  --panel: #fffefd;
+  --panel-soft: #f8f6fc;
+  --line: #e4dfed;
+  --ink: #352f49;
+  --muted: #746d86;
+  --accent: #7863b6;
+  --blue: #3e7385;
+  --warm: #aa527e;
+  --accent-soft: #eee8f8;
+  --heading: #514267;
+  --shadow: 0 7px 26px #4c3c7010;
+}
+body.anime-lab {
+  background: radial-gradient(ellipse at 0% 4%, #faeaf0 0, transparent 34%),
+    radial-gradient(ellipse at 100% 12%, #eae5f7 0, transparent 44%), var(--bg);
+  color: var(--ink);
+}
+.lab-nav {
+  min-height: 82px; height: auto; padding: 18px 32px;
+  background: linear-gradient(105deg, #302e48, #45405f);
+  border-bottom: 1px solid #b7a1c9; box-shadow: 0 5px 20px #34284714;
+}
+.brand {gap: 12px;}
+.brand-mark {
+  display: grid; place-items: center; width: 40px; height: 40px;
+  background: linear-gradient(140deg, #f9dce9, #e4ddf7);
+  border: 1px solid #fff4fc80; border-radius: 13px;
+  color: #8e69ad; font-size: 26px; box-shadow: inset 0 1px 0 #ffffffb0;
+}
+.brand h1 {font-size: 25px; font-weight: 750; letter-spacing: .4px; color: #faf5ff;}
+.lab-nav > div {gap: 8px;}
+.lab-nav > div a {padding: 9px 13px; border-radius: 10px; color: #ded7e9; font-weight: 600;}
+.lab-nav > div a:hover {background: #ffffff12; text-decoration: none; color: #fff5fb;}
+.lab-nav a[aria-current] {background: #f5e8ff20; color: #ffdeef; box-shadow: inset 0 0 0 1px #efd6fa22;}
+main {max-width: 1560px; padding: 24px 28px 0;}
+button, input, select {
+  border-color: var(--line); border-radius: 10px;
+  background: var(--panel-soft); color: var(--ink);
+}
+button {box-shadow: 0 1px 2px #344e7809; transition: background .16s, border-color .16s, box-shadow .16s;}
+button:hover:not(:disabled) {background: var(--accent-soft); border-color: #d1c4e5; box-shadow: 0 3px 10px #59467310;}
+button:active:not(:disabled) {box-shadow: inset 0 1px 3px #344e7818;}
+button.primary, .primary:disabled, .primary:disabled:hover {
+  background: linear-gradient(110deg, #7460af, #9363a4);
+  border-color: #8160a3; color: #fff; box-shadow: 0 4px 12px #8060ad28;
+}
+button.primary:hover:not(:disabled) {background: linear-gradient(110deg, #69549f, #885898);}
+button:disabled {opacity: .48; cursor: not-allowed !important; box-shadow: none;}
+button:focus-visible, input:focus-visible, select:focus-visible {outline: 2px solid var(--accent); outline-offset: 3px;}
+input[type=checkbox], input[type=range] {accent-color: var(--accent);}
+select {cursor: pointer;}
+.compute-card, .live-clock-card, .replay-bar, .station-panel, .profile-card {
+  border: 1px solid var(--line); background: var(--panel); border-radius: 17px; box-shadow: var(--shadow);
+}
+.compute-card {padding: 22px 24px; margin-bottom: 16px; position: relative; overflow: hidden;}
+.compute-card::before {
+  content: ''; position: absolute; inset: 0 0 auto; height: 3px;
+  background: linear-gradient(90deg, #b3a0d6, #d9a0b9, #a4c7c9); pointer-events: none;
+}
+.compute-card h2 {margin: 0; font-size: 16px; color: var(--heading);}
+.compute-controls {display: flex; align-items: end; flex-wrap: wrap; gap: 12px; margin: 16px 0 0;}
+.compute-controls label {display: grid; gap: 7px; flex: 1 1 125px; font-size: 12px; color: var(--muted);}
+.compute-controls select, .compute-controls input[type=number] {width: 100%; height: 43px; min-height: 43px;}
+.compute-controls button {height: 43px; white-space: nowrap;}
+.compute-card p {font-size: 12px; color: var(--muted); line-height: 1.7;}
+#compute-status {overflow-wrap: anywhere; margin-top: 12px;}
+#compute-status:empty {display: none;}
+#compute-status[aria-busy=true]::before {
+  content: ''; display: inline-block; width: 7px; height: 7px; margin-right: 8px;
+  border-radius: 50%; background: var(--accent); animation: environment-pulse 1.5s ease-in-out infinite;
+}
+.initialization {margin: 16px 0 0; padding: 14px 16px; border: 1px solid #e7def1; border-radius: 12px; background: #f7f1fb;}
+.init-top {display: flex; justify-content: space-between; gap: 12px; font-size: 12px; color: #675480;}
+.init-top span:last-child {color: var(--accent); font-variant-numeric: tabular-nums;}
+.initialization p {margin: 0; font-variant-numeric: tabular-nums;}
+.initialization progress {
+  display: block; appearance: none; -webkit-appearance: none; width: 100%; height: 8px;
+  margin: 12px 0; border: 0; border-radius: 20px; background: #e9e0f3; overflow: hidden;
+  accent-color: var(--accent);
+}
+.initialization progress::-webkit-progress-bar {background: #e9e0f3; border-radius: 20px;}
+.initialization progress::-webkit-progress-value {background: linear-gradient(90deg, #9881c7, #c98caa); border-radius: 20px;}
+.initialization progress::-moz-progress-bar {background: #a08ac8; border-radius: 20px;}
+.live-clock-card {padding: 17px 24px; margin-bottom: 20px; background: linear-gradient(100deg, #fffefd, #f2edf9);}
+.live-clock-card .timeline-top {display: flex; align-items: center; justify-content: space-between; gap: 16px;}
+.clock-block strong {font-size: 22px; color: var(--heading); font-weight: 700;}
+.phase-block {flex: 0 1 auto; border-left: 0; padding-left: 0; text-align: right;}
+.phase-block h2 {font-size: 14px; color: var(--muted); margin: 0;}
+.replay-bar {padding: 16px 24px; margin-bottom: 20px;}
+.replay-bar label {display: flex; justify-content: space-between; font-size: 13px; color: var(--heading);}
+.replay-controls {display: flex; align-items: center; gap: 16px; margin-top: 10px;}
+.replay-controls button {flex: none; min-width: 100px;}
+.replay-controls input {flex: 1; min-width: 0; margin: 0;}
+.workspace {grid-template-columns: minmax(0, 1fr) 294px; gap: 18px;}
+.map-toolbar {gap: 12px; margin-bottom: 12px;}
+.segmented {border-color: var(--line); background: var(--panel); border-radius: 12px; padding: 4px;}
+.segmented button {border-radius: 8px; box-shadow: none; color: var(--muted);}
+.segmented button[aria-pressed=true] {background: var(--accent-soft); color: #6d579e;}
+.map-actions button {background: var(--panel); color: #66547e; font-size: 12px;}
+.map-overlays {color: var(--muted); gap: 12px; margin: 10px 0 14px;}
+.map-overlays select {background: var(--panel); font-size: 12px; padding: 5px 8px;}
+.map-overlays input[type=range] {width: 85px;}
+.map-card {border-color: #ded7e8; border-radius: 14px; background: var(--panel); box-shadow: 0 4px 16px #56406b0c;}
+.map-card header {background: #f8f5fb; padding: 11px 12px; border-bottom: 1px solid var(--line);}
+.map-card header select {max-width: 80%; width: auto; background: var(--panel); border-color: #e3dbed; font-weight: 600; color: var(--heading);}
+.map-card .map-time {display: inline; white-space: normal; text-align: right; color: var(--muted);}
+.weather-map {background: #e9e9ef; height: 390px; touch-action: pan-x pan-y;}
+.layout-1 .weather-map {height: 570px;}
+.layout-4 .weather-map {height: 320px;}
+/* Keep moving tile panes unfiltered: avoid a large composited filter surface. */
+.weather-map .leaflet-tile-pane {filter: none;}
+.weather-raster {image-rendering: pixelated; pointer-events: none !important;}
+.weather-map .leaflet-zoom-animated {will-change: transform;}
+.weather-map .leaflet-overlay-pane > canvas {width: auto; height: auto; touch-action: inherit; cursor: inherit;}
+.weather-map .leaflet-control-scale-line {background: #fffefdeb; border-color: #a398b4; color: #61516f; text-shadow: none;}
+.leaflet-control-zoom {border: 1px solid #dfd5eb !important; box-shadow: 0 3px 10px #5940711c !important;}
+.leaflet-control-zoom a {color: #796195 !important; background: #fffefded !important;}
+.leaflet-tooltip {background: #fffefd; border-color: #e6ddef; box-shadow: 0 3px 10px #59407115; color: var(--heading);}
+.map-card .legend {height: 40px; border-top-color: var(--line); color: var(--muted); background: #fcfaff;}
+.legend-bar {height: 6px;}
+.radar-settings {color: var(--muted); margin: 10px 0 0; padding: 8px 2px;}
+.radar-settings select {background: var(--panel);}
+#map-status:empty, #station-message:empty {display: none;}
+#map-status {font-size: 12px; color: #95637b;}
+.station-panel {padding: 18px;}
+.section-title h2 {color: var(--heading); font-size: 16px;}
+.station-panel .section-title {margin-bottom: 12px;}
+#station-search {background: var(--panel-soft); font-size: 12px; border-radius: 10px;}
+#station-select {background: #fdfbff; border-color: var(--line); height: 90px; border-radius: 10px; color: #675a79;}
+#station-select option {border-radius: 4px;}
+#station-select option:checked {background: #eee7f8; color: #725591;}
+.station-heading {margin: 18px 0;}
+.station-heading h3 {color: var(--heading); font-size: 25px;}
+.station-heading > span {color: var(--warm);}
+.station-heading time {color: var(--muted);}
+.observations {gap: 10px;}
+.observations > div {padding: 10px 9px; border-radius: 10px; background: #f8f6fc; border: 1px solid #eee9f5;}
+.observations > div:first-child {background: #fff4f8; border-color: #f4e3ed;}
+.observations > div:nth-child(2) {background: #f1f8f8; border-color: #e1eeee;}
+.observations span {font-size: 11px; color: var(--muted);}
+.station-panel .observations strong {font-size: 20px; font-weight: 650; color: #5c4d76;}
+#obs-temperature {color: var(--warm);}
+#obs-dewpoint {color: var(--blue);}
+.observations small {font-size: 10px; color: var(--muted);}
+.station-buttons {margin-top: 14px; gap: 7px;}
+.station-buttons button {color: #705c87; background: var(--panel); font-size: 11px; min-height: 36px;}
+.custom-station {border-top-color: var(--line);}
+.custom-station summary {color: #8a6ba2;}
+.custom-station button {min-height: 38px;}
+.profile-card {padding: 20px;}
+.profile-card canvas {border-radius: 10px;}
+.profile-legend {display: flex; gap: 14px; font-size: 12px;}
+.profile-legend span:first-child {color: var(--warm);}
+.profile-legend span:last-child {color: var(--blue);}
+.environment-section {grid-template-columns: 1fr; margin-top: 20px;}
+.section-title {margin-bottom: 12px;}
+footer {justify-content: center; color: var(--muted); padding: 24px 0; font-size: 11px;}
+@keyframes environment-pulse {50% {opacity: .3;}}
+@media (prefers-reduced-motion: reduce) {#compute-status[aria-busy=true]::before {animation: none;}}
+@media (max-width: 1150px) {
+  main {padding: 20px 18px 0;}
+  .workspace {grid-template-columns: minmax(0, 1fr) 270px; gap: 14px;}
+  .compute-controls label {flex-basis: calc(20% - 12px);}
+  .compute-controls button {flex: 1;}
+  .lab-nav {padding: 16px 22px;}
+  .brand h1 {font-size: 22px;}
+  .lab-nav > div a {padding: 8px 9px;}
+  .station-panel {padding: 14px;}
+  .observations > div {padding: 9px 7px;}
+}
+@media (max-width: 850px) {
+  .workspace {grid-template-columns: 1fr;}
+  .lab-nav {gap: 14px; flex-wrap: wrap;}
+  .lab-nav > div {gap: 4px; flex-wrap: wrap;}
+  .observations {grid-template-columns: repeat(4, 1fr);}
+  .compute-controls label {flex-basis: calc(33.33% - 12px);}
+  .compute-controls button {flex: 1 1 30%;}
+  .station-buttons {grid-template-columns: repeat(4, 1fr);}
+  .map-actions {flex-wrap: wrap;}
+}
+@media (max-width: 520px) {
+  main {padding: 16px 12px 0;}
+  .lab-nav {padding: 14px 16px; gap: 10px;}
+  .brand h1 {font-size: 21px;}
+  .brand-mark {width: 33px; height: 33px; font-size: 23px; border-radius: 11px;}
+  .lab-nav > div {gap: 3px; width: 100%; justify-content: space-between;}
+  .lab-nav > div a {font-size: 11px; padding: 7px 9px;}
+  .compute-card {padding: 20px 16px;}
+  .compute-controls {gap: 10px;}
+  .compute-controls label {flex: 1 1 calc(50% - 10px);}
+  .compute-controls label:last-of-type {flex-basis: 100%;}
+  .compute-controls button {flex: 1 1 40%; font-size: 12px;}
+  .live-clock-card {padding: 15px 17px;}
+  .live-clock-card .timeline-top {flex-wrap: wrap;}
+  .clock-block {min-width: 0;}
+  .clock-block strong {font-size: 20px;}
+  .phase-block h2 {font-size: 12px;}
+  .map-toolbar {gap: 10px;}
+  .map-actions {justify-content: flex-start; flex: 1 1 100%;}
+  .map-overlays {gap: 8px 10px;}
+  .weather-map, .layout-4 .weather-map {height: 310px;}
+  .layout-1 .weather-map {height: 410px;}
+  .map-grid {grid-template-columns: 1fr;}
+  .map-card header select {max-width: 73%;}
+  .map-time {font-size: 10px;}
+  .observations {grid-template-columns: repeat(2, 1fr);}
+  .station-buttons {grid-template-columns: repeat(2, 1fr);}
+  .replay-bar {padding: 15px;}
+  .replay-controls {gap: 10px;}
+  .replay-controls button {min-width: 85px; font-size: 12px;}
+  .profile-card {padding: 16px;}
+  .profile-legend {gap: 10px;}
+  .section-title {gap: 10px;}
+  footer {font-size: 11px;}
+}

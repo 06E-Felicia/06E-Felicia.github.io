@@ -1,0 +1,17 @@
+{
+  "seed": 20260421,
+  "hours": 72,
+  "grid_km": 6,
+  "frame_minutes": 60,
+  "month": 4,
+  "moisture": 1.0,
+  "jet": 1.0,
+  "shear": 1.0,
+  "trough": 1.0,
+  "cold_reservoir": 1.0,
+  "sst_c": 23.0,
+  "stochastic": 0.6,
+  "terrain": true,
+  "compact_transport": false,
+  "bounds": [104.3, 19.8, 118.0, 26.7]
+}

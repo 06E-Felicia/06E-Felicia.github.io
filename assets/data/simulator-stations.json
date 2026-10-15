@@ -1,0 +1,1449 @@
+{
+  "source": "https://image.data.cma.cn/static/doc/A/A.0012.0001/SURF_CHN_MUL_HOR_STATION.pdf",
+  "sourceTitle": "中国气象数据网：中国地面逐小时资料台站表",
+  "documentMetadataDate": "2023-10-27",
+  "retrievedAt": "2026-10-13",
+  "note": "公开资料表快照：广东86站、广西74站；不代表最新完整在役名录。经纬度原表为百分之一度，本站显示历史站址。所有气象数值由教学模型生成。",
+  "stations": [
+    {
+      "id": "59071",
+      "name": "连南",
+      "province": "广东",
+      "lon": 112.28,
+      "lat": 24.73,
+      "elevation": 174.3,
+      "kind": "national"
+    },
+    {
+      "id": "59072",
+      "name": "连州",
+      "province": "广东",
+      "lon": 112.37,
+      "lat": 24.81,
+      "elevation": 131.7,
+      "kind": "national"
+    },
+    {
+      "id": "59074",
+      "name": "连山",
+      "province": "广东",
+      "lon": 112.07,
+      "lat": 24.57,
+      "elevation": 300.6,
+      "kind": "national"
+    },
+    {
+      "id": "59075",
+      "name": "阳山",
+      "province": "广东",
+      "lon": 112.57,
+      "lat": 24.3,
+      "elevation": 155.2,
+      "kind": "national"
+    },
+    {
+      "id": "59081",
+      "name": "乳源",
+      "province": "广东",
+      "lon": 113.29,
+      "lat": 24.78,
+      "elevation": 125.3,
+      "kind": "national"
+    },
+    {
+      "id": "59082",
+      "name": "韶关",
+      "province": "广东",
+      "lon": 113.61,
+      "lat": 24.67,
+      "elevation": 121.3,
+      "kind": "national"
+    },
+    {
+      "id": "59087",
+      "name": "佛冈",
+      "province": "广东",
+      "lon": 113.52,
+      "lat": 23.88,
+      "elevation": 97.2,
+      "kind": "national"
+    },
+    {
+      "id": "59088",
+      "name": "英德",
+      "province": "广东",
+      "lon": 113.41,
+      "lat": 24.19,
+      "elevation": 74.4,
+      "kind": "national"
+    },
+    {
+      "id": "59090",
+      "name": "始兴",
+      "province": "广东",
+      "lon": 114.05,
+      "lat": 24.96,
+      "elevation": 143.9,
+      "kind": "national"
+    },
+    {
+      "id": "59094",
+      "name": "翁源",
+      "province": "广东",
+      "lon": 114.12,
+      "lat": 24.35,
+      "elevation": 177.6,
+      "kind": "national"
+    },
+    {
+      "id": "59096",
+      "name": "连平",
+      "province": "广东",
+      "lon": 114.5,
+      "lat": 24.39,
+      "elevation": 283.9,
+      "kind": "national"
+    },
+    {
+      "id": "59097",
+      "name": "新丰",
+      "province": "广东",
+      "lon": 114.21,
+      "lat": 24.04,
+      "elevation": 269.3,
+      "kind": "national"
+    },
+    {
+      "id": "59099",
+      "name": "和平",
+      "province": "广东",
+      "lon": 114.94,
+      "lat": 24.47,
+      "elevation": 209.2,
+      "kind": "national"
+    },
+    {
+      "id": "59106",
+      "name": "平远",
+      "province": "广东",
+      "lon": 115.87,
+      "lat": 24.56,
+      "elevation": 200.8,
+      "kind": "national"
+    },
+    {
+      "id": "59107",
+      "name": "龙川",
+      "province": "广东",
+      "lon": 115.28,
+      "lat": 24.11,
+      "elevation": 179.6,
+      "kind": "national"
+    },
+    {
+      "id": "59109",
+      "name": "兴宁",
+      "province": "广东",
+      "lon": 115.72,
+      "lat": 24.17,
+      "elevation": 123.6,
+      "kind": "national"
+    },
+    {
+      "id": "59114",
+      "name": "蕉岭",
+      "province": "广东",
+      "lon": 116.17,
+      "lat": 24.65,
+      "elevation": 135.7,
+      "kind": "national"
+    },
+    {
+      "id": "59116",
+      "name": "大埔",
+      "province": "广东",
+      "lon": 116.71,
+      "lat": 24.35,
+      "elevation": 224.4,
+      "kind": "national"
+    },
+    {
+      "id": "59117",
+      "name": "梅县",
+      "province": "广东",
+      "lon": 116.07,
+      "lat": 24.28,
+      "elevation": 116,
+      "kind": "national"
+    },
+    {
+      "id": "59264",
+      "name": "封开",
+      "province": "广东",
+      "lon": 111.51,
+      "lat": 23.4,
+      "elevation": 83.7,
+      "kind": "national"
+    },
+    {
+      "id": "59268",
+      "name": "郁南",
+      "province": "广东",
+      "lon": 111.54,
+      "lat": 23.26,
+      "elevation": 70.6,
+      "kind": "national"
+    },
+    {
+      "id": "59269",
+      "name": "德庆",
+      "province": "广东",
+      "lon": 111.84,
+      "lat": 23.16,
+      "elevation": 128.8,
+      "kind": "national"
+    },
+    {
+      "id": "59270",
+      "name": "怀集",
+      "province": "广东",
+      "lon": 112.19,
+      "lat": 23.94,
+      "elevation": 107.2,
+      "kind": "national"
+    },
+    {
+      "id": "59271",
+      "name": "广宁",
+      "province": "广东",
+      "lon": 112.42,
+      "lat": 23.64,
+      "elevation": 92.7,
+      "kind": "national"
+    },
+    {
+      "id": "59276",
+      "name": "四会",
+      "province": "广东",
+      "lon": 112.64,
+      "lat": 23.34,
+      "elevation": 40.1,
+      "kind": "national"
+    },
+    {
+      "id": "59278",
+      "name": "高要",
+      "province": "广东",
+      "lon": 112.48,
+      "lat": 22.99,
+      "elevation": 60,
+      "kind": "national"
+    },
+    {
+      "id": "59279",
+      "name": "三水",
+      "province": "广东",
+      "lon": 112.88,
+      "lat": 23.2,
+      "elevation": 24,
+      "kind": "national"
+    },
+    {
+      "id": "59280",
+      "name": "清远",
+      "province": "广东",
+      "lon": 113.09,
+      "lat": 23.71,
+      "elevation": 79.2,
+      "kind": "national"
+    },
+    {
+      "id": "59284",
+      "name": "花都",
+      "province": "广东",
+      "lon": 113.24,
+      "lat": 23.42,
+      "elevation": 38.9,
+      "kind": "national"
+    },
+    {
+      "id": "59285",
+      "name": "从化",
+      "province": "广东",
+      "lon": 113.62,
+      "lat": 23.58,
+      "elevation": 149.7,
+      "kind": "national"
+    },
+    {
+      "id": "59287",
+      "name": "广州",
+      "province": "广东",
+      "lon": 113.48,
+      "lat": 23.21,
+      "elevation": 70.7,
+      "kind": "national"
+    },
+    {
+      "id": "59288",
+      "name": "南海",
+      "province": "广东",
+      "lon": 113.01,
+      "lat": 23.15,
+      "elevation": 30.1,
+      "kind": "national"
+    },
+    {
+      "id": "59289",
+      "name": "东莞",
+      "province": "广东",
+      "lon": 113.74,
+      "lat": 22.97,
+      "elevation": 56,
+      "kind": "national"
+    },
+    {
+      "id": "59290",
+      "name": "龙门",
+      "province": "广东",
+      "lon": 114.25,
+      "lat": 23.78,
+      "elevation": 85.5,
+      "kind": "national"
+    },
+    {
+      "id": "59293",
+      "name": "河源",
+      "province": "广东",
+      "lon": 114.77,
+      "lat": 23.78,
+      "elevation": 115.1,
+      "kind": "national"
+    },
+    {
+      "id": "59294",
+      "name": "增城",
+      "province": "广东",
+      "lon": 113.83,
+      "lat": 23.34,
+      "elevation": 30.7,
+      "kind": "national"
+    },
+    {
+      "id": "59297",
+      "name": "博罗",
+      "province": "广东",
+      "lon": 114.26,
+      "lat": 23.18,
+      "elevation": 50.2,
+      "kind": "national"
+    },
+    {
+      "id": "59298",
+      "name": "惠阳",
+      "province": "广东",
+      "lon": 114.37,
+      "lat": 23.07,
+      "elevation": 108.5,
+      "kind": "national"
+    },
+    {
+      "id": "59303",
+      "name": "五华",
+      "province": "广东",
+      "lon": 115.75,
+      "lat": 23.91,
+      "elevation": 135.9,
+      "kind": "national"
+    },
+    {
+      "id": "59304",
+      "name": "紫金",
+      "province": "广东",
+      "lon": 115.17,
+      "lat": 23.65,
+      "elevation": 299.7,
+      "kind": "national"
+    },
+    {
+      "id": "59306",
+      "name": "揭西",
+      "province": "广东",
+      "lon": 115.85,
+      "lat": 23.45,
+      "elevation": 80.9,
+      "kind": "national"
+    },
+    {
+      "id": "59310",
+      "name": "丰顺",
+      "province": "广东",
+      "lon": 116.17,
+      "lat": 23.77,
+      "elevation": 45.3,
+      "kind": "national"
+    },
+    {
+      "id": "59312",
+      "name": "潮州",
+      "province": "广东",
+      "lon": 116.7,
+      "lat": 23.67,
+      "elevation": 60.7,
+      "kind": "national"
+    },
+    {
+      "id": "59313",
+      "name": "饶平",
+      "province": "广东",
+      "lon": 117,
+      "lat": 23.69,
+      "elevation": 90.4,
+      "kind": "national"
+    },
+    {
+      "id": "59314",
+      "name": "普宁",
+      "province": "广东",
+      "lon": 116.2,
+      "lat": 23.4,
+      "elevation": 69,
+      "kind": "national"
+    },
+    {
+      "id": "59315",
+      "name": "揭阳",
+      "province": "广东",
+      "lon": 116.4,
+      "lat": 23.59,
+      "elevation": 43.9,
+      "kind": "national"
+    },
+    {
+      "id": "59316",
+      "name": "汕头",
+      "province": "广东",
+      "lon": 116.68,
+      "lat": 23.39,
+      "elevation": 2.3,
+      "kind": "national"
+    },
+    {
+      "id": "59317",
+      "name": "惠来",
+      "province": "广东",
+      "lon": 116.3,
+      "lat": 22.98,
+      "elevation": 42,
+      "kind": "national"
+    },
+    {
+      "id": "59318",
+      "name": "潮阳",
+      "province": "广东",
+      "lon": 116.58,
+      "lat": 23.32,
+      "elevation": 141.1,
+      "kind": "national"
+    },
+    {
+      "id": "59319",
+      "name": "澄海",
+      "province": "广东",
+      "lon": 116.73,
+      "lat": 23.51,
+      "elevation": 42.2,
+      "kind": "national"
+    },
+    {
+      "id": "59324",
+      "name": "南澳",
+      "province": "广东",
+      "lon": 117.03,
+      "lat": 23.43,
+      "elevation": 8,
+      "kind": "national"
+    },
+    {
+      "id": "59456",
+      "name": "信宜",
+      "province": "广东",
+      "lon": 110.93,
+      "lat": 22.35,
+      "elevation": 141.4,
+      "kind": "national"
+    },
+    {
+      "id": "59462",
+      "name": "罗定",
+      "province": "广东",
+      "lon": 111.6,
+      "lat": 22.71,
+      "elevation": 60,
+      "kind": "national"
+    },
+    {
+      "id": "59469",
+      "name": "阳春",
+      "province": "广东",
+      "lon": 111.79,
+      "lat": 22.16,
+      "elevation": 37.6,
+      "kind": "national"
+    },
+    {
+      "id": "59470",
+      "name": "新兴",
+      "province": "广东",
+      "lon": 112.21,
+      "lat": 22.76,
+      "elevation": 75,
+      "kind": "national"
+    },
+    {
+      "id": "59471",
+      "name": "云浮",
+      "province": "广东",
+      "lon": 112.05,
+      "lat": 22.94,
+      "elevation": 101.4,
+      "kind": "national"
+    },
+    {
+      "id": "59473",
+      "name": "鹤山",
+      "province": "广东",
+      "lon": 112.98,
+      "lat": 22.74,
+      "elevation": 47.3,
+      "kind": "national"
+    },
+    {
+      "id": "59475",
+      "name": "开平",
+      "province": "广东",
+      "lon": 112.65,
+      "lat": 22.4,
+      "elevation": 29.3,
+      "kind": "national"
+    },
+    {
+      "id": "59476",
+      "name": "新会",
+      "province": "广东",
+      "lon": 113.04,
+      "lat": 22.53,
+      "elevation": 36.3,
+      "kind": "national"
+    },
+    {
+      "id": "59477",
+      "name": "恩平",
+      "province": "广东",
+      "lon": 112.23,
+      "lat": 22.27,
+      "elevation": 69.3,
+      "kind": "national"
+    },
+    {
+      "id": "59478",
+      "name": "台山",
+      "province": "广东",
+      "lon": 112.79,
+      "lat": 22.25,
+      "elevation": 33.1,
+      "kind": "national"
+    },
+    {
+      "id": "59480",
+      "name": "顺德",
+      "province": "广东",
+      "lon": 113.23,
+      "lat": 22.83,
+      "elevation": 55,
+      "kind": "national"
+    },
+    {
+      "id": "59481",
+      "name": "番禺",
+      "province": "广东",
+      "lon": 113.36,
+      "lat": 22.96,
+      "elevation": 66.6,
+      "kind": "national"
+    },
+    {
+      "id": "59485",
+      "name": "中山",
+      "province": "广东",
+      "lon": 113.41,
+      "lat": 22.51,
+      "elevation": 33.8,
+      "kind": "national"
+    },
+    {
+      "id": "59487",
+      "name": "斗门",
+      "province": "广东",
+      "lon": 113.3,
+      "lat": 22.23,
+      "elevation": 23.1,
+      "kind": "national"
+    },
+    {
+      "id": "59488",
+      "name": "珠海",
+      "province": "广东",
+      "lon": 113.57,
+      "lat": 22.28,
+      "elevation": 51.4,
+      "kind": "national"
+    },
+    {
+      "id": "59492",
+      "name": "惠东",
+      "province": "广东",
+      "lon": 114.67,
+      "lat": 23.03,
+      "elevation": 85,
+      "kind": "national"
+    },
+    {
+      "id": "59493",
+      "name": "深圳",
+      "province": "广东",
+      "lon": 114,
+      "lat": 22.54,
+      "elevation": 63,
+      "kind": "national"
+    },
+    {
+      "id": "59500",
+      "name": "海丰",
+      "province": "广东",
+      "lon": 115.31,
+      "lat": 23.02,
+      "elevation": 45.6,
+      "kind": "national"
+    },
+    {
+      "id": "59501",
+      "name": "汕尾",
+      "province": "广东",
+      "lon": 115.36,
+      "lat": 22.79,
+      "elevation": 16.7,
+      "kind": "national"
+    },
+    {
+      "id": "59502",
+      "name": "陆丰",
+      "province": "广东",
+      "lon": 115.65,
+      "lat": 22.97,
+      "elevation": 32,
+      "kind": "national"
+    },
+    {
+      "id": "59650",
+      "name": "遂溪",
+      "province": "广东",
+      "lon": 110.24,
+      "lat": 21.4,
+      "elevation": 29.7,
+      "kind": "national"
+    },
+    {
+      "id": "59653",
+      "name": "高州",
+      "province": "广东",
+      "lon": 110.86,
+      "lat": 21.94,
+      "elevation": 77,
+      "kind": "national"
+    },
+    {
+      "id": "59654",
+      "name": "廉江",
+      "province": "广东",
+      "lon": 110.3,
+      "lat": 21.63,
+      "elevation": 27.9,
+      "kind": "national"
+    },
+    {
+      "id": "59655",
+      "name": "化州",
+      "province": "广东",
+      "lon": 110.61,
+      "lat": 21.65,
+      "elevation": 31.9,
+      "kind": "national"
+    },
+    {
+      "id": "59656",
+      "name": "吴川",
+      "province": "广东",
+      "lon": 110.81,
+      "lat": 21.41,
+      "elevation": 27.3,
+      "kind": "national"
+    },
+    {
+      "id": "59658",
+      "name": "湛江",
+      "province": "广东",
+      "lon": 110.3,
+      "lat": 21.16,
+      "elevation": 53.4,
+      "kind": "national"
+    },
+    {
+      "id": "59659",
+      "name": "茂名",
+      "province": "广东",
+      "lon": 110.91,
+      "lat": 21.75,
+      "elevation": 33.5,
+      "kind": "national"
+    },
+    {
+      "id": "59663",
+      "name": "阳江",
+      "province": "广东",
+      "lon": 111.98,
+      "lat": 21.85,
+      "elevation": 90.3,
+      "kind": "national"
+    },
+    {
+      "id": "59664",
+      "name": "电白",
+      "province": "广东",
+      "lon": 110.99,
+      "lat": 21.55,
+      "elevation": 31.8,
+      "kind": "national"
+    },
+    {
+      "id": "59673",
+      "name": "上川岛",
+      "province": "广东",
+      "lon": 112.77,
+      "lat": 21.74,
+      "elevation": 21.9,
+      "kind": "national"
+    },
+    {
+      "id": "59750",
+      "name": "雷州",
+      "province": "广东",
+      "lon": 110.07,
+      "lat": 20.96,
+      "elevation": 33.6,
+      "kind": "national"
+    },
+    {
+      "id": "59754",
+      "name": "徐闻",
+      "province": "广东",
+      "lon": 110.17,
+      "lat": 20.24,
+      "elevation": 11.4,
+      "kind": "national"
+    },
+    {
+      "id": "57988",
+      "name": "乐昌",
+      "province": "广东",
+      "lon": 113.35,
+      "lat": 25.11,
+      "elevation": 143.2,
+      "kind": "national"
+    },
+    {
+      "id": "57989",
+      "name": "仁化",
+      "province": "广东",
+      "lon": 113.76,
+      "lat": 25.06,
+      "elevation": 112.7,
+      "kind": "national"
+    },
+    {
+      "id": "57996",
+      "name": "南雄",
+      "province": "广东",
+      "lon": 114.26,
+      "lat": 25.08,
+      "elevation": 149.7,
+      "kind": "national"
+    },
+    {
+      "id": "57859",
+      "name": "资源",
+      "province": "广西",
+      "lon": 110.64,
+      "lat": 26.03,
+      "elevation": 408.8,
+      "kind": "national"
+    },
+    {
+      "id": "57927",
+      "name": "天峨",
+      "province": "广西",
+      "lon": 107.18,
+      "lat": 24.97,
+      "elevation": 412,
+      "kind": "national"
+    },
+    {
+      "id": "57941",
+      "name": "三江",
+      "province": "广西",
+      "lon": 109.61,
+      "lat": 25.77,
+      "elevation": 305.5,
+      "kind": "national"
+    },
+    {
+      "id": "57942",
+      "name": "龙胜",
+      "province": "广西",
+      "lon": 110,
+      "lat": 25.8,
+      "elevation": 268.4,
+      "kind": "national"
+    },
+    {
+      "id": "57947",
+      "name": "融安",
+      "province": "广西",
+      "lon": 109.41,
+      "lat": 25.24,
+      "elevation": 161.3,
+      "kind": "national"
+    },
+    {
+      "id": "57948",
+      "name": "融水",
+      "province": "广西",
+      "lon": 109.25,
+      "lat": 25.11,
+      "elevation": 238.3,
+      "kind": "national"
+    },
+    {
+      "id": "57949",
+      "name": "永福",
+      "province": "广西",
+      "lon": 109.99,
+      "lat": 24.99,
+      "elevation": 157.4,
+      "kind": "national"
+    },
+    {
+      "id": "57954",
+      "name": "临桂",
+      "province": "广西",
+      "lon": 110.15,
+      "lat": 25.23,
+      "elevation": 222.5,
+      "kind": "national"
+    },
+    {
+      "id": "57955",
+      "name": "兴安",
+      "province": "广西",
+      "lon": 110.66,
+      "lat": 25.62,
+      "elevation": 224.2,
+      "kind": "national"
+    },
+    {
+      "id": "57956",
+      "name": "灵川",
+      "province": "广西",
+      "lon": 110.34,
+      "lat": 25.43,
+      "elevation": 191,
+      "kind": "national"
+    },
+    {
+      "id": "57957",
+      "name": "桂林",
+      "province": "广西",
+      "lon": 110.31,
+      "lat": 25.32,
+      "elevation": 164.4,
+      "kind": "national"
+    },
+    {
+      "id": "57960",
+      "name": "全州",
+      "province": "广西",
+      "lon": 111.07,
+      "lat": 25.94,
+      "elevation": 196.4,
+      "kind": "national"
+    },
+    {
+      "id": "57964",
+      "name": "灌阳",
+      "province": "广西",
+      "lon": 111.15,
+      "lat": 25.49,
+      "elevation": 263.1,
+      "kind": "national"
+    },
+    {
+      "id": "59001",
+      "name": "隆林",
+      "province": "广西",
+      "lon": 105.36,
+      "lat": 24.77,
+      "elevation": 789,
+      "kind": "national"
+    },
+    {
+      "id": "59004",
+      "name": "西林",
+      "province": "广西",
+      "lon": 105.09,
+      "lat": 24.5,
+      "elevation": 829.5,
+      "kind": "national"
+    },
+    {
+      "id": "59012",
+      "name": "乐业",
+      "province": "广西",
+      "lon": 106.56,
+      "lat": 24.75,
+      "elevation": 1030.9,
+      "kind": "national"
+    },
+    {
+      "id": "59015",
+      "name": "凌云",
+      "province": "广西",
+      "lon": 106.54,
+      "lat": 24.38,
+      "elevation": 544.6,
+      "kind": "national"
+    },
+    {
+      "id": "59017",
+      "name": "田林",
+      "province": "广西",
+      "lon": 106.26,
+      "lat": 24.27,
+      "elevation": 277.3,
+      "kind": "national"
+    },
+    {
+      "id": "59021",
+      "name": "凤山",
+      "province": "广西",
+      "lon": 107.03,
+      "lat": 24.55,
+      "elevation": 509.4,
+      "kind": "national"
+    },
+    {
+      "id": "59023",
+      "name": "河池",
+      "province": "广西",
+      "lon": 108.04,
+      "lat": 24.69,
+      "elevation": 260.3,
+      "kind": "national"
+    },
+    {
+      "id": "59025",
+      "name": "东兰",
+      "province": "广西",
+      "lon": 107.39,
+      "lat": 24.54,
+      "elevation": 249,
+      "kind": "national"
+    },
+    {
+      "id": "59027",
+      "name": "巴马",
+      "province": "广西",
+      "lon": 107.24,
+      "lat": 24.14,
+      "elevation": 255.2,
+      "kind": "national"
+    },
+    {
+      "id": "59031",
+      "name": "环江",
+      "province": "广西",
+      "lon": 108.26,
+      "lat": 24.81,
+      "elevation": 342.7,
+      "kind": "national"
+    },
+    {
+      "id": "59034",
+      "name": "宜州",
+      "province": "广西",
+      "lon": 108.64,
+      "lat": 24.48,
+      "elevation": 185.1,
+      "kind": "national"
+    },
+    {
+      "id": "59037",
+      "name": "都安",
+      "province": "广西",
+      "lon": 108.11,
+      "lat": 23.94,
+      "elevation": 171.1,
+      "kind": "national"
+    },
+    {
+      "id": "59038",
+      "name": "忻城",
+      "province": "广西",
+      "lon": 108.65,
+      "lat": 24.02,
+      "elevation": 147.5,
+      "kind": "national"
+    },
+    {
+      "id": "59041",
+      "name": "柳城",
+      "province": "广西",
+      "lon": 109.25,
+      "lat": 24.65,
+      "elevation": 218.6,
+      "kind": "national"
+    },
+    {
+      "id": "59044",
+      "name": "沙塘",
+      "province": "广西",
+      "lon": 109.37,
+      "lat": 24.49,
+      "elevation": 202.2,
+      "kind": "national"
+    },
+    {
+      "id": "59045",
+      "name": "鹿寨",
+      "province": "广西",
+      "lon": 109.79,
+      "lat": 24.49,
+      "elevation": 131.3,
+      "kind": "national"
+    },
+    {
+      "id": "59046",
+      "name": "柳州",
+      "province": "广西",
+      "lon": 109.46,
+      "lat": 24.36,
+      "elevation": 305.8,
+      "kind": "national"
+    },
+    {
+      "id": "59047",
+      "name": "柳江",
+      "province": "广西",
+      "lon": 109.28,
+      "lat": 24.24,
+      "elevation": 133.7,
+      "kind": "national"
+    },
+    {
+      "id": "59052",
+      "name": "恭城",
+      "province": "广西",
+      "lon": 110.82,
+      "lat": 24.84,
+      "elevation": 170.2,
+      "kind": "national"
+    },
+    {
+      "id": "59053",
+      "name": "平乐",
+      "province": "广西",
+      "lon": 110.64,
+      "lat": 24.65,
+      "elevation": 157.6,
+      "kind": "national"
+    },
+    {
+      "id": "59055",
+      "name": "荔浦",
+      "province": "广西",
+      "lon": 110.4,
+      "lat": 24.5,
+      "elevation": 165.7,
+      "kind": "national"
+    },
+    {
+      "id": "59057",
+      "name": "金秀",
+      "province": "广西",
+      "lon": 110.19,
+      "lat": 24.14,
+      "elevation": 831,
+      "kind": "national"
+    },
+    {
+      "id": "59058",
+      "name": "蒙山",
+      "province": "广西",
+      "lon": 110.51,
+      "lat": 24.2,
+      "elevation": 181.9,
+      "kind": "national"
+    },
+    {
+      "id": "59059",
+      "name": "昭平",
+      "province": "广西",
+      "lon": 110.81,
+      "lat": 24.18,
+      "elevation": 105.9,
+      "kind": "national"
+    },
+    {
+      "id": "59065",
+      "name": "贺州",
+      "province": "广西",
+      "lon": 111.51,
+      "lat": 24.42,
+      "elevation": 148.8,
+      "kind": "national"
+    },
+    {
+      "id": "59209",
+      "name": "那坡",
+      "province": "广西",
+      "lon": 105.82,
+      "lat": 23.41,
+      "elevation": 855.8,
+      "kind": "national"
+    },
+    {
+      "id": "59211",
+      "name": "百色",
+      "province": "广西",
+      "lon": 106.61,
+      "lat": 23.9,
+      "elevation": 174.8,
+      "kind": "national"
+    },
+    {
+      "id": "59215",
+      "name": "德保",
+      "province": "广西",
+      "lon": 106.63,
+      "lat": 23.33,
+      "elevation": 680,
+      "kind": "national"
+    },
+    {
+      "id": "59218",
+      "name": "靖西",
+      "province": "广西",
+      "lon": 106.46,
+      "lat": 23.1,
+      "elevation": 724.7,
+      "kind": "national"
+    },
+    {
+      "id": "59224",
+      "name": "田东",
+      "province": "广西",
+      "lon": 107.14,
+      "lat": 23.67,
+      "elevation": 155.2,
+      "kind": "national"
+    },
+    {
+      "id": "59227",
+      "name": "天等",
+      "province": "广西",
+      "lon": 107.14,
+      "lat": 23.11,
+      "elevation": 454.1,
+      "kind": "national"
+    },
+    {
+      "id": "59228",
+      "name": "平果",
+      "province": "广西",
+      "lon": 107.57,
+      "lat": 23.29,
+      "elevation": 146.4,
+      "kind": "national"
+    },
+    {
+      "id": "59229",
+      "name": "隆安",
+      "province": "广西",
+      "lon": 107.71,
+      "lat": 23.17,
+      "elevation": 126.1,
+      "kind": "national"
+    },
+    {
+      "id": "59230",
+      "name": "马山",
+      "province": "广西",
+      "lon": 108.12,
+      "lat": 23.72,
+      "elevation": 219.3,
+      "kind": "national"
+    },
+    {
+      "id": "59235",
+      "name": "上林",
+      "province": "广西",
+      "lon": 108.62,
+      "lat": 23.38,
+      "elevation": 140.3,
+      "kind": "national"
+    },
+    {
+      "id": "59237",
+      "name": "武鸣",
+      "province": "广西",
+      "lon": 108.3,
+      "lat": 23.19,
+      "elevation": 155.3,
+      "kind": "national"
+    },
+    {
+      "id": "59238",
+      "name": "宾阳",
+      "province": "广西",
+      "lon": 108.83,
+      "lat": 23.25,
+      "elevation": 128,
+      "kind": "national"
+    },
+    {
+      "id": "59241",
+      "name": "象州",
+      "province": "广西",
+      "lon": 109.7,
+      "lat": 23.98,
+      "elevation": 124.3,
+      "kind": "national"
+    },
+    {
+      "id": "59242",
+      "name": "来宾",
+      "province": "广西",
+      "lon": 109.15,
+      "lat": 23.76,
+      "elevation": 96.6,
+      "kind": "national"
+    },
+    {
+      "id": "59246",
+      "name": "武宣",
+      "province": "广西",
+      "lon": 109.66,
+      "lat": 23.59,
+      "elevation": 70.2,
+      "kind": "national"
+    },
+    {
+      "id": "59255",
+      "name": "平南",
+      "province": "广西",
+      "lon": 110.42,
+      "lat": 23.54,
+      "elevation": 83,
+      "kind": "national"
+    },
+    {
+      "id": "59256",
+      "name": "藤县",
+      "province": "广西",
+      "lon": 110.91,
+      "lat": 23.37,
+      "elevation": 105.5,
+      "kind": "national"
+    },
+    {
+      "id": "59265",
+      "name": "梧州",
+      "province": "广西",
+      "lon": 111.3,
+      "lat": 23.48,
+      "elevation": 114.8,
+      "kind": "national"
+    },
+    {
+      "id": "59266",
+      "name": "苍梧",
+      "province": "广西",
+      "lon": 111.26,
+      "lat": 23.38,
+      "elevation": 77.7,
+      "kind": "national"
+    },
+    {
+      "id": "59419",
+      "name": "凭祥",
+      "province": "广西",
+      "lon": 106.74,
+      "lat": 22.06,
+      "elevation": 348.8,
+      "kind": "national"
+    },
+    {
+      "id": "59421",
+      "name": "大新",
+      "province": "广西",
+      "lon": 107.17,
+      "lat": 22.86,
+      "elevation": 278.6,
+      "kind": "national"
+    },
+    {
+      "id": "59429",
+      "name": "上思",
+      "province": "广西",
+      "lon": 108.01,
+      "lat": 22.18,
+      "elevation": 215.9,
+      "kind": "national"
+    },
+    {
+      "id": "59431",
+      "name": "南宁",
+      "province": "广西",
+      "lon": 108.55,
+      "lat": 22.78,
+      "elevation": 152.1,
+      "kind": "national"
+    },
+    {
+      "id": "59435",
+      "name": "邕宁",
+      "province": "广西",
+      "lon": 108.45,
+      "lat": 22.69,
+      "elevation": 106.9,
+      "kind": "national"
+    },
+    {
+      "id": "59441",
+      "name": "横县",
+      "province": "广西",
+      "lon": 109.25,
+      "lat": 22.8,
+      "elevation": 88.7,
+      "kind": "national"
+    },
+    {
+      "id": "59446",
+      "name": "灵山",
+      "province": "广西",
+      "lon": 109.3,
+      "lat": 22.42,
+      "elevation": 66.8,
+      "kind": "national"
+    },
+    {
+      "id": "59448",
+      "name": "浦北",
+      "province": "广西",
+      "lon": 109.55,
+      "lat": 22.26,
+      "elevation": 70.3,
+      "kind": "national"
+    },
+    {
+      "id": "59449",
+      "name": "博白",
+      "province": "广西",
+      "lon": 109.99,
+      "lat": 22.3,
+      "elevation": 86.1,
+      "kind": "national"
+    },
+    {
+      "id": "59451",
+      "name": "北流",
+      "province": "广西",
+      "lon": 110.38,
+      "lat": 22.66,
+      "elevation": 155,
+      "kind": "national"
+    },
+    {
+      "id": "59452",
+      "name": "容县",
+      "province": "广西",
+      "lon": 110.53,
+      "lat": 22.83,
+      "elevation": 133.3,
+      "kind": "national"
+    },
+    {
+      "id": "59454",
+      "name": "岑溪",
+      "province": "广西",
+      "lon": 110.99,
+      "lat": 22.95,
+      "elevation": 202,
+      "kind": "national"
+    },
+    {
+      "id": "59457",
+      "name": "陆川",
+      "province": "广西",
+      "lon": 110.27,
+      "lat": 22.32,
+      "elevation": 122.6,
+      "kind": "national"
+    },
+    {
+      "id": "59632",
+      "name": "钦州",
+      "province": "广西",
+      "lon": 108.6,
+      "lat": 21.98,
+      "elevation": 49.3,
+      "kind": "national"
+    },
+    {
+      "id": "59635",
+      "name": "防城港",
+      "province": "广西",
+      "lon": 108.39,
+      "lat": 21.67,
+      "elevation": 49.3,
+      "kind": "national"
+    },
+    {
+      "id": "59640",
+      "name": "合浦",
+      "province": "广西",
+      "lon": 109.19,
+      "lat": 21.66,
+      "elevation": 6.4,
+      "kind": "national"
+    },
+    {
+      "id": "59644",
+      "name": "北海",
+      "province": "广西",
+      "lon": 109.18,
+      "lat": 21.45,
+      "elevation": 10.3,
+      "kind": "national"
+    }
+  ]
+}

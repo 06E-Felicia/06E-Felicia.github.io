@@ -53,9 +53,36 @@ The page itself is static (`index.html` + assets), while weather data is updated
 5. The scheduled GitHub Actions workflow commits and deploys the refreshed `config.json`: every 10 minutes in March–May (China time), every 30 minutes otherwise. GitHub scheduling can be delayed.
 6. If Shenzhen fetching fails, existing Shenzhen data remains. If regional fetching fails, the thunder monitor fails closed, without generating an estimate. Details are written to `logs/run.log`.
 
+## 华南强对流实验室
+
+入口：`simulator.html`。默认 **浏览器 Worker 本机完整计算，再自动播放**，GitHub Actions 可选批量运行同一 Python 内核。不使用 WRF、额外计算服务器或 API key。每次点击「开始模拟」重新生成种子及环境，并锁定开始按钮至本轮结束。准备阶段显示环境初始化进度与估计剩余时间，不显示未完成天气或回看控件；全部保存后自动进入第一轮演变，首轮结束才开放回看滑条，不加载旧实验工件。地图缩小极限为当前华南模拟区域。详细操作、数值方法与限制见 [模拟器说明](simulation/README.md)。
+
+- 默认 72 小时、6 km 网格，支持 4/8 km。14 层温湿与水物质输送、参数化对流、雨冷反馈和独立随机过程；初始锋区位于南岭附近，不预设风暴对象、路线、速度、轮次或抵深时间。
+- 卫星/街道底图及真实 DEM。单图、双图、四图独立选择雷达、925/500/300 hPa 风、MUCAPE、温度和降水，共用同一模拟时刻和地图范围；不再展示其他 CAPE、CIN、冷池温差/厚度等调试指标。
+- 单站虚拟雷达默认深圳，任一观测点可设为雷达中心；支持 0.5°/1.5°/2.4° 仰角、230 km 探测半径和 ±25 m/s 速度折叠。波束高度采用有效地球半径 4/3 近似；径向速度正值远离、负值靠近；无有效回波不绘制速度。
+- 国家站元数据取自[国家气象信息中心台站表](https://image.data.cma.cn/static/doc/A/A.0012.0001/SURF_CHN_MUL_HOR_STATION.pdf)，PDF 元数据日期 2023-10-27，提取日期 2026-10-13。界面仅显示其中 32 个主要城市代表站，保留实际站号、站址；城市与站名不同时单独注明。归档文件保留原表，不是最新完整在役站名录。
+- 地图测站和自定义点直接取当前网格状态，可查看分层温湿廓线；CSV 导出明确限定为已经载入的时次，不伪造完整历史。
+- CAPE 包含气块上升积分与虚温修正；模型另以向北平滑递减的能量上限约束触发、上升质量通量和公开 MUCAPE，不限制南支槽宽度。原始气块能量保留用于热力诊断，具体上限是实验参数，未经实况校准。降水由水物质演变产生；冷池仍在内核中演变，单体按中高层西风移动并沿边界再生。日变化、冷水面稳定层与山地阻滞参与补给和衰减。
+- V1 新增飑后 CAPE 消耗记忆、真实湿热补给恢复和统一的对流占据面积；云内/云下蒸发分别处理，不以加大显示数字制造强降水。页面移除宣传副标题，采用樱粉/淡紫浅色界面。首页更新提示板先于天气预警显示，关闭后继续原来的预警顺序。
+- 计算后端在本机短测后选择较快的等价输送/湿绝热实现，减少重复数组和无用积分。默认保留双精度云雨场；可选单精度云雨场的省时模式，以及 10/20/30 分钟时间分辨率。网格、14 层、内部稳定性时间步与物理过程不随保存间隔减少；剩余时间依据实际积分速度估算，初次载入暂不显示虚构倒计时。
+
+计算代码位于 `simulation/`，新前端为 `simulation-data.js` 和 `simulation-v2.js`。这是降阶物理模型，不是完整三维非静力数值预报；未解析超级单体旋转、完整冰相微物理和湍流。新增的脱离凝结水是简化冰相储库，不是完整云模式。网页移除了种子、CFL、账目、参数调试表与调试说明，仅保留模拟/非实况标识；完整方法和限制保留在本文档及 [内核说明](simulation/README.md)。旧 `simulator-*.js` 不再加载。
+
+本地预览请通过 HTTP 服务打开，不能直接双击 HTML；无需预先生成后台结果：
+
+```bash
+python3 -m http.server 8080 --bind 127.0.0.1
+```
+
+然后访问 `http://127.0.0.1:8080/simulator.html`，点击「开始模拟」。首次从本站加载随项目提供的 Pyodide 科学计算运行时；数值积分在本机进行。默认 6 km / 72 h，每 10 个模拟分钟存档，全部计算完成后从头自动播放。播放速度可切换为 1/5/15/30 分钟每秒或最快；首轮结束后可暂停、拖动滑条和继续播放。时间流速不影响物理计算或网格，计算时长取决于设备性能。运行期间可结束本轮，结束后才能重新开始全新实验；取消的残缺过程不播放，关闭页面中止计算。
+
+后台入口：Actions → **运行强对流模拟**。结果保留为 90 天工件，完成后自动发布；天气更新会恢复最新模拟工件。模型测试、依赖安装和浏览器回归参见 [模拟器说明](simulation/README.md)。
+
 ## Requirements
 
-- Python 3.10+ (standard library only; no browser or third-party Python packages required)
+- Weather updater: Python 3.10+ (standard library only).
+- Browser simulation: a modern browser with WebAssembly, Web Worker, IndexedDB and gzip streams. Python/NumPy/SciPy runtime downloads on first start; compressed local states support end-of-run replay with a bounded RAM cache.
+- Optional Actions/local CLI simulation: Python 3.12 and `simulation/requirements.txt`.
 
 ## Local Development
 

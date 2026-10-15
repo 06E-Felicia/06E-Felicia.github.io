@@ -954,6 +954,18 @@ body {
 
 /* The upstream estimate is a separate, higher-priority step in the alert queue. */
 .thunder-overlay { z-index: 30001; }
+.update-overlay{z-index:30002;height:100dvh;background:rgba(23,16,36,.73);padding:24px}
+.update-modal{max-width:1160px;width:100%;max-height:calc(100dvh - 48px);border:1px solid #e9d7f0;border-radius:26px;background:linear-gradient(130deg,#fff9fc,#f5f3ff);box-shadow:0 24px 90px #120b2580}
+.update-modal .alert-header{padding:22px 24px;border-bottom:1px solid #ece0f0;background:linear-gradient(100deg,#fce7f1,#eee7ff)}
+.update-modal h2{color:#8e56a5;letter-spacing:1px;font-size:clamp(21px,2.5vw,31px)}
+.update-main-body{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.9fr);min-height:0;overflow-y:auto;align-items:center;gap:24px;padding:24px}
+.update-image-side{min-width:0;border:1px solid #e6d9ed;border-radius:14px;overflow:hidden;background:#f2edf9;box-shadow:0 8px 20px #9170a322}
+.update-image-side img{display:block;width:100%;height:auto;object-fit:contain}
+.update-copy{min-width:0;color:#665377;line-height:1.9}.update-copy h3{font-size:20px;color:#a261ac;margin:0 0 14px}.update-copy p{font-size:15px;margin:0 0 14px;overflow-wrap:anywhere}.update-copy .update-caveat{font-size:12px;color:#93819e;margin-bottom:0}
+.update-actions{display:flex;gap:12px;padding:18px 24px;border-top:1px solid #e7ddec}
+.update-launch,.update-dismiss{flex:1;display:flex;align-items:center;justify-content:center;min-height:46px;padding:12px 16px;border-radius:13px;font-size:15px;font-weight:700;cursor:pointer;text-align:center;box-sizing:border-box}
+.update-launch{color:#fff;background:linear-gradient(110deg,#b26ac9,#df7cac);text-decoration:none;border:1px solid #bf78c7;box-shadow:0 4px 14px #b37ac02b}.update-launch:hover{background:#bd6ebf;text-decoration:none;color:#fff}.update-dismiss{border:1px solid #ded0e9;background:#fff;color:#8c6b9f}.update-dismiss:hover{background:#f7eefa}.update-actions a:focus-visible,.update-actions button:focus-visible{outline:3px solid #bb88cc;outline-offset:3px}
+@media(max-width:700px){.update-overlay{padding:12px}.update-modal{max-height:calc(100dvh - 24px);border-radius:20px}.update-modal .alert-header{padding:17px 14px}.update-main-body{grid-template-columns:1fr;gap:16px;padding:16px}.update-image-side img{max-height:30dvh}.update-copy h3{font-size:17px;margin-bottom:9px}.update-copy p{font-size:14px;margin-bottom:10px}.update-actions{padding:14px;gap:8px}.update-launch,.update-dismiss{font-size:12px;min-height:44px;padding:10px 8px}}
 .thunder-modal { max-height: calc(100dvh - 40px); }
 .thunder-modal .alert-main-body { min-height: 0; overflow-y: auto; }
 .thunder-label { color: #ffcf81; margin: 0 0 8px; font-size: 13px; }

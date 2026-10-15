@@ -1,0 +1,115 @@
+ const fs=require('node:fs'),path=require('node:path'),zlib=require('node:zlib'),assert=require('node:assert/strict');
+const {chromium}=require('playwright');
+(async()=>{
+ const data=process.env.SIM_TEST_RUN;if(!data)throw Error('Set SIM_TEST_RUN to a completed simulation directory');
+ const browser=await chromium.launch({headless:true,...(process.env.TEST_BROWSER_CHANNEL?{channel:process.env.TEST_BROWSER_CHANNEL}:{})});
+ try{
+  const context=await browser.newContext({viewport:{width:1440,height:1000},acceptDownloads:true}),errors=[],requests=[];
+  const manifest=JSON.parse(fs.readFileSync(path.join(data,'manifest.json'),'utf8'));
+  const frames=manifest.frames.slice(0,3).map(f=>zlib.gunzipSync(fs.readFileSync(path.join(data,f.file))).toString('utf8'));
+  // Genuine packed frames must stay invisible until the whole run is saved.
+  await context.addInitScript(({manifest,frames})=>{window.Worker=class{
+    constructor(){this.terminated=false;window.__liveWorker=this;}
+    postMessage(message){if(message.type==='start'){this.onmessage({data:{type:'manifest',manifest:{...manifest,config:{...manifest.config,hours:manifest.frames[2].hour},frames:[],status:'running'}}});this.emitFrame(0);}}
+    emitFrame(index,invalid=false,hourOverride=null){const raw=JSON.parse(frames[index]);if(hourOverride!==null)raw.hour=hourOverride;if(!this.terminated)this.onmessage({data:{type:'frame',index,hour:manifest.frames[index].hour,raw:invalid?'invalid JSON':JSON.stringify(raw)}});}
+    terminate(){this.terminated=true;}
+  };},{manifest,frames});
+  await context.route('**/*',async route=>{const url=new URL(route.request().url());if(url.origin!=='http://127.0.0.1:14331')return route.abort();
+   requests.push(url.pathname);let root=process.cwd(),relative=url.pathname;
+   const file=path.resolve(root,'.'+relative);if(!file.startsWith(root+path.sep)||!fs.existsSync(file))return route.fulfill({status:404,body:''});
+   if(relative==='/assets/vendor/leaflet/leaflet.js')return route.fulfill({contentType:'application/javascript',body:fs.readFileSync(file,'utf8')+'\n;window.__mapChecks=[];L.Map.addInitHook(function(){const check={map:this,resets:0};window.__mapChecks.push(check);this.on("viewreset",()=>check.resets++);});'});
+   return route.fulfill({path:file});
+  });
+  const page=await context.newPage();page.on('pageerror',e=>errors.push(e.stack||e.message));
+  await page.goto('http://127.0.0.1:14331/simulator.html');await page.locator('#empty-state').waitFor({state:'visible'});assert.equal(await page.locator('#play,#timeline,#reload,#follow-live').count(),0);
+  assert.equal(await page.locator('#station-select option').count(),32);
+  assert.equal(await page.locator('h1').innerText(),'强对流模拟器V1');
+  assert.equal(await page.locator('.lab-heading,.intro,.eyebrow').count(),0);
+  assert.equal(await page.evaluate(()=>getComputedStyle(document.documentElement).colorScheme),'light');
+  assert.doesNotMatch(await page.locator('main').innerText(),/春夏华南 ·|每轮全新天气|真实地形 ·|让天气从环境中演变|从状态出发/);
+  assert.equal(await page.locator('#compute-mode').inputValue(),'accurate');
+  assert.equal(await page.locator('#frame-interval').inputValue(),'10');
+  assert.equal(await page.locator('#observations > div').count(),8);
+  assert.equal(await page.locator('.map-card select').first().locator('option[value="coldpool"],option[value="coldpool_depth"],option[value="sbcape"],option[value="mlcape"],option[value="cin"],option[value="rainrate_core"],option[value="terrain"]').count(),0);
+  assert.equal(await page.locator('#replay-bar').isVisible(),false);
+  await page.locator('#flow-rate').selectOption('60');await page.locator('#start-simulation').click();
+  const ready=()=>page.waitForFunction(()=>Simulator.getState().frame&&!Simulator.getState().busy,null,{timeout:60000});
+  await page.waitForFunction(()=>Simulator.getState().replayFrames===1&&!Simulator.getState().busy);
+  const firstWorker=await page.evaluate(()=>{window.__firstWorker=window.__liveWorker;document.querySelector('#start-simulation').onclick();return window.__firstWorker===window.__liveWorker;});
+  assert.equal(firstWorker,true,'repeated start must not replace the active worker');
+  assert.doesNotMatch(await page.locator('body').innerText(),/回放|回看|回顾|先计算/);
+  assert.equal(await page.evaluate(()=>Simulator.getState().frame),null);assert.equal(await page.locator('#replay-bar').isVisible(),false);
+  await page.evaluate(()=>window.__liveWorker.emitFrame(1,false,.9999999999999999));await page.waitForFunction(()=>Simulator.getState().replayFrames===2&&!Simulator.getState().busy);
+  assert.equal(await page.evaluate(()=>Simulator.getState().frame),null);assert.equal(await page.locator('#initialization').isVisible(),true);assert.ok(await page.locator('#compute-progress').evaluate(el=>el.value>0&&el.value<1));assert.equal(await page.locator('#start-simulation').isDisabled(),true);
+  await page.evaluate(()=>window.__liveWorker.onmessage({data:{type:'progress',hour:1,hours:2,elapsed:30}}));
+  assert.equal(await page.locator('#compute-percent').innerText(),'50.0%');assert.match(await page.locator('#compute-remaining').innerText(),/30 秒/);
+  await page.screenshot({path:'/private/tmp/felicia-v36-initialization.png',fullPage:true});
+  await page.evaluate(()=>window.__liveWorker.emitFrame(2));await page.waitForFunction(()=>Simulator.getState().replayFrames===3&&!Simulator.getState().busy);
+  assert.equal(await page.evaluate(()=>Simulator.getState().frame),null);
+  await page.evaluate(()=>window.__liveWorker.onmessage({data:{type:'complete'}}));await ready();
+  assert.equal(await page.evaluate(()=>Simulator.getState().current),0);assert.equal(await page.locator('#start-simulation').isDisabled(),true);assert.equal(await page.locator('#replay-bar').isVisible(),false);
+  assert.equal(await page.locator('#initialization').isVisible(),false);
+  assert.equal(await page.evaluate(()=>Simulator.getState().playbackState),'playing');
+  assert.equal(await page.locator('#empty-state').isVisible(),false);assert.equal(await page.locator('.weather-map').count(),2);
+  await page.locator('.weather-map').first().scrollIntoViewIfNeeded();
+  const beforeMove=await page.evaluate(()=>Simulator.getState().maps),mapBox=await page.locator('.weather-map').first().boundingBox();
+  await page.mouse.move(mapBox.x+mapBox.width*.55,mapBox.y+mapBox.height*.5);await page.mouse.wheel(0,-350);
+  await page.waitForFunction(z=>{const m=Simulator.getState().maps;return m[0].zoom>z&&m.every(x=>x.zoom===m[0].zoom);},beforeMove[0].zoom);
+  await page.waitForTimeout(350);
+  const zoomed=await page.evaluate(()=>Simulator.getState().maps);assert.deepEqual(zoomed.map(x=>x.rasterBuilds),beforeMove.map(x=>x.rasterBuilds));
+  const resets=()=>page.evaluate(()=>window.__mapChecks.filter(x=>x.map.getContainer().isConnected).map(x=>x.resets));
+  const synced=()=>{const maps=Simulator.getState().maps,p=L.CRS.EPSG3857.latLngToPoint(maps[0].center,maps[0].zoom);return maps.every(m=>m.zoom===maps[0].zoom&&L.CRS.EPSG3857.latLngToPoint(m.center,m.zoom).distanceTo(p)<=.8);};
+  const beforePanResets=await resets();
+  await page.mouse.down();await page.mouse.move(mapBox.x+mapBox.width*.55+70,mapBox.y+mapBox.height*.5+40,{steps:6});await page.mouse.up();
+  await page.waitForFunction(synced);await page.waitForTimeout(700);
+  const panned=await page.evaluate(()=>Simulator.getState().maps);assert.notDeepEqual(panned[0].center,zoomed[0].center);
+  assert.ok(await page.evaluate(synced),'map centres stay within one display pixel, including Leaflet pan rounding');
+  assert.deepEqual(await resets(),beforePanResets,'dragging must translate peer maps without resetting their tile/canvas panes');
+  assert.deepEqual(panned.map(x=>x.rasterBuilds),beforeMove.map(x=>x.rasterBuilds));
+  await page.mouse.wheel(0,5000);await page.waitForTimeout(500);
+  assert.ok(await page.evaluate(()=>Simulator.getState().maps.every(m=>m.zoom===m.minZoom)),'zoom-out must stop at the regional floor');
+  await page.locator('#opacity').evaluate(el=>{el.value=.5;el.dispatchEvent(new Event('input',{bubbles:true}));});
+  assert.deepEqual(await page.evaluate(()=>Simulator.getState().maps.map(x=>x.rasterBuilds)),beforeMove.map(x=>x.rasterBuilds));
+  assert.equal(await page.locator('.leaflet-weatherFields-pane').first().evaluate(el=>getComputedStyle(el).zIndex),'350');
+  await page.locator('#flow-rate').selectOption('0');await page.waitForFunction(()=>Simulator.getState().playbackState==='ended');assert.equal(await page.locator('#start-simulation').isDisabled(),false);await page.locator('#replay-bar').waitFor({state:'visible'});
+  await page.locator('#replay-slider').evaluate(el=>{el.value=0;el.dispatchEvent(new Event('input',{bubbles:true}));});await page.waitForFunction(()=>Simulator.getState().frame.hour===0&&!Simulator.getState().busy);
+  await page.locator('#replay-slider').evaluate(el=>{el.value=1;el.dispatchEvent(new Event('input',{bubbles:true}));});await page.waitForFunction(()=>Simulator.getState().current===1&&!Simulator.getState().busy);assert.match(await page.locator('#sim-clock').innerText(),/09:00/);
+  await page.locator('#replay-slider').evaluate(el=>{el.value=2;el.dispatchEvent(new Event('input',{bubbles:true}));});await page.waitForFunction(()=>Simulator.getState().current===2&&!Simulator.getState().busy);
+  const fronts=await page.evaluate(()=>Simulator.getState().maps.map(m=>m.frontSegments));
+  await page.locator('#show-front').uncheck();assert.ok(await page.evaluate(()=>Simulator.getState().maps.every(m=>m.frontSegments===0)));
+  await page.locator('#show-front').check();assert.deepEqual(await page.evaluate(()=>Simulator.getState().maps.map(m=>m.frontSegments)),fronts);
+  assert.equal((await page.locator('label').filter({has:page.locator('#show-front')}).innerText()).trim(),'冷锋');
+  assert.ok(await page.evaluate(()=>window.__mapChecks.filter(x=>x.map.getContainer().isConnected).every(({map})=>{let dashed=false;map.eachLayer(layer=>{if(layer instanceof L.Polyline&&layer.options.dashArray)dashed=true;});return !dashed;})),'no cold-pool contour layer is drawn');
+  await page.locator('[data-layout="4"]').click();assert.equal(await page.locator('.weather-map').count(),4);
+  await page.locator('#view-prd').click();await page.waitForFunction(synced);await page.waitForTimeout(350);
+  for(const index of [1,3]){
+   const before=await resets(),builds=await page.evaluate(()=>Simulator.getState().maps.map(x=>x.rasterBuilds));
+   const box=await page.locator('.weather-map').nth(index).boundingBox();
+   await page.mouse.move(box.x+box.width*.5,box.y+box.height*.5);await page.mouse.down();
+   await page.mouse.move(box.x+box.width*.5+65,box.y+box.height*.5+35,{steps:12});await page.mouse.up();
+   await page.waitForFunction(synced);await page.waitForTimeout(700);
+   assert.deepEqual(await resets(),before,'all four maps pan without full resets when any peer is dragged');
+   assert.deepEqual(await page.evaluate(()=>Simulator.getState().maps.map(x=>x.rasterBuilds)),builds);
+  }
+  await page.locator('.map-card select').nth(0).selectOption('mucape');await page.locator('.map-card select').nth(2).selectOption('midwind');
+  assert.deepEqual(await page.locator('.map-time').allTextContents(),Array(4).fill(await page.locator('#sim-clock').innerText()));
+  await page.locator('[data-layout="1"]').click();await page.locator('[data-layout="4"]').click();assert.equal(await page.locator('.map-card select').nth(2).inputValue(),'midwind');
+  await page.locator('#station-search').fill('59488');await page.locator('#station-select').selectOption('59488');assert.equal(await page.locator('#station-name').innerText(),'珠海');
+  await page.locator('#station-radar').click();assert.match(await page.locator('#radar-name').innerText(),/珠海/);
+  await page.locator('#add-on-map').click();await page.locator('.weather-map').first().click({position:{x:160,y:180}});assert.equal(await page.locator('.custom-station').getAttribute('open'),'');
+  await page.locator('#custom-name').fill('珠江口测试');await page.locator('#custom-lon').fill('113.74');await page.locator('#custom-lat').fill('22.55');await page.locator('#station-form button').click();
+  assert.equal(await page.evaluate(()=>Simulator.getState().stationCount),33);assert.notEqual(await page.locator('#obs-temperature').innerText(),'—');
+  const exportPromise=page.waitForEvent('download');await page.locator('#export-station').click();const exported=await exportPromise;assert.match(fs.readFileSync(await exported.path(),'utf8'),/loaded frames only/);
+  assert.equal(await page.locator('#config-form,#parameter-controls,#audit,#mechanism-text,.method-card').count(),0);
+  assert.doesNotMatch(await page.locator('body').innerText(),/CFL|账面残差|主种子|物理核验|后台复现实验/);
+  await page.screenshot({path:'/private/tmp/felicia-v2-desktop.png',fullPage:true});
+  await page.setViewportSize({width:390,height:844});await page.locator('[data-layout="2"]').click();await page.screenshot({path:'/private/tmp/felicia-v2-mobile.png',fullPage:true});
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+  await page.reload();await page.waitForFunction(()=>window.Simulator&&Simulator.getState().stationCount===33);assert.equal(await page.evaluate(()=>Simulator.getState().manifest),null);await page.locator('#start-simulation').click();await page.waitForFunction(()=>Simulator.getState().replayFrames===1&&!Simulator.getState().busy);
+  await page.locator('#station-search').fill('珠江口测试');const id=await page.locator('#station-select option').first().getAttribute('value');await page.locator('#station-select').selectOption(id);await page.locator('#delete-station').click();assert.equal(await page.evaluate(()=>Simulator.getState().stationCount),32);
+  await page.evaluate(()=>window.__liveWorker.emitFrame(1,true));await page.waitForFunction(()=>Simulator.getState().computeState==='error');assert.match(await page.locator('#compute-status').innerText(),/模拟中止/);
+  assert.equal(await page.locator('#start-simulation').isDisabled(),false,'errors must release the round lock');
+  assert.ok(await page.evaluate(()=>Simulator.getState().cacheSize<=2));assert.deepEqual(errors,[]);assert.ok(requests.every(p=>!p.startsWith('/assets/simulation/')));
+  console.log('PASS: locked start, initialization progress/ETA, hidden replay, automatic first cycle, end-only seek, regional zoom floor, cached zoom/pan, synchronized maps, persistent points, exports, mobile layout, corrupt state rejection.');
+ }finally{await browser.close();}
+})().catch(e=>{console.error(e);process.exitCode=1;});

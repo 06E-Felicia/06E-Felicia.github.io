@@ -23,6 +23,7 @@ const { chromium } = require('playwright');
             return route.fulfill({ path: file });
         });
         await page.goto('http://127.0.0.1:14331/');
+        await page.locator('#update-close').click();
         const dropdown = page.locator('.nav-bar .dropdown').first();
         const trigger = dropdown.locator('.nav-item'), link = dropdown.locator('.dropdown-menu a').first();
         await trigger.hover();
@@ -46,6 +47,7 @@ const { chromium } = require('playwright');
         await link.click();
         await page.waitForURL('**/forecast.html');
         await page.goto('http://127.0.0.1:14331/');
+        await page.locator('#update-close').click();
 
         await page.evaluate(() => {
             currentIndex = dialogs.reduce((best, value, index) => value.length > dialogs[best].length ? index : best, 0);
@@ -81,6 +83,7 @@ const { chromium } = require('playwright');
         assert.equal(await page.locator('#dialog-bubble').evaluate(el => getComputedStyle(el).fontSize), '15px');
         await page.setViewportSize({ width: 390, height: 844 });
         await page.reload();
+        await page.locator('#update-close').click();
         await page.locator('.nav-bar .dropdown > .nav-item').first().click();
         assert.equal(await page.locator('.nav-bar .dropdown .dropdown-menu a').first().isVisible(), true);
         assert.deepEqual(errors, []);

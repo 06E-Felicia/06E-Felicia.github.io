@@ -73,6 +73,8 @@ let ALERT_CONFIG = { ...DEFAULT_APP_CONFIG.ALERT_CONFIG };
 let WARNINGS = [...DEFAULT_APP_CONFIG.WARNINGS];
 let lastAlertSignature = "";
 let configRefreshing = false;
+let updateAnnouncementDismissed = false;
+let updateAnnouncementReturnFocus = null;
 
 let dialogTimer = null;
 let currentIndex = 0;
@@ -266,7 +268,39 @@ function updateECForecastImage() {
     if (linkElement) linkElement.href = primaryUrl;
 }
 
+function showUpdateAnnouncement() {
+    const overlay = document.getElementById('update-overlay');
+    if (!overlay || updateAnnouncementDismissed) return false;
+    if (overlay.style.display !== 'flex') updateAnnouncementReturnFocus = document.activeElement;
+    document.getElementById('alert-overlay').style.display = 'none';
+    ThunderAlerts.hide();
+    overlay.style.display = 'flex';
+    document.getElementById('update-close').focus();
+    return true;
+}
+
+function closeUpdateAnnouncement() {
+    updateAnnouncementDismissed = true;
+    const overlay = document.getElementById('update-overlay');
+    if (overlay) overlay.style.display = 'none';
+    if (updateAnnouncementReturnFocus?.isConnected) updateAnnouncementReturnFocus.focus();
+    updateAnnouncementReturnFocus = null;
+    checkAndShowAlert();
+}
+
+document.getElementById('update-overlay')?.addEventListener('keydown', event => {
+    if (event.key === 'Escape') { event.preventDefault(); closeUpdateAnnouncement(); return; }
+    if (event.key !== 'Tab') return;
+    const controls = [...document.getElementById('update-overlay').querySelectorAll('a[href], button')]
+        .filter(element => element.getClientRects().length > 0);
+    if (!controls.length) return;
+    const first = controls[0], last = controls[controls.length - 1];
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+});
+
 function checkAndShowAlert() {
+    if (showUpdateAnnouncement()) return;
     document.getElementById('alert-overlay').style.display = 'none';
     if (!ThunderAlerts.show()) showShenzhenAlert();
 }
@@ -277,6 +311,7 @@ function closeThunderAlert() {
 }
 
 function showShenzhenAlert() {
+    if (showUpdateAnnouncement()) return;
     const overlay = document.getElementById('alert-overlay');
     if (!ALERT_CONFIG.enabled || !ALERT_CONFIG.title || !ALERT_CONFIG.message) {
         overlay.style.display = 'none';
@@ -312,6 +347,9 @@ function render() {
 }
 
 async function initPage() {
+    // The announcement is independent of weather fetching. Updated snapshots
+    // wait behind it; closing the card displays the latest valid alert queue.
+    showUpdateAnnouncement();
     const appConfig = await loadAppConfig();
     applyRuntimeConfig(appConfig);
     render();

@@ -29,6 +29,7 @@ jobs:
     timeout-minutes: 10
     permissions:
       contents: write # 必须开启写入权限
+      actions: read # 恢复最近一次模拟结果，避免天气部署覆盖模拟数据。
       pages: write
       id-token: write
     environment:
@@ -69,8 +70,10 @@ jobs:
       - name: 验证估测规则与弹窗逻辑
         if: steps.frequency.outputs.run == 'true'
         run: |
-          python -B -m unittest discover -s tests -v
+          python -B -m unittest discover -s tests -p 'test_thunder.py' -v
+          python -B -m unittest discover -s tests -p 'test_monitor_backend.py' -v
           node tests/test_alerts.cjs
+          node tests/test_simulation_data.cjs
 
       - name: 获取天气数据更新
         if: steps.frequency.outputs.run == 'true'
@@ -109,6 +112,12 @@ jobs:
 
       # GITHUB_TOKEN pushes do not trigger a branch-source Pages rebuild.
       # Publish the same refreshed checkout explicitly; no personal token needed.
+      - name: 保留最近一次强对流模拟结果
+        if: steps.frequency.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python -m simulation.restore
+
       - name: 配置 GitHub Pages
         if: steps.frequency.outputs.run == 'true'
         uses: actions/configure-pages@v5

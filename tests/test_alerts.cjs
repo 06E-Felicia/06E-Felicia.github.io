@@ -3,13 +3,14 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
 
-function browser(iso = '2026-05-20T12:05:00+08:00', stored = null, storageBlocked = false) {
+function browser(iso = '2026-05-20T12:05:00+08:00', stored = null, storageBlocked = false, announcement = false) {
     let clock = Date.parse(iso);
     const elements = new Map(), listeners = {}, intervals = [];
     const document = {
         activeElement: null, hidden: false, body: { style: {} },
         addEventListener: (type, callback) => { listeners[type] = callback; },
         getElementById: id => {
+            if (id.startsWith('update-') && !announcement) return null;
             if (!elements.has(id)) elements.set(id, element(id));
             return elements.get(id);
         },
@@ -76,6 +77,21 @@ function browser(iso = '2026-05-20T12:05:00+08:00', stored = null, storageBlocke
 }
 
 (async () => {
+    const notice = browser(undefined, null, false, true);
+    await notice.run('initPage()');
+    assert.equal(notice.el('update-overlay').style.display, 'flex');
+    assert.equal(notice.el('thunder-overlay').style.display, 'none');
+    assert.equal(notice.el('alert-overlay').style.display, 'none');
+    await notice.backendMode('on');
+    assert.equal(notice.el('update-overlay').style.display, 'flex', 'weather refresh must not jump past the announcement');
+    assert.equal(notice.el('thunder-overlay').style.display, 'none');
+    notice.run('closeUpdateAnnouncement()');
+    assert.equal(notice.el('update-overlay').style.display, 'none');
+    assert.equal(notice.el('thunder-overlay').style.display, 'flex');
+    notice.run('closeThunderAlert()');
+    assert.equal(notice.el('alert-overlay').style.display, 'flex');
+    notice.run('checkAndShowAlert()');
+    assert.equal(notice.el('update-overlay').style.display, 'none', 'a dismissed announcement does not reopen within this visit');
     const b = browser();
     await b.run('initPage()');
     assert.equal(b.el('thunder-overlay').style.display, 'flex');
