@@ -120,6 +120,8 @@ select {cursor: pointer;}
 .leaflet-control-zoom {border: 1px solid #dfd5eb !important; box-shadow: 0 3px 10px #5940711c !important;}
 .leaflet-control-zoom a {color: #796195 !important; background: #fffefded !important;}
 .leaflet-tooltip {background: #fffefd; border-color: #e6ddef; box-shadow: 0 3px 10px #59407115; color: var(--heading);}
+.station-hit {cursor:pointer;outline:none;}
+.station-hit:focus-visible {stroke:#fff;stroke-width:2px;stroke-opacity:.95;fill-opacity:.12;}
 .map-card .legend {height: 40px; border-top-color: var(--line); color: var(--muted); background: #fcfaff;}
 .legend-bar {height: 6px;}
 .radar-settings {color: var(--muted); margin: 10px 0 0; padding: 8px 2px;}
@@ -160,6 +162,21 @@ select {cursor: pointer;}
 .section-title {margin-bottom: 12px;}
 footer {justify-content: center; color: var(--muted); padding: 24px 0; font-size: 11px;}
 @keyframes environment-pulse {50% {opacity: .3;}}
+.sol-lab {--accent:#9e6b32;--accent-soft:#fbefdf;--heading:#65503d;--warm:#a05e69;}
+.sol-lab .lab-nav {background:linear-gradient(105deg,#3f3545,#5e493f);}
+.sol-lab .brand-mark {background:linear-gradient(140deg,#fff3cc,#f5d8cc);color:#ae7c38;}
+.sol-lab button.primary,.sol-lab button.primary:disabled,.sol-lab button.primary:disabled:hover {background:linear-gradient(110deg,#9c6a39,#b97c69);border-color:#9c6a39;}
+.sol-lab button.primary:hover:not(:disabled) {background:linear-gradient(110deg,#875a2f,#a76c5c);}
+.sol-resolution {max-width:75ch;}
+.edition-dialog {width:min(490px,calc(100% - 40px));max-height:85dvh;overflow:auto;box-sizing:border-box;padding:28px;border:1px solid var(--line);border-radius:20px;background:var(--panel);color:var(--ink);box-shadow:0 24px 90px #30264140;}
+.edition-dialog::backdrop {background:#30264170;backdrop-filter:blur(5px);}
+.edition-dialog h2 {margin:8px 0 14px;font-size:21px;color:var(--heading);}
+.edition-dialog p {font-size:14px;line-height:1.8;color:var(--muted);}
+.edition-mark {font-size:30px;color:var(--accent);}
+.edition-actions {display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;}
+.edition-actions a,.edition-actions button {flex:1 1 180px;display:flex;align-items:center;justify-content:center;min-height:43px;padding:10px 12px;box-sizing:border-box;border-radius:10px;font:inherit;font-size:13px;text-decoration:none;}
+.edition-actions a {background:var(--accent);color:white;}
+.edition-actions a:focus-visible {outline:2px solid var(--accent);outline-offset:3px;}
 @media (prefers-reduced-motion: reduce) {#compute-status[aria-busy=true]::before {animation: none;}}
 @media (max-width: 1150px) {
   main {padding: 20px 18px 0;}

@@ -16,7 +16,7 @@ const {chromium}=require('playwright');
    // the target loop. No model.step/advance call or new weather process runs.
    await route.fulfill({response,body:source.replace(hook,hook+'await new Promise(()=>{});')});
   });
-  await page.goto('http://127.0.0.1:8765/simulator.html');
+  await page.goto((process.env.PREVIEW_URL||'http://127.0.0.1:8765')+'/simulator.html');
   await page.waitForFunction(()=>window.Simulator&&!document.querySelector('#start-simulation').disabled);
   console.log('PAGE',JSON.stringify(await page.evaluate(()=>({stations:Simulator.getState().stationCount,stationMessage:document.querySelector('#station-message').textContent,secure:isSecureContext,uuid:typeof crypto.randomUUID,worker:typeof Worker}))));
   await page.locator('#local-grid').selectOption('12');await page.locator('#local-hours').fill('1');await page.locator('#start-simulation').click();

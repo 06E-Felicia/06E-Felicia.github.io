@@ -9,7 +9,6 @@ import math
 import time
 from pathlib import Path
 import numpy as np
-from scipy.ndimage import zoom
 from .core import Model, VERSION, Z, settings, source_digest
 from .terrain import grid
 
@@ -36,9 +35,18 @@ def write_gzip(path, value):
 def terrain_for(config, path):
     with np.load(path,allow_pickle=False) as data:
         if not np.allclose(data['bounds'],config['bounds']):raise ValueError('DEM bounds mismatch; regenerate terrain for these bounds')
-        target=grid(config['bounds'],config['grid_km'])[0].shape
+        lon,lat=grid(config['bounds'],config['grid_km']);target=lon.shape
         h=data['height']
-        if target!=h.shape:h=zoom(h,(target[0]/h.shape[0],target[1]/h.shape[1]),order=1)
+        if target!=h.shape:
+            # Array endpoint stretching shifts coasts/ridges by up to a
+            # coarse cell because grids do not share their last coordinate.
+            # Sample the cached DEM at actual model coordinates instead.
+            from scipy.ndimage import map_coordinates
+            source_lon,source_lat=grid(data['bounds'],float(data['grid_km']))
+            if source_lon.shape!=h.shape:raise ValueError('DEM coordinates/shape mismatch')
+            x=(lon-source_lon[0,0])/(source_lon[0,1]-source_lon[0,0])
+            y=(lat-source_lat[0,0])/(source_lat[1,0]-source_lat[0,0])
+            h=map_coordinates(h,[y,x],order=1,mode='nearest')
         return h,{'source':str(data['source']),'native_zoom':int(data['zoom']),'source_grid_km':float(data['grid_km'])}
 
 
@@ -63,7 +71,7 @@ def run(config, terrain_path, output):
                 'dlon':float(lon[0,1]-lon[0,0]),'dlat':float(lat[1,0]-lat[0,0]),'nominal_km':cfg['grid_km'],'z_agl_m':Z.tolist()},
         'terrain':source,'frames':entries,'requested_frame_minutes':requested_interval,
         'limitations':['简化分层热力/水物质输送和对流质量通量闭合；非完整三维非静力模式',
-                      '暖雨与单一脱离凝结水储库；无完整冰相/冰雹微物理或可解析超级单体旋转',
+                      '暖雨、慢沉降冰云与快速对流冻结降水储库；仍无完整冰相/冰雹微物理或可解析超级单体旋转',
                       '参考静力气压；无完整压力扰动方程，近地风并非严格的 10 m 诊断',
                       '无实况同化；南岭锋区是物理场初始条件，不预设风暴数量、路线和抵达时间',
                       '1 个网格不是有效预报精度；结果只用于机制实验']}

@@ -16,7 +16,7 @@ class StratiformTests(unittest.TestCase):
         return Model(cfg,np.full(grid(cfg['bounds'],cfg['grid_km'])[0].shape,30))
 
     def water(self,m):
-        return float(np.sum((m.q+m.cloud+m.rain+m.anvil)*m.mass,dtype='float64'))
+        return float(np.sum((m.q+m.cloud+m.rain+m.anvil+m.graupel)*m.mass,dtype='float64'))
 
     def test_ice_saturation_reference_and_liquid_parcels_unchanged(self):
         self.assertAlmostEqual(float(saturation_ice(np.array(253.15),80000)),.0008035,delta=2e-6)
@@ -35,7 +35,7 @@ class StratiformTests(unittest.TestCase):
         m=self.model();m.temp[9]=250;m.q[:]=saturation_ice(m.temp,m.p)*.99
         m.cloud[9]=.0012;m.plume_cloud[9]=.0006
         before=self.water(m);surface=m.trailing_microphysics(90)
-        self.assertGreater(float(m.anvil[9].mean()),.0005)
+        self.assertGreater(float((m.anvil[9]+m.graupel[9]).mean()),.0005)
         self.assertLess(float(m.cloud[9].mean()),.00065)
         np.testing.assert_allclose(m.plume_cloud[9],m.cloud[9]*.5)
         self.assertLess(abs(self.water(m)+surface.sum()-before)/before,1e-12)

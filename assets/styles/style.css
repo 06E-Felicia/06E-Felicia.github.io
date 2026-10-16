@@ -155,6 +155,7 @@ body {
 }
 
 /* 导航栏 */
+[hidden] { display: none !important; }
 .nav-bar {
     position: relative;
     isolation: isolate;

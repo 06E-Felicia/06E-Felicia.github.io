@@ -6,7 +6,7 @@ from .core import Model
 from .terrain import grid
 
 
-def check():
+def check(*,include_model=True):
     callback=numerics._accelerator
     if callback is None:raise RuntimeError('Browser accelerator is not installed')
     moist_callback=thermo._accelerator
@@ -35,6 +35,8 @@ def check():
                 np.testing.assert_allclose(actual[key],expected[key],rtol=1e-10,atol=1e-8)
                 thermal_error=max(thermal_error,float(np.max(abs(actual[key]-expected[key]))))
             thermal_cases+=1
+        if not include_model:
+            return {'flux_cases':cases,'flux_exact':True,'parcel_cases':thermal_cases,'thermal_max_abs_error':thermal_error,'model_steps':0}
         cfg={'bounds':[112,22,113.5,24],'grid_km':10,'seed':719}
         lon,lat=grid(cfg['bounds'],cfg['grid_km']);height=np.where(lon>112.8,0,30)
         thermo.install_accelerator(None);reference=Model(cfg,height)
@@ -48,6 +50,7 @@ def check():
             numerics.install_accelerator(None);thermo.install_accelerator(None);reference.step()
             numerics.install_accelerator(callback);thermo.install_accelerator(moist_callback);accelerated.step()
         fields=['temp','q','cloud','rain','anvil','anvil_nx','anvil_ny','anvil_motion','stratiform_rain','last_stratiform_rate','plume_cloud','plume_rain','rain_area','total','u','v','syn_u','syn_v','air','cold_content','cold_depth','cold_mx','cold_my','activity','surface_activity','organization','cape_deficit','synoptic_lift','ground_temp','transported_wake_debt']
+        fields+=['graupel','graupel_area','plume_cloud_area','momentum_u','momentum_v','downburst_energy']
         for key in fields:np.testing.assert_allclose(getattr(reference,key),getattr(accelerated,key),rtol=1e-8,atol=1e-8,err_msg=key)
         if not np.any(reference.anvil):raise AssertionError('Ice comparison did not exercise the new reservoir')
         return {'flux_cases':cases,'flux_exact':True,'parcel_cases':thermal_cases,'thermal_max_abs_error':thermal_error,'model_steps':40,'model_fields':len(fields),'model_tolerance':1e-8}

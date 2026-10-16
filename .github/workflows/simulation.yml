@@ -11,9 +11,9 @@ on:
         required: true
         default: '72'
       grid_km:
-        description: '网格间距；4 km 较细、8 km 更省计算额度'
+        description: '网格间距；4 km 较细、12 km 适合低分辨率过程测试'
         type: choice
-        options: ['4', '6', '8']
+        options: ['4', '6', '8', '12']
         default: '6'
       frame_minutes:
         description: '输出间隔（分钟）；不影响内部自适应时间步'
@@ -45,6 +45,13 @@ jobs:
           python -m unittest discover -s tests -p 'test_physics.py' -v
           python -m unittest discover -s tests -p 'test_coldpool.py' -v
           python -m unittest discover -s tests -p 'test_stratiform.py' -v
+          python -m unittest discover -s tests -p 'test_astra_front_cloud.py' -v
+          python -m unittest discover -s tests -p 'test_astra_rain_gust.py' -v
+          python -m unittest discover -s tests -p 'test_convective_ice.py' -v
+          python -m unittest discover -s tests -p 'test_coldpool_muscl.py' -v
+          python -m unittest discover -s tests -p 'test_sol.py' -v
+          python -m unittest discover -s tests -p 'test_preview.py' -v
+          python -m unittest discover -s tests -p 'test_open_boundaries.py' -v
       - name: 后台逐步积分（不使用 WRF 或额外服务器）
         env:
           SIM_SEED: ${{ inputs.seed }}

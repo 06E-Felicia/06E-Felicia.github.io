@@ -1,0 +1,557 @@
+{
+  "runs": [
+    {
+      "report": "baseline-421-12.json",
+      "engine": "3.9.0-frontal-cloud-lifecycle",
+      "source_sha256": "c7c46c07ed44eefc9a90dd06dae606525901ddde325387436a57c712f342e29b",
+      "config": {
+        "seed": 20260421,
+        "hours": 72.0,
+        "grid_km": 12.0,
+        "frame_minutes": 10,
+        "month": 4,
+        "moisture": 1.058,
+        "jet": 0.745,
+        "shear": 1.052,
+        "trough": 0.89,
+        "cold_reservoir": 0.879,
+        "sst_c": 23.61,
+        "stochastic": 0.779,
+        "terrain": true,
+        "compact_transport": false,
+        "bounds": [
+          104.3,
+          19.8,
+          118.0,
+          26.7
+        ]
+      },
+      "front_regime": "coupled",
+      "completed_hours": 72.0,
+      "elapsed_seconds": 812.39,
+      "sample_minutes": 30.0,
+      "straight_line_hours": 2.0,
+      "curved_band_hours": null,
+      "max_rain_mm_h": 29.73,
+      "max_hourly_rain_mm": 8.47,
+      "max_total_rain_mm": 142.63,
+      "max_echo_dbz": 50.73,
+      "max_gust_ms": 45.27,
+      "max_mean_surface_wind_ms": 13.12,
+      "max_water_relative_residual": 1.0183433717328247e-07,
+      "max_cfl": 0.45000000000000007,
+      "max_coldpool_cfl": 0.4000000000000001,
+      "max_front_multicrossing_fraction": 0,
+      "max_wake_initiation_fraction": 0.0465,
+      "frontal_latitudes": {
+        "0": {
+          "guangxi": 25.016,
+          "guangdong": 25.043
+        },
+        "12": {
+          "guangxi": 24.904,
+          "guangdong": 24.926
+        },
+        "24": {
+          "guangxi": 24.805,
+          "guangdong": 24.816
+        },
+        "36": {
+          "guangxi": 24.914,
+          "guangdong": 24.681
+        },
+        "48": {
+          "guangxi": 24.772,
+          "guangdong": 24.407
+        },
+        "60": {
+          "guangxi": 23.525,
+          "guangdong": 23.094
+        },
+        "72": {
+          "guangxi": 22.056,
+          "guangdong": 21.512
+        }
+      },
+      "limitations": [
+        "格点平均降水不等于站点/亚格点核区雨量；阵风为参数化诊断",
+        "直线 PCA 与弯曲带状指标不可混为同一判据或业务飑线分类器",
+        "数值稳定不等于所有气象形态及现实预报技能达标"
+      ]
+    },
+    {
+      "report": "baseline-422-12.json",
+      "engine": "3.9.0-frontal-cloud-lifecycle",
+      "source_sha256": "c7c46c07ed44eefc9a90dd06dae606525901ddde325387436a57c712f342e29b",
+      "config": {
+        "seed": 20260422,
+        "hours": 72.0,
+        "grid_km": 12.0,
+        "frame_minutes": 10,
+        "month": 5,
+        "moisture": 1.145,
+        "jet": 0.897,
+        "shear": 1.397,
+        "trough": 0.75,
+        "cold_reservoir": 1.256,
+        "sst_c": 25.25,
+        "stochastic": 0.831,
+        "terrain": true,
+        "compact_transport": false,
+        "bounds": [
+          104.3,
+          19.8,
+          118.0,
+          26.7
+        ]
+      },
+      "front_regime": "east",
+      "completed_hours": 72.0,
+      "elapsed_seconds": 1313.36,
+      "sample_minutes": 30.0,
+      "straight_line_hours": 1.0,
+      "curved_band_hours": null,
+      "max_rain_mm_h": 37.86,
+      "max_hourly_rain_mm": 9.95,
+      "max_total_rain_mm": 146.79,
+      "max_echo_dbz": 52.56,
+      "max_gust_ms": 49.45,
+      "max_mean_surface_wind_ms": 17.85,
+      "max_water_relative_residual": 1.0107085811145714e-07,
+      "max_cfl": 0.45000000000000007,
+      "max_coldpool_cfl": 0.4,
+      "max_front_multicrossing_fraction": 0,
+      "max_wake_initiation_fraction": 0.0155,
+      "frontal_latitudes": {
+        "0": {
+          "guangxi": 25.048,
+          "guangdong": 25.055
+        },
+        "12": {
+          "guangxi": 24.934,
+          "guangdong": 24.928
+        },
+        "24": {
+          "guangxi": 24.917,
+          "guangdong": 24.821
+        },
+        "36": {
+          "guangxi": 24.922,
+          "guangdong": 24.685
+        },
+        "48": {
+          "guangxi": 24.135,
+          "guangdong": 23.536
+        },
+        "60": {
+          "guangxi": 22.77,
+          "guangdong": 21.327
+        },
+        "72": {
+          "guangxi": 22.655,
+          "guangdong": 21.244
+        }
+      },
+      "limitations": [
+        "格点平均降水不等于站点/亚格点核区雨量；阵风为参数化诊断",
+        "直线 PCA 与弯曲带状指标不可混为同一判据或业务飑线分类器",
+        "数值稳定不等于所有气象形态及现实预报技能达标"
+      ]
+    },
+    {
+      "report": "revised-421-12.json",
+      "engine": "3.9.1-convective-ice-budget",
+      "source_sha256": "b8484d45563849ed583346344c6f6f0e3865f2cbe2208af61482af9f4265e87e",
+      "config": {
+        "seed": 20260421,
+        "hours": 72.0,
+        "grid_km": 12.0,
+        "frame_minutes": 10,
+        "month": 4,
+        "moisture": 1.058,
+        "jet": 0.745,
+        "shear": 1.052,
+        "trough": 0.89,
+        "cold_reservoir": 0.879,
+        "sst_c": 23.61,
+        "stochastic": 0.779,
+        "terrain": true,
+        "compact_transport": false,
+        "bounds": [
+          104.3,
+          19.8,
+          118.0,
+          26.7
+        ]
+      },
+      "front_regime": "coupled",
+      "completed_hours": 72.0,
+      "elapsed_seconds": 1393.12,
+      "sample_minutes": 30.0,
+      "straight_line_hours": 1.5,
+      "curved_band_hours": null,
+      "max_rain_mm_h": 28.04,
+      "max_hourly_rain_mm": 9.18,
+      "max_total_rain_mm": 142.24,
+      "max_echo_dbz": 51.86,
+      "max_gust_ms": 50.93,
+      "max_mean_surface_wind_ms": 13.42,
+      "max_water_relative_residual": 1.2043458090352286e-07,
+      "max_cfl": 0.45000000000000007,
+      "max_coldpool_cfl": 0.4000000000000001,
+      "max_front_multicrossing_fraction": 0,
+      "max_wake_initiation_fraction": 0.0538,
+      "frontal_latitudes": {
+        "0": {
+          "guangxi": 25.016,
+          "guangdong": 25.043
+        },
+        "12": {
+          "guangxi": 24.904,
+          "guangdong": 24.926
+        },
+        "24": {
+          "guangxi": 24.805,
+          "guangdong": 24.816
+        },
+        "36": {
+          "guangxi": 24.914,
+          "guangdong": 24.681
+        },
+        "48": {
+          "guangxi": 24.772,
+          "guangdong": 24.407
+        },
+        "60": {
+          "guangxi": 23.525,
+          "guangdong": 23.094
+        },
+        "72": {
+          "guangxi": 22.056,
+          "guangdong": 21.512
+        }
+      },
+      "limitations": [
+        "格点平均降水不等于站点/亚格点核区雨量；阵风为参数化诊断",
+        "直线 PCA 与弯曲带状指标不可混为同一判据或业务飑线分类器",
+        "数值稳定不等于所有气象形态及现实预报技能达标"
+      ]
+    },
+    {
+      "report": "revised-422-12.json",
+      "engine": "3.9.1-convective-ice-budget",
+      "source_sha256": "b8484d45563849ed583346344c6f6f0e3865f2cbe2208af61482af9f4265e87e",
+      "config": {
+        "seed": 20260422,
+        "hours": 72.0,
+        "grid_km": 12.0,
+        "frame_minutes": 10,
+        "month": 5,
+        "moisture": 1.145,
+        "jet": 0.897,
+        "shear": 1.397,
+        "trough": 0.75,
+        "cold_reservoir": 1.256,
+        "sst_c": 25.25,
+        "stochastic": 0.831,
+        "terrain": true,
+        "compact_transport": false,
+        "bounds": [
+          104.3,
+          19.8,
+          118.0,
+          26.7
+        ]
+      },
+      "front_regime": "east",
+      "completed_hours": 72.0,
+      "elapsed_seconds": 1945.0,
+      "sample_minutes": 30.0,
+      "straight_line_hours": 0.5,
+      "curved_band_hours": null,
+      "max_rain_mm_h": 39.01,
+      "max_hourly_rain_mm": 10.49,
+      "max_total_rain_mm": 160.58,
+      "max_echo_dbz": 53.37,
+      "max_gust_ms": 56.2,
+      "max_mean_surface_wind_ms": 18.22,
+      "max_water_relative_residual": 1.3034493662794213e-07,
+      "max_cfl": 0.45000000000000007,
+      "max_coldpool_cfl": 0.4,
+      "max_front_multicrossing_fraction": 0,
+      "max_wake_initiation_fraction": 0.0169,
+      "frontal_latitudes": {
+        "0": {
+          "guangxi": 25.048,
+          "guangdong": 25.055
+        },
+        "12": {
+          "guangxi": 24.934,
+          "guangdong": 24.928
+        },
+        "24": {
+          "guangxi": 24.917,
+          "guangdong": 24.821
+        },
+        "36": {
+          "guangxi": 24.922,
+          "guangdong": 24.685
+        },
+        "48": {
+          "guangxi": 24.136,
+          "guangdong": 23.536
+        },
+        "60": {
+          "guangxi": 22.77,
+          "guangdong": 21.327
+        },
+        "72": {
+          "guangxi": 22.655,
+          "guangdong": 21.244
+        }
+      },
+      "limitations": [
+        "格点平均降水不等于站点/亚格点核区雨量；阵风为参数化诊断",
+        "直线 PCA 与弯曲带状指标不可混为同一判据或业务飑线分类器",
+        "数值稳定不等于所有气象形态及现实预报技能达标"
+      ]
+    },
+    {
+      "report": "final-421-12.json",
+      "engine": "3.9.2-resolved-coldpool-head",
+      "source_sha256": "fe7dcf947829fe56d562930dd0175a429b0e1769b56572c1bae5ff40c126af1e",
+      "config": {
+        "seed": 20260421,
+        "hours": 72.0,
+        "grid_km": 12.0,
+        "frame_minutes": 10,
+        "month": 4,
+        "moisture": 1.058,
+        "jet": 0.745,
+        "shear": 1.052,
+        "trough": 0.89,
+        "cold_reservoir": 0.879,
+        "sst_c": 23.61,
+        "stochastic": 0.779,
+        "terrain": true,
+        "compact_transport": false,
+        "bounds": [
+          104.3,
+          19.8,
+          118.0,
+          26.7
+        ]
+      },
+      "front_regime": "coupled",
+      "completed_hours": 72.0,
+      "elapsed_seconds": 1156.17,
+      "sample_minutes": 30.0,
+      "straight_line_hours": 1.0,
+      "curved_band_hours": 5.5,
+      "max_rain_mm_h": 29.47,
+      "max_hourly_rain_mm": 9.16,
+      "max_total_rain_mm": 140.44,
+      "max_echo_dbz": 52.37,
+      "max_gust_ms": 49.37,
+      "max_mean_surface_wind_ms": 15.76,
+      "max_water_relative_residual": 1.1017568123723528e-07,
+      "max_cfl": 0.45000000000000007,
+      "max_coldpool_cfl": 0.4000000000000001,
+      "max_front_multicrossing_fraction": 0,
+      "max_wake_initiation_fraction": 0.0326,
+      "frontal_latitudes": {
+        "0": {
+          "guangxi": 25.016,
+          "guangdong": 25.043
+        },
+        "12": {
+          "guangxi": 24.904,
+          "guangdong": 24.926
+        },
+        "24": {
+          "guangxi": 24.805,
+          "guangdong": 24.816
+        },
+        "36": {
+          "guangxi": 24.914,
+          "guangdong": 24.681
+        },
+        "48": {
+          "guangxi": 24.772,
+          "guangdong": 24.407
+        },
+        "60": {
+          "guangxi": 23.525,
+          "guangdong": 23.094
+        },
+        "72": {
+          "guangxi": 22.057,
+          "guangdong": 21.513
+        }
+      },
+      "limitations": [
+        "格点平均降水不等于站点/亚格点核区雨量；阵风为参数化诊断",
+        "直线 PCA 与弯曲带状指标不可混为同一判据或业务飑线分类器",
+        "数值稳定不等于所有气象形态及现实预报技能达标"
+      ]
+    },
+    {
+      "report": "final-422-12.json",
+      "engine": "3.9.2-resolved-coldpool-head",
+      "source_sha256": "fe7dcf947829fe56d562930dd0175a429b0e1769b56572c1bae5ff40c126af1e",
+      "config": {
+        "seed": 20260422,
+        "hours": 72.0,
+        "grid_km": 12.0,
+        "frame_minutes": 10,
+        "month": 5,
+        "moisture": 1.145,
+        "jet": 0.897,
+        "shear": 1.397,
+        "trough": 0.75,
+        "cold_reservoir": 1.256,
+        "sst_c": 25.25,
+        "stochastic": 0.831,
+        "terrain": true,
+        "compact_transport": false,
+        "bounds": [
+          104.3,
+          19.8,
+          118.0,
+          26.7
+        ]
+      },
+      "front_regime": "east",
+      "completed_hours": 72.0,
+      "elapsed_seconds": 1372.36,
+      "sample_minutes": 30.0,
+      "straight_line_hours": 0.5,
+      "curved_band_hours": 4.0,
+      "max_rain_mm_h": 42.61,
+      "max_hourly_rain_mm": 10.74,
+      "max_total_rain_mm": 172.43,
+      "max_echo_dbz": 54.38,
+      "max_gust_ms": 54.86,
+      "max_mean_surface_wind_ms": 18.18,
+      "max_water_relative_residual": 9.555476806868163e-08,
+      "max_cfl": 0.45000000000000007,
+      "max_coldpool_cfl": 0.4,
+      "max_front_multicrossing_fraction": 0,
+      "max_wake_initiation_fraction": 0.0134,
+      "frontal_latitudes": {
+        "0": {
+          "guangxi": 25.048,
+          "guangdong": 25.055
+        },
+        "12": {
+          "guangxi": 24.934,
+          "guangdong": 24.928
+        },
+        "24": {
+          "guangxi": 24.917,
+          "guangdong": 24.821
+        },
+        "36": {
+          "guangxi": 24.922,
+          "guangdong": 24.685
+        },
+        "48": {
+          "guangxi": 24.135,
+          "guangdong": 23.536
+        },
+        "60": {
+          "guangxi": 22.77,
+          "guangdong": 21.327
+        },
+        "72": {
+          "guangxi": 22.655,
+          "guangdong": 21.244
+        }
+      },
+      "limitations": [
+        "格点平均降水不等于站点/亚格点核区雨量；阵风为参数化诊断",
+        "直线 PCA 与弯曲带状指标不可混为同一判据或业务飑线分类器",
+        "数值稳定不等于所有气象形态及现实预报技能达标"
+      ]
+    },
+    {
+      "report": "final-423-12.json",
+      "engine": "3.9.2-resolved-coldpool-head",
+      "source_sha256": "fe7dcf947829fe56d562930dd0175a429b0e1769b56572c1bae5ff40c126af1e",
+      "config": {
+        "seed": 20260423,
+        "hours": 72.0,
+        "grid_km": 12.0,
+        "frame_minutes": 10,
+        "month": 4,
+        "moisture": 0.992,
+        "jet": 1.344,
+        "shear": 1.258,
+        "trough": 1.383,
+        "cold_reservoir": 1.373,
+        "sst_c": 25.06,
+        "stochastic": 0.65,
+        "terrain": true,
+        "compact_transport": false,
+        "bounds": [
+          104.3,
+          19.8,
+          118.0,
+          26.7
+        ]
+      },
+      "front_regime": "coupled",
+      "completed_hours": 72.0,
+      "elapsed_seconds": 1316.25,
+      "sample_minutes": 30.0,
+      "straight_line_hours": 1.0,
+      "curved_band_hours": 7.0,
+      "max_rain_mm_h": 31.98,
+      "max_hourly_rain_mm": 10.06,
+      "max_total_rain_mm": 92.93,
+      "max_echo_dbz": 53.07,
+      "max_gust_ms": 52.91,
+      "max_mean_surface_wind_ms": 19.33,
+      "max_water_relative_residual": 1.0746584739002364e-07,
+      "max_cfl": 0.45000000000000007,
+      "max_coldpool_cfl": 0.4000000000000001,
+      "max_front_multicrossing_fraction": 0,
+      "max_wake_initiation_fraction": 0.0735,
+      "frontal_latitudes": {
+        "0": {
+          "guangxi": 25.144,
+          "guangdong": 25.046
+        },
+        "12": {
+          "guangxi": 25.045,
+          "guangdong": 24.943
+        },
+        "24": {
+          "guangxi": 25.022,
+          "guangdong": 24.834
+        },
+        "36": {
+          "guangxi": 24.996,
+          "guangdong": 24.761
+        },
+        "48": {
+          "guangxi": 24.368,
+          "guangdong": 24.034
+        },
+        "60": {
+          "guangxi": 22.347,
+          "guangdong": 21.946
+        },
+        "72": {
+          "guangxi": 21.865,
+          "guangdong": 21.353
+        }
+      },
+      "limitations": [
+        "格点平均降水不等于站点/亚格点核区雨量；阵风为参数化诊断",
+        "直线 PCA 与弯曲带状指标不可混为同一判据或业务飑线分类器",
+        "数值稳定不等于所有气象形态及现实预报技能达标"
+      ]
+    }
+  ]
+}

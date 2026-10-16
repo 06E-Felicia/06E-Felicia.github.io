@@ -19,8 +19,12 @@
     const base=k*plane,bx=k*nxface,by=k*nyface,wx=(k*nxface)%ux.length,wy=(k*nyface)%vy.length;
     for(let y=0;y<ny;y++)for(let x=0;x<nx;x++){
      const i=base+y*nx+x,value=f[i];
-     s.sx[i]=minmod(value-(x?f[i-1]:ghost(i)),(x<nx-1?f[i+1]:ghost(i))-value);
-     s.sy[i]=minmod(value-(y?f[i-nx]:ghost(i)),(y<ny-1?f[i+nx]:ghost(i))-value);
+     const left=x?f[i-1]:ux[wx+y*(nx+1)]>0?ghost(i):value;
+     const right=x<nx-1?f[i+1]:ux[wx+y*(nx+1)+nx]<0?ghost(i):value;
+     const below=y?f[i-nx]:vy[wy+x]>0?ghost(i):value;
+     const above=y<ny-1?f[i+nx]:vy[wy+ny*nx+x]<0?ghost(i):value;
+     s.sx[i]=minmod(value-left,right-value);
+     s.sy[i]=minmod(value-below,above-value);
     }
     for(let y=0;y<ny;y++){
      const row=base+y*nx,fr=bx+y*(nx+1),wr=wx+y*(nx+1);

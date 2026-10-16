@@ -19,12 +19,13 @@ const {chromium}=require('playwright');
    if(['numpy','transport','force-fused'].includes(process.env.BENCH_BACKEND))source=source.replace('install_moist_accelerator(simulationMoistKernel)','install_moist_accelerator(None)');
    source=source.replace('self.postMessage({type,...payload})',"(type==='complete'&&console.log('COMPUTE_TIMING',JSON.stringify(payload)),self.postMessage({type,...payload}))");
    if(process.env.CHECK_KERNEL){
-    const hook='const seed=20260421;';
+    const hook="py.globals.set('browser_seed',seed);";
+    assert.ok(source.includes(hook),'kernel comparison must run after actual seeded Worker initialization');
     source=source.replace(hook,`const checkFile=await fetch(new URL('simulation/check_acceleration.py',base));py.FS.writeFile('/home/pyodide/simulation/check_acceleration.py',await checkFile.text());console.log('ACCELERATION_CHECK',await py.runPythonAsync('import json\\nfrom simulation.check_acceleration import check\\njson.dumps(check())'));${hook}`);
    }
    await route.fulfill({response,body:source});
   });
-  await page.goto('http://127.0.0.1:8765/simulator.html');
+  await page.goto((process.env.PREVIEW_URL||'http://127.0.0.1:8765')+'/simulator.html');
   page.on('console',message=>{if(/ACCELERATION_CHECK|COMPUTE_TIMING|DEBUG_BACKEND/.test(message.text()))console.log(message.text());});
   await page.locator('#local-grid').selectOption(process.env.BENCH_GRID||'6');
   await page.locator('#local-hours').fill(process.env.BENCH_HOURS||'1');

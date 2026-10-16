@@ -86,6 +86,11 @@ const { chromium } = require('playwright');
         await page.locator('#update-close').click();
         await page.locator('.nav-bar .dropdown > .nav-item').first().click();
         assert.equal(await page.locator('.nav-bar .dropdown .dropdown-menu a').first().isVisible(), true);
+        await page.keyboard.press('Escape');
+        await page.locator('.nav-bar .dropdown > .nav-item').filter({ hasText: /^StormSim$/ }).click();
+        assert.equal(await page.getByRole('link', { name: 'StormSim 1.1 Astra', exact: true }).isVisible(), true);
+        assert.equal(await page.getByRole('link', { name: 'StormSim 1.0 Sol · 轻量版', exact: true }).count(), 0);
+        assert.equal(await page.locator('a[href="simulator-sol.html"]').getAttribute('hidden'), '');
         assert.deepEqual(errors, []);
         console.log('PASS: pinned dropdown across gap, outside click/Escape/keyboard/link navigation/mobile click; longest dialogue + resize/short screens/readable scrolling.');
     } finally { await browser.close(); }

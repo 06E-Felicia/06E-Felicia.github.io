@@ -82,8 +82,13 @@ class Advection:
         a=np.asarray(a,dtype=dtype);b=np.asarray(b,dtype=dtype)
         w=np.moveaxis(wind,axis,-1);sign=np.moveaxis(positive,axis,-1)
         left=np.empty_like(a);right=np.empty_like(a)
-        left[...,1:]=a[...,1:]-a[...,:-1];left[...,:1]=a[...,:1]-b[...,:1]
-        right[...,:-1]=a[...,1:]-a[...,:-1];right[...,-1:]=b[...,-1:]-a[...,-1:]
+        left[...,1:]=a[...,1:]-a[...,:-1]
+        # Prescribed external thermodynamics apply ONLY to inflow. Using
+        # them in an outflow cell's limiter creates a fixed edge gradient,
+        # even though the face flux itself selects the interior state.
+        left[...,:1]=a[...,:1]-np.where(w[...,:1]>0,b[...,:1],a[...,:1])
+        right[...,:-1]=a[...,1:]-a[...,:-1]
+        right[...,-1:]=np.where(w[...,-1:]<0,b[...,-1:],a[...,-1:])-a[...,-1:]
         slope=np.where(left*right>0,np.where(left>0,np.minimum(left,right),np.maximum(left,right)),0)
         flux=np.empty(np.broadcast_shapes(a.shape[:-1]+(a.shape[-1]+1,),w.shape),dtype=np.result_type(a,w))
         flux[...,1:-1]=w[...,1:-1]*np.where(sign[...,1:-1],a[...,:-1]+slope[...,:-1]*.5,a[...,1:]-slope[...,1:]*.5)

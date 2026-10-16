@@ -173,10 +173,12 @@ class PhysicsTests(unittest.TestCase):
 
     def test_detrained_anvil_water_is_conserved_and_melts_into_weak_rain(self):
         m=self.model();m.temp[8:]=260;m.q[:]=saturation(m.temp,m.p)*.99
-        m.cloud[8]=.0012;m.plume_cloud[8]=.0012;m.organization.fill(.7)
-        before=float(np.sum((m.q+m.cloud+m.rain+m.anvil)*m.mass))
+        # Environmental/detrained cloud is the weak-echo reservoir. Dense
+        # convective frozen cloud now has a separate, explicitly tested path.
+        m.cloud[8]=.0012;m.organization.fill(.7)
+        before=float(np.sum((m.q+m.cloud+m.rain+m.anvil+m.graupel)*m.mass))
         surface=m.trailing_microphysics(90)
-        after=float(np.sum((m.q+m.cloud+m.rain+m.anvil)*m.mass)+surface.sum())
+        after=float(np.sum((m.q+m.cloud+m.rain+m.anvil+m.graupel)*m.mass)+surface.sum())
         self.assertGreater(float(m.anvil.max()),0)
         self.assertLess(abs(after-before)/before,1e-12)
         echo=rain_reflectivity(m.rain,m.plume_rain,m.rain_area,m.mass/DZ[:,None,None],m.anvil)
@@ -184,10 +186,10 @@ class PhysicsTests(unittest.TestCase):
         # Warm melting layer transfers existing frozen water to liquid rain.
         m.anvil.fill(0);m.cloud.fill(0);m.plume_cloud.fill(0)
         m.temp[6]=279;m.anvil[6]=.0002
-        before=float(np.sum((m.q+m.cloud+m.rain+m.anvil)*m.mass))
+        before=float(np.sum((m.q+m.cloud+m.rain+m.anvil+m.graupel)*m.mass))
         surface=m.trailing_microphysics(90)
         self.assertGreater(float(m.rain[6].max()),0)
-        after=float(np.sum((m.q+m.cloud+m.rain+m.anvil)*m.mass)+surface.sum())
+        after=float(np.sum((m.q+m.cloud+m.rain+m.anvil+m.graupel)*m.mass)+surface.sum())
         self.assertLess(abs(after-before)/before,1e-12)
 
     def test_hourly_rain_uses_accumulated_water_not_current_rate(self):

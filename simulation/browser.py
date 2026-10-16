@@ -7,6 +7,13 @@ from .run import terrain_for, pack
 from .experiment import random_environment
 from . import numerics, thermo
 
+SOL_GRID_KM=28
+SOL_FIELDS={'temperature','dewpoint','u10','v10','rainrate','rain_total','rain_hour',
+            'gust',
+            'mucape','coldair','coldpool','coldpool_depth','organization','composite',
+            'u925','v925','u500','v500','u300','v300','terrain',
+            't3','q3','p3','u3','v3','w3','dbz3','fall3','echo_u3','echo_v3'}
+
 
 def select_backends(model):
     """Time equivalent operators on this device; retain only faster paths.
@@ -34,16 +41,25 @@ def select_backends(model):
     return {'selected':selected,'calibration':checks}
 
 
-def initialize(seed, controls):
-    global model, config
-    config=random_environment(seed,json.loads(controls))
+def initialize(seed, controls, profile='astra'):
+    global model, config, selected_profile
+    if profile not in ('astra','sol'):raise ValueError('Unknown StormSim edition')
+    selected_profile=profile
+    controls=json.loads(controls)
+    if profile=='sol':
+        # Coarsen the horizontal domain, NOT the time axis or physical source
+        # terms. Keep all 14 vertical layers, CFL and cold-pool substeps.
+        controls={'hours':controls.get('hours',72),'grid_km':SOL_GRID_KM,
+                  'frame_minutes':60,'compact_transport':False}
+    config=random_environment(seed,controls,grid_limit=SOL_GRID_KM if profile=='sol' else 12)
     height,terrain=terrain_for(config,'assets/data/simulation-terrain.npz')
-    model=Model(config,height)
+    # Sol coarsens the grid/output, not the corrected physical mechanisms.
+    model=Model(config,height,grid_limit=SOL_GRID_KM if profile=='sol' else 12)
     acceleration=select_backends(model)
     lon,lat=model.lon,model.lat
     return json.dumps({'schema':2,'engine':VERSION,'status':'running','simulation':True,
-        'source_sha256':source_digest('experiment.py'),
-        'execution':'browser','config':config,'terrain':terrain,'frames':[],'acceleration':acceleration,
+        'source_sha256':source_digest('experiment.py','browser.py'),
+        'execution':'browser','edition':profile,'product_version':'1.1','config':config,'terrain':terrain,'frames':[],'acceleration':acceleration,
         'seed_streams':dict(zip(['initial_temperature','initial_moisture','time_evolution','synoptic','convective_cells'],model.seed_ids)),
         'grid':{'nx':lon.shape[1],'ny':lon.shape[0],'west':float(lon[0,0]),'south':float(lat[0,0]),
                 'dlon':float(lon[0,1]-lon[0,0]),'dlat':float(lat[1,0]-lat[0,0]),'nominal_km':config['grid_km'],'z_agl_m':Z.tolist()}})
@@ -61,5 +77,7 @@ def advance(target):
 def snapshot():
     audit=model.audit_state()
     if abs(audit['water_relative_residual'])>.002:raise FloatingPointError('Water budget failure; simulation stopped')
+    fields=model.fields(include_mixed=selected_profile!='sol')
+    if selected_profile=='sol':fields={k:v for k,v in fields.items() if k in SOL_FIELDS}
     return json.dumps({'schema':2,'hour':model.time/3600,
-        'fields':{k:pack(v) for k,v in model.fields().items()},'audit':audit},separators=(',',':'),allow_nan=False)
+        'fields':{k:pack(v) for k,v in fields.items()},'audit':audit},separators=(',',':'),allow_nan=False)

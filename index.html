@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>深中气象</title>
-    <link rel="stylesheet" href="assets/styles/style.css?v=20261014-v1">
+    <link rel="stylesheet" href="assets/styles/style.css?v=4.1.0">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <meta name="description" content="深中气象 - 提供深圳市最新天气实况、预报和预警信息，助您做好出行和生活安排。">
     <meta name="keywords" content="深中气象, 深圳天气, 天气预报, 天气实况, 天气预警, 台风预报, 卫星云图, 气象信息">
@@ -16,16 +16,17 @@
         <section class="alert-modal update-modal" role="dialog" aria-modal="true" aria-labelledby="update-title" aria-describedby="update-introduction">
             <div class="alert-header"><h2 id="update-title">疯狂星期四重磅更新！</h2></div>
             <div class="update-main-body">
-                <div class="update-image-side"><img src="assets/images/simulator-v1-preview-user.png?v=20261015" alt="强对流模拟器V1页面截图：雷达、低空风与城市观测点" width="2880" height="1556"></div>
+                <div class="update-image-side"><img src="assets/images/simulator-v1-preview-user.png?v=20261015" alt="StormSim 模拟器截图：雷达、低空风与城市观测点" width="2880" height="1556"></div>
                 <div class="update-copy">
-                    <h3>强对流模拟器V1 上线</h3>
+                    <h3>StormSim 1.1 Astra</h3>
                     <p id="update-introduction">每次开始，生成全新的随机天气环境。观察华南飑线、冷锋与真实地形的相互作用，切换雷达、测风、MUCAPE 和降水图。</p>
                     <p>点击城市或自定义观测点查看天气变化；自由调整时间流速，过程结束后还能拖动回看。</p>
+                    <p>Astra 保留精细设置；设备算力有限时，可选择 <a href="simulator-sol.html">Sol 轻量版</a>。</p>
                     <p class="update-caveat">简化物理模拟，非实时观测或业务预报。</p>
                 </div>
             </div>
             <div class="alert-footer update-actions">
-                <a class="update-launch" href="simulator.html">✦ 体验模拟器</a>
+                <a class="update-launch" href="simulator.html">✦ 体验 StormSim Astra</a>
                 <button id="update-close" class="update-dismiss" onclick="closeUpdateAnnouncement()">关闭 · 继续查看预警</button>
             </div>
         </section>
@@ -106,7 +107,7 @@
                     </div>
                 </li>
                 <li><a href="warnings.html" class="nav-item">预警</a></li>
-                <li><a href="simulator.html" class="nav-item">强对流模拟器</a></li>
+                <li class="dropdown"><a href="#" class="nav-item">StormSim</a><div class="dropdown-menu"><a href="simulator.html">StormSim 1.1 Astra</a><a href="simulator-sol.html">StormSim 1.1 Sol · 轻量版</a></div></li>
                 <li class="dropdown">
                     <a href="#" class="nav-item">卫星云图</a>
                     <div class="dropdown-menu">

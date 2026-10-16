@@ -1,7 +1,7 @@
 /* Same Python core as Actions, isolated from the map/UI thread. */
 'use strict';
 const RUNTIME=new URL('../vendor/pyodide/',self.location.href).href;
-importScripts('simulation-advection.js?v=3.8.0');
+importScripts('simulation-advection.js?v=4.2.1');
 self.simulationAdvectionKernel=SimulationAdvection.pythonKernel;
 self.simulationMoistKernel=SimulationAdvection.moistPythonKernel;
 let active=false,acknowledge=null;
@@ -21,10 +21,12 @@ self.onmessage=async({data})=>{
     await py.runPythonAsync('from js import simulationAdvectionKernel, simulationMoistKernel\nfrom simulation.numerics import install_accelerator\nfrom simulation.thermo import install_accelerator as install_moist_accelerator\ninstall_accelerator(simulationAdvectionKernel)\ninstall_moist_accelerator(simulationMoistKernel)');
     // Fresh cryptographic seed is generated INSIDE each new worker, not on
     // page load; refreshing/replaying old results is never a new experiment.
-    const seed=crypto.getRandomValues(new Uint32Array(1))[0]%2147483646+1;
-    py.globals.set('browser_seed',seed);py.globals.set('browser_controls',JSON.stringify(data.controls));
+    // An explicit seed is accepted only when transferring Astra to Sol.
+    const profile=data.profile==='sol'?'sol':'astra';
+    const seed=profile==='sol'&&Number.isInteger(data.seed)&&data.seed>=1&&data.seed<=2147483646?data.seed:crypto.getRandomValues(new Uint32Array(1))[0]%2147483646+1;
+    py.globals.set('browser_seed',seed);py.globals.set('browser_controls',JSON.stringify(data.controls));py.globals.set('browser_profile',profile);
     send('status',{text:'正在生成新环境与地形…'});
-    const manifest=JSON.parse(await py.runPythonAsync('from simulation.browser import initialize, advance, snapshot\ninitialize(browser_seed, browser_controls)'));
+    const manifest=JSON.parse(await py.runPythonAsync('from simulation.browser import initialize, advance, snapshot\ninitialize(browser_seed, browser_controls, browser_profile)'));
     send('manifest',{manifest});
     const hours=manifest.config.hours,interval=manifest.config.frame_minutes/60;
     const targets=[];for(let hour=0;hour<hours-1e-8;hour+=interval)targets.push(hour);targets.push(hours);

@@ -12,6 +12,7 @@ The page itself is static (`index.html` + assets), while weather data is updated
 	- `auto_update/updater.py`: updates all weather blocks in one run.
 	- `auto_update/utils/util_updater.py`: reads the public data files used by `weather.sz.gov.cn` for live observations, a seven-day forecast, and active alerts.
 - Dedicated `forecast.html` and `warnings.html` pages, populated from the same update.
+- StormSim 1.1 Astra (`simulator.html`) and Sol (`simulator-sol.html`): browser-local physical simulation. Sol is open again with a coarser grid and the corrected physical mechanisms; see [edition details](simulation/STORMSIM.md). Keep the root `.nojekyll` file when uploading to GitHub Pages.
 - Unified error logging to `logs/run.log` when fetch/update actions fail.
 
 ## Project Structure
@@ -57,7 +58,7 @@ The page itself is static (`index.html` + assets), while weather data is updated
 
 入口：`simulator.html`。默认 **浏览器 Worker 本机完整计算，再自动播放**，GitHub Actions 可选批量运行同一 Python 内核。不使用 WRF、额外计算服务器或 API key。每次点击「开始模拟」重新生成种子及环境，并锁定开始按钮至本轮结束。准备阶段显示环境初始化进度与估计剩余时间，不显示未完成天气或回看控件；全部保存后自动进入第一轮演变，首轮结束才开放回看滑条，不加载旧实验工件。地图缩小极限为当前华南模拟区域。详细操作、数值方法与限制见 [模拟器说明](simulation/README.md)。
 
-- 默认 72 小时、6 km 网格，支持 4/8 km。14 层温湿与水物质输送、参数化对流、雨冷反馈和独立随机过程；初始锋区位于南岭附近，不预设风暴对象、路线、速度、轮次或抵深时间。
+- Astra 默认 72 小时、6 km 网格，支持 4/8/12 km；Sol 固定 28 km 网格、每小时保存。均保留 14 层温湿与水物质输送、参数化对流、雨冷反馈和独立随机过程；初始锋区位于南岭附近，不预设风暴对象、路线、速度、轮次或抵深时间。
 - 卫星/街道底图及真实 DEM。单图、双图、四图独立选择雷达、925/500/300 hPa 风、MUCAPE、温度和降水，共用同一模拟时刻和地图范围；不再展示其他 CAPE、CIN、冷池温差/厚度等调试指标。
 - 单站虚拟雷达默认深圳，任一观测点可设为雷达中心；支持 0.5°/1.5°/2.4° 仰角、230 km 探测半径和 ±25 m/s 速度折叠。波束高度采用有效地球半径 4/3 近似；径向速度正值远离、负值靠近；无有效回波不绘制速度。
 - 国家站元数据取自[国家气象信息中心台站表](https://image.data.cma.cn/static/doc/A/A.0012.0001/SURF_CHN_MUL_HOR_STATION.pdf)，PDF 元数据日期 2023-10-27，提取日期 2026-10-13。界面仅显示其中 32 个主要城市代表站，保留实际站号、站址；城市与站名不同时单独注明。归档文件保留原表，不是最新完整在役站名录。
@@ -68,7 +69,15 @@ The page itself is static (`index.html` + assets), while weather data is updated
 
 计算代码位于 `simulation/`，新前端为 `simulation-data.js` 和 `simulation-v2.js`。这是降阶物理模型，不是完整三维非静力数值预报；未解析超级单体旋转、完整冰相微物理和湍流。新增的脱离凝结水是简化冰相储库，不是完整云模式。网页移除了种子、CFL、账目、参数调试表与调试说明，仅保留模拟/非实况标识；完整方法和限制保留在本文档及 [内核说明](simulation/README.md)。旧 `simulator-*.js` 不再加载。
 
-本地预览请通过 HTTP 服务打开，不能直接双击 HTML；无需预先生成后台结果：
+本地预览不能直接双击 HTML（`file://` 会被浏览器阻止读取运行时和创建 Worker）。macOS 可直接双击项目根目录的 **`启动本地预览.command`**，自动检查项目文件并打开预览；保持启动的终端窗口打开。也可以在项目目录运行以下命令，无需安装 NumPy/SciPy 或预先生成模拟结果：
+
+```bash
+python3 -m simulation.preview
+```
+
+默认打开 `http://127.0.0.1:8765/simulator.html`。若端口被其他程序占用，会自动选择后续端口，以终端输出为准；重复启动复用同一项目的服务。只监听本机，不是对外部署或额外计算服务器。按 Control+C 结束服务。
+
+已有其他静态服务器也可继续使用，例如：
 
 ```bash
 python3 -m http.server 8080 --bind 127.0.0.1

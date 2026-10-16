@@ -3,7 +3,7 @@ import numpy as np
 from .core import settings
 
 
-def random_environment(seed, overrides=None):
+def random_environment(seed, overrides=None, *, grid_limit=12):
     # A separate stream from the model's initial-field/evolution streams.
     rng=np.random.default_rng(np.random.SeedSequence([int(seed),8675309]))
     month=int(rng.integers(3,6))
@@ -20,4 +20,4 @@ def random_environment(seed, overrides=None):
     for key,value in (overrides or {}).items():
         if key not in ('hours','grid_km','frame_minutes','terrain','compact_transport'):raise ValueError('Not a numerical control: '+key)
         raw[key]=value
-    return settings(raw)
+    return settings(raw,grid_limit=grid_limit)
