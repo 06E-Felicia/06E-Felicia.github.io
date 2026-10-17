@@ -1,0 +1,59 @@
+{
+  "kind": "isolated cold-pool operators; flat terrain, fixed 8 m/s background, no new cooling or weather integration",
+  "rows": [
+    {
+      "hour": 0,
+      "max_K": 0.08000000000000002,
+      "max_depth_m": 591.8770731387019,
+      "centroid_lon": 108.30000000849574,
+      "layer_mean_eastward_m_s": 7.999261893103427,
+      "new_source_Q": 0.0,
+      "cold_Q": 1311.0330711496897
+    },
+    {
+      "hour": 2,
+      "max_K": 0.047774230149353565,
+      "max_depth_m": 591.5934370880422,
+      "centroid_lon": 108.75817354895692,
+      "layer_mean_eastward_m_s": 5.595957455791132,
+      "new_source_Q": 0.0,
+      "cold_Q": 844.3530490779815
+    },
+    {
+      "hour": 4,
+      "max_K": 0.028460816242924472,
+      "max_depth_m": 603.4683464244107,
+      "centroid_lon": 109.13953029846176,
+      "layer_mean_eastward_m_s": 5.165121164175802,
+      "new_source_Q": 0.0,
+      "cold_Q": 543.7941171553284
+    },
+    {
+      "hour": 6,
+      "max_K": 0.016951233529470186,
+      "max_depth_m": 622.860318411315,
+      "centroid_lon": 109.50237682268558,
+      "layer_mean_eastward_m_s": 5.033683974595733,
+      "new_source_Q": 0.0,
+      "cold_Q": 350.22321785378216
+    },
+    {
+      "hour": 8,
+      "max_K": 0.010129406070829908,
+      "max_depth_m": 650.7391217829047,
+      "centroid_lon": 109.85771158583559,
+      "layer_mean_eastward_m_s": 4.973674811700662,
+      "new_source_Q": 0.0,
+      "cold_Q": 225.55650834454022
+    },
+    {
+      "hour": 12,
+      "max_K": 0.0036346553131506283,
+      "max_depth_m": 714.4415871151349,
+      "centroid_lon": 110.55299327136447,
+      "layer_mean_eastward_m_s": 4.8871960064209885,
+      "new_source_Q": 0.0,
+      "cold_Q": 93.5569857259941
+    }
+  ]
+}

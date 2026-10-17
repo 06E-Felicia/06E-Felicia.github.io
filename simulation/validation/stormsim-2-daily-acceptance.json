@@ -1,0 +1,102 @@
+{
+  "engine": "4.3.0-bay-trough-daily-episodes",
+  "source_sha256": "1933f621afca50212533d85eb2bf7aad16e14e55dfb73123c8b20d24ceed129a",
+  "checks": {
+    "same_final_astra_source": true,
+    "three_spring_months": true,
+    "one_configured_independent_origin_per_episode": true,
+    "primary_line_organizes_in_each_sample": true,
+    "split_is_along_one_front_not_parallel_rear_line": true,
+    "new_second_day_episode_not_first_day_wake": true,
+    "gust_envelope": true,
+    "real_heavy_rain_retained": true,
+    "water_budget": true,
+    "real_browser_uses_final_source": true,
+    "nojekyll_present": true
+  },
+  "passed": true,
+  "processes": [
+    {
+      "seed": 20260423,
+      "month": 4,
+      "hours": 72,
+      "first_initiation_h": 3.0,
+      "first_strong_echo_h": 6.0,
+      "max_mature_components": 2,
+      "max_ns_extent_km": 360,
+      "gust_peak_m_s": 29.523234242698237,
+      "point_rain5_peak_mm": 22.320138931274414,
+      "water_max_relative_residual": 7.438326514268584e-08,
+      "first_day_quiet_18_24h": true,
+      "second_day_strong_hours": [
+        28.5,
+        29.0
+      ],
+      "days_with_initiation": [
+        0,
+        1
+      ]
+    },
+    {
+      "seed": 20260426,
+      "month": 3,
+      "hours": 8,
+      "first_initiation_h": 2.5,
+      "first_strong_echo_h": 4.5,
+      "max_mature_components": 1,
+      "max_ns_extent_km": 324,
+      "gust_peak_m_s": 28.336770839826233,
+      "point_rain5_peak_mm": 16.079023361206055,
+      "water_max_relative_residual": 9.29802643360728e-10,
+      "first_day_quiet_18_24h": true,
+      "second_day_strong_hours": [],
+      "days_with_initiation": [
+        0
+      ]
+    },
+    {
+      "seed": 20260425,
+      "month": 5,
+      "hours": 12,
+      "first_initiation_h": 1.5,
+      "first_strong_echo_h": 2.5,
+      "max_mature_components": 1,
+      "max_ns_extent_km": 192,
+      "gust_peak_m_s": 30.11924004591771,
+      "point_rain5_peak_mm": 16.42348289489746,
+      "water_max_relative_residual": 2.664449537380109e-09,
+      "first_day_quiet_18_24h": true,
+      "second_day_strong_hours": [],
+      "days_with_initiation": [
+        0
+      ]
+    }
+  ],
+  "diagnostics": {
+    "strict_one_connected_strong_echo_component": false,
+    "split_hour": 10.5,
+    "split_pieces": [
+      {
+        "area_km2": 7200,
+        "ns_km": 144,
+        "ew_km": 120,
+        "south": 23.577148253068888,
+        "north": 24.76425198974768,
+        "west": 114.87113610706892,
+        "east": 115.92824971777581
+      },
+      {
+        "area_km2": 8064,
+        "ns_km": 168,
+        "ew_km": 96,
+        "south": 25.088007554296443,
+        "north": 26.490948334007744,
+        "west": 116.28062092134478,
+        "east": 117.10282039633903
+      }
+    ],
+    "front_interpolation_max_error_km": 36.0,
+    "note": "Strong fragments are not independent genesis episodes. Strict connectivity is retained as a diagnostic, not falsely called passed."
+  },
+  "scope": "Astra 12-km sampled integrations, not all seeds or default 6-km accuracy; component cutoff is 1500 km2 and >=120-km extent, not a universal squall-line definition; fragments retained in source reports"
+}

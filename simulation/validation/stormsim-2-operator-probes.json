@@ -1,0 +1,77 @@
+{
+  "engine": "4.0.0-airmass-trigger-budget",
+  "source_sha256": "d85186cfce1f62ff224bdef0be00503d75d74245b46cb375bfd65f1bb44f328d",
+  "scope": "Isolated closures plus one cropped 6 h postfrontal integration, not a full South-China run",
+  "checks": {
+    "material_front_reduces_actual_energy": true,
+    "controlled_postfront_does_not_reignite": true,
+    "cold_pool_under_half_kelvin_at_four_hours": true,
+    "retirement_does_not_restore_consumed_cape": true,
+    "moving_shafts_reduce_false_dry_holes": true,
+    "native_rain_conserved": true
+  },
+  "front": {
+    "before_raw_cape_mean": 1886.3478393086657,
+    "after_raw_cape_mean": 35.86220647013512,
+    "water_relative_residual": 0.0
+  },
+  "postfront_six_hour": {
+    "scope": "12 km, cropped flat 112-113E / 22-23N, controlled deep cold-air entry; 6 h actual steps with soil/surface fluxes retained",
+    "mucape_mean": 8.330569413927197,
+    "mucape_max": 235.16879432273615,
+    "peak_new_initiation": 0,
+    "water_residual": 6.18035961547196e-16
+  },
+  "source_free_cold_pool": [
+    {
+      "hour": 0,
+      "deficit_K": 4.0,
+      "depth_m": 600.0,
+      "remaining_cape_debt": 800.0
+    },
+    {
+      "hour": 1,
+      "deficit_K": 1.4373912221537677,
+      "depth_m": 593.5076293945312,
+      "remaining_cape_debt": 800.0
+    },
+    {
+      "hour": 2,
+      "deficit_K": 0.5281425893631295,
+      "depth_m": 428.2652282714844,
+      "remaining_cape_debt": 800.0
+    },
+    {
+      "hour": 3,
+      "deficit_K": 0.25735135183323743,
+      "depth_m": 73.53802490234375,
+      "remaining_cape_debt": 800.0
+    },
+    {
+      "hour": 4,
+      "deficit_K": 0.01654020614487243,
+      "depth_m": 2.812622547149658,
+      "remaining_cape_debt": 800.0
+    }
+  ],
+  "rain_footprint_probe": {
+    "stationary": {
+      "fraction_below_half_mm": 0.2119140625,
+      "point_total_percentiles_mm": [
+        0.1112067699432373,
+        3.7705456018447876,
+        33.06899299621582
+      ],
+      "max_native_water_error_mm": 3.871384251397103e-06
+    },
+    "advected": {
+      "fraction_below_half_mm": 0.0693359375,
+      "point_total_percentiles_mm": [
+        0.7565578043460847,
+        4.797545433044434,
+        26.499549674987797
+      ],
+      "max_native_water_error_mm": 4.027064278488979e-06
+    }
+  }
+}

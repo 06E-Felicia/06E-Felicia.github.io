@@ -1,0 +1,30 @@
+{
+  "engine": "4.5.1-coastal-front-delay",
+  "source_sha256": "dac748137bf93eeb5d1d28cbb841116e9a07169d5da5fc48e23c6e47c1e0938f",
+  "edition": "astra",
+  "runtime": "native Python, full Model.step integration with real terrain",
+  "seed": 20260423,
+  "grid_km": 12,
+  "hours": 64,
+  "elapsed_s": 895.4038313749479,
+  "arrival_method": "First bilinearly sampled prognostic air tracer >= 0.5, checked every 15 simulated minutes. Points are coastal city checks, not national station coordinates. Simulation starts day 1 at 08:00.",
+  "coastal_points": {
+    "北海": {"lon": 109.12, "lat": 21.48, "material_arrival_elapsed_h": 53.75, "clock": "day 3 13:45", "pressure_arrival_elapsed_h": 52.75},
+    "阳江": {"lon": 111.98, "lat": 21.86, "material_arrival_elapsed_h": 53.25, "clock": "day 3 13:15", "pressure_arrival_elapsed_h": 52.25},
+    "珠海": {"lon": 113.58, "lat": 22.27, "material_arrival_elapsed_h": 54.5, "clock": "day 3 14:30", "pressure_arrival_elapsed_h": 53.5},
+    "深圳": {"lon": 114.0, "lat": 22.54, "material_arrival_elapsed_h": 54.5, "clock": "day 3 14:30", "pressure_arrival_elapsed_h": 53.25},
+    "汕头": {"lon": 116.68, "lat": 23.35, "material_arrival_elapsed_h": 55.5, "clock": "day 3 15:30", "pressure_arrival_elapsed_h": 54.25}
+  },
+  "final_audit": {
+    "steps": 3893,
+    "hours": 64.0,
+    "max_cfl": 0.45000000000000007,
+    "water_relative_residual": -1.278667695217641e-7,
+    "point_rain5_peak_mm": 21.30746078491211,
+    "point_hour_peak_mm": 45.1914176940918,
+    "point_total_max_mm": 80.84351348876953,
+    "gust_peak_m_s": 32.0,
+    "coldpool_relative_residual": -5.463382254783078e-15
+  },
+  "scope": "One seed, 12 km native Astra integration; not a default 6 km benchmark, browser timing benchmark or guarantee of coastal arrival time for all seeds."
+}

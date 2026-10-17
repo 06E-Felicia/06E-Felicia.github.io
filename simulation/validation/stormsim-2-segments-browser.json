@@ -1,0 +1,206 @@
+{
+  "edition": "astra",
+  "state": "complete",
+  "error": null,
+  "manifest": {
+    "schema": 2,
+    "engine": "4.1.0-density-current-inflow",
+    "status": "complete",
+    "simulation": true,
+    "source_sha256": "a5d0bb7b210f3e28c56676f464396d631e6e82af2312231447c9d6e68eaf43da",
+    "execution": "browser",
+    "edition": "astra",
+    "product_version": "2",
+    "config": {
+      "seed": 20260421,
+      "hours": 3,
+      "grid_km": 12,
+      "frame_minutes": 30,
+      "month": 4,
+      "moisture": 1.058,
+      "jet": 0.745,
+      "shear": 1.052,
+      "trough": 0.89,
+      "cold_reservoir": 0.879,
+      "sst_c": 23.61,
+      "stochastic": 0.779,
+      "terrain": true,
+      "compact_transport": false,
+      "bounds": [
+        104.3,
+        19.8,
+        118,
+        26.7
+      ]
+    },
+    "terrain": {
+      "source": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+      "native_zoom": 7,
+      "source_grid_km": 4,
+      "coastal_detail": {
+        "source": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+        "zoom": 10,
+        "grid_km": 0.25,
+        "bounds": [
+          112.9,
+          21.95,
+          114.7,
+          22.95
+        ],
+        "sha256": "425fa7da27c4ba8f2f467876e94fba746a190593ab6162da77aa58d218396ba4",
+        "aggregation": "cell mean, height standard deviation, maximum and >50m fraction; peaks are not full-cell walls"
+      }
+    },
+    "frames": [],
+    "acceleration": {
+      "selected": {
+        "transport": "numpy",
+        "moist_rk4": "numpy"
+      },
+      "calibration": {
+        "transport": {
+          "numpy_s": 0.020400000000000418,
+          "fused_s": 0.018500000000000405
+        },
+        "moist_rk4": {
+          "numpy_s": 0.09830000000000005,
+          "fused_s": 0.15270000000000028
+        }
+      }
+    },
+    "rain_grid": {
+      "nx": 468,
+      "ny": 256,
+      "west": 104.25595359955388,
+      "south": 19.759530554431407,
+      "dlon": 0.029364266964080343,
+      "dlat": 0.02697963037906348,
+      "z_agl_m": [],
+      "method": "conservative advected rain-shaft quadrature; bilinear gauge sampling; not resolved grid"
+    },
+    "seed_streams": {
+      "initial_temperature": 2280475044,
+      "initial_moisture": 2198033564,
+      "time_evolution": 1878620655,
+      "synoptic": 1390775955,
+      "convective_cells": 3558454021
+    },
+    "grid": {
+      "nx": 117,
+      "ny": 64,
+      "west": 104.3,
+      "south": 19.8,
+      "dlon": 0.11745706785632137,
+      "dlat": 0.10791852151625392,
+      "nominal_km": 12,
+      "z_agl_m": [
+        30,
+        150,
+        350,
+        650,
+        1000,
+        1500,
+        2200,
+        3200,
+        4500,
+        6000,
+        8000,
+        10500,
+        13500,
+        16500
+      ]
+    },
+    "elapsed_seconds": 96.44860000002384,
+    "timing": {
+      "integrationMs": 91726.70000004768,
+      "snapshotMs": 4015.6999999284744,
+      "storageMs": 704.1999999880791
+    }
+  },
+  "frames": 7,
+  "fields": [
+    "temperature",
+    "dewpoint",
+    "u10",
+    "v10",
+    "pressure",
+    "rainrate",
+    "rainrate_core",
+    "gust",
+    "rain_total",
+    "rain_hour",
+    "sbcape",
+    "mucape",
+    "mucape_raw",
+    "cape_deficit",
+    "mlcape",
+    "cin",
+    "coldpool",
+    "coldpool_depth",
+    "coldair",
+    "updraft",
+    "organization",
+    "composite",
+    "u925",
+    "v925",
+    "u500",
+    "v500",
+    "u300",
+    "v300",
+    "terrain",
+    "t3",
+    "q3",
+    "u3",
+    "v3",
+    "dbz3",
+    "fall3",
+    "echo_u3",
+    "echo_v3",
+    "w3",
+    "p3",
+    "point_rainrate",
+    "point_rain_total",
+    "point_rain_hour",
+    "point_rain5"
+  ],
+  "audit": {
+    "steps": 144,
+    "hours": 3,
+    "max_cfl": 0.45000000000000007,
+    "water_relative_residual": 4.2828714645616e-10,
+    "frontal_airmass_exchange_water": -188.14052699387037,
+    "plume_condensate_supplied": 1673.4673280071513,
+    "plume_condensate_requested": 1673.4673280071513,
+    "rainwater_evaporated": 323.10952860189025,
+    "cold_head_form_drag_dissipation": 4361.496896495259,
+    "positivity_correction": 1.3671890972548978e-15,
+    "temperature_range_K": [
+      204.31295776367188,
+      301.59661865234375
+    ],
+    "max_rain_mm_h": 37.86571354842769,
+    "core_rain_max_mm_h": 644.2025394162953,
+    "hourly_rain_max_mm": 4.4702887535095215,
+    "total_rain_max_mm": 8.42353343963623,
+    "point_rain5_peak_mm": 11.869664192199707,
+    "point_hour_peak_mm": 13.649170875549316,
+    "point_total_max_mm": 13.649170875549316,
+    "gust_max_m_s": 22.651228229818017,
+    "gust_peak_m_s": 24.813731486057,
+    "meanwind_peak_m_s": 12.142030114487296,
+    "convective_anvil_mass": 153.1691105159904,
+    "environmental_anvil_mass": 46.085564978569415,
+    "convective_anvil_source": 381.0053379464197,
+    "environmental_anvil_source": 87.74399823256203,
+    "max_cape_J_kg": 7363.655669784272,
+    "max_raw_cape_J_kg": 7612.5612378126425,
+    "active_fraction": 0.007211538461538462,
+    "cape_deficit_max_J_kg": 2926.4733036668385,
+    "cape_consumed_sum": 162715.43167385235,
+    "cape_recovered_sum": 80850.3611309421,
+    "coldpool_depth_max_m": 656.2433864226097,
+    "coldpool_max_cfl": 0.20568516115706534,
+    "coldpool_relative_residual": 0
+  },
+  "wall_seconds": 105.458
+}

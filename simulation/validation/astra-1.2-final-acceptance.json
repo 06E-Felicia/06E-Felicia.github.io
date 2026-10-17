@@ -1,0 +1,85 @@
+{
+  "engine": "3.14.0-ice-number-budget",
+  "source_sha256": "c0d7684c68c1545c483a65eb12a43595bf57453f5350e43c9f5b50adc09c7489",
+  "all_passed": true,
+  "checks": {
+    "final_source_matches_all_astra_evidence": true,
+    "astra_only_process_validation": true,
+    "complete_72_hours": true,
+    "external_start_then_actual_cold_air_exits_south": true,
+    "both_provinces_move_and_accelerate": true,
+    "wind_925_both_components_evolve": true,
+    "wind_500_both_components_evolve": true,
+    "wind_300_both_components_evolve": true,
+    "no_domain_height_squall_line_in_sample": true,
+    "organized_band_tracks_more_than_single_cell_life": true,
+    "all_32_actual_public_stations_sampled": true,
+    "actual_station_heavy_passage_not_just_regional_peak": true,
+    "strong_cores_have_five_minute_bursts_and_20_to_40_mm_typical_windows": true,
+    "paired_gust_exceeds_sustained_at_heavy_station": true,
+    "ordinary_sample_gusts_not_40_to_50_m_s": true,
+    "cloud_decay_uses_native_number_not_inferred_checkpoint": true,
+    "detached_old_cloud_family_clears_without_age_mask": true,
+    "moving_front_can_really_trigger_convection": true,
+    "water_budget": true
+  },
+  "details": {
+    "front_movement": {
+      "guangxi": {
+        "early_deg": 0.9089999999999989,
+        "later_deg": 2.125,
+        "acceleration_ratio": 2.3377337733773405
+      },
+      "guangdong": {
+        "early_deg": 0.953000000000003,
+        "later_deg": 1.689,
+        "acceleration_ratio": 1.7722980062959022
+      }
+    },
+    "wind_925_component_ranges_m_s": [
+      6.588671803474426,
+      15.195656776428223
+    ],
+    "wind_500_component_ranges_m_s": [
+      0.5493927001953125,
+      7.787487745285034
+    ],
+    "wind_300_component_ranges_m_s": [
+      2.946147918701172,
+      7.6989970207214355
+    ],
+    "max_ns_extent_km": 276.0,
+    "longest_band_track_hours": 4.0,
+    "heavy_station_passages": {
+      "中山": {
+        "total_mm": 23.62482452392578,
+        "peak5_mm": 8.956853866577148,
+        "peak_gust_m_s": 17.36606507694819,
+        "peak_gust_increment_m_s": 8.461493782202396,
+        "rain_events_mm": [
+          23.502260863780975
+        ]
+      }
+    },
+    "regional_five_minute_peak_and_core_window_quantiles": [
+      20.454914093017578,
+      [
+        13.874312114715577,
+        30.674270629882812,
+        50.46860122680665,
+        92.64005279541016
+      ]
+    ],
+    "sample_gust_peaks_m_s": [
+      24.676722488300076,
+      26.068851591553198
+    ],
+    "remaining_old_cloud_family_fraction_4h_8h": [
+      0.002131325930438336,
+      1.2587629330233186e-05
+    ],
+    "controlled_front_convective_cells_peak": 15,
+    "max_water_relative_residual": 1.7137226340901348e-07
+  },
+  "scope": "Controlled/unit regressions are separate; these are Astra 12 km representative process gates, not 6 km or all-seed forecast accuracy"
+}

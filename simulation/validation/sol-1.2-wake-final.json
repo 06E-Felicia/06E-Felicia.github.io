@@ -1,0 +1,1403 @@
+{
+  "engine": "3.11.0-friction-wake",
+  "source_sha256": "722489d489ec837fcc067e65c5d360dc79041d72b49a491a3543e1f190ca8748",
+  "seed": 20260423,
+  "grid_km": 28,
+  "threshold": {
+    "active_deficit_K": 0.5,
+    "active_depth_m": 100,
+    "neutral_deficit_K": 0.1
+  },
+  "checkpoint_hour": 8,
+  "history": [
+    {
+      "hour": 0.0,
+      "cold_Q": 0.0,
+      "source_Q": 0.0,
+      "max_deficit_K": 0.0,
+      "max_depth_m": 0.0,
+      "active_cells": 0,
+      "neutral_deep_cells": 0,
+      "neutral_depth_max_m": 0.0,
+      "pools": []
+    },
+    {
+      "hour": 1.0,
+      "cold_Q": 17918.975224003054,
+      "source_Q": 25399.050854999423,
+      "max_deficit_K": 2.937171102477462,
+      "max_depth_m": 504.23910963562383,
+      "active_cells": 39,
+      "neutral_deep_cells": 0,
+      "neutral_depth_max_m": 0.0,
+      "pools": [
+        {
+          "cells": 38,
+          "lon": 105.43232734714121,
+          "lat": 23.656667163659876,
+          "mean_deficit_K": 1.6978051434712853,
+          "max_deficit_K": 2.7923047453358114,
+          "mean_depth_m": 206.97526819395884,
+          "rain_mean_mm_h": 3.154222681782221,
+          "buoyancy_content": 13399.754160579465
+        }
+      ]
+    },
+    {
+      "hour": 2.0,
+      "cold_Q": 136931.48369076446,
+      "source_Q": 184279.13281282486,
+      "max_deficit_K": 6.9516776230107915,
+      "max_depth_m": 1371.4877368192808,
+      "active_cells": 149,
+      "neutral_deep_cells": 0,
+      "neutral_depth_max_m": 0.0,
+      "pools": [
+        {
+          "cells": 131,
+          "lon": 106.10549146798995,
+          "lat": 23.25613870687939,
+          "mean_deficit_K": 2.7139982289657474,
+          "max_deficit_K": 6.9516776230107915,
+          "mean_depth_m": 381.81763439935463,
+          "rain_mean_mm_h": 2.679369020299045,
+          "buoyancy_content": 125709.33798663199
+        },
+        {
+          "cells": 18,
+          "lon": 105.99007669859931,
+          "lat": 20.513461336690806,
+          "mean_deficit_K": 1.3289903926671098,
+          "max_deficit_K": 1.9745025193659584,
+          "mean_depth_m": 141.48283954932614,
+          "rain_mean_mm_h": 0.7329299520476886,
+          "buoyancy_content": 3347.7296555512376
+        }
+      ]
+    },
+    {
+      "hour": 3.0,
+      "cold_Q": 472996.6008916184,
+      "source_Q": 638907.2817645209,
+      "max_deficit_K": 7.037370221128021,
+      "max_depth_m": 1502.6117419135876,
+      "active_cells": 280,
+      "neutral_deep_cells": 0,
+      "neutral_depth_max_m": 0.0,
+      "pools": [
+        {
+          "cells": 278,
+          "lon": 106.92039113253567,
+          "lat": 22.893276087345445,
+          "mean_deficit_K": 3.0119044650777713,
+          "max_deficit_K": 6.813708223164885,
+          "mean_depth_m": 527.8926514020698,
+          "rain_mean_mm_h": 1.8891471681193244,
+          "buoyancy_content": 463756.47239364084
+        }
+      ]
+    },
+    {
+      "hour": 4.0,
+      "cold_Q": 748992.8848362125,
+      "source_Q": 1145091.2264928794,
+      "max_deficit_K": 7.58931227721495,
+      "max_depth_m": 1598.9800760125504,
+      "active_cells": 379,
+      "neutral_deep_cells": 0,
+      "neutral_depth_max_m": 0.0,
+      "pools": [
+        {
+          "cells": 378,
+          "lon": 107.84111308277953,
+          "lat": 22.988259530721,
+          "mean_deficit_K": 3.1159930887882745,
+          "max_deficit_K": 7.58931227721495,
+          "mean_depth_m": 638.6917226743215,
+          "rain_mean_mm_h": 1.3033026341614344,
+          "buoyancy_content": 738972.5247800923
+        }
+      ]
+    },
+    {
+      "hour": 5.0,
+      "cold_Q": 977007.6186679556,
+      "source_Q": 1703744.468820583,
+      "max_deficit_K": 7.463701602854867,
+      "max_depth_m": 1534.8027372119614,
+      "active_cells": 507,
+      "neutral_deep_cells": 0,
+      "neutral_depth_max_m": 0.0,
+      "pools": [
+        {
+          "cells": 505,
+          "lon": 108.80880081732828,
+          "lat": 22.955850995864484,
+          "mean_deficit_K": 2.96201604616432,
+          "max_deficit_K": 7.463701602854867,
+          "mean_depth_m": 668.5177248016485,
+          "rain_mean_mm_h": 0.9650044769765483,
+          "buoyancy_content": 966659.4200267617
+        }
+      ]
+    },
+    {
+      "hour": 6.0,
+      "cold_Q": 1065158.1757148914,
+      "source_Q": 2188065.2475244887,
+      "max_deficit_K": 7.384051602782344,
+      "max_depth_m": 1572.6695660247794,
+      "active_cells": 590,
+      "neutral_deep_cells": 0,
+      "neutral_depth_max_m": 0.0,
+      "pools": [
+        {
+          "cells": 590,
+          "lon": 109.55371528937012,
+          "lat": 23.036823994494355,
+          "mean_deficit_K": 2.604117667339468,
+          "max_deficit_K": 7.384051602782344,
+          "mean_depth_m": 699.5055562415582,
+          "rain_mean_mm_h": 0.7547472568363998,
+          "buoyancy_content": 1053183.8930236453
+        }
+      ]
+    },
+    {
+      "hour": 7.0,
+      "cold_Q": 1112160.8189745108,
+      "source_Q": 2656703.857322659,
+      "max_deficit_K": 7.420692321288374,
+      "max_depth_m": 1757.0941895991596,
+      "active_cells": 664,
+      "neutral_deep_cells": 0,
+      "neutral_depth_max_m": 0.0,
+      "pools": [
+        {
+          "cells": 641,
+          "lon": 110.38718352859769,
+          "lat": 23.14502520799607,
+          "mean_deficit_K": 2.3721442432112454,
+          "max_deficit_K": 7.420692321288374,
+          "mean_depth_m": 724.2498489194084,
+          "rain_mean_mm_h": 0.6917555909385289,
+          "buoyancy_content": 1081882.002232723
+        },
+        {
+          "cells": 22,
+          "lon": 105.48346894127963,
+          "lat": 21.265075686038873,
+          "mean_deficit_K": 2.7367233092724423,
+          "max_deficit_K": 5.494682545585919,
+          "mean_depth_m": 276.0167530268364,
+          "rain_mean_mm_h": 1.7161594299652387,
+          "buoyancy_content": 13947.426273717128
+        }
+      ]
+    },
+    {
+      "hour": 8.0,
+      "cold_Q": 1129381.843665139,
+      "source_Q": 3099994.5860210764,
+      "max_deficit_K": 7.196871460715659,
+      "max_depth_m": 1801.6859999010353,
+      "active_cells": 749,
+      "neutral_deep_cells": 0,
+      "neutral_depth_max_m": 0.0,
+      "pools": [
+        {
+          "cells": 748,
+          "lon": 110.6965946677584,
+          "lat": 23.08295452441431,
+          "mean_deficit_K": 2.138052919504519,
+          "max_deficit_K": 7.196871460715659,
+          "mean_depth_m": 696.3176092454548,
+          "rain_mean_mm_h": 0.45092521566835786,
+          "buoyancy_content": 1114035.0024737841
+        }
+      ]
+    }
+  ],
+  "branches": {
+    "normal": [
+      {
+        "hour": 8.0,
+        "cold_Q": 1129381.843665139,
+        "source_Q": 3099994.5860210764,
+        "max_deficit_K": 7.196871460715659,
+        "max_depth_m": 1801.6859999010353,
+        "active_cells": 749,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 748,
+            "lon": 110.6965946677584,
+            "lat": 23.08295452441431,
+            "mean_deficit_K": 2.138052919504519,
+            "max_deficit_K": 7.196871460715659,
+            "mean_depth_m": 696.3176092454548,
+            "rain_mean_mm_h": 0.45092521566835786,
+            "buoyancy_content": 1114035.0024737841
+          }
+        ]
+      },
+      {
+        "hour": 9.0,
+        "cold_Q": 980539.3907472225,
+        "source_Q": 3351713.743849993,
+        "max_deficit_K": 5.835417749744043,
+        "max_depth_m": 1801.1667208611768,
+        "active_cells": 796,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 789,
+            "lon": 110.92518402474253,
+            "lat": 23.101613745500504,
+            "mean_deficit_K": 1.7860984700964695,
+            "max_deficit_K": 5.835417749744043,
+            "mean_depth_m": 676.3551847949843,
+            "rain_mean_mm_h": 0.2594997388520143,
+            "buoyancy_content": 966905.5463635537
+          }
+        ],
+        "new_source_Q": 251719.1578289168
+      },
+      {
+        "hour": 10.0,
+        "cold_Q": 824068.6769540997,
+        "source_Q": 3519748.581452126,
+        "max_deficit_K": 4.377648687477944,
+        "max_depth_m": 1801.028581649303,
+        "active_cells": 844,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 835,
+            "lon": 111.0082286905919,
+            "lat": 23.14530184201948,
+            "mean_deficit_K": 1.5196126885472578,
+            "max_deficit_K": 4.377648687477944,
+            "mean_depth_m": 627.2427685158921,
+            "rain_mean_mm_h": 0.2090309424130341,
+            "buoyancy_content": 810334.3138017629
+          }
+        ],
+        "new_source_Q": 419753.9954310497
+      },
+      {
+        "hour": 11.0,
+        "cold_Q": 709984.6591199902,
+        "source_Q": 3670784.4859290463,
+        "max_deficit_K": 3.4572970874919493,
+        "max_depth_m": 1800.8331466423729,
+        "active_cells": 851,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 847,
+            "lon": 111.04844244410876,
+            "lat": 23.191257782192658,
+            "mean_deficit_K": 1.3474714899853968,
+            "max_deficit_K": 3.4572970874919493,
+            "mean_depth_m": 597.162447194442,
+            "rain_mean_mm_h": 0.26059551405345527,
+            "buoyancy_content": 694391.8242105439
+          },
+          {
+            "cells": 3,
+            "lon": 104.75677748610792,
+            "lat": 25.927373832756313,
+            "mean_deficit_K": 0.8368569054777758,
+            "max_deficit_K": 0.8653437934557959,
+            "mean_depth_m": 115.94274348239509,
+            "rain_mean_mm_h": 1.2071801308134928,
+            "buoyancy_content": 292.09119272681664
+          }
+        ],
+        "new_source_Q": 570789.8999079699
+      },
+      {
+        "hour": 12.0,
+        "cold_Q": 629138.9780955488,
+        "source_Q": 3832812.8445180394,
+        "max_deficit_K": 3.5832183427239457,
+        "max_depth_m": 1801.5533162911192,
+        "active_cells": 841,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 756,
+            "lon": 111.57835046713396,
+            "lat": 23.481553760244374,
+            "mean_deficit_K": 1.2617626030117493,
+            "max_deficit_K": 3.5832183427239457,
+            "mean_depth_m": 619.4618783692451,
+            "rain_mean_mm_h": 0.29350840453060634,
+            "buoyancy_content": 591585.7317110845
+          },
+          {
+            "cells": 81,
+            "lon": 107.05419906438406,
+            "lat": 21.087028293638316,
+            "mean_deficit_K": 1.117615628968817,
+            "max_deficit_K": 2.487540474697161,
+            "mean_depth_m": 230.65613670819957,
+            "rain_mean_mm_h": 0.04772089153973265,
+            "buoyancy_content": 21570.53789340987
+          }
+        ],
+        "new_source_Q": 732818.258496963
+      },
+      {
+        "hour": 13.0,
+        "cold_Q": 567110.4176199178,
+        "source_Q": 4000523.4363917937,
+        "max_deficit_K": 3.758736732786708,
+        "max_depth_m": 1801.3543836554059,
+        "active_cells": 802,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 735,
+            "lon": 111.64274469913244,
+            "lat": 23.530554859652423,
+            "mean_deficit_K": 1.204348392692854,
+            "max_deficit_K": 3.758736732786708,
+            "mean_depth_m": 609.9440399303359,
+            "rain_mean_mm_h": 0.3228130647058534,
+            "buoyancy_content": 535123.1481204657
+          },
+          {
+            "cells": 62,
+            "lon": 106.96109722551907,
+            "lat": 21.205261608131035,
+            "mean_deficit_K": 1.0021199613638017,
+            "max_deficit_K": 2.454485665111617,
+            "mean_depth_m": 212.1267420198783,
+            "rain_mean_mm_h": 0.0603982441809409,
+            "buoyancy_content": 14492.580380833286
+          }
+        ],
+        "new_source_Q": 900528.8503707172
+      },
+      {
+        "hour": 14.0,
+        "cold_Q": 538729.179579924,
+        "source_Q": 4193142.5611083875,
+        "max_deficit_K": 4.08957052748859,
+        "max_depth_m": 1801.8744702759973,
+        "active_cells": 721,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 712,
+            "lon": 111.55005950913717,
+            "lat": 23.567245617199497,
+            "mean_deficit_K": 1.20538861802357,
+            "max_deficit_K": 4.08957052748859,
+            "mean_depth_m": 611.8200864717636,
+            "rain_mean_mm_h": 0.4307317074511024,
+            "buoyancy_content": 517954.16240119847
+          }
+        ],
+        "new_source_Q": 1093147.9750873111
+      },
+      {
+        "hour": 15.0,
+        "cold_Q": 536034.2330111414,
+        "source_Q": 4412102.860691624,
+        "max_deficit_K": 5.51558240574704,
+        "max_depth_m": 1801.5311851339825,
+        "active_cells": 696,
+        "neutral_deep_cells": 1,
+        "neutral_depth_max_m": 252.92587442797728,
+        "pools": [
+          {
+            "cells": 687,
+            "lon": 111.71575256703947,
+            "lat": 23.5492915556179,
+            "mean_deficit_K": 1.2379474226555334,
+            "max_deficit_K": 5.51558240574704,
+            "mean_depth_m": 610.9285846175695,
+            "rain_mean_mm_h": 0.3981870283076667,
+            "buoyancy_content": 514577.74558169546
+          }
+        ],
+        "new_source_Q": 1312108.2746705473
+      },
+      {
+        "hour": 16.0,
+        "cold_Q": 502389.9239014622,
+        "source_Q": 4598711.15804277,
+        "max_deficit_K": 4.696021127088456,
+        "max_depth_m": 1801.7088738449233,
+        "active_cells": 662,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 655,
+            "lon": 111.83620088759373,
+            "lat": 23.522557408088222,
+            "mean_deficit_K": 1.209578629493738,
+            "max_deficit_K": 4.696021127088456,
+            "mean_depth_m": 610.9506368357067,
+            "rain_mean_mm_h": 0.38501907218745485,
+            "buoyancy_content": 480603.6191442502
+          }
+        ],
+        "new_source_Q": 1498716.5720216935
+      },
+      {
+        "hour": 17.0,
+        "cold_Q": 441941.0328153205,
+        "source_Q": 4754779.459006702,
+        "max_deficit_K": 3.5457001741069076,
+        "max_depth_m": 1801.3534372735803,
+        "active_cells": 620,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 611,
+            "lon": 111.83167014982469,
+            "lat": 23.534699123765513,
+            "mean_deficit_K": 1.1361591792106165,
+            "max_deficit_K": 3.5457001741069076,
+            "mean_depth_m": 601.5727115093999,
+            "rain_mean_mm_h": 0.3184734676427269,
+            "buoyancy_content": 418424.9801473927
+          }
+        ],
+        "new_source_Q": 1654784.8729856252
+      },
+      {
+        "hour": 18.0,
+        "cold_Q": 363282.28945650277,
+        "source_Q": 4879272.03316405,
+        "max_deficit_K": 2.7217056915949853,
+        "max_depth_m": 1800.7359094387125,
+        "active_cells": 601,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 587,
+            "lon": 111.77029619529145,
+            "lat": 23.532105599284492,
+            "mean_deficit_K": 1.0379834648461346,
+            "max_deficit_K": 2.634573012965197,
+            "mean_depth_m": 560.6445449869481,
+            "rain_mean_mm_h": 0.24092857308319734,
+            "buoyancy_content": 339976.05098858394
+          },
+          {
+            "cells": 3,
+            "lon": 110.14675182218143,
+            "lat": 22.48597209107126,
+            "mean_deficit_K": 1.2444281585039676,
+            "max_deficit_K": 1.4541863298731337,
+            "mean_depth_m": 142.23100309986714,
+            "rain_mean_mm_h": 0.06490168913704357,
+            "buoyancy_content": 519.8765200023939
+          }
+        ],
+        "new_source_Q": 1779277.447142974
+      },
+      {
+        "hour": 19.0,
+        "cold_Q": 281314.61497068976,
+        "source_Q": 4975814.1422114605,
+        "max_deficit_K": 2.5990222716787295,
+        "max_depth_m": 1800.423404611212,
+        "active_cells": 558,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 291,
+            "lon": 115.4246508575398,
+            "lat": 23.32966499983237,
+            "mean_deficit_K": 0.8803840588867912,
+            "max_deficit_K": 1.851415575407913,
+            "mean_depth_m": 674.1478989123658,
+            "rain_mean_mm_h": 0.10704517629655681,
+            "buoyancy_content": 170330.80401704772
+          },
+          {
+            "cells": 247,
+            "lon": 106.98962419350349,
+            "lat": 23.806529725927398,
+            "mean_deficit_K": 1.074962101461492,
+            "max_deficit_K": 2.5990222716787295,
+            "mean_depth_m": 313.75007026489794,
+            "rain_mean_mm_h": 0.34416078949658413,
+            "buoyancy_content": 84201.13171314093
+          },
+          {
+            "cells": 4,
+            "lon": 107.04066491664753,
+            "lat": 21.68857412653448,
+            "mean_deficit_K": 1.1654421918014852,
+            "max_deficit_K": 1.3849496296170716,
+            "mean_depth_m": 139.76956771887572,
+            "rain_mean_mm_h": 0.08124732494117524,
+            "buoyancy_content": 642.1049845602256
+          },
+          {
+            "cells": 3,
+            "lon": 108.13693088330656,
+            "lat": 21.562669184765515,
+            "mean_deficit_K": 1.229996918770556,
+            "max_deficit_K": 1.348365301631413,
+            "mean_depth_m": 132.7276676456936,
+            "rain_mean_mm_h": 0.16102374949574425,
+            "buoyancy_content": 485.1027483439891
+          }
+        ],
+        "new_source_Q": 1875819.556190384
+      },
+      {
+        "hour": 20.0,
+        "cold_Q": 220720.36590165552,
+        "source_Q": 5068624.626517833,
+        "max_deficit_K": 2.585720675437062,
+        "max_depth_m": 1800.46605528521,
+        "active_cells": 518,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 250,
+            "lon": 107.00010307588116,
+            "lat": 23.81989298079953,
+            "mean_deficit_K": 1.0618435008995066,
+            "max_deficit_K": 2.585720675437062,
+            "mean_depth_m": 309.66641385349084,
+            "rain_mean_mm_h": 0.3640771593210523,
+            "buoyancy_content": 83524.26343044575
+          },
+          {
+            "cells": 241,
+            "lon": 115.44006370268853,
+            "lat": 23.465348844195276,
+            "mean_deficit_K": 0.8015308600070378,
+            "max_deficit_K": 1.7171871207715537,
+            "mean_depth_m": 591.7891393129291,
+            "rain_mean_mm_h": 0.11015230177670891,
+            "buoyancy_content": 107848.55786931865
+          },
+          {
+            "cells": 5,
+            "lon": 110.87759579995411,
+            "lat": 24.58438778722068,
+            "mean_deficit_K": 0.6707439665913447,
+            "max_deficit_K": 0.7544516970650016,
+            "mean_depth_m": 168.63951023528028,
+            "rain_mean_mm_h": 0.21226444222870358,
+            "buoyancy_content": 562.4559750820198
+          },
+          {
+            "cells": 4,
+            "lon": 107.04066491664753,
+            "lat": 21.68857412653448,
+            "mean_deficit_K": 1.1721563207136227,
+            "max_deficit_K": 1.3930668614921804,
+            "mean_depth_m": 148.46753057176153,
+            "rain_mean_mm_h": 0.07881459073633575,
+            "buoyancy_content": 684.27908569717
+          },
+          {
+            "cells": 4,
+            "lon": 108.27396412913895,
+            "lat": 21.562669184765515,
+            "mean_deficit_K": 1.2704225174232548,
+            "max_deficit_K": 1.551956002260305,
+            "mean_depth_m": 146.60172353215694,
+            "rain_mean_mm_h": 0.16439079364969036,
+            "buoyancy_content": 723.9823457036883
+          },
+          {
+            "cells": 3,
+            "lon": 116.45028113047078,
+            "lat": 20.471493022767817,
+            "mean_deficit_K": 1.1430670759827974,
+            "max_deficit_K": 1.4389038056828354,
+            "mean_depth_m": 104.08790416934708,
+            "rain_mean_mm_h": 0.016270483232865725,
+            "buoyancy_content": 356.55012060449883
+          }
+        ],
+        "new_source_Q": 1968630.0404967568
+      },
+      {
+        "hour": 21.0,
+        "cold_Q": 180176.0594288141,
+        "source_Q": 5161203.2380798785,
+        "max_deficit_K": 2.5780886283125275,
+        "max_depth_m": 1759.5013435041951,
+        "active_cells": 482,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 254,
+            "lon": 106.9996628430914,
+            "lat": 23.848785686491773,
+            "mean_deficit_K": 1.04570025699965,
+            "max_deficit_K": 2.5780886283125275,
+            "mean_depth_m": 306.5932967610189,
+            "rain_mean_mm_h": 0.36648212346442166,
+            "buoyancy_content": 83090.52371794902
+          },
+          {
+            "cells": 186,
+            "lon": 115.56030177044116,
+            "lat": 23.3266921861092,
+            "mean_deficit_K": 0.7974127354050502,
+            "max_deficit_K": 1.603436326317235,
+            "mean_depth_m": 476.0067475281194,
+            "rain_mean_mm_h": 0.10315505890884344,
+            "buoyancy_content": 62461.655487105454
+          },
+          {
+            "cells": 9,
+            "lon": 112.73515757679301,
+            "lat": 24.976092050501908,
+            "mean_deficit_K": 0.5826219261515226,
+            "max_deficit_K": 0.6583773854966707,
+            "mean_depth_m": 216.3987873439456,
+            "rain_mean_mm_h": 0.4535145857537198,
+            "buoyancy_content": 1115.829732966589
+          },
+          {
+            "cells": 7,
+            "lon": 108.37184501901922,
+            "lat": 21.634614865776353,
+            "mean_deficit_K": 1.2032347965680696,
+            "max_deficit_K": 1.7049986011239693,
+            "mean_depth_m": 143.70818652949905,
+            "rain_mean_mm_h": 0.12651133024305278,
+            "buoyancy_content": 1202.233649247881
+          },
+          {
+            "cells": 5,
+            "lon": 111.48054208161656,
+            "lat": 24.785835694051023,
+            "mean_deficit_K": 0.59465786151827,
+            "max_deficit_K": 0.6623401071169935,
+            "mean_depth_m": 153.72515954187378,
+            "rain_mean_mm_h": 0.21107915995216434,
+            "buoyancy_content": 453.93188632090806
+          },
+          {
+            "cells": 4,
+            "lon": 107.04066491664753,
+            "lat": 21.68857412653448,
+            "mean_deficit_K": 1.1674001020886449,
+            "max_deficit_K": 1.3837187486833442,
+            "mean_depth_m": 154.07824155459622,
+            "rain_mean_mm_h": 0.07625442319472125,
+            "buoyancy_content": 706.8948494653678
+          }
+        ],
+        "new_source_Q": 2061208.652058802
+      },
+      {
+        "hour": 22.0,
+        "cold_Q": 155446.64990492992,
+        "source_Q": 5253648.676431136,
+        "max_deficit_K": 2.584024101027263,
+        "max_depth_m": 1615.4643425663019,
+        "active_cells": 439,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 254,
+            "lon": 106.94894975211406,
+            "lat": 23.873570123847866,
+            "mean_deficit_K": 1.02567667491919,
+            "max_deficit_K": 2.584024101027263,
+            "mean_depth_m": 306.33591851445124,
+            "rain_mean_mm_h": 0.37201763194215376,
+            "buoyancy_content": 81894.83397016386
+          },
+          {
+            "cells": 139,
+            "lon": 115.33955602036663,
+            "lat": 23.20758554629387,
+            "mean_deficit_K": 0.8609058840640863,
+            "max_deficit_K": 1.7640592001052469,
+            "mean_depth_m": 347.37232268733527,
+            "rain_mean_mm_h": 0.10081026194312759,
+            "buoyancy_content": 35103.27285490192
+          },
+          {
+            "cells": 11,
+            "lon": 108.61031845981842,
+            "lat": 21.677128222737306,
+            "mean_deficit_K": 1.1872313724396473,
+            "max_deficit_K": 1.7376375968635351,
+            "mean_depth_m": 141.00953892681795,
+            "rain_mean_mm_h": 0.09599079050260186,
+            "buoyancy_content": 1848.8889509030075
+          },
+          {
+            "cells": 5,
+            "lon": 111.48054208161656,
+            "lat": 24.785835694051023,
+            "mean_deficit_K": 0.6580741944688795,
+            "max_deficit_K": 0.7269552903844667,
+            "mean_depth_m": 121.75299034227923,
+            "rain_mean_mm_h": 0.2301137749423236,
+            "buoyancy_content": 401.4672290612849
+          },
+          {
+            "cells": 4,
+            "lon": 107.04066491664753,
+            "lat": 21.68857412653448,
+            "mean_deficit_K": 1.155425007560218,
+            "max_deficit_K": 1.3691121174567082,
+            "mean_depth_m": 157.25276561965978,
+            "rain_mean_mm_h": 0.07416597062915854,
+            "buoyancy_content": 714.0884133416796
+          },
+          {
+            "cells": 3,
+            "lon": 112.7047057443858,
+            "lat": 24.92013429860459,
+            "mean_deficit_K": 0.6282355354596365,
+            "max_deficit_K": 0.741434358462036,
+            "mean_depth_m": 231.98536406136955,
+            "rain_mean_mm_h": 0.46429412222746363,
+            "buoyancy_content": 422.87282298965636
+          }
+        ],
+        "new_source_Q": 2153654.09041006
+      },
+      {
+        "hour": 23.0,
+        "cold_Q": 138264.56000814147,
+        "source_Q": 5345448.607394718,
+        "max_deficit_K": 2.5745855003096603,
+        "max_depth_m": 1427.0318032300402,
+        "active_cells": 421,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 243,
+            "lon": 106.81396794206064,
+            "lat": 23.85900952188508,
+            "mean_deficit_K": 0.9930190161170995,
+            "max_deficit_K": 2.5745855003096603,
+            "mean_depth_m": 311.37088805583124,
+            "rain_mean_mm_h": 0.3696073125138667,
+            "buoyancy_content": 77706.3814611824
+          },
+          {
+            "cells": 70,
+            "lon": 113.98237762695626,
+            "lat": 22.42961464094611,
+            "mean_deficit_K": 1.0900635950450186,
+            "max_deficit_K": 1.8194382682184709,
+            "mean_depth_m": 155.76762285084556,
+            "rain_mean_mm_h": 0.11166853409627606,
+            "buoyancy_content": 11895.126556311088
+          },
+          {
+            "cells": 46,
+            "lon": 117.07983966567168,
+            "lat": 23.730423834352916,
+            "mean_deficit_K": 0.6892288337964877,
+            "max_deficit_K": 1.3341920002222842,
+            "mean_depth_m": 328.88201664166394,
+            "rain_mean_mm_h": 0.09940249506576988,
+            "buoyancy_content": 9638.702721169113
+          },
+          {
+            "cells": 13,
+            "lon": 108.76939201791755,
+            "lat": 21.659519139972414,
+            "mean_deficit_K": 1.1938524139989064,
+            "max_deficit_K": 1.6808393181169743,
+            "mean_depth_m": 147.53981560818028,
+            "rain_mean_mm_h": 0.08587691824506316,
+            "buoyancy_content": 2302.6416916824182
+          },
+          {
+            "cells": 8,
+            "lon": 109.19893853850749,
+            "lat": 24.83619767075861,
+            "mean_deficit_K": 0.6787548628988501,
+            "max_deficit_K": 0.8876271717550077,
+            "mean_depth_m": 127.61816020316078,
+            "rain_mean_mm_h": 0.6237417539798852,
+            "buoyancy_content": 688.5643123510654
+          },
+          {
+            "cells": 5,
+            "lon": 115.42709956158903,
+            "lat": 24.231853950267578,
+            "mean_deficit_K": 0.6956258065373104,
+            "max_deficit_K": 0.8197655654885679,
+            "mean_depth_m": 225.6040727709382,
+            "rain_mean_mm_h": 0.13180572426131418,
+            "buoyancy_content": 765.6945213592892
+          },
+          {
+            "cells": 5,
+            "lon": 111.48054208161656,
+            "lat": 24.785835694051023,
+            "mean_deficit_K": 0.6580162822411116,
+            "max_deficit_K": 0.7764203631425349,
+            "mean_depth_m": 118.34462327351052,
+            "rain_mean_mm_h": 0.2434268162275192,
+            "buoyancy_content": 389.9015835295455
+          },
+          {
+            "cells": 4,
+            "lon": 107.04066491664753,
+            "lat": 21.68857412653448,
+            "mean_deficit_K": 1.0998049586086682,
+            "max_deficit_K": 1.3127962294828905,
+            "mean_depth_m": 159.27570499846973,
+            "rain_mean_mm_h": 0.07134972037728762,
+            "buoyancy_content": 689.7153235066315
+          }
+        ],
+        "new_source_Q": 2245454.021373641
+      },
+      {
+        "hour": 24.0,
+        "cold_Q": 116350.8749149628,
+        "source_Q": 5435609.739948782,
+        "max_deficit_K": 2.560475131505472,
+        "max_depth_m": 1295.0652049151124,
+        "active_cells": 350,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 182,
+            "lon": 106.4368151190785,
+            "lat": 24.048945892005413,
+            "mean_deficit_K": 0.9418574608826106,
+            "max_deficit_K": 2.3739948789792993,
+            "mean_depth_m": 342.8919472655544,
+            "rain_mean_mm_h": 0.40700793902598603,
+            "buoyancy_content": 60558.70563653335
+          },
+          {
+            "cells": 71,
+            "lon": 114.22815516284152,
+            "lat": 22.37484472462729,
+            "mean_deficit_K": 1.07569237967507,
+            "max_deficit_K": 1.8160441872615158,
+            "mean_depth_m": 151.2191781521403,
+            "rain_mean_mm_h": 0.09886171679610412,
+            "buoyancy_content": 11487.717783995535
+          },
+          {
+            "cells": 17,
+            "lon": 109.00749503330049,
+            "lat": 21.651543261308316,
+            "mean_deficit_K": 1.1406182366986912,
+            "max_deficit_K": 1.7511677361354878,
+            "mean_depth_m": 143.5022401135248,
+            "rain_mean_mm_h": 0.06974655774366845,
+            "buoyancy_content": 2833.347259357091
+          },
+          {
+            "cells": 15,
+            "lon": 105.32318156888176,
+            "lat": 21.713755114888276,
+            "mean_deficit_K": 1.3730776093481203,
+            "max_deficit_K": 2.560475131505472,
+            "mean_depth_m": 332.3802329303559,
+            "rain_mean_mm_h": 0.23118374078372425,
+            "buoyancy_content": 6883.619023190138
+          },
+          {
+            "cells": 12,
+            "lon": 117.5465470971298,
+            "lat": 24.33257790368275,
+            "mean_deficit_K": 0.6393656277790299,
+            "max_deficit_K": 0.855496177498564,
+            "mean_depth_m": 287.8041227186405,
+            "rain_mean_mm_h": 0.14883488476801043,
+            "buoyancy_content": 2153.912044858859
+          },
+          {
+            "cells": 7,
+            "lon": 116.24146856539288,
+            "lat": 22.965609964476844,
+            "mean_deficit_K": 1.0875084540076363,
+            "max_deficit_K": 1.3474108670618543,
+            "mean_depth_m": 174.60234628972142,
+            "rain_mean_mm_h": 0.10876283237079752,
+            "buoyancy_content": 1383.7754152040977
+          },
+          {
+            "cells": 6,
+            "lon": 109.141841352744,
+            "lat": 25.046039240373556,
+            "mean_deficit_K": 0.6907571918964571,
+            "max_deficit_K": 0.8662301021030754,
+            "mean_depth_m": 118.10795083539331,
+            "rain_mean_mm_h": 0.7983947719747079,
+            "buoyancy_content": 487.2126475302497
+          },
+          {
+            "cells": 5,
+            "lon": 108.08211758497359,
+            "lat": 25.138369531004127,
+            "mean_deficit_K": 0.6938232926417578,
+            "max_deficit_K": 0.7828599174192628,
+            "mean_depth_m": 129.1067569694994,
+            "rain_mean_mm_h": 1.0403244216082919,
+            "buoyancy_content": 444.09942131696135
+          },
+          {
+            "cells": 4,
+            "lon": 107.04066491664753,
+            "lat": 21.68857412653448,
+            "mean_deficit_K": 0.9446722083341109,
+            "max_deficit_K": 1.175321838711352,
+            "mean_depth_m": 155.373202991402,
+            "rain_mean_mm_h": 0.07287625360403345,
+            "buoyancy_content": 585.0980051767389
+          },
+          {
+            "cells": 4,
+            "lon": 110.12391294787602,
+            "lat": 22.758766131570685,
+            "mean_deficit_K": 0.8005126496877946,
+            "max_deficit_K": 0.9319765497672792,
+            "mean_depth_m": 148.50033568696432,
+            "rain_mean_mm_h": 0.03401053346936994,
+            "buoyancy_content": 482.63875964032894
+          },
+          {
+            "cells": 3,
+            "lon": 116.81570311935712,
+            "lat": 23.661084880914938,
+            "mean_deficit_K": 0.6187894408076989,
+            "max_deficit_K": 0.6955288333154851,
+            "mean_depth_m": 158.24842625012795,
+            "rain_mean_mm_h": 0.038180513735598054,
+            "buoyancy_content": 283.78839398796765
+          },
+          {
+            "cells": 3,
+            "lon": 115.26265966659018,
+            "lat": 24.33257790368275,
+            "mean_deficit_K": 0.5662808335252157,
+            "max_deficit_K": 0.632606104673533,
+            "mean_depth_m": 162.7111688997203,
+            "rain_mean_mm_h": 0.20479387332704155,
+            "buoyancy_content": 277.5116397107466
+          }
+        ],
+        "new_source_Q": 2335615.1539277057
+      }
+    ],
+    "no_new_cold_source": [
+      {
+        "hour": 8.0,
+        "cold_Q": 1129381.843665139,
+        "source_Q": 3099994.5860210764,
+        "max_deficit_K": 7.196871460715659,
+        "max_depth_m": 1801.6859999010353,
+        "active_cells": 749,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 748,
+            "lon": 110.6965946677584,
+            "lat": 23.08295452441431,
+            "mean_deficit_K": 2.138052919504519,
+            "max_deficit_K": 7.196871460715659,
+            "mean_depth_m": 696.3176092454548,
+            "rain_mean_mm_h": 0.45092521566835786,
+            "buoyancy_content": 1114035.0024737841
+          }
+        ]
+      },
+      {
+        "hour": 9.0,
+        "cold_Q": 775094.8389276078,
+        "source_Q": 3099994.5860210764,
+        "max_deficit_K": 5.153809350155397,
+        "max_depth_m": 1800.0,
+        "active_cells": 635,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 607,
+            "lon": 111.88310828255281,
+            "lat": 23.06730583648228,
+            "mean_deficit_K": 1.862574349224838,
+            "max_deficit_K": 5.153809350155397,
+            "mean_depth_m": 690.9947708420715,
+            "rain_mean_mm_h": 0.269262623130305,
+            "buoyancy_content": 751435.241074993
+          },
+          {
+            "cells": 26,
+            "lon": 105.50167615576083,
+            "lat": 23.838643132127576,
+            "mean_deficit_K": 0.7468526888938027,
+            "max_deficit_K": 1.1643467929391793,
+            "mean_depth_m": 323.4522754586411,
+            "rain_mean_mm_h": 0.5992766424237469,
+            "buoyancy_content": 6252.086267726424
+          }
+        ],
+        "new_source_Q": 0.0
+      },
+      {
+        "hour": 10.0,
+        "cold_Q": 538214.9207223953,
+        "source_Q": 3099994.5860210764,
+        "max_deficit_K": 3.731852194907549,
+        "max_depth_m": 1800.0,
+        "active_cells": 559,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 496,
+            "lon": 112.9347521476716,
+            "lat": 23.336507356300864,
+            "mean_deficit_K": 1.5469046228976917,
+            "max_deficit_K": 3.731852194907549,
+            "mean_depth_m": 675.6044725954505,
+            "rain_mean_mm_h": 0.21596608123698616,
+            "buoyancy_content": 506175.79733195505
+          },
+          {
+            "cells": 50,
+            "lon": 106.29520405931942,
+            "lat": 21.043940824677378,
+            "mean_deficit_K": 1.3011054839012473,
+            "max_deficit_K": 1.9896350239257856,
+            "mean_depth_m": 239.93135377524234,
+            "rain_mean_mm_h": 0.10021982244118144,
+            "buoyancy_content": 16036.973416700801
+          },
+          {
+            "cells": 12,
+            "lon": 105.39626596665903,
+            "lat": 23.849942293568386,
+            "mean_deficit_K": 0.6747833648467987,
+            "max_deficit_K": 0.8189709704525843,
+            "mean_depth_m": 196.59551288678338,
+            "rain_mean_mm_h": 0.6317445639190149,
+            "buoyancy_content": 1539.4360046615993
+          }
+        ],
+        "new_source_Q": 0.0
+      },
+      {
+        "hour": 11.0,
+        "cold_Q": 372510.2483397672,
+        "source_Q": 3099994.5860210764,
+        "max_deficit_K": 2.817862540851931,
+        "max_depth_m": 1800.0,
+        "active_cells": 486,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 448,
+            "lon": 113.30565362454654,
+            "lat": 23.485529924906725,
+            "mean_deficit_K": 1.2708434772186339,
+            "max_deficit_K": 2.817862540851931,
+            "mean_depth_m": 616.9237804952669,
+            "rain_mean_mm_h": 0.24169003311011034,
+            "buoyancy_content": 353345.74865510286
+          },
+          {
+            "cells": 34,
+            "lon": 106.63762595831702,
+            "lat": 20.933144475920685,
+            "mean_deficit_K": 1.0723720218286292,
+            "max_deficit_K": 1.444682824585864,
+            "mean_depth_m": 219.0289795279964,
+            "rain_mean_mm_h": 0.013618643980769642,
+            "buoyancy_content": 7966.487458372625
+          }
+        ],
+        "new_source_Q": 0.0
+      },
+      {
+        "hour": 12.0,
+        "cold_Q": 245412.93030241536,
+        "source_Q": 3099994.5860210764,
+        "max_deficit_K": 2.1344751686526364,
+        "max_depth_m": 1694.629014287509,
+        "active_cells": 380,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 359,
+            "lon": 113.70605360390373,
+            "lat": 23.788977180167727,
+            "mean_deficit_K": 1.0788883552745023,
+            "max_deficit_K": 2.1344751686526364,
+            "mean_depth_m": 582.8407239935483,
+            "rain_mean_mm_h": 0.24313217658262273,
+            "buoyancy_content": 231972.46188863288
+          },
+          {
+            "cells": 21,
+            "lon": 106.72744606903068,
+            "lat": 21.083031311359935,
+            "mean_deficit_K": 0.8207448841180284,
+            "max_deficit_K": 1.0255732364773473,
+            "mean_depth_m": 187.7346069425433,
+            "rain_mean_mm_h": 0.02467539705034721,
+            "buoyancy_content": 3242.3152622730076
+          }
+        ],
+        "new_source_Q": 0.0
+      },
+      {
+        "hour": 13.0,
+        "cold_Q": 153641.54863246024,
+        "source_Q": 3099994.5860210764,
+        "max_deficit_K": 1.6346325918296274,
+        "max_depth_m": 1541.918061252086,
+        "active_cells": 268,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 261,
+            "lon": 114.36590570535762,
+            "lat": 24.0730497095383,
+            "mean_deficit_K": 0.9620140910398736,
+            "max_deficit_K": 1.6346325918296274,
+            "mean_depth_m": 547.7326724922189,
+            "rain_mean_mm_h": 0.23438590358082328,
+            "buoyancy_content": 142202.25289495196
+          },
+          {
+            "cells": 6,
+            "lon": 106.72092067637199,
+            "lat": 21.268890987304594,
+            "mean_deficit_K": 0.6675178833520193,
+            "max_deficit_K": 0.7132967627144021,
+            "mean_depth_m": 182.347411107073,
+            "rain_mean_mm_h": 0.024837618629957967,
+            "buoyancy_content": 714.0970754265874
+          }
+        ],
+        "new_source_Q": 0.0
+      },
+      {
+        "hour": 14.0,
+        "cold_Q": 90135.8004853155,
+        "source_Q": 3099994.5860210764,
+        "max_deficit_K": 1.2683281351612403,
+        "max_depth_m": 1433.3785632614224,
+        "active_cells": 188,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 186,
+            "lon": 115.06668739029227,
+            "lat": 24.20531914533563,
+            "mean_deficit_K": 0.8456919013466948,
+            "max_deficit_K": 1.2683281351612403,
+            "mean_depth_m": 499.0139033793059,
+            "rain_mean_mm_h": 0.2615820840560179,
+            "buoyancy_content": 81814.46544629626
+          }
+        ],
+        "new_source_Q": 0.0
+      },
+      {
+        "hour": 15.0,
+        "cold_Q": 48595.55233611957,
+        "source_Q": 3099994.5860210764,
+        "max_deficit_K": 1.0145370499113178,
+        "max_depth_m": 1270.32230651248,
+        "active_cells": 121,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 120,
+            "lon": 115.7651149013089,
+            "lat": 24.410219284440288,
+            "mean_deficit_K": 0.7458730312783556,
+            "max_deficit_K": 1.0145370499113178,
+            "mean_depth_m": 484.46026424800044,
+            "rain_mean_mm_h": 0.43275941096886505,
+            "buoyancy_content": 44207.49776500742
+          }
+        ],
+        "new_source_Q": 0.0
+      },
+      {
+        "hour": 16.0,
+        "cold_Q": 23839.96830040485,
+        "source_Q": 3099994.5860210764,
+        "max_deficit_K": 0.8160135072734175,
+        "max_depth_m": 1220.8323541357115,
+        "active_cells": 61,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 56,
+            "lon": 116.12401149753656,
+            "lat": 24.6608300732947,
+            "mean_deficit_K": 0.6467178760413902,
+            "max_deficit_K": 0.8160135072734175,
+            "mean_depth_m": 498.84061478866687,
+            "rain_mean_mm_h": 0.27512210522584635,
+            "buoyancy_content": 18692.43034042826
+          }
+        ],
+        "new_source_Q": 0.0
+      },
+      {
+        "hour": 17.0,
+        "cold_Q": 10305.822694923112,
+        "source_Q": 3099994.5860210764,
+        "max_deficit_K": 0.6559598054404415,
+        "max_depth_m": 1076.2482362122464,
+        "active_cells": 23,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 22,
+            "lon": 116.74511023514043,
+            "lat": 24.881981285947326,
+            "mean_deficit_K": 0.5879337332876987,
+            "max_deficit_K": 0.6559598054404415,
+            "mean_depth_m": 505.0846163220944,
+            "rain_mean_mm_h": 0.31884441225048027,
+            "buoyancy_content": 6645.254071498143
+          }
+        ],
+        "new_source_Q": 0.0
+      },
+      {
+        "hour": 18.0,
+        "cold_Q": 3622.805033021183,
+        "source_Q": 3099994.5860210764,
+        "max_deficit_K": 0.5259297388583493,
+        "max_depth_m": 804.9418980668241,
+        "active_cells": 5,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [
+          {
+            "cells": 5,
+            "lon": 116.85224531824576,
+            "lat": 24.936921624173785,
+            "mean_deficit_K": 0.513851089523411,
+            "max_deficit_K": 0.5259297388583493,
+            "mean_depth_m": 601.4153106402172,
+            "rain_mean_mm_h": 0.24910351844868533,
+            "buoyancy_content": 1546.6493929888222
+          }
+        ],
+        "new_source_Q": 0.0
+      },
+      {
+        "hour": 19.0,
+        "cold_Q": 858.62278986153,
+        "source_Q": 3099994.5860210764,
+        "max_deficit_K": 0.4124033985853704,
+        "max_depth_m": 448.19086816758795,
+        "active_cells": 0,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [],
+        "new_source_Q": 0.0
+      },
+      {
+        "hour": 20.0,
+        "cold_Q": 56.64466556074073,
+        "source_Q": 3099994.5860210764,
+        "max_deficit_K": 0.27182092249063355,
+        "max_depth_m": 87.18211533337997,
+        "active_cells": 0,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [],
+        "new_source_Q": 0.0
+      },
+      {
+        "hour": 21.0,
+        "cold_Q": 0.1406156816644319,
+        "source_Q": 3099994.5860210764,
+        "max_deficit_K": 0.004258292464992357,
+        "max_depth_m": 0.5942282884635407,
+        "active_cells": 0,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [],
+        "new_source_Q": 0.0
+      },
+      {
+        "hour": 22.0,
+        "cold_Q": 0.0,
+        "source_Q": 3099994.5860210764,
+        "max_deficit_K": 0.0,
+        "max_depth_m": 0.0,
+        "active_cells": 0,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [],
+        "new_source_Q": 0.0
+      },
+      {
+        "hour": 23.0,
+        "cold_Q": 0.0,
+        "source_Q": 3099994.5860210764,
+        "max_deficit_K": 0.0,
+        "max_depth_m": 0.0,
+        "active_cells": 0,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [],
+        "new_source_Q": 0.0
+      },
+      {
+        "hour": 24.0,
+        "cold_Q": 0.0,
+        "source_Q": 3099994.5860210764,
+        "max_deficit_K": 0.0,
+        "max_depth_m": 0.0,
+        "active_cells": 0,
+        "neutral_deep_cells": 0,
+        "neutral_depth_max_m": 0.0,
+        "pools": [],
+        "new_source_Q": 0.0
+      }
+    ]
+  },
+  "elapsed_seconds": 87.47491012501996,
+  "limitation": "no_new_cold_source is a controlled diagnostic, not a physically complete alternate forecast; .5 K / 100 m are analysis thresholds, not universal meteorological definitions"
+}

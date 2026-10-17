@@ -1,0 +1,58 @@
+{
+  "scope": "WebKit/iPhone viewport startup and first stored frame; not physical-iPhone full-process verification",
+  "results": [
+    {
+      "edition": "astra",
+      "state": "computing",
+      "error": null,
+      "frames": 1,
+      "progress": 0.017017914477985896,
+      "storage": "idb",
+      "grid": {
+        "nx": 117,
+        "ny": 64,
+        "west": 104.3,
+        "south": 19.8,
+        "dlon": 0.11745706785632137,
+        "dlat": 0.10791852151625392,
+        "nominal_km": 12,
+        "z_agl_m": [
+          30,
+          150,
+          350,
+          650,
+          1000,
+          1500,
+          2200,
+          3200,
+          4500,
+          6000,
+          8000,
+          10500,
+          13500,
+          16500
+        ]
+      },
+      "engine": "4.4.0-westerly-warm-sector",
+      "source_sha256": "53664f9dc67fa1aec2864f9bac488d5924868c40a3a3ebd0c2d96871183fdb13",
+      "terrain": {
+        "source": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+        "native_zoom": 7,
+        "source_grid_km": 4,
+        "coastal_detail": {
+          "source": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+          "zoom": 10,
+          "grid_km": 0.25,
+          "bounds": [
+            112.9,
+            21.95,
+            114.7,
+            22.95
+          ],
+          "sha256": "425fa7da27c4ba8f2f467876e94fba746a190593ab6162da77aa58d218396ba4",
+          "aggregation": "cell mean, height standard deviation, maximum and >50m fraction; peaks are not full-cell walls"
+        }
+      }
+    }
+  ]
+}

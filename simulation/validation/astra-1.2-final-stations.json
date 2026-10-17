@@ -1,0 +1,1597 @@
+{
+  "engine": "3.14.0-ice-number-budget",
+  "source_sha256": "c0d7684c68c1545c483a65eb12a43595bf57453f5350e43c9f5b50adc09c7489",
+  "seed": 20260421,
+  "edition": "astra",
+  "grid_km": 12,
+  "station_sampling": "Exact 32 public UI station IDs and archived coordinates; same fine-grid bilinear sampler",
+  "controlled_entered_front": false,
+  "execution": "native astra 12 km, five-minute point sampling; not browser performance",
+  "elapsed_s": 219.8086374999839,
+  "cities": {
+    "\u97f6\u5173": {
+      "total_mm": 0.4038342535495758,
+      "peak5_mm": 0.12111032009124756,
+      "peak_gust_m_s": 11.552680265005728,
+      "peak_gust_increment_m_s": 2.2477244766245157,
+      "rain_events_mm": []
+    },
+    "\u6885\u5dde": {
+      "total_mm": 2.4660630226135254,
+      "peak5_mm": 0.38117310404777527,
+      "peak_gust_m_s": 12.463741011067988,
+      "peak_gust_increment_m_s": 3.326177134352747,
+      "rain_events_mm": []
+    },
+    "\u8087\u5e86": {
+      "total_mm": 0.3038891553878784,
+      "peak5_mm": 0.0762094110250473,
+      "peak_gust_m_s": 16.772962805973087,
+      "peak_gust_increment_m_s": 7.925791864847758,
+      "rain_events_mm": []
+    },
+    "\u6e05\u8fdc": {
+      "total_mm": 8.498191833496094,
+      "peak5_mm": 2.4505879878997803,
+      "peak_gust_m_s": 18.975953836562496,
+      "peak_gust_increment_m_s": 6.376703885420195,
+      "rain_events_mm": [
+        7.3449866771698
+      ]
+    },
+    "\u5e7f\u5dde": {
+      "total_mm": 6.8621625900268555,
+      "peak5_mm": 2.981213092803955,
+      "peak_gust_m_s": 16.17501282635057,
+      "peak_gust_increment_m_s": 7.753464733037276,
+      "rain_events_mm": [
+        6.114892661571503
+      ]
+    },
+    "\u4f5b\u5c71": {
+      "total_mm": 1.537344217300415,
+      "peak5_mm": 0.40517833828926086,
+      "peak_gust_m_s": 18.04395320860538,
+      "peak_gust_increment_m_s": 7.143667344151011,
+      "rain_events_mm": [
+        1.2652246057987213
+      ]
+    },
+    "\u4e1c\u839e": {
+      "total_mm": 0.5410723090171814,
+      "peak5_mm": 0.1345236748456955,
+      "peak_gust_m_s": 16.616065837725678,
+      "peak_gust_increment_m_s": 4.298558118178596,
+      "rain_events_mm": []
+    },
+    "\u6cb3\u6e90": {
+      "total_mm": 1.9763509035110474,
+      "peak5_mm": 0.7726839780807495,
+      "peak_gust_m_s": 13.140999793653194,
+      "peak_gust_increment_m_s": 5.0022576641332614,
+      "rain_events_mm": [
+        1.9423251152038574
+      ]
+    },
+    "\u60e0\u5dde": {
+      "total_mm": 2.46282958984375,
+      "peak5_mm": 1.4133716821670532,
+      "peak_gust_m_s": 16.81192119963199,
+      "peak_gust_increment_m_s": 9.28920713362435,
+      "rain_events_mm": [
+        2.188442587852478
+      ]
+    },
+    "\u6f6e\u5dde": {
+      "total_mm": 1.6721233129501343,
+      "peak5_mm": 0.8825915455818176,
+      "peak_gust_m_s": 15.054349362524245,
+      "peak_gust_increment_m_s": 8.53317418260832,
+      "rain_events_mm": [
+        1.5019128322601318
+      ]
+    },
+    "\u63ed\u9633": {
+      "total_mm": 3.8237454891204834,
+      "peak5_mm": 1.8710945844650269,
+      "peak_gust_m_s": 15.153271710668186,
+      "peak_gust_increment_m_s": 8.9167252225748,
+      "rain_events_mm": [
+        3.7547327280044556
+      ]
+    },
+    "\u6c55\u5934": {
+      "total_mm": 0.46907123923301697,
+      "peak5_mm": 0.07652686536312103,
+      "peak_gust_m_s": 17.329760201970856,
+      "peak_gust_increment_m_s": 8.96318229963415,
+      "rain_events_mm": []
+    },
+    "\u4e91\u6d6e": {
+      "total_mm": 0.2659701108932495,
+      "peak5_mm": 0.07808820903301239,
+      "peak_gust_m_s": 18.436910545348443,
+      "peak_gust_increment_m_s": 9.042296530647244,
+      "rain_events_mm": []
+    },
+    "\u6c5f\u95e8": {
+      "total_mm": 10.955260276794434,
+      "peak5_mm": 2.8651344776153564,
+      "peak_gust_m_s": 15.087731445322799,
+      "peak_gust_increment_m_s": 5.966766440806065,
+      "rain_events_mm": [
+        10.185330867767334
+      ]
+    },
+    "\u4e2d\u5c71": {
+      "total_mm": 23.62482452392578,
+      "peak5_mm": 8.956853866577148,
+      "peak_gust_m_s": 17.36606507694819,
+      "peak_gust_increment_m_s": 8.461493782202396,
+      "rain_events_mm": [
+        23.502260863780975
+      ]
+    },
+    "\u73e0\u6d77": {
+      "total_mm": 1.1351568698883057,
+      "peak5_mm": 0.3385838270187378,
+      "peak_gust_m_s": 12.394894710707733,
+      "peak_gust_increment_m_s": 2.061655030264893,
+      "rain_events_mm": []
+    },
+    "\u6df1\u5733": {
+      "total_mm": 15.394173622131348,
+      "peak5_mm": 3.9308276176452637,
+      "peak_gust_m_s": 12.129829394185531,
+      "peak_gust_increment_m_s": 2.7224844181511116,
+      "rain_events_mm": [
+        14.674035906791687
+      ]
+    },
+    "\u6c55\u5c3e": {
+      "total_mm": 0.16129779815673828,
+      "peak5_mm": 0.00938480906188488,
+      "peak_gust_m_s": 13.930609207542775,
+      "peak_gust_increment_m_s": 5.963303719443763,
+      "rain_events_mm": []
+    },
+    "\u6e5b\u6c5f": {
+      "total_mm": 1.5760103464126587,
+      "peak5_mm": 0.12765882909297943,
+      "peak_gust_m_s": 13.584828248335642,
+      "peak_gust_increment_m_s": 7.463499949421542,
+      "rain_events_mm": []
+    },
+    "\u8302\u540d": {
+      "total_mm": 13.54110050201416,
+      "peak5_mm": 4.292842864990234,
+      "peak_gust_m_s": 17.782163969132558,
+      "peak_gust_increment_m_s": 8.765867383149459,
+      "rain_events_mm": [
+        12.755058765411377
+      ]
+    },
+    "\u9633\u6c5f": {
+      "total_mm": 1.0554625988006592,
+      "peak5_mm": 0.1790962815284729,
+      "peak_gust_m_s": 17.753139462914046,
+      "peak_gust_increment_m_s": 10.186976006059039,
+      "rain_events_mm": []
+    },
+    "\u6842\u6797": {
+      "total_mm": 1.1546224355697632,
+      "peak5_mm": 0.022088319063186646,
+      "peak_gust_m_s": 10.091049786703337,
+      "peak_gust_increment_m_s": 1.9191920289957043,
+      "rain_events_mm": []
+    },
+    "\u6cb3\u6c60": {
+      "total_mm": 1.018513798713684,
+      "peak5_mm": 0.10370130836963654,
+      "peak_gust_m_s": 12.065222681566516,
+      "peak_gust_increment_m_s": 2.6721672371965344,
+      "rain_events_mm": []
+    },
+    "\u67f3\u5dde": {
+      "total_mm": 3.8479602336883545,
+      "peak5_mm": 0.30971482396125793,
+      "peak_gust_m_s": 14.739328464831912,
+      "peak_gust_increment_m_s": 3.922577069313263,
+      "rain_events_mm": []
+    },
+    "\u8d3a\u5dde": {
+      "total_mm": 2.446928024291992,
+      "peak5_mm": 0.5282773971557617,
+      "peak_gust_m_s": 17.795068691822713,
+      "peak_gust_increment_m_s": 6.008005560159246,
+      "rain_events_mm": [
+        1.134345293045044
+      ]
+    },
+    "\u767e\u8272": {
+      "total_mm": 20.813125610351562,
+      "peak5_mm": 2.6559345722198486,
+      "peak_gust_m_s": 14.03232080943707,
+      "peak_gust_increment_m_s": 3.7206805147099047,
+      "rain_events_mm": [
+        17.047191321849823
+      ]
+    },
+    "\u6765\u5bbe": {
+      "total_mm": 15.549591064453125,
+      "peak5_mm": 5.898532390594482,
+      "peak_gust_m_s": 17.25111837055544,
+      "peak_gust_increment_m_s": 7.381401054524435,
+      "rain_events_mm": [
+        13.507356345653534
+      ]
+    },
+    "\u68a7\u5dde": {
+      "total_mm": 2.433253765106201,
+      "peak5_mm": 0.4736191928386688,
+      "peak_gust_m_s": 12.152496788222917,
+      "peak_gust_increment_m_s": 7.341763559936465,
+      "rain_events_mm": [
+        1.383212298154831
+      ]
+    },
+    "\u5357\u5b81": {
+      "total_mm": 3.769951105117798,
+      "peak5_mm": 1.173153042793274,
+      "peak_gust_m_s": 15.852909131270566,
+      "peak_gust_increment_m_s": 5.583083556556131,
+      "rain_events_mm": [
+        3.1081336736679077
+      ]
+    },
+    "\u94a6\u5dde": {
+      "total_mm": 20.642887115478516,
+      "peak5_mm": 5.75341796875,
+      "peak_gust_m_s": 16.30583485272651,
+      "peak_gust_increment_m_s": 7.557206846651674,
+      "rain_events_mm": [
+        19.97343397140503
+      ]
+    },
+    "\u9632\u57ce\u6e2f": {
+      "total_mm": 2.0951144695281982,
+      "peak5_mm": 0.7081165313720703,
+      "peak_gust_m_s": 9.841105394178246,
+      "peak_gust_increment_m_s": 3.3238112829875845,
+      "rain_events_mm": [
+        1.3129087686538696
+      ]
+    },
+    "\u5317\u6d77": {
+      "total_mm": 3.878067970275879,
+      "peak5_mm": 0.6567355990409851,
+      "peak_gust_m_s": 13.777200649843982,
+      "peak_gust_increment_m_s": 6.692815401765314,
+      "rain_events_mm": [
+        1.770958811044693,
+        1.2734332084655762
+      ]
+    }
+  },
+  "samples": [
+    {
+      "hour": 0.0,
+      "front": {
+        "guangxi": null,
+        "guangdong": null
+      },
+      "front_coverage": 0.0,
+      "front_convective_cells": 0,
+      "driver_latitude_range": [
+        27.00003122675616,
+        27.199993195221538
+      ],
+      "strong_cells": 0,
+      "old_warm_wake_cells": 0,
+      "weak_echo_in_old_wake": 0,
+      "longest_ns_km": 0,
+      "largest_objects": [],
+      "winds": {
+        "925": [
+          7.944328784942627,
+          7.5534820556640625
+        ],
+        "500": [
+          21.553983688354492,
+          3.9483401775360107
+        ],
+        "300": [
+          41.4773063659668,
+          3.1435787677764893
+        ]
+      },
+      "audit": {
+        "steps": 0,
+        "hours": 0.0,
+        "max_cfl": 0.0,
+        "water_relative_residual": 0.0,
+        "positivity_correction": 0.0,
+        "temperature_range_K": [
+          204.27841186523438,
+          300.42022705078125
+        ],
+        "max_rain_mm_h": 0.0,
+        "core_rain_max_mm_h": 0.0,
+        "hourly_rain_max_mm": 0.0,
+        "total_rain_max_mm": 0.0,
+        "point_rain5_peak_mm": 0.0,
+        "point_hour_peak_mm": 0.0,
+        "point_total_max_mm": 0.0,
+        "gust_max_m_s": 6.776531933051678,
+        "gust_peak_m_s": 0.0,
+        "meanwind_peak_m_s": 0.0,
+        "convective_anvil_mass": 0.0,
+        "environmental_anvil_mass": 0.0,
+        "convective_anvil_source": 0.0,
+        "environmental_anvil_source": 0.0,
+        "max_cape_J_kg": 3599.435967059995,
+        "max_raw_cape_J_kg": 6096.490260474888,
+        "active_fraction": 0.0,
+        "cape_deficit_max_J_kg": 0.0,
+        "cape_consumed_sum": 0.0,
+        "cape_recovered_sum": 0.0,
+        "coldpool_depth_max_m": 0.0,
+        "coldpool_max_cfl": 0.0,
+        "coldpool_relative_residual": 0.0
+      }
+    },
+    {
+      "hour": 1.0,
+      "front": {
+        "guangxi": null,
+        "guangdong": null
+      },
+      "front_coverage": 0.0,
+      "front_convective_cells": 0,
+      "driver_latitude_range": [
+        26.944839834118913,
+        27.11255597999283
+      ],
+      "strong_cells": 22,
+      "old_warm_wake_cells": 0,
+      "weak_echo_in_old_wake": 0,
+      "longest_ns_km": 84.0,
+      "largest_objects": [
+        {
+          "cells": 8,
+          "length_km": 85.0,
+          "ns_extent_km": 84.0,
+          "aspect": 3.13,
+          "geodesic_length_km": 113.0,
+          "band_thinness": 11.08,
+          "coldpool_max_K": 4.06,
+          "coldpool_depth_mean_m": 284.8,
+          "coldair_mean": 0.0,
+          "rain_mean_mm_h": 13.42,
+          "rain_peak_mm_h": 19.15,
+          "gust_peak_ms": 17.29,
+          "centroid_km": [
+            330.0,
+            273.0
+          ],
+          "orientation_deg": 97.8,
+          "motion_ms": [
+            24.659320656167708,
+            6.87413846139671
+          ]
+        }
+      ],
+      "winds": {
+        "925": [
+          7.442902565002441,
+          6.887282371520996
+        ],
+        "500": [
+          21.52450180053711,
+          3.9580376148223877
+        ],
+        "300": [
+          41.30356216430664,
+          3.198190212249756
+        ]
+      },
+      "audit": {
+        "steps": 48,
+        "hours": 1.0,
+        "max_cfl": 0.45000000000000007,
+        "water_relative_residual": -7.972592732193311e-11,
+        "positivity_correction": 3.6021503159034424e-13,
+        "temperature_range_K": [
+          204.31446838378906,
+          300.7962951660156
+        ],
+        "max_rain_mm_h": 19.932034519255485,
+        "core_rain_max_mm_h": 593.7063222614624,
+        "hourly_rain_max_mm": 5.626924514770508,
+        "total_rain_max_mm": 5.626924514770508,
+        "point_rain5_peak_mm": 14.10568618774414,
+        "point_hour_peak_mm": 43.9303092956543,
+        "point_total_max_mm": 43.9303092956543,
+        "gust_max_m_s": 17.289594936060993,
+        "gust_peak_m_s": 19.192625953074533,
+        "meanwind_peak_m_s": 11.513765403139686,
+        "convective_anvil_mass": 258.1496577828333,
+        "environmental_anvil_mass": 37.681889920578186,
+        "convective_anvil_source": 335.47725802737676,
+        "environmental_anvil_source": 33.349820375304546,
+        "max_cape_J_kg": 3590.8864036583445,
+        "max_raw_cape_J_kg": 7395.969383516676,
+        "active_fraction": 0.003872863247863248,
+        "cape_deficit_max_J_kg": 2562.5908687892297,
+        "cape_consumed_sum": 137967.04770767046,
+        "cape_recovered_sum": 11425.047975899766,
+        "coldpool_depth_max_m": 750.8628744160277,
+        "coldpool_max_cfl": 0.2932776927616089,
+        "coldpool_relative_residual": 3.968895203727857e-16
+      }
+    },
+    {
+      "hour": 2.0,
+      "front": {
+        "guangxi": null,
+        "guangdong": null
+      },
+      "front_coverage": 0.0,
+      "front_convective_cells": 0,
+      "driver_latitude_range": [
+        26.887527318492808,
+        27.028992186947754
+      ],
+      "strong_cells": 158,
+      "old_warm_wake_cells": 0,
+      "weak_echo_in_old_wake": 0,
+      "longest_ns_km": 276.0,
+      "largest_objects": [
+        {
+          "cells": 75,
+          "length_km": 312.1,
+          "ns_extent_km": 276.0,
+          "aspect": 3.73,
+          "geodesic_length_km": 366.7,
+          "band_thinness": 12.45,
+          "coldpool_max_K": 7.26,
+          "coldpool_depth_mean_m": 343.1,
+          "coldair_mean": 0.0,
+          "rain_mean_mm_h": 12.65,
+          "rain_peak_mm_h": 23.58,
+          "gust_peak_ms": 17.63,
+          "centroid_km": [
+            447.52,
+            332.8
+          ],
+          "orientation_deg": 115.0,
+          "motion_ms": [
+            24.57878071766155,
+            5.604473945731735
+          ]
+        },
+        {
+          "cells": 23,
+          "length_km": 120.0,
+          "ns_extent_km": 120.0,
+          "aspect": 2.46,
+          "geodesic_length_km": 144.0,
+          "band_thinness": 6.26,
+          "coldpool_max_K": 7.14,
+          "coldpool_depth_mean_m": 326.5,
+          "coldair_mean": 0.0,
+          "rain_mean_mm_h": 14.64,
+          "rain_peak_mm_h": 26.55,
+          "gust_peak_ms": 18.54,
+          "centroid_km": [
+            254.61,
+            153.91
+          ],
+          "orientation_deg": 90.7,
+          "motion_ms": [
+            25.6513088931894,
+            6.575025165135253
+          ]
+        },
+        {
+          "cells": 16,
+          "length_km": 156.7,
+          "ns_extent_km": 48.0,
+          "aspect": 3.07,
+          "geodesic_length_km": 204.9,
+          "band_thinness": 18.21,
+          "coldpool_max_K": 5.15,
+          "coldpool_depth_mean_m": 355.5,
+          "coldair_mean": 0.0,
+          "rain_mean_mm_h": 9.16,
+          "rain_peak_mm_h": 17.35,
+          "gust_peak_ms": 14.84,
+          "centroid_km": [
+            219.75,
+            467.25
+          ],
+          "orientation_deg": 178.2,
+          "motion_ms": [
+            25.532729389663327,
+            6.511966942138581
+          ]
+        }
+      ],
+      "winds": {
+        "925": [
+          6.461668491363525,
+          5.735901355743408
+        ],
+        "500": [
+          21.48314666748047,
+          3.856412887573242
+        ],
+        "300": [
+          41.0634765625,
+          3.143237829208374
+        ]
+      },
+      "audit": {
+        "steps": 96,
+        "hours": 2.0,
+        "max_cfl": 0.45000000000000007,
+        "water_relative_residual": 7.745106767713613e-10,
+        "positivity_correction": 3.6913230067877377e-13,
+        "temperature_range_K": [
+          204.3141326904297,
+          301.1094970703125
+        ],
+        "max_rain_mm_h": 28.250461475186903,
+        "core_rain_max_mm_h": 660.6993370757478,
+        "hourly_rain_max_mm": 11.711189270019531,
+        "total_rain_max_mm": 11.841228485107422,
+        "point_rain5_peak_mm": 20.454914093017578,
+        "point_hour_peak_mm": 75.88014221191406,
+        "point_total_max_mm": 75.88361358642578,
+        "gust_max_m_s": 18.537106927819583,
+        "gust_peak_m_s": 20.202020821770912,
+        "meanwind_peak_m_s": 12.686742381288186,
+        "convective_anvil_mass": 583.1705605579555,
+        "environmental_anvil_mass": 28.80334227757659,
+        "convective_anvil_source": 1545.4192935528379,
+        "environmental_anvil_source": 65.11451514991597,
+        "max_cape_J_kg": 3588.9866405664307,
+        "max_raw_cape_J_kg": 6524.544414539523,
+        "active_fraction": 0.025240384615384616,
+        "cape_deficit_max_J_kg": 3578.381651033038,
+        "cape_consumed_sum": 663181.5086799362,
+        "cape_recovered_sum": 74816.87927054595,
+        "coldpool_depth_max_m": 1174.2408266451398,
+        "coldpool_max_cfl": 0.4,
+        "coldpool_relative_residual": -5.724514679899505e-16
+      }
+    },
+    {
+      "hour": 3.0,
+      "front": {
+        "guangxi": null,
+        "guangdong": null
+      },
+      "front_coverage": 0.0,
+      "front_convective_cells": 0,
+      "driver_latitude_range": [
+        26.82892785928878,
+        26.949049254615087
+      ],
+      "strong_cells": 181,
+      "old_warm_wake_cells": 0,
+      "weak_echo_in_old_wake": 0,
+      "longest_ns_km": 216.0,
+      "largest_objects": [
+        {
+          "cells": 85,
+          "length_km": 252.8,
+          "ns_extent_km": 216.0,
+          "aspect": 1.45,
+          "geodesic_length_km": 315.8,
+          "band_thinness": 8.15,
+          "coldpool_max_K": 7.48,
+          "coldpool_depth_mean_m": 457.2,
+          "coldair_mean": 0.0,
+          "rain_mean_mm_h": 14.4,
+          "rain_peak_mm_h": 29.0,
+          "gust_peak_ms": 19.15,
+          "centroid_km": [
+            735.25,
+            290.82
+          ],
+          "orientation_deg": 37.6,
+          "motion_ms": [
+            21.07323199094545,
+            2.9104430660954357
+          ]
+        },
+        {
+          "cells": 66,
+          "length_km": 262.8,
+          "ns_extent_km": 180.0,
+          "aspect": 3.25,
+          "geodesic_length_km": 297.6,
+          "band_thinness": 9.32,
+          "coldpool_max_K": 7.4,
+          "coldpool_depth_mean_m": 569.9,
+          "coldair_mean": 0.0,
+          "rain_mean_mm_h": 13.26,
+          "rain_peak_mm_h": 25.35,
+          "gust_peak_ms": 18.39,
+          "centroid_km": [
+            528.0,
+            439.09
+          ],
+          "orientation_deg": 128.2,
+          "motion_ms": [
+            24.10974611437808,
+            4.49741532100247
+          ]
+        }
+      ],
+      "winds": {
+        "925": [
+          5.404397487640381,
+          4.610256195068359
+        ],
+        "500": [
+          21.43216323852539,
+          3.6518826484680176
+        ],
+        "300": [
+          40.77114486694336,
+          2.9823176860809326
+        ]
+      },
+      "audit": {
+        "steps": 144,
+        "hours": 3.0,
+        "max_cfl": 0.45000000000000007,
+        "water_relative_residual": 1.475477573645142e-09,
+        "positivity_correction": 7.229506686497058e-13,
+        "temperature_range_K": [
+          204.3115692138672,
+          302.704833984375
+        ],
+        "max_rain_mm_h": 29.004991578172557,
+        "core_rain_max_mm_h": 630.6521275808827,
+        "hourly_rain_max_mm": 11.156538963317871,
+        "total_rain_max_mm": 13.190692901611328,
+        "point_rain5_peak_mm": 20.454914093017578,
+        "point_hour_peak_mm": 83.95564270019531,
+        "point_total_max_mm": 92.35469818115234,
+        "gust_max_m_s": 19.259238078983234,
+        "gust_peak_m_s": 21.41958295504498,
+        "meanwind_peak_m_s": 14.270724849256153,
+        "convective_anvil_mass": 739.0439213985369,
+        "environmental_anvil_mass": 37.5189027840262,
+        "convective_anvil_source": 3455.9926479011137,
+        "environmental_anvil_source": 114.5794353506545,
+        "max_cape_J_kg": 3585.6869289467504,
+        "max_raw_cape_J_kg": 6720.33820576457,
+        "active_fraction": 0.03138354700854701,
+        "cape_deficit_max_J_kg": 2933.5405272015364,
+        "cape_consumed_sum": 1252902.0903855953,
+        "cape_recovered_sum": 166741.38217476616,
+        "coldpool_depth_max_m": 1542.6645792744341,
+        "coldpool_max_cfl": 0.4,
+        "coldpool_relative_residual": -7.878586901070334e-16
+      }
+    },
+    {
+      "hour": 4.0,
+      "front": {
+        "guangxi": null,
+        "guangdong": null
+      },
+      "front_coverage": 0.0,
+      "front_convective_cells": 0,
+      "driver_latitude_range": [
+        26.769743586807433,
+        26.87249911162541
+      ],
+      "strong_cells": 128,
+      "old_warm_wake_cells": 0,
+      "weak_echo_in_old_wake": 0,
+      "longest_ns_km": 168.0,
+      "largest_objects": [
+        {
+          "cells": 61,
+          "length_km": 188.9,
+          "ns_extent_km": 168.0,
+          "aspect": 2.08,
+          "geodesic_length_km": 226.8,
+          "band_thinness": 5.86,
+          "coldpool_max_K": 7.33,
+          "coldpool_depth_mean_m": 690.8,
+          "coldair_mean": 0.0,
+          "rain_mean_mm_h": 15.96,
+          "rain_peak_mm_h": 28.27,
+          "gust_peak_ms": 20.87,
+          "centroid_km": [
+            913.77,
+            372.59
+          ],
+          "orientation_deg": 115.0,
+          "motion_ms": [
+            20.707690369497797,
+            2.535741935611722
+          ]
+        },
+        {
+          "cells": 40,
+          "length_km": 164.6,
+          "ns_extent_km": 120.0,
+          "aspect": 2.53,
+          "geodesic_length_km": 188.7,
+          "band_thinness": 6.18,
+          "coldpool_max_K": 7.24,
+          "coldpool_depth_mean_m": 536.3,
+          "coldair_mean": 0.0,
+          "rain_mean_mm_h": 13.41,
+          "rain_peak_mm_h": 25.9,
+          "gust_peak_ms": 17.5,
+          "centroid_km": [
+            656.1,
+            471.3
+          ],
+          "orientation_deg": 132.4,
+          "motion_ms": [
+            21.857967011962156,
+            2.891228139429729
+          ]
+        },
+        {
+          "cells": 14,
+          "length_km": 64.4,
+          "ns_extent_km": 48.0,
+          "aspect": 1.35,
+          "geodesic_length_km": 93.9,
+          "band_thinness": 4.38,
+          "coldpool_max_K": 7.17,
+          "coldpool_depth_mean_m": 486.5,
+          "coldair_mean": 0.0,
+          "rain_mean_mm_h": 13.92,
+          "rain_peak_mm_h": 24.21,
+          "gust_peak_ms": 18.44,
+          "centroid_km": [
+            1077.43,
+            402.0
+          ],
+          "orientation_deg": 141.2,
+          "motion_ms": [
+            24.11629611587424,
+            2.51479761442151
+          ]
+        }
+      ],
+      "winds": {
+        "925": [
+          4.502523422241211,
+          3.7864162921905518
+        ],
+        "500": [
+          21.37493133544922,
+          3.354793071746826
+        ],
+        "300": [
+          40.443790435791016,
+          2.7215986251831055
+        ]
+      },
+      "audit": {
+        "steps": 192,
+        "hours": 4.0,
+        "max_cfl": 0.45000000000000007,
+        "water_relative_residual": 1.3732739680516226e-10,
+        "positivity_correction": 7.267401120222716e-13,
+        "temperature_range_K": [
+          204.3095703125,
+          302.67205810546875
+        ],
+        "max_rain_mm_h": 28.271189987828905,
+        "core_rain_max_mm_h": 515.6712694982335,
+        "hourly_rain_max_mm": 12.28897762298584,
+        "total_rain_max_mm": 13.258554458618164,
+        "point_rain5_peak_mm": 20.454914093017578,
+        "point_hour_peak_mm": 83.95564270019531,
+        "point_total_max_mm": 92.5744400024414,
+        "gust_max_m_s": 20.86964941778093,
+        "gust_peak_m_s": 21.41958295504498,
+        "meanwind_peak_m_s": 15.24191272111436,
+        "convective_anvil_mass": 594.532943672219,
+        "environmental_anvil_mass": 45.52423167386831,
+        "convective_anvil_source": 4748.103434349997,
+        "environmental_anvil_source": 174.44232673796552,
+        "max_cape_J_kg": 3578.987047078901,
+        "max_raw_cape_J_kg": 6801.251591561521,
+        "active_fraction": 0.021501068376068376,
+        "cape_deficit_max_J_kg": 2851.971428643148,
+        "cape_consumed_sum": 1540976.5211128981,
+        "cape_recovered_sum": 255069.18676458125,
+        "coldpool_depth_max_m": 1736.0668566326706,
+        "coldpool_max_cfl": 0.4,
+        "coldpool_relative_residual": -5.806342092988042e-16
+      }
+    },
+    {
+      "hour": 5.0,
+      "front": {
+        "guangxi": null,
+        "guangdong": null
+      },
+      "front_coverage": 0.0,
+      "front_convective_cells": 0,
+      "driver_latitude_range": [
+        26.71047847230291,
+        26.79916627243179
+      ],
+      "strong_cells": 65,
+      "old_warm_wake_cells": 0,
+      "weak_echo_in_old_wake": 0,
+      "longest_ns_km": 84.0,
+      "largest_objects": [
+        {
+          "cells": 20,
+          "length_km": 115.2,
+          "ns_extent_km": 84.0,
+          "aspect": 2.8,
+          "geodesic_length_km": 144.9,
+          "band_thinness": 7.29,
+          "coldpool_max_K": 7.21,
+          "coldpool_depth_mean_m": 829.7,
+          "coldair_mean": 0.0,
+          "rain_mean_mm_h": 13.48,
+          "rain_peak_mm_h": 23.72,
+          "gust_peak_ms": 22.02,
+          "centroid_km": [
+            996.6,
+            466.8
+          ],
+          "orientation_deg": 144.0,
+          "motion_ms": [
+            23.034380943325083,
+            2.3520712094475402
+          ]
+        },
+        {
+          "cells": 19,
+          "length_km": 96.6,
+          "ns_extent_km": 72.0,
+          "aspect": 1.71,
+          "geodesic_length_km": 120.9,
+          "band_thinness": 5.34,
+          "coldpool_max_K": 7.03,
+          "coldpool_depth_mean_m": 713.0,
+          "coldair_mean": 0.0,
+          "rain_mean_mm_h": 11.03,
+          "rain_peak_mm_h": 24.81,
+          "gust_peak_ms": 17.24,
+          "centroid_km": [
+            766.11,
+            505.89
+          ],
+          "orientation_deg": 130.3,
+          "motion_ms": [
+            18.284579649232462,
+            2.52862386066654
+          ]
+        },
+        {
+          "cells": 18,
+          "length_km": 71.8,
+          "ns_extent_km": 60.0,
+          "aspect": 1.49,
+          "geodesic_length_km": 101.0,
+          "band_thinness": 3.93,
+          "coldpool_max_K": 7.45,
+          "coldpool_depth_mean_m": 369.5,
+          "coldair_mean": 0.0,
+          "rain_mean_mm_h": 11.25,
+          "rain_peak_mm_h": 22.13,
+          "gust_peak_ms": 17.92,
+          "centroid_km": [
+            1204.67,
+            441.33
+          ],
+          "orientation_deg": 138.9,
+          "motion_ms": [
+            24.868743262776906,
+            2.600297443933681
+          ]
+        }
+      ],
+      "winds": {
+        "925": [
+          3.678618907928467,
+          3.2883145809173584
+        ],
+        "500": [
+          21.313390731811523,
+          2.977566719055176
+        ],
+        "300": [
+          40.10063552856445,
+          2.3693079948425293
+        ]
+      },
+      "audit": {
+        "steps": 240,
+        "hours": 5.0,
+        "max_cfl": 0.45000000000000007,
+        "water_relative_residual": -1.9011647484504216e-10,
+        "positivity_correction": 7.26740112022273e-13,
+        "temperature_range_K": [
+          204.30715942382812,
+          302.9122619628906
+        ],
+        "max_rain_mm_h": 24.809198778022022,
+        "core_rain_max_mm_h": 334.8980569760541,
+        "hourly_rain_max_mm": 13.559184074401855,
+        "total_rain_max_mm": 14.154296875,
+        "point_rain5_peak_mm": 20.454914093017578,
+        "point_hour_peak_mm": 83.95564270019531,
+        "point_total_max_mm": 92.59223937988281,
+        "gust_max_m_s": 22.024040290458387,
+        "gust_peak_m_s": 22.347703871772477,
+        "meanwind_peak_m_s": 17.936814760483887,
+        "convective_anvil_mass": 409.25925432826546,
+        "environmental_anvil_mass": 50.7857174276388,
+        "convective_anvil_source": 5539.71686996039,
+        "environmental_anvil_source": 243.0664015286992,
+        "max_cape_J_kg": 3590.394422636947,
+        "max_raw_cape_J_kg": 6692.27027780752,
+        "active_fraction": 0.012419871794871794,
+        "cape_deficit_max_J_kg": 2805.59025036763,
+        "cape_consumed_sum": 1650944.7753131946,
+        "cape_recovered_sum": 353354.1261512481,
+        "coldpool_depth_max_m": 1767.5429176073721,
+        "coldpool_max_cfl": 0.4,
+        "coldpool_relative_residual": -5.89790442238047e-16
+      }
+    },
+    {
+      "hour": 6.0,
+      "front": {
+        "guangxi": null,
+        "guangdong": null
+      },
+      "front_coverage": 0.0,
+      "front_convective_cells": 0,
+      "driver_latitude_range": [
+        26.651497280846822,
+        26.728723506201817
+      ],
+      "strong_cells": 50,
+      "old_warm_wake_cells": 0,
+      "weak_echo_in_old_wake": 0,
+      "longest_ns_km": 48.0,
+      "largest_objects": [
+        {
+          "cells": 20,
+          "length_km": 114.5,
+          "ns_extent_km": 48.0,
+          "aspect": 2.77,
+          "geodesic_length_km": 146.9,
+          "band_thinness": 7.49,
+          "coldpool_max_K": 6.76,
+          "coldpool_depth_mean_m": 713.5,
+          "coldair_mean": 0.0,
+          "rain_mean_mm_h": 13.21,
+          "rain_peak_mm_h": 24.98,
+          "gust_peak_ms": 19.12,
+          "centroid_km": [
+            1096.2,
+            511.2
+          ],
+          "orientation_deg": 159.2,
+          "motion_ms": [
+            22.33306017608976,
+            2.2318808491394235
+          ]
+        },
+        {
+          "cells": 15,
+          "length_km": 81.3,
+          "ns_extent_km": 48.0,
+          "aspect": 2.1,
+          "geodesic_length_km": 110.9,
+          "band_thinness": 5.7,
+          "coldpool_max_K": 7.5,
+          "coldpool_depth_mean_m": 465.3,
+          "coldair_mean": 0.0,
+          "rain_mean_mm_h": 12.15,
+          "rain_peak_mm_h": 22.71,
+          "gust_peak_ms": 18.64,
+          "centroid_km": [
+            1316.8,
+            476.0
+          ],
+          "orientation_deg": 157.0,
+          "motion_ms": [
+            22.326044694004747,
+            2.4282310939776184
+          ]
+        },
+        {
+          "cells": 8,
+          "length_km": 60.0,
+          "ns_extent_km": 24.0,
+          "aspect": 2.5,
+          "geodesic_length_km": 84.0,
+          "band_thinness": 6.12,
+          "coldpool_max_K": 4.72,
+          "coldpool_depth_mean_m": 916.3,
+          "coldair_mean": 0.0,
+          "rain_mean_mm_h": 13.59,
+          "rain_peak_mm_h": 26.67,
+          "gust_peak_ms": 13.82,
+          "centroid_km": [
+            876.0,
+            523.5
+          ],
+          "orientation_deg": 0.0,
+          "motion_ms": [
+            15.930919022898774,
+            2.392976589282586
+          ]
+        }
+      ],
+      "winds": {
+        "925": [
+          2.955551862716675,
+          3.034956693649292
+        ],
+        "500": [
+          21.253742218017578,
+          2.533860921859741
+        ],
+        "300": [
+          39.76173400878906,
+          1.9353833198547363
+        ]
+      },
+      "audit": {
+        "steps": 288,
+        "hours": 6.0,
+        "max_cfl": 0.45000000000000007,
+        "water_relative_residual": -3.629992363066749e-10,
+        "positivity_correction": 7.26740112022273e-13,
+        "temperature_range_K": [
+          204.3028564453125,
+          302.50860595703125
+        ],
+        "max_rain_mm_h": 26.67334752928007,
+        "core_rain_max_mm_h": 271.88185983451655,
+        "hourly_rain_max_mm": 9.755631446838379,
+        "total_rain_max_mm": 15.062281608581543,
+        "point_rain5_peak_mm": 20.454914093017578,
+        "point_hour_peak_mm": 83.95564270019531,
+        "point_total_max_mm": 92.64005279541016,
+        "gust_max_m_s": 19.12425621164959,
+        "gust_peak_m_s": 22.849110564362288,
+        "meanwind_peak_m_s": 18.374625185623394,
+        "convective_anvil_mass": 306.96348819298674,
+        "environmental_anvil_mass": 59.41820261565226,
+        "convective_anvil_source": 6083.909919324046,
+        "environmental_anvil_source": 321.34408280981114,
+        "max_cape_J_kg": 3596.2750882556934,
+        "max_raw_cape_J_kg": 6676.526399431891,
+        "active_fraction": 0.009481837606837606,
+        "cape_deficit_max_J_kg": 2773.725566945368,
+        "cape_consumed_sum": 1702239.9280356083,
+        "cape_recovered_sum": 459606.6895163868,
+        "coldpool_depth_max_m": 1521.887330567929,
+        "coldpool_max_cfl": 0.4,
+        "coldpool_relative_residual": 7.461320460841697e-17
+      }
+    },
+    {
+      "hour": 7.0,
+      "front": {
+        "guangxi": null,
+        "guangdong": null
+      },
+      "front_coverage": 0.0,
+      "front_convective_cells": 0,
+      "driver_latitude_range": [
+        26.592978782881342,
+        26.660904046254664
+      ],
+      "strong_cells": 2,
+      "old_warm_wake_cells": 30,
+      "weak_echo_in_old_wake": 11,
+      "longest_ns_km": 0,
+      "largest_objects": [],
+      "winds": {
+        "925": [
+          2.3450546264648438,
+          2.9193124771118164
+        ],
+        "500": [
+          21.202852249145508,
+          2.0367178916931152
+        ],
+        "300": [
+          39.47501754760742,
+          1.430145025253296
+        ]
+      },
+      "audit": {
+        "steps": 336,
+        "hours": 7.0,
+        "max_cfl": 0.45000000000000007,
+        "water_relative_residual": -7.602327359817186e-11,
+        "positivity_correction": 7.26740112022273e-13,
+        "temperature_range_K": [
+          204.2978515625,
+          302.6398010253906
+        ],
+        "max_rain_mm_h": 11.279756331128562,
+        "core_rain_max_mm_h": 376.3330485843174,
+        "hourly_rain_max_mm": 9.897716522216797,
+        "total_rain_max_mm": 16.9881591796875,
+        "point_rain5_peak_mm": 20.454914093017578,
+        "point_hour_peak_mm": 83.95564270019531,
+        "point_total_max_mm": 92.70379638671875,
+        "gust_max_m_s": 18.4015335811579,
+        "gust_peak_m_s": 22.849110564362288,
+        "meanwind_peak_m_s": 18.374625185623394,
+        "convective_anvil_mass": 182.84250762951044,
+        "environmental_anvil_mass": 74.34647872868749,
+        "convective_anvil_source": 6356.886187173126,
+        "environmental_anvil_source": 414.35358094281,
+        "max_cape_J_kg": 3596.275087875112,
+        "max_raw_cape_J_kg": 6449.800724206663,
+        "active_fraction": 0.0009348290598290599,
+        "cape_deficit_max_J_kg": 2730.4696507362137,
+        "cape_consumed_sum": 1733243.5644516293,
+        "cape_recovered_sum": 585205.9482491396,
+        "coldpool_depth_max_m": 1423.1459274443755,
+        "coldpool_max_cfl": 0.4,
+        "coldpool_relative_residual": -9.71340390194199e-16
+      }
+    },
+    {
+      "hour": 8.0,
+      "front": {
+        "guangxi": null,
+        "guangdong": null
+      },
+      "front_coverage": 0.0,
+      "front_convective_cells": 0,
+      "driver_latitude_range": [
+        26.534976558179988,
+        26.59535384957615
+      ],
+      "strong_cells": 26,
+      "old_warm_wake_cells": 327,
+      "weak_echo_in_old_wake": 218,
+      "longest_ns_km": 48.0,
+      "largest_objects": [
+        {
+          "cells": 19,
+          "length_km": 110.9,
+          "ns_extent_km": 48.0,
+          "aspect": 2.86,
+          "geodesic_length_km": 141.9,
+          "band_thinness": 7.36,
+          "coldpool_max_K": 4.73,
+          "coldpool_depth_mean_m": 908.9,
+          "coldair_mean": 0.0,
+          "rain_mean_mm_h": 13.39,
+          "rain_peak_mm_h": 20.95,
+          "gust_peak_ms": 16.56,
+          "centroid_km": [
+            579.16,
+            238.74
+          ],
+          "orientation_deg": 166.7,
+          "motion_ms": [
+            28.639131922389222,
+            3.1851579317532495
+          ]
+        }
+      ],
+      "winds": {
+        "925": [
+          1.9605125188827515,
+          2.9399783611297607
+        ],
+        "500": [
+          21.15706443786621,
+          1.5002821683883667
+        ],
+        "300": [
+          39.202056884765625,
+          0.8688912391662598
+        ]
+      },
+      "audit": {
+        "steps": 384,
+        "hours": 8.0,
+        "max_cfl": 0.45000000000000007,
+        "water_relative_residual": -2.1467859598602457e-09,
+        "positivity_correction": 7.26740112022273e-13,
+        "temperature_range_K": [
+          204.293212890625,
+          303.1020812988281
+        ],
+        "max_rain_mm_h": 20.94579193704396,
+        "core_rain_max_mm_h": 336.209631183182,
+        "hourly_rain_max_mm": 7.586814880371094,
+        "total_rain_max_mm": 18.967193603515625,
+        "point_rain5_peak_mm": 20.454914093017578,
+        "point_hour_peak_mm": 83.95564270019531,
+        "point_total_max_mm": 100.08494567871094,
+        "gust_max_m_s": 18.345237970075452,
+        "gust_peak_m_s": 22.849110564362288,
+        "meanwind_peak_m_s": 18.374625185623394,
+        "convective_anvil_mass": 173.86178644654322,
+        "environmental_anvil_mass": 86.62155832335331,
+        "convective_anvil_source": 6582.180655974566,
+        "environmental_anvil_source": 523.7473130398458,
+        "max_cape_J_kg": 3596.275088287814,
+        "max_raw_cape_J_kg": 6356.364540833495,
+        "active_fraction": 0.004807692307692308,
+        "cape_deficit_max_J_kg": 2674.5954335573224,
+        "cape_consumed_sum": 1799541.3766033512,
+        "cape_recovered_sum": 733748.4606686637,
+        "coldpool_depth_max_m": 1441.090547248491,
+        "coldpool_max_cfl": 0.4,
+        "coldpool_relative_residual": -1.457054082027566e-15
+      }
+    },
+    {
+      "hour": 9.0,
+      "front": {
+        "guangxi": null,
+        "guangdong": null
+      },
+      "front_coverage": 0.017,
+      "front_convective_cells": 0,
+      "driver_latitude_range": [
+        26.477419550224408,
+        26.531701148635353
+      ],
+      "strong_cells": 14,
+      "old_warm_wake_cells": 902,
+      "weak_echo_in_old_wake": 574,
+      "longest_ns_km": 60.0,
+      "largest_objects": [
+        {
+          "cells": 11,
+          "length_km": 79.9,
+          "ns_extent_km": 60.0,
+          "aspect": 2.13,
+          "geodesic_length_km": 103.9,
+          "band_thinness": 6.81,
+          "coldpool_max_K": 4.83,
+          "coldpool_depth_mean_m": 711.3,
+          "coldair_mean": 0.0,
+          "rain_mean_mm_h": 10.4,
+          "rain_peak_mm_h": 18.05,
+          "gust_peak_ms": 14.46,
+          "centroid_km": [
+            668.73,
+            392.73
+          ],
+          "orientation_deg": 135.0,
+          "motion_ms": [
+            21.48693135454515,
+            2.22804510224458
+          ]
+        }
+      ],
+      "winds": {
+        "925": [
+          1.8113316297531128,
+          3.0670015811920166
+        ],
+        "500": [
+          21.120874404907227,
+          0.9383531808853149
+        ],
+        "300": [
+          38.98674011230469,
+          0.26484230160713196
+        ]
+      },
+      "audit": {
+        "steps": 432,
+        "hours": 9.0,
+        "max_cfl": 0.45000000000000007,
+        "water_relative_residual": -6.15898099783068e-09,
+        "positivity_correction": 7.26740112022273e-13,
+        "temperature_range_K": [
+          204.2884979248047,
+          304.2264404296875
+        ],
+        "max_rain_mm_h": 18.05434413283078,
+        "core_rain_max_mm_h": 573.1702279175748,
+        "hourly_rain_max_mm": 6.644775867462158,
+        "total_rain_max_mm": 20.983137130737305,
+        "point_rain5_peak_mm": 20.454914093017578,
+        "point_hour_peak_mm": 83.95564270019531,
+        "point_total_max_mm": 100.28845977783203,
+        "gust_max_m_s": 15.088507085014559,
+        "gust_peak_m_s": 22.849110564362288,
+        "meanwind_peak_m_s": 18.374625185623394,
+        "convective_anvil_mass": 135.43468162772604,
+        "environmental_anvil_mass": 108.47211592082782,
+        "convective_anvil_source": 6754.517390273186,
+        "environmental_anvil_source": 659.2280063453504,
+        "max_cape_J_kg": 3598.6392694451515,
+        "max_raw_cape_J_kg": 6318.059262641448,
+        "active_fraction": 0.002403846153846154,
+        "cape_deficit_max_J_kg": 2622.3272126031165,
+        "cape_consumed_sum": 1836918.413379362,
+        "cape_recovered_sum": 873961.7531737513,
+        "coldpool_depth_max_m": 1260.208608037457,
+        "coldpool_max_cfl": 0.4000000000000001,
+        "coldpool_relative_residual": -1.1308120446430353e-15
+      }
+    },
+    {
+      "hour": 10.0,
+      "front": {
+        "guangxi": 26.581,
+        "guangdong": null
+      },
+      "front_coverage": 0.402,
+      "front_convective_cells": 0,
+      "driver_latitude_range": [
+        26.42013531948082,
+        26.469499830125812
+      ],
+      "strong_cells": 7,
+      "old_warm_wake_cells": 1335,
+      "weak_echo_in_old_wake": 802,
+      "longest_ns_km": 0,
+      "largest_objects": [],
+      "winds": {
+        "925": [
+          1.7573506832122803,
+          3.1375515460968018
+        ],
+        "500": [
+          21.09617805480957,
+          0.36398816108703613
+        ],
+        "300": [
+          38.84125518798828,
+          -0.36624863743782043
+        ]
+      },
+      "audit": {
+        "steps": 480,
+        "hours": 10.0,
+        "max_cfl": 0.45000000000000007,
+        "water_relative_residual": -9.605994750658733e-09,
+        "positivity_correction": 7.26740112022273e-13,
+        "temperature_range_K": [
+          204.2826385498047,
+          303.609619140625
+        ],
+        "max_rain_mm_h": 12.669989632806885,
+        "core_rain_max_mm_h": 399.6848041471835,
+        "hourly_rain_max_mm": 5.045438289642334,
+        "total_rain_max_mm": 22.929187774658203,
+        "point_rain5_peak_mm": 20.454914093017578,
+        "point_hour_peak_mm": 83.95564270019531,
+        "point_total_max_mm": 100.47663116455078,
+        "gust_max_m_s": 15.197431932341724,
+        "gust_peak_m_s": 22.849110564362288,
+        "meanwind_peak_m_s": 18.374625185623394,
+        "convective_anvil_mass": 124.82217328690261,
+        "environmental_anvil_mass": 120.09990875381287,
+        "convective_anvil_source": 6888.999137534433,
+        "environmental_anvil_source": 811.362644595619,
+        "max_cape_J_kg": 3593.615408411364,
+        "max_raw_cape_J_kg": 6239.491933605047,
+        "active_fraction": 0.0016025641025641025,
+        "cape_deficit_max_J_kg": 2544.5148769343955,
+        "cape_consumed_sum": 1861580.8220163018,
+        "cape_recovered_sum": 983764.477061107,
+        "coldpool_depth_max_m": 1167.4667383454564,
+        "coldpool_max_cfl": 0.4000000000000001,
+        "coldpool_relative_residual": -1.68305120308416e-15
+      }
+    },
+    {
+      "hour": 11.0,
+      "front": {
+        "guangxi": 26.514,
+        "guangdong": 26.56
+      },
+      "front_coverage": 1.0,
+      "front_convective_cells": 0,
+      "driver_latitude_range": [
+        26.36287500094989,
+        26.408299899175812
+      ],
+      "strong_cells": 0,
+      "old_warm_wake_cells": 1643,
+      "weak_echo_in_old_wake": 828,
+      "longest_ns_km": 0,
+      "largest_objects": [],
+      "winds": {
+        "925": [
+          1.776232361793518,
+          3.165912389755249
+        ],
+        "500": [
+          21.08456039428711,
+          -0.20900669693946838
+        ],
+        "300": [
+          38.77369689941406,
+          -1.0075088739395142
+        ]
+      },
+      "audit": {
+        "steps": 528,
+        "hours": 11.0,
+        "max_cfl": 0.45000000000000007,
+        "water_relative_residual": -1.1817137441796192e-08,
+        "positivity_correction": 7.26740112022273e-13,
+        "temperature_range_K": [
+          204.2770538330078,
+          303.0386657714844
+        ],
+        "max_rain_mm_h": 4.868968621077298,
+        "core_rain_max_mm_h": 418.3263433998834,
+        "hourly_rain_max_mm": 3.5354013442993164,
+        "total_rain_max_mm": 24.874332427978516,
+        "point_rain5_peak_mm": 20.454914093017578,
+        "point_hour_peak_mm": 83.95564270019531,
+        "point_total_max_mm": 100.6855239868164,
+        "gust_max_m_s": 11.09720359535924,
+        "gust_peak_m_s": 22.849110564362288,
+        "meanwind_peak_m_s": 18.374625185623394,
+        "convective_anvil_mass": 100.120754050004,
+        "environmental_anvil_mass": 128.19540538819757,
+        "convective_anvil_source": 6957.583861460807,
+        "environmental_anvil_source": 973.9709146709451,
+        "max_cape_J_kg": 3593.2833725620117,
+        "max_raw_cape_J_kg": 6212.443315645778,
+        "active_fraction": 0.00013354700854700856,
+        "cape_deficit_max_J_kg": 2459.5055932356536,
+        "cape_consumed_sum": 1877131.6078391895,
+        "cape_recovered_sum": 1054006.1181394963,
+        "coldpool_depth_max_m": 1150.326362059958,
+        "coldpool_max_cfl": 0.4000000000000001,
+        "coldpool_relative_residual": -1.0447923714488416e-15
+      }
+    },
+    {
+      "hour": 12.0,
+      "front": {
+        "guangxi": 26.442,
+        "guangdong": 26.475
+      },
+      "front_coverage": 1.0,
+      "front_convective_cells": 0,
+      "driver_latitude_range": [
+        26.30534244466751,
+        26.347634399851316
+      ],
+      "strong_cells": 0,
+      "old_warm_wake_cells": 1851,
+      "weak_echo_in_old_wake": 720,
+      "longest_ns_km": 0,
+      "largest_objects": [],
+      "winds": {
+        "925": [
+          1.9115362167358398,
+          3.181633949279785
+        ],
+        "500": [
+          21.084064483642578,
+          -0.7661726474761963
+        ],
+        "300": [
+          38.787654876708984,
+          -1.6413131952285767
+        ]
+      },
+      "audit": {
+        "steps": 576,
+        "hours": 12.0,
+        "max_cfl": 0.45000000000000007,
+        "water_relative_residual": -5.157801850202235e-09,
+        "positivity_correction": 7.26740112022284e-13,
+        "temperature_range_K": [
+          204.27874755859375,
+          303.6098937988281
+        ],
+        "max_rain_mm_h": 6.218958290879242,
+        "core_rain_max_mm_h": 305.746940297723,
+        "hourly_rain_max_mm": 3.9197545051574707,
+        "total_rain_max_mm": 26.830595016479492,
+        "point_rain5_peak_mm": 20.454914093017578,
+        "point_hour_peak_mm": 83.95564270019531,
+        "point_total_max_mm": 101.46238708496094,
+        "gust_max_m_s": 10.887489713875038,
+        "gust_peak_m_s": 22.849110564362288,
+        "meanwind_peak_m_s": 18.374625185623394,
+        "convective_anvil_mass": 107.72829057421201,
+        "environmental_anvil_mass": 138.32325073913051,
+        "convective_anvil_source": 7037.184955455646,
+        "environmental_anvil_source": 1151.566210045193,
+        "max_cape_J_kg": 3596.0314537916092,
+        "max_raw_cape_J_kg": 6207.623617018088,
+        "active_fraction": 0.00013354700854700856,
+        "cape_deficit_max_J_kg": 2401.7473397782264,
+        "cape_consumed_sum": 1899620.0117294139,
+        "cape_recovered_sum": 1096466.5508013028,
+        "coldpool_depth_max_m": 1148.824086417786,
+        "coldpool_max_cfl": 0.4000000000000001,
+        "coldpool_relative_residual": -5.610747580885862e-16
+      }
+    }
+  ],
+  "line_tracks": [
+    {
+      "id": 1,
+      "start_hour": 2.0,
+      "end_hour": 2.0,
+      "duration_hours": 0.0,
+      "samples": 1,
+      "max_length_km": 120.0
+    },
+    {
+      "id": 2,
+      "start_hour": 2.0,
+      "end_hour": 5.0,
+      "duration_hours": 3.0,
+      "samples": 4,
+      "max_length_km": 312.1
+    },
+    {
+      "id": 3,
+      "start_hour": 2.0,
+      "end_hour": 2.0,
+      "duration_hours": 0.0,
+      "samples": 1,
+      "max_length_km": 156.7
+    },
+    {
+      "id": 4,
+      "start_hour": 3.0,
+      "end_hour": 3.0,
+      "duration_hours": 0.0,
+      "samples": 1,
+      "max_length_km": 252.8
+    },
+    {
+      "id": 5,
+      "start_hour": 4.0,
+      "end_hour": 6.0,
+      "duration_hours": 2.0,
+      "samples": 3,
+      "max_length_km": 188.9
+    },
+    {
+      "id": 6,
+      "start_hour": 8.0,
+      "end_hour": 8.0,
+      "duration_hours": 0.0,
+      "samples": 1,
+      "max_length_km": 110.9
+    }
+  ],
+  "core_hit_six_hour_rain_quantiles_mm": [
+    13.874312114715577,
+    30.674270629882812,
+    50.46860122680665,
+    92.64005279541016
+  ],
+  "six_hour_native_rain_quantiles_mm": [
+    5.33125733853667,
+    6.707728107412436,
+    9.461203481029862,
+    15.062281604376949
+  ]
+}

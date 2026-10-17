@@ -23,13 +23,13 @@ const {chromium}=require('playwright');
   const page=await context.newPage();page.on('pageerror',e=>errors.push(e.stack||e.message));
   await page.goto('http://127.0.0.1:14331/simulator.html');await page.locator('#empty-state').waitFor({state:'visible'});assert.equal(await page.locator('#play,#timeline,#reload,#follow-live').count(),0);
   assert.equal(await page.locator('#station-select option').count(),32);
-  assert.equal(await page.locator('h1').innerText(),'StormSim 1.1 Astra');
+  assert.equal(await page.locator('h1').innerText(),'StormSim 2 Astra');
   assert.equal(await page.locator('.lab-heading,.intro,.eyebrow').count(),0);
   assert.equal(await page.evaluate(()=>getComputedStyle(document.documentElement).colorScheme),'light');
   assert.doesNotMatch(await page.locator('main').innerText(),/春夏华南 ·|每轮全新天气|真实地形 ·|让天气从环境中演变|从状态出发/);
   assert.equal(await page.locator('#compute-mode').inputValue(),'accurate');
   assert.equal(await page.locator('#frame-interval').inputValue(),'10');
-  assert.equal(await page.locator('#observations > div').count(),9);
+  assert.equal(await page.locator('#observations > div').count(),10);
   assert.equal(await page.locator('.map-card select').first().locator('option[value="surfacewind"],option[value="gust"]').count(),2);
   assert.equal(await page.locator('.map-card select').first().locator('option[value="coldpool"],option[value="coldpool_depth"],option[value="sbcape"],option[value="mlcape"],option[value="cin"],option[value="rainrate_core"],option[value="terrain"]').count(),0);
   assert.equal(await page.locator('#replay-bar').isVisible(),false);
@@ -69,6 +69,12 @@ const {chromium}=require('playwright');
   assert.deepEqual(panned.map(x=>x.rasterBuilds),beforeMove.map(x=>x.rasterBuilds));
   await page.mouse.wheel(0,5000);await page.waitForTimeout(500);
   assert.ok(await page.evaluate(()=>Simulator.getState().maps.every(m=>m.zoom===m.minZoom)),'zoom-out must stop at the regional floor');
+  const regional=await page.evaluate(()=>Simulator.getState().maps.map(m=>m.center));
+  for(const [dx,dy]of [[500,0],[-500,0],[0,400],[0,-400]]){
+   await page.mouse.move(mapBox.x+mapBox.width/2,mapBox.y+mapBox.height/2);await page.mouse.down();
+   await page.mouse.move(mapBox.x+mapBox.width/2+dx,mapBox.y+mapBox.height/2+dy,{steps:15});await page.mouse.up();
+   assert.deepEqual(await page.evaluate(()=>Simulator.getState().maps.map(m=>m.center)),regional,'minimum regional view must not bounce during outward dragging');
+  }
   await page.locator('#opacity').evaluate(el=>{el.value=.5;el.dispatchEvent(new Event('input',{bubbles:true}));});
   assert.deepEqual(await page.evaluate(()=>Simulator.getState().maps.map(x=>x.rasterBuilds)),beforeMove.map(x=>x.rasterBuilds));
   assert.equal(await page.locator('.leaflet-weatherFields-pane').first().evaluate(el=>getComputedStyle(el).zIndex),'350');

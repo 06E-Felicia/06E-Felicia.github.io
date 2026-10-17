@@ -137,11 +137,31 @@ class DensityCurrentTests(unittest.TestCase):
         self.assertGreater(float(after.min()),5)
         np.testing.assert_allclose(m.inflow_shear(u,v,-nx,ny),0,atol=1e-5)
 
-    def test_low_level_jet_changes_line_normal_without_a_fixed_line_angle(self):
-        m=self.model();u,v=m.winds();one=np.ones(m.shape)
-        shallow=m.inflow_shear(u,v,one*0,-one,np.full(m.shape,350))
-        deep=m.inflow_shear(u,v,one*0,-one,np.full(m.shape,1500))
-        self.assertGreater(float(np.mean(deep-shallow)),2)
+    def test_rkw_uses_wind_difference_across_depth_not_a_jet_layer_mean(self):
+        from simulation.core import Z
+        m=self.model();one=np.ones(m.shape)
+        m.u=m.syn_u.copy();m.v=m.syn_v.copy()
+        # Analytic environmental profile: the shallow head samples 1500 m,
+        # the deep head 3000 m. A large intervening LLJ must not change this
+        # endpoint difference into the old layer-mean/opposite-normal shear.
+        u=np.broadcast_to((3+Z*.004)[:,None,None],m.q.shape).copy()
+        v=np.broadcast_to((2+Z*.002)[:,None,None],m.q.shape).copy()
+        u[4]+=25;v[4]+=25
+        shallow=m.inflow_shear(u,v,one,one*0,np.full(m.shape,350))
+        deep=m.inflow_shear(u,v,one,one*0,np.full(m.shape,1500))
+        np.testing.assert_allclose(shallow,(1500-Z[0])*.004)
+        np.testing.assert_allclose(deep,(3000-Z[0])*.004)
+        np.testing.assert_allclose(m.inflow_shear(u,v,-one,one*0),0)
+        np.testing.assert_allclose(m.inflow_shear(u,v,one*0,one),(1500-Z[0])*.002)
+
+    def test_donor_column_is_sampled_at_receiving_head_depth(self):
+        from simulation.core import Z
+        m=self.model();m.u=m.syn_u.copy();m.v=m.syn_v.copy()
+        y,x=np.indices(m.shape);m.donors=y*m.shape[1]+(x+3)%m.shape[1]
+        depth=np.where(x%4<2,350.,1500.)
+        u=np.broadcast_to((3+Z*.004)[:,None,None],m.q.shape).copy();v=u*0
+        shear=m.inflow_shear(u,v,np.ones(m.shape),np.zeros(m.shape),depth)
+        np.testing.assert_allclose(shear,(np.clip(2*depth,1500,3500)-Z[0])*.004)
 
     def test_leading_jet_uses_pressure_work_to_cross_cin_not_an_lfc_height_shortcut(self):
         m=self.model()

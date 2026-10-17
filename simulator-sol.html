@@ -2,15 +2,15 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>StormSim 1.1 Sol · 深中气象</title><link rel="icon" href="favicon.ico">
+  <title>StormSim 2 Sol · 深中气象</title><link rel="icon" href="favicon.ico">
   <link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css">
   <link rel="stylesheet" href="assets/styles/simulator.css">
-  <link rel="stylesheet" href="assets/styles/simulation-v2.css?v=4.2.0">
+  <link rel="stylesheet" href="assets/styles/simulation-v2.css?v=5.5.1">
 </head>
 <body class="anime-lab sol-lab" data-edition="sol">
 <nav class="lab-nav">
-  <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">☀</span><h1>StormSim 1.1 Sol</h1></a>
-  <div><a href="index.html">今日天气</a><a href="forecast.html">一周预报</a><a href="warnings.html">预警</a><a href="simulator.html">Astra</a><a href="simulator-sol.html" aria-current="page">Sol · 轻量版</a></div>
+  <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">☀</span><h1>StormSim 2 Sol</h1></a>
+  <div><a href="index.html">今日天气</a><a href="forecast.html">一周预报</a><a href="warnings.html">预警</a><a href="simulator.html">Astra</a><a href="simulator-sol.html" aria-current="page">Sol</a></div>
 </nav>
 <main>
   <section class="compute-card" aria-label="模拟控制">
@@ -21,7 +21,7 @@
       <label>时间流速<select id="flow-rate"><option value="60">1 分钟 / 秒</option><option value="300" selected>5 分钟 / 秒</option><option value="900">15 分钟 / 秒</option><option value="1800">30 分钟 / 秒</option><option value="0">最快</option></select></label>
       <button id="start-simulation" class="primary">☀ 开始模拟</button><button id="stop-compute" disabled>结束本轮</button>
     </div>
-    <p class="sol-resolution">28 km 网格 · 14 层大气 · 每小时输出。保留冷池、冰相降水和阵风机制；山地与珠江口细节较 Astra 简化，非业务预报。</p>
+    <p class="sol-resolution">28 km 网格 · 14 层大气 · 每小时输出。模拟冷池、冰相降水与阵风演变，非业务预报。</p>
     <div id="initialization" class="initialization" hidden><div class="init-top"><span>环境初始化</span><span id="compute-percent">载入中</span></div><progress id="compute-progress" max="1" aria-label="环境初始化进度"></progress><p id="compute-remaining" role="status">预计剩余时间：暂无法估计</p></div>
     <p id="compute-status" role="status"></p>
   </section>
@@ -47,13 +47,14 @@
       <label class="sr-only" for="station-select">观测点列表</label><select id="station-select" size="4"></select>
       <div class="station-heading"><h3 id="station-name">深圳</h3><span id="station-id">59493</span><p id="station-coordinates"></p><time id="station-time"></time></div>
       <div class="observations" id="observations"></div>
+      <p class="fine-print">降水为守恒雨区的点位估测；不代表新增网格精度。</p>
       <div class="station-buttons"><button id="station-center">定位本站</button><button id="station-radar">设为雷达中心</button><button id="export-station">导出已载入观测</button><button id="delete-station" hidden>删除自定义点</button></div>
       <details class="custom-station"><summary>＋ 自定义观测点</summary><form id="station-form"><label>名称<input id="custom-name" maxlength="30" required></label><div class="coordinate-inputs"><label>经度<input id="custom-lon" type="number" step=".0001" min="104.3" max="118" value="113.74" required></label><label>纬度<input id="custom-lat" type="number" step=".0001" min="19.8" max="26.7" value="22.55" required></label></div><button class="primary" type="submit">添加并观测</button></form></details>
       <p id="station-message" class="fine-print" role="status"></p>
     </aside>
   </div>
   <section class="environment-section"><div class="profile-card"><div class="section-title"><h2>温湿廓线</h2><div class="profile-legend"><span>● 气温</span><span>● 露点</span></div></div><canvas id="profile-chart" role="img" aria-label="当前观测点分层温度露点"></canvas></div></section>
-  <footer>仅供模拟 · 非实况 / 非业务预报</footer>
+  <footer>仅供模拟 · 非实况 / 非业务预报 · 地形：<a href="assets/data/simulation-terrain-LICENSE.md">Mapzen · USGS / NOAA</a></footer>
 </main>
-<script src="assets/vendor/leaflet/leaflet.js"></script><script src="assets/scripts/simulation-data.js?v=3.8.0"></script><script src="assets/scripts/simulation-frame-store.js"></script><script src="assets/scripts/simulation-v2.js?v=4.2.1"></script>
+<script src="assets/vendor/leaflet/leaflet.js"></script><script src="assets/scripts/simulation-data.js?v=5.5.1"></script><script src="assets/scripts/simulation-frame-store.js?v=5.5.1"></script><script src="assets/scripts/simulation-v2.js?v=5.5.1"></script>
 </body></html>

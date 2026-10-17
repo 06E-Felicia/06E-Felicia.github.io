@@ -1,0 +1,75 @@
+{
+  "engine": "4.1.0-density-current-inflow",
+  "source_sha256": "a5d0bb7b210f3e28c56676f464396d631e6e82af2312231447c9d6e68eaf43da",
+  "terrain": {
+    "source": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+    "native_zoom": 7,
+    "source_grid_km": 4.0,
+    "coastal_detail": {
+      "source": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+      "zoom": 10,
+      "grid_km": 0.25,
+      "bounds": [
+        112.9,
+        21.95,
+        114.7,
+        22.95
+      ],
+      "sha256": "425fa7da27c4ba8f2f467876e94fba746a190593ab6162da77aa58d218396ba4",
+      "aggregation": "cell mean, height standard deviation, maximum and >50m fraction; peaks are not full-cell walls"
+    }
+  },
+  "scope": "Controlled 6-km real-DEM density-current crossings, not a 6-km full weather simulation or a guarantee that all storms weaken over hills",
+  "sites": [
+    {
+      "site": "Phoenix",
+      "initial_lon": 113.43,
+      "initial_lat": 22.44,
+      "elapsed_minutes": 30,
+      "cases": [
+        {
+          "fine_relief": false,
+          "downwind_cold_content": 1832.6385124708609,
+          "downwind_depth_sum": 610.8795041569533,
+          "max_cold_current_speed": 8.597219514264857,
+          "depth_relative_residual": -2.9644475153963154e-16,
+          "cold_content_relative_residual": 0.0
+        },
+        {
+          "fine_relief": true,
+          "downwind_cold_content": 1600.0159521142118,
+          "downwind_depth_sum": 533.3386507047371,
+          "max_cold_current_speed": 8.293292346879424,
+          "depth_relative_residual": 0.0,
+          "cold_content_relative_residual": 0.0
+        }
+      ],
+      "fine_relief_to_mean_only_downwind_ratio": 0.8730668602816739
+    },
+    {
+      "site": "Lantau",
+      "initial_lon": 113.77,
+      "initial_lat": 22.25,
+      "elapsed_minutes": 30,
+      "cases": [
+        {
+          "fine_relief": false,
+          "downwind_cold_content": 1298.0275477505193,
+          "downwind_depth_sum": 432.6758492501731,
+          "max_cold_current_speed": 8.763776366764166,
+          "depth_relative_residual": 0.0,
+          "cold_content_relative_residual": 1.9762983451390953e-16
+        },
+        {
+          "fine_relief": true,
+          "downwind_cold_content": 741.4027799968662,
+          "downwind_depth_sum": 247.13425999895546,
+          "max_cold_current_speed": 8.083756408139537,
+          "depth_relative_residual": -2.964447517708643e-16,
+          "cold_content_relative_residual": 0.0
+        }
+      ],
+      "fine_relief_to_mean_only_downwind_ratio": 0.5711764602236036
+    }
+  ]
+}

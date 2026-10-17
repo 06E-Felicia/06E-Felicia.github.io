@@ -1,0 +1,228 @@
+{
+  "engine": "4.1.0-density-current-inflow",
+  "source_sha256": "a5d0bb7b210f3e28c56676f464396d631e6e82af2312231447c9d6e68eaf43da",
+  "all_passed": true,
+  "checks": {
+    "same_final_source": true,
+    "real_astra_processes": true,
+    "whole_72h_and_two_warm_processes": true,
+    "multibow_and_strong_weak_cold_head_contrast_observed": true,
+    "main_active_components_not_single_giant_bows": true,
+    "actual_32_gauge_median_not_reduced": true,
+    "observed_heavy_gauge_passage_not_just_domain_peak": true,
+    "native_water_budget": true,
+    "no_late_strong_redevelopment": true,
+    "coastal_obstacles_have_measured_response": true,
+    "coastal_current_inventory_conserved": true,
+    "real_worker_wasm_new_terrain_playback": true,
+    "nojekyll_preserved": true,
+    "material_front_reduces_actual_energy": true,
+    "controlled_postfront_does_not_reignite": true,
+    "cold_pool_under_half_kelvin_at_four_hours": true,
+    "retirement_does_not_restore_consumed_cape": true,
+    "moving_shafts_reduce_false_dry_holes": true,
+    "native_rain_conserved": true
+  },
+  "details": {
+    "main_active_component_ns_range_km": [
+      168.0,
+      276.0
+    ],
+    "main_active_component_bow_max_km": 102.21634496919911,
+    "main_rain_cold_head_correlation_median": 0.3958863102523196,
+    "all_32_gauge_median_before_after_mm": [
+      6.160566806793213,
+      8.749512195587158
+    ],
+    "old_strong_pixels_only_contrast_threshold_passed": false,
+    "contrast_metric_revision": "Old >=40dBZ-pixels-only mean excluded the weak links. Its strict result is retained here; required contrast uses fixed front-relative strips including those links, not changed weather or a relaxed numeric threshold.",
+    "all_32_gauges": [
+      {
+        "name": "桂林",
+        "before_mm": 4.568594932556152,
+        "after_mm": 3.777789831161499
+      },
+      {
+        "name": "河池",
+        "before_mm": 1.4519697427749634,
+        "after_mm": 1.5490069389343262
+      },
+      {
+        "name": "柳州",
+        "before_mm": 7.303359508514404,
+        "after_mm": 9.889562606811523
+      },
+      {
+        "name": "贺州",
+        "before_mm": 5.815288066864014,
+        "after_mm": 6.295681953430176
+      },
+      {
+        "name": "韶关",
+        "before_mm": 4.28451681137085,
+        "after_mm": 1.671451449394226
+      },
+      {
+        "name": "梅州",
+        "before_mm": 2.005908489227295,
+        "after_mm": 8.260069847106934
+      },
+      {
+        "name": "百色",
+        "before_mm": 4.760005474090576,
+        "after_mm": 4.699487209320068
+      },
+      {
+        "name": "来宾",
+        "before_mm": 6.286651611328125,
+        "after_mm": 5.131937503814697
+      },
+      {
+        "name": "梧州",
+        "before_mm": 13.950515747070312,
+        "after_mm": 18.394865036010742
+      },
+      {
+        "name": "肇庆",
+        "before_mm": 6.034482002258301,
+        "after_mm": 6.894665718078613
+      },
+      {
+        "name": "清远",
+        "before_mm": 3.298764705657959,
+        "after_mm": 16.10724639892578
+      },
+      {
+        "name": "广州",
+        "before_mm": 13.723905563354492,
+        "after_mm": 17.264257431030273
+      },
+      {
+        "name": "佛山",
+        "before_mm": 9.932784080505371,
+        "after_mm": 3.392493486404419
+      },
+      {
+        "name": "东莞",
+        "before_mm": 5.5410590171813965,
+        "after_mm": 8.856185913085938
+      },
+      {
+        "name": "河源",
+        "before_mm": 2.473336935043335,
+        "after_mm": 10.857365608215332
+      },
+      {
+        "name": "惠州",
+        "before_mm": 5.106115341186523,
+        "after_mm": 5.724542140960693
+      },
+      {
+        "name": "潮州",
+        "before_mm": 4.152937412261963,
+        "after_mm": 14.888341903686523
+      },
+      {
+        "name": "揭阳",
+        "before_mm": 1.1328645944595337,
+        "after_mm": 14.277812004089355
+      },
+      {
+        "name": "汕头",
+        "before_mm": 12.496549606323242,
+        "after_mm": 8.642838478088379
+      },
+      {
+        "name": "南宁",
+        "before_mm": 18.97395133972168,
+        "after_mm": 11.493484497070312
+      },
+      {
+        "name": "云浮",
+        "before_mm": 7.736490726470947,
+        "after_mm": 15.123553276062012
+      },
+      {
+        "name": "江门",
+        "before_mm": 7.734945297241211,
+        "after_mm": 11.243751525878906
+      },
+      {
+        "name": "中山",
+        "before_mm": 16.238765716552734,
+        "after_mm": 16.76984977722168
+      },
+      {
+        "name": "珠海",
+        "before_mm": 3.3739612102508545,
+        "after_mm": 2.287442922592163
+      },
+      {
+        "name": "深圳",
+        "before_mm": 4.643751621246338,
+        "after_mm": 16.986400604248047
+      },
+      {
+        "name": "汕尾",
+        "before_mm": 4.681535243988037,
+        "after_mm": 6.575019359588623
+      },
+      {
+        "name": "钦州",
+        "before_mm": 24.65274429321289,
+        "after_mm": 4.867705345153809
+      },
+      {
+        "name": "防城港",
+        "before_mm": 17.926183700561523,
+        "after_mm": 12.855801582336426
+      },
+      {
+        "name": "北海",
+        "before_mm": 17.203096389770508,
+        "after_mm": 11.276749610900879
+      },
+      {
+        "name": "湛江",
+        "before_mm": 16.70940589904785,
+        "after_mm": 8.498453140258789
+      },
+      {
+        "name": "茂名",
+        "before_mm": 9.08806037902832,
+        "after_mm": 6.826527118682861
+      },
+      {
+        "name": "阳江",
+        "before_mm": 24.570764541625977,
+        "after_mm": 10.229199409484863
+      }
+    ],
+    "actual_station_heavy_passages": [
+      {
+        "seed": 20260425,
+        "station": "江门",
+        "total_mm": 35.270362854003906,
+        "peak5_mm": 19.127302169799805
+      }
+    ],
+    "late_weak_initiations": [
+      {
+        "hour": 56,
+        "fraction": 0.00013354700854700856,
+        "max_rain_mm_h": 3.530430127418043
+      },
+      {
+        "hour": 57,
+        "fraction": 0.00013354700854700856,
+        "max_rain_mm_h": 2.0076703383450205
+      },
+      {
+        "hour": 58,
+        "fraction": 0.00013354700854700856,
+        "max_rain_mm_h": 1.8135797125302067
+      }
+    ]
+  },
+  "scope": "Project regression thresholds for these Astra 12-km seeds and controlled 6-km obstacle probes, not forecast skill, every-gauge 20-40mm certification, or full default 6-km weather verification"
+}

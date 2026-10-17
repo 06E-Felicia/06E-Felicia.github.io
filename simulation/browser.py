@@ -13,6 +13,7 @@ SOL_FIELDS={'temperature','dewpoint','u10','v10','rainrate','rain_total','rain_h
             'mucape','coldair','coldpool','coldpool_depth','organization','composite',
             'u925','v925','u500','v500','u300','v300','terrain',
             't3','q3','p3','u3','v3','w3','dbz3','fall3','echo_u3','echo_v3'}
+SOL_FIELDS.update(['point_rainrate','point_rain_total','point_rain_hour','point_rain5'])
 
 
 def select_backends(model):
@@ -59,16 +60,17 @@ def initialize(seed, controls, profile='astra'):
     lon,lat=model.lon,model.lat
     return json.dumps({'schema':2,'engine':VERSION,'status':'running','simulation':True,
         'source_sha256':source_digest('experiment.py','browser.py'),
-        'execution':'browser','edition':profile,'product_version':'1.1','config':config,'terrain':terrain,'frames':[],'acceleration':acceleration,
+        'execution':'browser','edition':profile,'product_version':'2','config':config,'terrain':terrain,'frames':[],'acceleration':acceleration,
+        'rain_grid':model.surface_rain.grid(lon,lat),
         'seed_streams':dict(zip(['initial_temperature','initial_moisture','time_evolution','synoptic','convective_cells'],model.seed_ids)),
         'grid':{'nx':lon.shape[1],'ny':lon.shape[0],'west':float(lon[0,0]),'south':float(lat[0,0]),
                 'dlon':float(lon[0,1]-lon[0,0]),'dlat':float(lat[1,0]-lat[0,0]),'nominal_km':config['grid_km'],'z_agl_m':Z.tolist()}})
 
 
-def advance(target):
+def advance(target, batch=10):
     # Small batches allow progress messages; no steps are skipped. Worker
     # termination is immediate even while Python is computing.
-    for _ in range(10):
+    for _ in range(max(1,min(10,int(batch)))):
         if model.time>=target-1e-6:break
         model.step(target)
     return model.time
@@ -78,6 +80,7 @@ def snapshot():
     audit=model.audit_state()
     if abs(audit['water_relative_residual'])>.002:raise FloatingPointError('Water budget failure; simulation stopped')
     fields=model.fields(include_mixed=selected_profile!='sol')
+    fields.update(model.surface_rain.fields())
     if selected_profile=='sol':fields={k:v for k,v in fields.items() if k in SOL_FIELDS}
     return json.dumps({'schema':2,'hour':model.time/3600,
         'fields':{k:pack(v) for k,v in fields.items()},'audit':audit},separators=(',',':'),allow_nan=False)

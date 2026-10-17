@@ -2,11 +2,13 @@
  'use strict';
  const $=id=>document.getElementById(id),D=SimulationData;
  const edition=document.body.dataset.edition==='sol'?'sol':'astra';
+ const mobile=matchMedia('(pointer: coarse)').matches&&Math.min(screen.width,screen.height)<900;
+ if(mobile&&edition==='astra'){$('local-grid').value='12';$('compute-mode').value='compact';$('frame-interval').value='30';}
  const localFile=location.protocol==='file:';
  function openingError(){
    if(localFile)return '不能直接双击 HTML 开始模拟。请双击项目中的「启动本地预览.command」，通过自动打开的 http://127.0.0.1 页面访问。';
    if(!window.isSecureContext)return '模拟需要安全环境。请使用 HTTPS，或通过本机 http://127.0.0.1 预览，不要使用局域网 HTTP 地址。';
-   for(const [name,available]of [['WebAssembly',typeof WebAssembly==='object'],['Worker',typeof Worker==='function'],['IndexedDB',typeof indexedDB!=='undefined'],['gzip 压缩',typeof CompressionStream==='function'&&typeof DecompressionStream==='function'],['随机数',typeof crypto?.randomUUID==='function']])if(!available)return '当前浏览器不支持 '+name+'，请使用较新的 Chrome、Edge、Firefox 或 Safari。';
+   for(const [name,available]of [['WebAssembly',typeof WebAssembly==='object'],['Worker',typeof Worker==='function'],['本机存储',typeof indexedDB!=='undefined'||typeof caches!=='undefined'],['随机数',typeof crypto?.randomUUID==='function']])if(!available)return '当前浏览器不支持 '+name+'，请使用较新的 Chrome、Edge、Firefox 或 Safari。';
    return null;
  }
  function showOpeningError(text){lastError=text;computeState='error';$('compute-status').textContent=text;$('phase-title').textContent='暂时无法开始';$('start-simulation').disabled=true;$('stop-compute').disabled=true;say(text);}
@@ -18,6 +20,7 @@
  const REGION=L.latLngBounds([19.8,104.3],[26.7,118]);
  let manifest=null,frame=null,current=0,busy=false,picking=false,views=[],syncing=false;
  let worker=null,computeState='idle',archiveRun=null,entries=[],replayRevision=0,replayTimer=null;
+ let workerWatchdog=null;
  let playbackState='idle',playTimer=null,roundLocked=false,lastError=null;
  const replayCache=new Map();
  try{archiveRun=sessionStorage.getItem('felicia-last-local-run');}catch(_){}
@@ -28,8 +31,9 @@
  const records=new Map(),choices=['composite','velocity','lowwind','upperwind'];
  const layers={composite:['合成雷达回波','dBZ',5,60],reflectivity:['单站反射率','dBZ',5,60],velocity:['多普勒径向速度','m/s',-30,30],lowwind:['低空风 · 925 hPa','m/s',0,30],midwind:['中层风 · 500 hPa','m/s',0,50],upperwind:['高空风 · 300 hPa','m/s',0,80],mucape:['MUCAPE','J/kg',0,4000],temperature:['近地面温度','℃',10,35],rainrate:['格点平均雨强','mm/h',0,60],rain_hour:['近 1 小时降水','mm',0,60],rain_total:['累计降水','mm',0,150]};
  layers.surfacewind=['近地面风','m/s',0,40];layers.gust=['近地面阵风（诊断）','m/s',0,40];
+ layers.rainrate=['点位雨强（估测）','mm/h',0,240];layers.rain5=['近 5 分钟降水（估测）','mm',0,20];layers.rain_hour[0]='近 1 小时降水（估测）';layers.rain_total[0]='累计降水（估测）';
  const palettes={rain:[[40,77,160],[39,175,223],[48,186,110],[231,220,67],[243,120,41],[206,49,85],[211,149,238]],wind:[[34,53,91],[52,106,160],[66,174,168],[157,204,123],[240,185,92],[223,100,100]],velocity:[[50,77,190],[46,182,200],[70,206,153],[39,49,66],[213,185,121],[238,121,84],[212,46,86]],terrain:[[30,78,61],[89,121,69],[140,139,98],[190,171,127],[218,215,192]]};
- function color(key,val){const p=palettes[key==='velocity'?'velocity':key==='terrain'?'terrain':['composite','reflectivity','rainrate','rainrate_core','rain_hour','rain_total'].includes(key)?'rain':'wind'],spec=layers[key],f=Math.max(0,Math.min(1,(val-spec[2])/(spec[3]-spec[2])))*(p.length-1),i=Math.min(p.length-2,Math.floor(f)),a=f-i;return p[i].map((v,k)=>Math.round(v+(p[i+1][k]-v)*a));}
+ function color(key,val){const p=palettes[key==='velocity'?'velocity':key==='terrain'?'terrain':['composite','reflectivity','rainrate','rain5','rainrate_core','rain_hour','rain_total'].includes(key)?'rain':'wind'],spec=layers[key],f=Math.max(0,Math.min(1,(val-spec[2])/(spec[3]-spec[2])))*(p.length-1),i=Math.min(p.length-2,Math.floor(f)),a=f-i;return p[i].map((v,k)=>Math.round(v+(p[i+1][k]-v)*a));}
  const clock=h=>{const minutes=Math.round(h*60)+480;return `第 ${Math.floor(minutes/1440)+1} 天 ${String(Math.floor(minutes/60)%24).padStart(2,'0')}:${String(minutes%60).padStart(2,'0')}`;};
  const duration=seconds=>seconds<60?Math.ceil(seconds)+' 秒':seconds<3600?Math.ceil(seconds/60)+' 分钟':(seconds/3600).toFixed(1)+' 小时';
  function initializationProgress(hour,hours,elapsed=null){
@@ -43,7 +47,7 @@
    const dialog=$('sol-suggestion');
    if(edition!=='astra'||solSuggested||total<=300||remaining<=0||!worker||!dialog||dialog.dataset.enabled!=='true')return;
    solSuggested=true;
-   $('sol-suggestion-text').textContent='按本机当前计算速度，Astra 本轮预计共需约 '+duration(total)+'，超过 5 分钟。可以切换到轻量版 StormSim 1.1 Sol。';
+   $('sol-suggestion-text').textContent='按本机当前计算速度，Astra 本轮预计共需约 '+duration(total)+'，超过 5 分钟。可以切换到 StormSim 2 Sol。';
    const url=new URL('simulator-sol.html',location.href);if(manifest?.config?.seed)url.searchParams.set('seed',manifest.config.seed);url.searchParams.set('hours',manifest?.config?.hours||$('local-hours').value);
    $('switch-to-sol').href=url.href;dialog.showModal();
  }
@@ -51,7 +55,7 @@
  function decodeLive(raw){
    raw=JSON.parse(raw);
    if(raw.schema!==2||!Number.isFinite(raw.hour)||raw.hour<0)throw Error('模拟时刻不匹配');
-   const fields=Object.fromEntries(Object.entries(raw.fields).map(([k,v])=>[k,D.unpack(v,manifest.grid)]));
+   const fields=Object.fromEntries(Object.entries(raw.fields).map(([k,v])=>[k,D.unpack(v,k.startsWith('point_')?manifest.rain_grid:manifest.grid)]));
    const required=['temperature','rainrate','rain_total','mucape','terrain','t3','q3','p3','u3','v3','w3','dbz3','coldair'];
    if(edition==='astra')required.push('sbcape','mlcape','cin');
    for(const k of required)if(!fields[k])throw Error('缺少模拟字段 '+k);
@@ -70,7 +74,7 @@
    playTimer=setTimeout(async()=>{if(run!==archiveRun||playbackState!=='playing')return;if(await seekReplay(current+1))schedulePlayback();},Math.max(16,delay));
  }
  async function startPlayback(){if(worker||computeState!=='complete'||entries.length<2)return;clearTimeout(replayTimer);pausePlayback();replayRevision++;if(!frame||current>=entries.length-1){if(!await seekReplay(0))return;}playbackState='playing';playbackButton();schedulePlayback();}
- function stopCompute(){if($('sol-suggestion')?.open)$('sol-suggestion').close();if(worker){worker.terminate();worker=null;busy=false;computeState='stopped';if(manifest)manifest.status='stopped';entries=[];SimulationFrameStore.remove(archiveRun).catch(()=>{});$('empty-state').hidden=false;$('sim-clock').textContent='等待开始';}pausePlayback();replayRevision++;clearTimeout(replayTimer);$('compute-status').removeAttribute('aria-busy');$('initialization').hidden=true;$('compute-status').textContent='本轮已结束，再次开始将生成全新的天气环境。';say('本轮已结束');$('stop-compute').disabled=true;computeControls(false);if(computeState==='complete')showReplay();}
+ function stopCompute(){clearTimeout(workerWatchdog);if(computeState==='loading')computeState='stopped';if($('sol-suggestion')?.open)$('sol-suggestion').close();if(worker){worker.terminate();worker=null;busy=false;computeState='stopped';if(manifest)manifest.status='stopped';entries=[];SimulationFrameStore.remove(archiveRun).catch(()=>{});$('empty-state').hidden=false;$('sim-clock').textContent='等待开始';}pausePlayback();replayRevision++;clearTimeout(replayTimer);$('compute-status').removeAttribute('aria-busy');$('initialization').hidden=true;$('compute-status').textContent='本轮已结束，再次开始将生成全新的天气环境。';say('本轮已结束');$('stop-compute').disabled=true;computeControls(false);if(computeState==='complete')showReplay();}
  async function startCompute(){
    const unsupported=openingError();if(unsupported){showOpeningError(unsupported);return;}
    if(roundLocked||worker)return;
@@ -78,30 +82,38 @@
    const hours=+$('local-hours').value,grid_km=+$('local-grid').value,frame_minutes=+$('frame-interval').value,compact_transport=$('compute-mode').value==='compact';
    if(!Number.isFinite(hours)||hours<1||hours>96){$('compute-status').textContent='过程时长须在 1–96 小时之间。';return;}
    stopCompute();const old=archiveRun;archiveRun=crypto.randomUUID();const run=archiveRun;clearFrames();computeControls(true);if(old)SimulationFrameStore.remove(old).catch(()=>{});try{sessionStorage.setItem('felicia-last-local-run',run);}catch(_){}computeState='loading';$('compute-status').textContent='正在准备本轮天气环境，请稍候…';$('stop-compute').disabled=false;$('empty-state').hidden=true;$('compute-status').setAttribute('aria-busy','true');say('正在准备本轮天气环境');
-   const owned=new Worker('assets/scripts/simulation-local-worker.js?v=4.2.1');worker=owned;
    $('initialization').hidden=false;$('compute-progress').removeAttribute('value');$('compute-percent').textContent='载入中';$('compute-remaining').textContent='首次载入时暂无法估计剩余时间';
+   $('compute-status').textContent='正在检查本机存储…';
+   await SimulationFrameStore.prepare();
+   if(archiveRun!==run||!roundLocked)return;
+   const owned=new Worker('assets/scripts/simulation-local-worker.js?v=5.5.1');worker=owned;
    const fail=text=>{if(worker!==owned)return;busy=false;stopCompute();lastError=text;computeState='error';$('compute-status').textContent='模拟中止：'+text+'。请检查项目文件与浏览器存储权限后重试。';};
+   const watch=()=>{clearTimeout(workerWatchdog);workerWatchdog=setTimeout(()=>{if(document.hidden)watch();else fail('计算线程长时间未响应，请保持 Safari 在前台，关闭其他占用内存的页面后重试');},180000);};watch();
    owned.onerror=e=>fail(e.message||'计算线程无法加载');
+   owned.onmessageerror=()=>fail('浏览器无法读取计算线程的数据');
    owned.onmessage=async({data})=>{if(worker!==owned)return;
+     watch();
      try{
        // Show actual setup progress/ETA, but no partial weather or replay UI.
-       if(data.type==='status')$('compute-status').textContent=data.text||'正在载入本轮初始环境…';
+       if(data.type==='status'){$('compute-status').textContent=data.text||'正在载入本轮初始环境…';$('compute-percent').textContent='载入中'+(data.stage?' · '+data.stage:'');}
        if(data.type==='progress')initializationProgress(data.hour,data.hours,data.elapsed);
        if(data.type==='manifest'){
          manifest=data.manifest;computeState='computing';$('run-info').textContent=`${manifest.config.month} 月 · ${manifest.grid.nominal_km} km · ${manifest.config.hours} 小时`;
          initializationProgress(0,manifest.config.hours);$('compute-status').textContent='环境初始化中，完成后自动开始本轮演变。';
        }
        if(data.type==='frame'){
-         busy=true;const latest=decodeLive(data.raw);if(data.index!==entries.length||entries.length&&latest.hour<=entries.at(-1).hour)throw Error('计算结果时刻没有前进');await SimulationFrameStore.putRaw(run,data.index,data.raw);if(worker!==owned){SimulationFrameStore.remove(run).catch(()=>{});return;}entries.push({index:data.index,hour:latest.hour});
+         // Validate metadata now; decode large volumes only during viewing,
+         // after the Python Worker has released its WASM memory on iOS.
+         busy=true;const latest=JSON.parse(data.raw);if(latest.schema!==2||!latest.fields?.t3||!Number.isFinite(latest.hour)||data.index!==entries.length||entries.length&&latest.hour<=entries.at(-1).hour)throw Error('计算结果时刻没有前进');await SimulationFrameStore.putRaw(run,data.index,data.raw);if(worker!==owned){SimulationFrameStore.remove(run).catch(()=>{});return;}entries.push({index:data.index,hour:latest.hour});
          busy=false;
          initializationProgress(latest.hour,manifest.config.hours);
          if(worker===owned)owned.postMessage({type:'ack'});
        }
-       if(data.type==='complete'){if(!entries.length||Math.abs(entries.at(-1).hour-manifest.config.hours)>1e-6)throw Error('完整过程未保存，拒绝展示');manifest.status='complete';manifest.elapsed_seconds=data.elapsed;manifest.timing=data.timing;computeState='complete';if($('sol-suggestion')?.open)$('sol-suggestion').close();$('compute-status').removeAttribute('aria-busy');$('initialization').hidden=true;$('compute-status').textContent='本轮环境已就绪，可调整时间流速。';$('phase-title').textContent='天气演变中';owned.terminate();worker=null;$('empty-state').hidden=true;await startPlayback();}
+       if(data.type==='complete'){if(!entries.length||Math.abs(entries.at(-1).hour-manifest.config.hours)>1e-6)throw Error('完整过程未保存，拒绝展示');clearTimeout(workerWatchdog);manifest.status='complete';manifest.elapsed_seconds=data.elapsed;manifest.timing=data.timing;computeState='complete';if($('sol-suggestion')?.open)$('sol-suggestion').close();$('compute-status').removeAttribute('aria-busy');$('initialization').hidden=true;$('compute-status').textContent='本轮环境已就绪，可调整时间流速。';$('phase-title').textContent='天气演变中';owned.terminate();worker=null;$('empty-state').hidden=true;await startPlayback();}
        if(data.type==='error')fail(data.text);
      }catch(e){fail(e.message||String(e));}
    };
-   owned.postMessage({type:'start',profile:edition,seed:transferSeed,controls:{hours,grid_km,frame_minutes,compact_transport}});
+   owned.postMessage({type:'start',profile:edition,seed:transferSeed,mobile,controls:{hours,grid_km,frame_minutes,compact_transport}});
    if(transferSeed){const clean=new URL(location.href);clean.searchParams.delete('seed');clean.searchParams.delete('hours');history.replaceState(null,'',clean.pathname+clean.search+clean.hash);}transferSeed=null;
  }
  if($('keep-astra'))$('keep-astra').onclick=()=>$('sol-suggestion').close();
@@ -111,11 +123,16 @@
  function customSave(){try{localStorage.setItem(STORAGE,JSON.stringify(custom));return true;}catch(_){return false;}}
  function observation(point){if(!frame)return {};const i=D.index(manifest.grid,point.lon,point.lat),f=frame.fields;
    const out={hour:frame.hour};for(const k of ['temperature','dewpoint','rainrate','rain_hour','rain_total','mucape'])out[k]=D.value(f[k],i);
+   for(const k of ['rainrate','rain_hour','rain_total','rain5']){
+     const fine=manifest.rain_grid&&f['point_'+k],g=fine?manifest.rain_grid:manifest.grid;
+     out[k]=D.sample(fine||f[k],g,point.lon,point.lat);
+   }
    out.gust=D.value(f.gust,i);
    const u=D.value(f.u10,i),v=D.value(f.v10,i);out.wind=Math.hypot(u,v);out.direction=out.wind<.1?NaN:(Math.atan2(-u,-v)*180/Math.PI+360)%360;return out;
  }
  const obs=[['temperature','气温','℃'],['dewpoint','露点','℃'],['wind','风速','m/s'],['direction','风向（来向）','°'],['rainrate','雨强','mm/h'],['rain_hour','近 1h 降水','mm'],['rain_total','累计雨量','mm'],['mucape','MUCAPE','J/kg']];
  obs.splice(3,0,['gust','阵风（诊断）','m/s']);
+ obs.splice(6,0,['rain5','近 5min 降水','mm']);
  function update(){
    $('station-name').textContent=selected.name;$('station-id').textContent=selected.id.startsWith('custom-')?'自定义观测点':selected.id+(selected.stationName&&selected.stationName!==selected.name?' · '+selected.stationName+'站':'');$('station-coordinates').textContent=`${selected.lon.toFixed(3)}°E / ${selected.lat.toFixed(3)}°N`;$('delete-station').hidden=selected.kind!=='custom';
    const o=observation(selected);for(const [k]of obs)$('obs-'+k).textContent=Number.isFinite(o[k])?o[k].toFixed(k.includes('cape')||k==='cin'||k==='direction'?0:1):'—';
@@ -140,7 +157,7 @@
      this.map.createPane('weatherFields').style.zIndex='350';
      this.map.getPane('weatherFields').style.pointerEvents='none';
      this.map.on('zoomstart',()=>{this.zooming=true;});
-     this.map.on('zoomend',()=>{this.zooming=false;});
+     this.map.on('zoomend',()=>{this.zooming=false;this.constrainView();});
      // Followers emit asynchronous zoom events too. Keep their ownership
      // through moveend so they cannot bounce the same zoom back to the source.
      this.map.on('zoomanim',e=>{if(!this.disposed&&!this.following&&!syncing)this.syncView(e.center,e.zoom);});
@@ -156,7 +173,16 @@
      if(Math.abs(delta.x)>.5||Math.abs(delta.y)>.5)this.map.panBy(delta,{animate:false});
    }
    queueVectors(){cancelAnimationFrame(this.vectorRAF);this.vectorRAF=requestAnimationFrame(()=>{if(!this.disposed&&!this.zooming&&!this.following)this.drawVectors();});}
-   limitView(reset=false){this.map.setMinZoom(this.map.getBoundsZoom(REGION));if(reset)this.map.fitBounds(REGION,{animate:false});this.map.panInsideBounds(REGION,{animate:false});}
+   constrainView(){
+     // A fitted regional viewport can be larger than REGION. Leaflet's
+     // viscous limiter then has reversed min/max offsets and snaps on drag.
+     // Expand constraints ONLY by the viewport surplus, not the zoom limit.
+     const m=this.map,z=m.getZoom(),a=m.project(REGION.getNorthWest(),z),b=m.project(REGION.getSouthEast(),z),size=m.getSize();
+     const px=Math.max(0,(size.x-(b.x-a.x))/2)+1,py=Math.max(0,(size.y-(b.y-a.y))/2)+1;
+     m.setMaxBounds(L.latLngBounds(m.unproject(a.subtract([px,py]),z),m.unproject(b.add([px,py]),z)));
+     if(z<=m.getMinZoom()+.01)m.dragging.disable();else m.dragging.enable();
+   }
+   limitView(reset=false){this.map.setMinZoom(this.map.getBoundsZoom(REGION));this.constrainView();if(reset)this.map.fitBounds(REGION,{animate:false});this.constrainView();}
    destroy(){this.disposed=true;this.pendingView=null;cancelAnimationFrame(this.syncRAF);cancelAnimationFrame(this.vectorRAF);this.map.stop();
      // Leaflet's in-flight zoom timer still needs its pane at transition end.
      // The card is detached immediately by maps(); release its map only after
@@ -204,7 +230,7 @@
      if(!frame){if(this.raster){this.map.removeLayer(this.raster);this.raster=null;}this.renderedFrame=null;this.frontFrame=null;this.front.setLatLngs([]);this.vectors.setLatLngs([]);return;}
      const signature=[this.key,radar.lon,radar.lat,$('radar-elevation').value,$('fold-velocity').checked].join('/');
      if(this.renderedFrame!==frame||this.signature!==signature){
-       const g=manifest.grid,f=frame.fields,key=this.key,wind=key.endsWith('wind'),level=key==='surfacewind'?'10':key==='lowwind'?'925':key==='midwind'?'500':'300';
+       const f=frame.fields,key=this.key,pointRain=manifest.rain_grid&&f['point_'+key],g=pointRain?manifest.rain_grid:manifest.grid,wind=key.endsWith('wind'),level=key==='surfacewind'?'10':key==='lowwind'?'925':key==='midwind'?'500':'300';
        const west=g.west-g.dlon/2,east=g.west+(g.nx-.5)*g.dlon,south=g.south-g.dlat/2,north=g.south+(g.ny-.5)*g.dlat;
        const merc=lat=>Math.log(Math.tan(Math.PI/4+lat*Math.PI/360)),top=merc(north),bottom=merc(south);
        const canvas=document.createElement('canvas');canvas.width=g.nx*2;canvas.height=g.ny*2;const ctx=canvas.getContext('2d'),pixels=ctx.createImageData(canvas.width,canvas.height),memo=new Map(),elev=+$('radar-elevation').value,fold=$('fold-velocity').checked;
@@ -221,8 +247,8 @@
            if(lon<domain[0]||lon>domain[2]||lat<domain[1]||lat>domain[3])continue;
            const column=Math.max(0,Math.min(g.nx-1,Math.round((lon-g.west)/g.dlon)));
            const i=row*g.nx+column;let rgba=memo.get(i);
-           if(!rgba){let val;if(key==='velocity'||key==='reflectivity'){const r=D.radar(f,g,g.west+column*g.dlon,g.south+row*g.dlat,radar,elev,fold);val=r.valid?(key==='velocity'?r.velocity:r.dbz):NaN;}else val=wind?Math.hypot(D.value(f['u'+level],i),D.value(f['v'+level],i)):D.value(f[key],i);
-             const visible=Number.isFinite(val)&&(!['composite','reflectivity'].includes(key)||val>=5)&&(!['rainrate','rainrate_core','rain_hour','rain_total','coldpool'].includes(key)||val>=.1)&&(key!=='coldpool_depth'||val>=30);rgba=visible?[...color(key,val),255]:[0,0,0,0];memo.set(i,rgba);
+           if(!rgba){let val;if(key==='velocity'||key==='reflectivity'){const r=D.radar(f,g,g.west+column*g.dlon,g.south+row*g.dlat,radar,elev,fold);val=r.valid?(key==='velocity'?r.velocity:r.dbz):NaN;}else val=wind?Math.hypot(D.value(f['u'+level],i),D.value(f['v'+level],i)):D.value(pointRain||f[key],i);
+             const visible=Number.isFinite(val)&&(!['composite','reflectivity'].includes(key)||val>=5)&&(!['rainrate','rain5','rainrate_core','rain_hour','rain_total','coldpool'].includes(key)||val>=.1)&&(key!=='coldpool_depth'||val>=30);rgba=visible?[...color(key,val),255]:[0,0,0,0];memo.set(i,rgba);
            }
            pixels.data.set(rgba,(y*canvas.width+x)*4);
          }

@@ -14,14 +14,14 @@ ROOT = Path(__file__).resolve().parents[1]
 HEALTH = '/__stormsim_preview__'
 REQUIRED = (
     'simulator.html', 'simulator-sol.html', 'simulation/__init__.py',
-    'simulation/core.py', 'simulation/coldpool.py', 'simulation/numerics.py',
+    'simulation/core.py', 'simulation/coldpool.py', 'simulation/precipitation.py', 'simulation/synoptic.py', 'simulation/numerics.py',
     'simulation/thermo.py', 'simulation/terrain.py', 'simulation/run.py',
     'simulation/config.json', 'simulation/experiment.py', 'simulation/browser.py',
     'assets/scripts/simulation-local-worker.js', 'assets/scripts/simulation-advection.js',
     'assets/scripts/simulation-v2.js', 'assets/scripts/simulation-data.js',
     'assets/scripts/simulation-frame-store.js', 'assets/styles/simulation-v2.css',
     'assets/vendor/leaflet/leaflet.js', 'assets/vendor/leaflet/leaflet.css',
-    'assets/data/simulation-terrain.npz',
+    'assets/data/simulation-terrain.npz', 'assets/data/simulation-terrain-detail.npz',
     'assets/data/simulator-stations.json', 'assets/vendor/pyodide/pyodide.js',
     'assets/vendor/pyodide/pyodide.asm.js', 'assets/vendor/pyodide/pyodide.asm.wasm',
     'assets/vendor/pyodide/python_stdlib.zip', 'assets/vendor/pyodide/pyodide-lock.json',

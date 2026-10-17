@@ -65,10 +65,14 @@ class Advection:
             return (-(np.diff(fx,axis=-1)+np.diff(fy,axis=-2))/self.dx,
                     -(np.diff(mx,axis=-1)+np.diff(my,axis=-2))/self.dx)
 
+        moments=np.where(carrier[None]>0,moments,0)
         da,dm=tendency(carrier,moments)
         first=carrier+dt*da;first_m=moments+dt*dm
+        first_m=np.where(first[None]>0,first_m,0)
         da,dm=tendency(first,first_m)
-        return .5*(carrier+first+dt*da),.5*(moments+first_m+dt*dm)
+        updated=.5*(carrier+first+dt*da)
+        carried=.5*(moments+first_m+dt*dm)
+        return updated,np.where(updated[None]>0,carried,0)
 
     @staticmethod
     def _flux(field,wind,positive,axis,outside):

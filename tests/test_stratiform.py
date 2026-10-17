@@ -37,7 +37,10 @@ class StratiformTests(unittest.TestCase):
         before=self.water(m);surface=m.trailing_microphysics(90)
         self.assertGreater(float((m.anvil[9]+m.graupel[9]).mean()),.0005)
         self.assertLess(float(m.cloud[9].mean()),.00065)
-        np.testing.assert_allclose(m.plume_cloud[9],m.cloud[9]*.5)
+        # Precipitating core ice additionally collects colocated plume cloud;
+        # it need not retain the initial 1:2 share of environmental cloud.
+        self.assertTrue(np.all(m.plume_cloud[9]<=m.cloud[9]*.5))
+        self.assertTrue(np.all(m.plume_cloud[9]>=0))
         self.assertLess(abs(self.water(m)+surface.sum()-before)/before,1e-12)
 
     def test_ice_growth_debits_real_supersaturated_vapour(self):

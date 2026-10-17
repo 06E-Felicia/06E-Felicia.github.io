@@ -47,7 +47,10 @@ def terrain_for(config, path):
             x=(lon-source_lon[0,0])/(source_lon[0,1]-source_lon[0,0])
             y=(lat-source_lat[0,0])/(source_lat[1,0]-source_lat[0,0])
             h=map_coordinates(h,[y,x],order=1,mode='nearest')
-        return h,{'source':str(data['source']),'native_zoom':int(data['zoom']),'source_grid_km':float(data['grid_km'])}
+        from .terrain import coastal_detail
+        h,detail=coastal_detail(h,lon,lat,config['grid_km'],Path(path).with_name('simulation-terrain-detail.npz'))
+        return h,{'source':str(data['source']),'native_zoom':int(data['zoom']),'source_grid_km':float(data['grid_km']),
+                  **({'coastal_detail':detail} if detail else {})}
 
 
 def run(config, terrain_path, output):
@@ -67,20 +70,22 @@ def run(config, terrain_path, output):
         'dependencies':{name:importlib.metadata.version(name) for name in ['numpy','scipy','Pillow']},
         'source_sha256':source_digest('run.py'),
         'config':cfg,'seed_streams':dict(zip(['initial_temperature','initial_moisture','time_evolution','synoptic','convective_cells'],model.seed_ids)),
+        'rain_grid':model.surface_rain.grid(lon,lat),
         'grid':{'nx':lon.shape[1],'ny':lon.shape[0],'west':float(lon[0,0]),'south':float(lat[0,0]),
                 'dlon':float(lon[0,1]-lon[0,0]),'dlat':float(lat[1,0]-lat[0,0]),'nominal_km':cfg['grid_km'],'z_agl_m':Z.tolist()},
         'terrain':source,'frames':entries,'requested_frame_minutes':requested_interval,
         'limitations':['简化分层热力/水物质输送和对流质量通量闭合；非完整三维非静力模式',
                       '暖雨、慢沉降冰云与快速对流冻结降水储库；仍无完整冰相/冰雹微物理或可解析超级单体旋转',
                       '参考静力气压；无完整压力扰动方程，近地风并非严格的 10 m 诊断',
-                      '无实况同化；南岭锋区是物理场初始条件，不预设风暴数量、路线和抵达时间',
+                      '无实况同化；孟加拉湾南支槽前气流与外部冷空气为天气情景强迫；每轮一个有限起生区，次日重新评估未耗竭暖区，不预设回波、路线和抵达时间',
+                      '阵风依据有限下沉功和地表摩擦诊断，教学情景上限为32m/s，并非实况极值预报',
                       '1 个网格不是有效预报精度；结果只用于机制实验']}
     times=np.arange(0,cfg['hours']*3600+1,cfg['frame_minutes']*60).tolist()
     if abs(times[-1]-cfg['hours']*3600)>.01:times.append(cfg['hours']*3600)
     for index, target in enumerate(times):
         while model.time<target-1e-6:model.step(target)
         if time.monotonic()-start>9000:raise TimeoutError('Compute budget exceeded (150 min); use coarser grid or shorter duration')
-        fields=model.fields();audit=model.audit_state()
+        fields=model.fields();fields.update(model.surface_rain.fields());audit=model.audit_state()
         if abs(audit['water_relative_residual'])>2e-3:raise FloatingPointError('Water budget residual exceeds 0.2%; refusing to publish')
         name=f'frame-{index:04d}.json.gz'
         digest=write_gzip(output/name,{'schema':2,'hour':model.time/3600,'fields':{k:pack(v) for k,v in fields.items()},'audit':audit})

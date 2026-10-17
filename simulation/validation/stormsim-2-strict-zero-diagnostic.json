@@ -1,0 +1,66 @@
+{
+  "engine": "4.0.0-airmass-trigger-budget",
+  "source_sha256": "d85186cfce1f62ff224bdef0be00503d75d74245b46cb375bfd65f1bb44f328d",
+  "all_passed": false,
+  "checks": {
+    "same_final_source": true,
+    "astra_not_sol_processes": true,
+    "whole_72_hours_complete": true,
+    "high_moisture_stress_complete": true,
+    "no_geographic_cape_plateau": true,
+    "no_domain_wide_deep_activation_in_samples": true,
+    "postfront_air_reaches_entire_domain": true,
+    "no_spurious_late_deep_initiation": false,
+    "strong_rain_not_removed": true,
+    "water_budget": true,
+    "real_astra_browser": true,
+    "material_front_reduces_actual_energy": true,
+    "controlled_postfront_does_not_reignite": true,
+    "cold_pool_under_half_kelvin_at_four_hours": true,
+    "retirement_does_not_restore_consumed_cape": true,
+    "moving_shafts_reduce_false_dry_holes": true,
+    "native_rain_conserved": true
+  },
+  "details": {
+    "late_postfront": [
+      {
+        "hour": 48,
+        "cape_p95": 169.36810842375752,
+        "new_fraction": 0.0,
+        "strong_echo_fraction": 0.0,
+        "active_coldpool_fraction": 0.005074786324786325
+      },
+      {
+        "hour": 54,
+        "cape_p95": 608.0927104115746,
+        "new_fraction": 0.0,
+        "strong_echo_fraction": 0.0,
+        "active_coldpool_fraction": 0.0033386752136752135
+      },
+      {
+        "hour": 60,
+        "cape_p95": 936.9847602967563,
+        "new_fraction": 0.0,
+        "strong_echo_fraction": 0.0,
+        "active_coldpool_fraction": 0.005742521367521368
+      },
+      {
+        "hour": 66,
+        "cape_p95": 583.2126765845637,
+        "new_fraction": 0.0,
+        "strong_echo_fraction": 0.0,
+        "active_coldpool_fraction": 0.006543803418803419
+      },
+      {
+        "hour": 72,
+        "cape_p95": 126.82582435017301,
+        "new_fraction": 0.0,
+        "strong_echo_fraction": 0.0,
+        "active_coldpool_fraction": 0.004941239316239316
+      }
+    ],
+    "max_sample_activation": 0.04620726495726496,
+    "moist_case_point_five_minute_peak_mm": 17.351146697998047
+  },
+  "scope": "Representative Astra 12 km samples and controlled closure probes; empirical area thresholds are not a universal weather definition; 6 km full process and all seeds are not certified"
+}

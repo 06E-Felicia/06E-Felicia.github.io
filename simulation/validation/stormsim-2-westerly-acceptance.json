@@ -1,0 +1,208 @@
+{
+  "engine": "4.4.0-westerly-warm-sector",
+  "source_sha256": "53664f9dc67fa1aec2864f9bac488d5924868c40a3a3ebd0c2d96871183fdb13",
+  "checks": {
+    "same_final_astra_source": true,
+    "500hpa_westerly_wsw": true,
+    "each_sample_triggers_and_organizes": true,
+    "dry_sample_included": true,
+    "three_spring_months": true,
+    "first_day_wake_stays_quiet": true,
+    "day_two_warm_sector_not_preempted": true,
+    "new_day_two_outbreak_lasts_multiple_samples": true,
+    "front_continues_south_after_warm_phase": true,
+    "real_convective_rain": true,
+    "water_budget": true,
+    "gust_not_excessive": true,
+    "real_browser_final_source": true,
+    "nojekyll_present": true,
+    "webkit_final_source_starts": true
+  },
+  "passed": true,
+  "cases": [
+    {
+      "seed": 20260423,
+      "hours": 72,
+      "moisture": 0.992,
+      "first_initiation_h": 3.5,
+      "first_strong_h": 4.5,
+      "strong_hours": [
+        4.5,
+        5.0,
+        5.5,
+        6.0,
+        6.5,
+        7.0,
+        7.5,
+        8.0,
+        8.5,
+        9.0,
+        9.5,
+        29.0,
+        29.5,
+        30.0,
+        30.5,
+        31.0,
+        31.5,
+        32.0,
+        32.5,
+        33.0,
+        33.5,
+        34.0,
+        34.5,
+        35.0
+      ],
+      "day_two_strong_hours": [
+        29.0,
+        29.5,
+        30.0,
+        30.5,
+        31.0,
+        31.5,
+        32.0,
+        32.5,
+        33.0,
+        33.5,
+        34.0,
+        34.5,
+        35.0
+      ],
+      "wind500_from_range_deg": [
+        254.3998565673828,
+        269.51226806640625
+      ],
+      "rainrate_peak_mm_h": 88.5173748574659,
+      "grid_total_peak_mm": 83.02970886230469,
+      "point_five_minute_peak_mm": 20.513776779174805,
+      "point_total_peak_mm": 83.03010559082031,
+      "gust_peak_m_s": 30.021323173899283,
+      "water_max_relative_residual": 1.8328621225029354e-07,
+      "front_latitude_by_hour": {
+        "24.0": [
+          25.69431414243009,
+          25.734833426223354,
+          25.743935796346438
+        ],
+        "36.0": [
+          23.78680053199946,
+          24.427489935885216,
+          24.93325356398237
+        ],
+        "48.0": [
+          20.29804589042593,
+          20.693429927879336,
+          21.07016491907229
+        ],
+        "72.0": [
+          13.444067747672646,
+          13.603419568370759,
+          13.76217189067864
+        ]
+      },
+      "largest_strong_ns_km": 276
+    },
+    {
+      "seed": 20261017,
+      "hours": 12,
+      "moisture": 1.004,
+      "first_initiation_h": 2.5,
+      "first_strong_h": 4.5,
+      "strong_hours": [
+        4.5,
+        5.0,
+        5.5,
+        6.0,
+        6.5,
+        7.0,
+        7.5,
+        8.0,
+        8.5,
+        9.0,
+        9.5,
+        10.0,
+        10.5
+      ],
+      "day_two_strong_hours": [],
+      "wind500_from_range_deg": [
+        258.6034851074219,
+        267.66412353515625
+      ],
+      "rainrate_peak_mm_h": 101.51304178446655,
+      "grid_total_peak_mm": 22.772672653198242,
+      "point_five_minute_peak_mm": 31.443328857421875,
+      "point_total_peak_mm": 57.12851333618164,
+      "gust_peak_m_s": 32.0,
+      "water_max_relative_residual": 6.154591724369054e-09,
+      "front_latitude_by_hour": {},
+      "largest_strong_ns_km": 216
+    },
+    {
+      "seed": 20261018,
+      "hours": 10,
+      "moisture": 0.856,
+      "first_initiation_h": 3.5,
+      "first_strong_h": 4.5,
+      "strong_hours": [
+        4.5,
+        5.0,
+        5.5,
+        6.0,
+        6.5,
+        7.0,
+        7.5,
+        8.0,
+        8.5,
+        9.0,
+        9.5,
+        10.0
+      ],
+      "day_two_strong_hours": [],
+      "wind500_from_range_deg": [
+        258.3251647949219,
+        265.6344299316406
+      ],
+      "rainrate_peak_mm_h": 72.3098907385095,
+      "grid_total_peak_mm": 23.65001106262207,
+      "point_five_minute_peak_mm": 17.58740997314453,
+      "point_total_peak_mm": 41.84443283081055,
+      "gust_peak_m_s": 27.411200633961872,
+      "water_max_relative_residual": 1.6425094816442679e-09,
+      "front_latitude_by_hour": {},
+      "largest_strong_ns_km": 168
+    },
+    {
+      "seed": 20261020,
+      "hours": 10,
+      "moisture": 0.933,
+      "first_initiation_h": 3.5,
+      "first_strong_h": 5.0,
+      "strong_hours": [
+        5.0,
+        5.5,
+        6.0,
+        6.5,
+        7.0,
+        7.5,
+        8.0,
+        8.5,
+        9.0,
+        9.5,
+        10.0
+      ],
+      "day_two_strong_hours": [],
+      "wind500_from_range_deg": [
+        255.5377960205078,
+        264.4541015625
+      ],
+      "rainrate_peak_mm_h": 70.08904291537333,
+      "grid_total_peak_mm": 16.165695190429688,
+      "point_five_minute_peak_mm": 16.682783126831055,
+      "point_total_peak_mm": 34.748653411865234,
+      "gust_peak_m_s": 26.365905518664636,
+      "water_max_relative_residual": 3.650375559606151e-09,
+      "front_latitude_by_hour": {},
+      "largest_strong_ns_km": 252
+    }
+  ],
+  "scope": "Astra 12-km sampled integrations; not a default 6-km or all-seed guarantee. Rain peaks are domain maxima, not a promise at every station. Echo fragments are retained."
+}

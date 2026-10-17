@@ -44,7 +44,7 @@ class PhysicsTests(unittest.TestCase):
 
     def test_stochastic_updates_after_initialization(self):
         a=self.model();before=a.noise.copy()
-        for _ in range(15):a.step()
+        while a.time<1000:a.step()
         self.assertFalse(np.array_equal(before,a.noise))
 
     def test_conservative_transport(self):
@@ -66,6 +66,7 @@ class PhysicsTests(unittest.TestCase):
 
     def test_departed_front_is_not_reset_by_initial_western_boundary(self):
         m=self.model();warm=m.air<.1;initial_t=m.temp.copy();initial_q=m.q.copy()
+        m.synoptic.front_lat.fill(m.cfg['bounds'][1]-4)
         m.air.fill(1);incoming_t,incoming_q=m.upstream_environment()
         self.assertTrue(np.all(incoming_t[0,warm]<initial_t[0,warm]-5))
         self.assertTrue(np.all(incoming_q[0,warm]<initial_q[0,warm]))
@@ -123,7 +124,12 @@ class PhysicsTests(unittest.TestCase):
         self.assertGreater(float((high-low).min()),2)
 
     def test_surface_wind_is_prognostic_and_front_is_continuous(self):
-        m=self.model();u,v=m.winds()
+        m=self.model()
+        # The production reservoir now starts outside the domain. Isolate an
+        # ENTERED front here to test continuity, not its old initial position.
+        m.synoptic.front_lat.fill(24.5);m.air=m.synoptic.external_air()
+        m.syn_u,m.syn_v=m.synoptic.surface_target(m.air,0);m.u=m.syn_u.copy();m.v=m.syn_v.copy()
+        u,v=m.winds()
         np.testing.assert_allclose(u[0],m.u,atol=1e-6)
         np.testing.assert_allclose(v[0],m.v,atol=1e-6)
         for _ in range(240):m.step()
@@ -314,8 +320,9 @@ class PhysicsTests(unittest.TestCase):
         self.assertAlmostEqual(removed,float(received.sum()),delta=1e-6)
         np.testing.assert_array_equal(m.q[:5],before[:5])
 
-    def test_cape_ceiling_declines_north_and_is_used_by_mass_flux(self):
+    def test_explicit_energy_budget_still_limits_plume_without_a_latitude_clip(self):
         m=self.model();ceiling=m.cape_ceiling
+        m.cape_capacity=ceiling.copy()  # fresh idealized 6000-J/kg source below
         self.assertTrue(np.all(np.diff(ceiling,axis=0)<0))
         self.assertGreater(float(ceiling[m.lat<22.5].mean()),3300)
         self.assertLess(float(ceiling[m.lat>24.8].max()),150)
@@ -331,7 +338,7 @@ class PhysicsTests(unittest.TestCase):
         np.testing.assert_allclose(v[0],m.v,atol=1e-6)
 
     def test_real_convective_mass_debits_energy_and_cannot_reset_by_new_mu_source(self):
-        m=self.model();m.mu['cape'].fill(2000);before=m.available_cape(m.mu['cape']).copy()
+        m=self.model();m.mu['cape'].fill(2000);m.cape_capacity=np.minimum(2000,m.cape_ceiling);before=m.available_cape(m.mu['cape']).copy()
         _,air=m.plume_reservoir();gain=np.full_like(m.cloud[1:],.001)
         water=float(np.sum(m.q*m.mass));received=m.debit_plumes(gain,90,air_flux=air*2)
         self.assertGreater(float(m.cape_deficit.max()),0)
@@ -381,6 +388,7 @@ class PhysicsTests(unittest.TestCase):
 
     def test_fresh_donor_can_feed_leading_edge_but_spent_donor_cannot(self):
         m=self.model();m.mu['cape'].fill(2000);m.sb['cape'].fill(2000)
+        m.cape_capacity=np.minimum(2000,m.cape_ceiling)
         m.cape_deficit.fill(1900);m.cape_deficit[:,0]=0;m.donors[:]=np.indices(m.shape)[0]*m.shape[1]
         self.assertGreater(float(m.plume_cape(np.full(m.shape,2000))[m.lat<23].min()),1900)
         m.cape_deficit[:,0]=1900
@@ -400,10 +408,18 @@ class PhysicsTests(unittest.TestCase):
         np.testing.assert_allclose(loss,0,atol=1e-12);np.testing.assert_allclose(m.rain,before,atol=1e-12)
 
     def test_subcloud_rain_is_not_shielded_from_downdraft_evaporation(self):
+        from simulation.core import rain_evaporation_rate,DZ,LV,CP
         a,b=self.model(),self.model();a.rain[0]=.001;b.rain[0]=.001
-        a.plume_rain[0]=a.rain[0];a.rain_area[0]=a.rain[0]*.25
+        # Equal LOCAL water concentration means the same drops; a narrow
+        # shaft has one quarter of the cell-mean water, not smaller drops.
+        a.rain[0]*=.25;a.plume_rain[0]=a.rain[0];a.rain_area[0]=a.rain[0]*.25
         a.mu['lcl_pressure'].fill(80000);b.mu['lcl_pressure'].fill(80000)
-        np.testing.assert_allclose(a.evaporate_rain(90),b.evaporate_rain(90),rtol=1e-12,atol=1e-12)
+        qs=saturation(a.temp[0],a.p[0]);dry=np.clip(1-a.q[0]/qs,0,1)
+        rate=rain_evaporation_rate(a.plume_rain[0],a.mass[0]/DZ[0],a.temp[0],a.p[0],.25)
+        capacity=np.maximum(qs-a.q[0],0)/(1+LV**2*qs/(CP*461.5*a.temp[0]**2))
+        expected=np.minimum(a.plume_rain[0]*dry*(-np.expm1(-90*rate)),capacity*.25)
+        np.testing.assert_allclose(a.evaporate_rain(90)[0],expected,rtol=1e-5,atol=1e-12)
+        np.testing.assert_allclose(expected,b.evaporate_rain(90)[0]*.25,rtol=1e-5,atol=1e-12)
 
     def test_northern_wave_is_distinct_and_slower_than_cloud_steering(self):
         m=self.model()
@@ -474,6 +490,7 @@ class PhysicsTests(unittest.TestCase):
 
     def test_isothermal_variable_depth_pool_lifts_from_head_not_thin_tail(self):
         m=self.model(stochastic=0);m.cold_depth[:,:5]=500;m.cold_content=m.cold_depth*3
+        m.activity[:,:5]=.1  # existing episode, not an independent new parent
         m.step()
         self.assertGreater(float(m.gust_lift[:,4:7].max()),300)
         self.assertGreater(float(m.cold_depth[:,4:7].max()),100)
@@ -483,7 +500,11 @@ class PhysicsTests(unittest.TestCase):
         self.assertGreater(float(u[11].mean()),40)
         self.assertGreater(float(cu.mean()),15)
         self.assertGreater(float(cu.mean()),abs(float(cv.mean())))
-        self.assertLess(float(m.syn_v[m.air>.9].mean()),0)
+        # Cold reservoir is initially external, then enters with a genuinely
+        # northerly low-level wind, independent of eastward cell steering.
+        m.synoptic.front_lat.fill(24);air=m.synoptic.external_air()
+        _,cold_v=m.synoptic.surface_target(air,0)
+        self.assertLess(float(cold_v[air>.9].mean()),0)
         f=m.fields();self.assertGreater(float(np.nanmean(f['u300'])),35)
 
     def test_spring_cool_sea_caps_only_the_boundary_layer(self):
@@ -521,6 +542,7 @@ class PhysicsTests(unittest.TestCase):
 
     def test_old_surface_plume_cannot_use_all_elevated_offshore_cape(self):
         m=self.model();m.sb['cape'].fill(0);m.mu['cape'].fill(2000)
+        m.cape_capacity=np.minimum(2000,m.cape_ceiling)
         m.activity.fill(.8);m.surface_activity=m.activity*.75
         fed=np.full(m.shape,2000.)
         m.land[:]=True;np.testing.assert_allclose(m.plume_cape(fed),np.minimum(2000,m.cape_ceiling))

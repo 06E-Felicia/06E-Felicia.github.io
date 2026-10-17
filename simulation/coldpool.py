@@ -17,7 +17,10 @@ def velocity(depth, mx, my):
 def face_flux(state, terrain, axis, higher_order=False):
     dimension = axis + 1
     pad = [(0, 0)] * 3; pad[dimension] = (1, 1)
-    padded = np.pad(state, pad, mode='constant')
+    # Continue an outgoing current across the open edge. A permanently DRY
+    # ghost made the rectangle itself a density-current front, launching
+    # rarefactions and convergence whenever a real pool reached the boundary.
+    padded = np.pad(state, pad, mode='edge')
     bed_pad = [(0, 0)] * 2; bed_pad[axis] = (1, 1)
     bed = np.pad(terrain, bed_pad, mode='edge')
     left = [slice(None)] * 3; right = left.copy()
@@ -33,7 +36,7 @@ def face_flux(state, terrain, axis, higher_order=False):
         # the head without prescribing a contour or borrowing distant donors.
         h=state[0];u,v=velocity(h,state[2],state[3])
         variables=[h+terrain,state[1]/np.maximum(h,1e-20),u,v]
-        if len(state)>4:variables.append(state[4]/np.maximum(h,1e-20))
+        variables.extend([a/np.maximum(h,1e-20) for a in state[4:]])
         variables=np.stack(variables);extended=np.pad(variables,pad,mode='edge')
         centre=[slice(None)]*3;centre[dimension]=slice(1,-1)
         before=centre.copy();after=centre.copy();before[dimension]=slice(None,-2);after[dimension]=slice(2,None)
@@ -41,13 +44,13 @@ def face_flux(state, terrain, axis, higher_order=False):
         slope=np.where(a*b>0,np.where(a>0,np.minimum(a,b),np.maximum(a,b)),0)
         slope[0]=np.clip(slope[0],-2*h,2*h)
         positive=variables+slope*.5;negative=variables-slope*.5
-        # Zero open-boundary water, with a free outflow at the physical edge.
+        # The exterior is a zero-gradient continuation, not a dry wall.
         plus=np.pad(positive,pad,mode='edge');minus=np.pad(negative,pad,mode='edge')
         a=plus[tuple(left)];b=minus[tuple(right)]
         hl0=np.maximum(a[0]-zl,0);hr0=np.maximum(b[0]-zr,0)
         hl0=np.where(lo[0]>0,hl0,0);hr0=np.where(hi[0]>0,hr0,0)
-        lo=np.stack([hl0,hl0*np.maximum(a[1],0),hl0*a[2],hl0*a[3],*([hl0*a[4]] if len(state)>4 else [])])
-        hi=np.stack([hr0,hr0*np.maximum(b[1],0),hr0*b[2],hr0*b[3],*([hr0*b[4]] if len(state)>4 else [])])
+        lo=np.stack([hl0,hl0*np.maximum(a[1],0),hl0*a[2],hl0*a[3],*[hl0*a[k] for k in range(4,len(state))]])
+        hi=np.stack([hr0,hr0*np.maximum(b[1],0),hr0*b[2],hr0*b[3],*[hr0*b[k] for k in range(4,len(state))]])
     top = np.maximum(zl, zr)
     hl, hr = np.maximum(0, lo[0] + zl - top), np.maximum(0, hi[0] + zr - top)
     al = hl / np.maximum(lo[0], 1e-20); ar = hr / np.maximum(hi[0], 1e-20)
@@ -66,6 +69,16 @@ def face_flux(state, terrain, axis, higher_order=False):
     pl, pr = .5 * GRAVITY * a[1] * hl, .5 * GRAVITY * b[1] * hr
     fl[normal] += pl; fr[normal] += pr
     flux = (fast[None] * fl - slow[None] * fr + (slow * fast)[None] * (b - a)) / np.maximum(fast - slow, 1e-20)[None]
+    # Diode boundary: export water/debt/momentum, never import an artificial
+    # exterior pool. Retain hydrostatic pressure even when mass inflow stops.
+    for index,outward in [(0,-1),(-1,1)]:
+        face=[slice(None)]*3;face[dimension]=index;face=tuple(face)
+        pressure=(pl+pr)*.5
+        pface=[slice(None)]*2;pface[axis]=index
+        incoming=outward*flux[face][0]<0
+        edge=flux[face].copy();edge[:,incoming]=0
+        edge[normal]=np.where(incoming,pressure[tuple(pface)],edge[normal])
+        flux[face]=edge
     # Cell-sided hydrostatic pressure corrections balance resting pools on
     # terrain and block a shallow current at a ridge higher than its head.
     correction_lo = .5 * GRAVITY * (lo[1] * lo[0] - a[1] * hl)
@@ -75,7 +88,8 @@ def face_flux(state, terrain, axis, higher_order=False):
 
 def advance(depth, content, mx, my, terrain, duration, dx, tracer=None,higher_order=False):
     fields=[depth,content,mx,my]
-    if tracer is not None:fields.append(tracer)
+    if tracer is not None:
+        fields.extend(tracer if np.ndim(tracer)==3 else [tracer])
     state = np.stack(fields).astype('float64')
     remaining = duration; external = 0.; max_cfl = 0.
     while remaining > 1e-8:

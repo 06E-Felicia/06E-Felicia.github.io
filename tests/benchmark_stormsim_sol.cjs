@@ -27,7 +27,7 @@ const {chromium}=require('playwright');
   await page.route('**/MapServer/tile/**',r=>r.abort());await page.route('**/tile.openstreetmap.org/**',r=>r.abort());
   await page.goto('http://127.0.0.1:'+server.address().port+'/simulator-sol.html?seed='+seed+'&hours='+hours);
   await page.waitForFunction(()=>window.Simulator&&!document.querySelector('#start-simulation').disabled);
-  assert.equal(await page.locator('h1').innerText(),'StormSim 1.1 Sol');
+  assert.equal(await page.locator('h1').innerText(),'StormSim 2 Sol');
   const started=Date.now();await page.locator('#start-simulation').click();
   await page.waitForFunction(()=>['complete','error'].includes(Simulator.getState().computeState),null,{timeout:600000});
   const wall=(Date.now()-started)/1000,result=await page.evaluate(()=>{const s=Simulator.getState();return {status:s.computeState,error:s.lastError,manifest:s.manifest,frames:s.replayFrames,stations:s.stationCount};});
@@ -47,7 +47,8 @@ const {chromium}=require('playwright');
   await page.screenshot({path:'/private/tmp/stormsim-sol-'+seed+'.png',fullPage:true});
   assert.deepEqual(errors,[]);
   const summary={hours,seed,wall_seconds:wall,grid_km:result.manifest.grid.nominal_km,shape:[result.manifest.grid.ny,result.manifest.grid.nx],frames:result.frames,acceleration:result.manifest.acceleration,timing:result.manifest.timing,
-    max_rain:Math.max(...audits.map(a=>a.max_rain_mm_h)),max_core_rain:Math.max(...audits.map(a=>a.core_rain_max_mm_h)),max_total_rain:Math.max(...audits.map(a=>a.total_rain_max_mm)),max_cold_depth:peak.coldpool_depth_max_m,max_water_residual:Math.max(...audits.map(a=>Math.abs(a.water_relative_residual)))};
+    max_rain:Math.max(...audits.map(a=>a.max_rain_mm_h)),max_core_rain:Math.max(...audits.map(a=>a.core_rain_max_mm_h)),max_total_rain:Math.max(...audits.map(a=>a.total_rain_max_mm)),max_cold_depth:peak.coldpool_depth_max_m,max_water_residual:Math.max(...audits.map(a=>Math.abs(a.water_relative_residual))),
+    gust_peak_m_s:Math.max(...audits.map(a=>a.gust_peak_m_s||0)),meanwind_peak_m_s:Math.max(...audits.map(a=>a.meanwind_peak_m_s||0)),point_rain5_peak_mm:Math.max(...audits.map(a=>a.point_rain5_peak_mm)),point_total_max_mm:Math.max(...audits.map(a=>a.point_total_max_mm))};
   if(process.env.SOL_BENCH_OUTPUT)fs.writeFileSync(process.env.SOL_BENCH_OUTPUT,JSON.stringify({summary,manifest:result.manifest,audits},null,2));
   console.log('RESULT REAL SOL',JSON.stringify(summary));
   if(hours===72)assert.ok(wall<300,'72-hour run exceeds the five-minute target on this test device: '+wall);

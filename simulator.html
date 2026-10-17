@@ -2,15 +2,15 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>StormSim 1.1 Astra · 深中气象</title><link rel="icon" href="favicon.ico">
+  <title>StormSim 2 Astra · 深中气象</title><link rel="icon" href="favicon.ico">
   <link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css">
   <link rel="stylesheet" href="assets/styles/simulator.css">
-  <link rel="stylesheet" href="assets/styles/simulation-v2.css?v=4.2.0">
+  <link rel="stylesheet" href="assets/styles/simulation-v2.css?v=5.5.1">
 </head>
 <body class="anime-lab" data-edition="astra">
 <nav class="lab-nav">
-  <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">✦</span><h1>StormSim 1.1 Astra</h1></a>
-  <div><a href="index.html">今日天气</a><a href="forecast.html">一周预报</a><a href="warnings.html">预警</a><a href="simulator.html" aria-current="page">Astra</a><a href="simulator-sol.html">Sol · 轻量版</a></div>
+  <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">✦</span><h1>StormSim 2 Astra</h1></a>
+  <div><a href="index.html">今日天气</a><a href="forecast.html">一周预报</a><a href="warnings.html">预警</a><a href="simulator.html" aria-current="page">Astra</a><a href="simulator-sol.html">Sol</a></div>
 </nav>
 <main>
   <section class="compute-card" aria-label="模拟控制">
@@ -48,19 +48,20 @@
       <label class="sr-only" for="station-select">观测点列表</label><select id="station-select" size="4"></select>
       <div class="station-heading"><h3 id="station-name" aria-live="polite">深圳</h3><span id="station-id">59493</span><p id="station-coordinates"></p><time id="station-time"></time></div>
       <div class="observations" id="observations"></div>
+      <p class="fine-print">降水为守恒雨区的点位估测；不代表新增网格精度。</p>
       <div class="station-buttons"><button id="station-center">定位本站</button><button id="station-radar">设为雷达中心</button><button id="export-station">导出已载入观测</button><button id="delete-station" hidden>删除自定义点</button></div>
       <details class="custom-station"><summary>＋ 自定义观测点</summary><form id="station-form"><label>名称<input id="custom-name" maxlength="30" required></label><div class="coordinate-inputs"><label>经度<input id="custom-lon" type="number" step=".0001" min="104.3" max="118" value="113.74" required></label><label>纬度<input id="custom-lat" type="number" step=".0001" min="19.8" max="26.7" value="22.55" required></label></div><button class="primary" type="submit">添加并观测</button></form></details>
       <p id="station-message" class="fine-print" role="status"></p>
     </aside>
   </div>
   <section class="environment-section"><div class="profile-card"><div class="section-title"><h2>温湿廓线</h2><div class="profile-legend"><span>● 气温</span><span>● 露点</span></div></div><canvas id="profile-chart" role="img" aria-label="当前观测点分层温度露点"></canvas></div></section>
-  <footer>仅供模拟 · 非实况 / 非业务预报</footer>
+  <footer>仅供模拟 · 非实况 / 非业务预报 · 地形：<a href="assets/data/simulation-terrain-LICENSE.md">Mapzen · USGS / NOAA</a></footer>
 </main>
 <dialog id="sol-suggestion" class="edition-dialog" data-enabled="true" aria-labelledby="sol-suggestion-title" aria-describedby="sol-suggestion-text">
-  <span class="edition-mark" aria-hidden="true">✧</span><h2 id="sol-suggestion-title">想更快看到天气演变？</h2>
+  <span class="edition-mark" aria-hidden="true">✧</span><h2 id="sol-suggestion-title">选择 StormSim 版本</h2>
   <p id="sol-suggestion-text"></p>
-  <p>Sol 使用较粗的网格，保留冷池、锋面和分层大气计算。切换后以相同随机种子重新计算，不是跳过时段或加速播放。</p>
+  <p>Sol 模拟冷池、锋面和分层大气演变。切换后以相同随机种子重新计算，不是跳过时段或加速播放。</p>
   <div class="edition-actions"><a id="switch-to-sol" href="simulator-sol.html">改用 StormSim Sol</a><button id="keep-astra" type="button">继续使用 Astra</button></div>
 </dialog>
-<script src="assets/vendor/leaflet/leaflet.js"></script><script src="assets/scripts/simulation-data.js?v=3.8.0"></script><script src="assets/scripts/simulation-frame-store.js"></script><script src="assets/scripts/simulation-v2.js?v=4.2.1"></script>
+<script src="assets/vendor/leaflet/leaflet.js"></script><script src="assets/scripts/simulation-data.js?v=5.5.1"></script><script src="assets/scripts/simulation-frame-store.js?v=5.5.1"></script><script src="assets/scripts/simulation-v2.js?v=5.5.1"></script>
 </body></html>

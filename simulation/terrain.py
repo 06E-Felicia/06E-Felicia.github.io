@@ -12,6 +12,61 @@ import numpy as np
 SOURCE = 'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'
 
 
+class TerrainField(np.ndarray):
+    """Mean dynamical elevation with unresolved real-DEM relief metadata.
+
+    NumPy consumers still receive an elevation array. Model initialization
+    explicitly reads the optional moments before converting to plain arrays;
+    a caller-provided flat/synthetic DEM has no hidden geographic obstacles.
+    """
+    def __new__(cls,height,relief,peak,coverage,land_fraction):
+        obj=np.asarray(height).view(cls)
+        obj.relief=relief;obj.peak=peak;obj.coverage=coverage;obj.land_fraction=land_fraction
+        return obj
+
+    def __array_finalize__(self,obj):
+        if obj is not None:
+            for name in ['relief','peak','coverage','land_fraction']:setattr(self,name,getattr(obj,name,None))
+
+
+def coastal_detail(height,lon,lat,km,path):
+    """Aggregate cached fine DEM into cell means, relief and peak moments.
+
+    Peak height is NOT installed as a solid grid-cell wall. Its finite land
+    coverage/height variance enter subgrid obstruction; mean elevation alone
+    is used by the resolved terrain-following solver. No named-city damping.
+    """
+    path=Path(path)
+    if not path.is_file():return height,None
+    with np.load(path,allow_pickle=False) as data:
+        fine=np.maximum(data['height'],0);b=data['bounds'];resolution=float(data['grid_km'])
+        flon,flat=grid(b,resolution)
+        if fine.shape!=flon.shape:raise ValueError('Fine DEM coordinates/shape mismatch')
+        dx=float(lon[0,1]-lon[0,0]);dy=float(lat[1,0]-lat[0,0])
+        ix=np.floor((flon-lon[0,0])/dx+.5).astype(int);iy=np.floor((flat-lat[0,0])/dy+.5).astype(int)
+        valid=(ix>=0)&(ix<lon.shape[1])&(iy>=0)&(iy<lon.shape[0])
+        bins=(iy[valid]*lon.shape[1]+ix[valid]).ravel();values=fine[valid].ravel();size=lon.size
+        count=np.bincount(bins,minlength=size);mean=np.bincount(bins,weights=values,minlength=size)/np.maximum(count,1)
+        second=np.bincount(bins,weights=values**2,minlength=size)/np.maximum(count,1)
+        cover=np.bincount(bins,weights=values>50,minlength=size)/np.maximum(count,1)
+        land=np.bincount(bins,weights=values>0,minlength=size)/np.maximum(count,1)
+        peak=np.zeros(size);np.maximum.at(peak,bins,values)
+        # Only fully covered cells replace the mean/receive moments; partial
+        # boundary samples cannot turn a corner of a fine tile into a ridge.
+        full=(lon-dx/2>=b[0])&(lon+dx/2<=b[2])&(lat-dy/2>=b[1])&(lat+dy/2<=b[3])
+        full&=count.reshape(lon.shape)>0
+        result=np.where(full,mean.reshape(lon.shape),height)
+        relief=np.where(full,np.sqrt(np.maximum(second-mean**2,0)).reshape(lon.shape),0)
+        peak=np.where(full,peak.reshape(lon.shape),np.maximum(height,0))
+        coverage=np.where(full,cover.reshape(lon.shape),0)
+        land_fraction=np.where(full,land.reshape(lon.shape),height>0)
+        import hashlib
+        meta={'source':str(data['source']),'zoom':int(data['zoom']),'grid_km':resolution,
+              'bounds':b.tolist(),'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),
+              'aggregation':'cell mean, height standard deviation, maximum and >50m fraction; peaks are not full-cell walls'}
+        return TerrainField(result,relief,peak,coverage,land_fraction),meta
+
+
 def grid(bounds, km):
     west, south, east, north = bounds
     dy = km/111.195; dx = km/(111.195*math.cos(math.radians((north+south)/2)))

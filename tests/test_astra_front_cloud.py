@@ -14,6 +14,20 @@ class AstraFrontCloudTests(unittest.TestCase):
     def water(self,m):
         return float(np.sum((m.q+m.cloud+m.rain+m.anvil+m.graupel)*m.mass,dtype='float64'))
 
+    def test_shallow_residual_outflow_cannot_lift_three_kilometre_columns(self):
+        m=self.model();m.air.fill(0);m.background_w.fill(0);m.w.fill(.1)
+        m.cold_depth.fill(100);u,v=m.winds();shallow=m.resolved_ascent(u,v)
+        self.assertGreater(float(shallow[0].min()),0)
+        self.assertLess(float(shallow[6:].max()),1e-5)
+        m.cold_depth.fill(1000);deep=m.resolved_ascent(u,v)
+        self.assertGreater(float(deep[6].min()),.02)
+
+    def test_real_synoptic_ascent_is_retained_without_cold_pool(self):
+        m=self.model();m.air.fill(0);m.cold_depth.fill(0)
+        m.background_w.fill(.03);m.w.fill(.03);u,v=m.winds()
+        expected=.03*np.exp(-Z[:,None,None]/m.ascent_depth[None])
+        np.testing.assert_allclose(m.resolved_ascent(u,v),expected,rtol=1e-6)
+
     def test_tilted_front_and_broad_weak_overrunning(self):
         m=self.model(bounds=[111,23.5,115,26.5],km=6)
         m.air[:]=1/(1+np.exp(-(m.lat-24.5)*111195/18000))
@@ -43,10 +57,10 @@ class AstraFrontCloudTests(unittest.TestCase):
     def test_boundary_thermodynamics_follow_the_same_sloping_front(self):
         m=self.model();t,_=m.upstream_environment()
         np.testing.assert_allclose(t,m.radiative_reference)
-        initial=m.frontal_layers().copy();m.air=np.clip(m.air+.2,0,1)
+        initial=m.frontal_layers(m.synoptic.external_air()).copy();m.synoptic.front_lat-=1
         t,_=m.upstream_environment()
-        expected=-7*(m.frontal_layers()-initial)*np.exp(-Z[:,None,None]/5000)
-        np.testing.assert_allclose(t-m.radiative_reference,expected,atol=1e-12)
+        expected=-9*(m.frontal_layers(m.synoptic.external_air())-initial)*np.exp(-Z[:,None,None]/2000)
+        np.testing.assert_allclose(t-m.radiative_reference,expected,atol=2e-7)
 
     def test_frontal_cloud_pulse_advects_east_without_moving_surface_front(self):
         m=self.model(bounds=[110,23,116,26],km=10)

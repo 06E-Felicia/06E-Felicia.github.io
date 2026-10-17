@@ -54,6 +54,7 @@ def morphology(model,with_masks=False,with_curved_masks=False):
         geodesic=band_geometry((objects==ident),model.cfg['grid_km'])
         area=len(x)*model.cfg['grid_km']**2
         candidates.append({'cells':len(x),'length_km':round(length,1),
+                           'ns_extent_km':round(float(np.ptp(y)*model.cfg['grid_km']+model.cfg['grid_km']),1),
                            'aspect':round(length/max(width,1),2),
                            'geodesic_length_km':round(geodesic,1),
                            'band_thinness':round(geodesic**2/max(area,1),2),

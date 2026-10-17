@@ -22,6 +22,17 @@
     }
     function index(g,lon,lat){const x=(lon-g.west)/g.dlon,y=(lat-g.south)/g.dlat;return !Number.isFinite(x+y)||x<-1e-7||y<-1e-7||x>g.nx-1+1e-7||y>g.ny-1+1e-7?-1:Math.round(y)*g.nx+Math.round(x);}
     function value(f,i,k=0){if(!f||i<0)return NaN;const n=f.shape.at(-1)*f.shape.at(-2),raw=f.data[k*n+i];return raw===undefined||raw===32767?NaN:raw*f.scale+f.offset;}
+    function sample(f,g,lon,lat,k=0){
+        let x=(lon-g.west)/g.dlon,y=(lat-g.south)/g.dlat;
+        if(!Number.isFinite(x+y)||x<-1e-7||y<-1e-7||x>g.nx-1+1e-7||y>g.ny-1+1e-7)return NaN;
+        x=Math.max(0,Math.min(x,g.nx-1));y=Math.max(0,Math.min(y,g.ny-1));
+        const x0=Math.floor(x),y0=Math.floor(y),x1=Math.min(x0+1,g.nx-1),y1=Math.min(y0+1,g.ny-1),fx=x-x0,fy=y-y0;
+        let sum=0,weight=0;
+        for(const [xx,yy,w]of [[x0,y0,(1-fx)*(1-fy)],[x1,y0,fx*(1-fy)],[x0,y1,(1-fx)*fy],[x1,y1,fx*fy]]){
+            if(w<=1e-12)continue;const a=value(f,yy*g.nx+xx,k);if(!Number.isFinite(a))return NaN;sum+=a*w;weight+=w;
+        }
+        return weight?sum/weight:NaN;
+    }
     function vertical(f,i,z,levels){if(z<levels[0]||z>levels.at(-1))return NaN;const k=Math.max(0,levels.findIndex(v=>v>=z)-1),a=(z-levels[k])/(levels[k+1]-levels[k]);return value(f,i,k)*(1-a)+value(f,i,k+1)*a;}
     function radar(frame,g,lon,lat,station,elevation=.5,fold=false){
         const i=index(g,lon,lat),east=(lon-station.lon)*111195*Math.cos(station.lat*Math.PI/180),north=(lat-station.lat)*111195,range=Math.hypot(east,north);
@@ -35,5 +46,5 @@
         const u=vertical(frame.echo_u3||frame.u3,i,z,g.z_agl_m),v=vertical(frame.echo_v3||frame.v3,i,z,g.z_agl_m),w=vertical(frame.w3,i,z,g.z_agl_m),fall=frame.fall3?vertical(frame.fall3,i,z,g.z_agl_m):6,raw=(u*east+v*north)/range*Math.cos(angle)+(w-fall)*Math.sin(angle);
         return {valid:Number.isFinite(raw),dbz:reflectivity,velocity:fold?((raw+25)%50+50)%50-25:raw,range:range/1000,height:beam/1000};
     }
-    const api={validateManifest,unpack,index,value,vertical,radar};root.SimulationData=api;if(typeof module!=='undefined')module.exports=api;
+    const api={validateManifest,unpack,index,value,sample,vertical,radar};root.SimulationData=api;if(typeof module!=='undefined')module.exports=api;
 })(globalThis);
