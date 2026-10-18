@@ -21,6 +21,7 @@ self.onmessage=async({data})=>{
     await py.runPythonAsync('import numpy, scipy'); // loadPackage can report a download failure without rejecting
     const base=new URL('../../',self.location.href);
     const files=['simulation/__init__.py','simulation/core.py','simulation/coldpool.py','simulation/precipitation.py','simulation/synoptic.py','simulation/numerics.py','simulation/thermo.py','simulation/terrain.py','simulation/run.py','simulation/config.json','simulation/experiment.py','simulation/browser.py','assets/data/simulation-terrain.npz','assets/data/simulation-terrain-detail.npz'];
+    if(data.profile==='sol')files.push('simulation/sol.py');
     phase('4/5','正在载入模型和地形…');
     for(const path of files){const response=await fetch(new URL(path,base),{cache:'no-cache',signal:AbortSignal.timeout(90000)});if(!response.ok)throw Error('无法载入 '+path+' ('+response.status+')');const bytes=new Uint8Array(await response.arrayBuffer());const destination='/home/pyodide/'+path;py.FS.mkdirTree(destination.slice(0,destination.lastIndexOf('/')));py.FS.writeFile(destination,bytes);}
     await py.runPythonAsync('from js import simulationAdvectionKernel, simulationMoistKernel\nfrom simulation.numerics import install_accelerator\nfrom simulation.thermo import install_accelerator as install_moist_accelerator\ninstall_accelerator(simulationAdvectionKernel)\ninstall_moist_accelerator(simulationMoistKernel)');

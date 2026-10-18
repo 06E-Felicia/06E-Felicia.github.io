@@ -54,12 +54,15 @@ def initialize(seed, controls, profile='astra'):
                   'frame_minutes':60,'compact_transport':False}
     config=random_environment(seed,controls,grid_limit=SOL_GRID_KM if profile=='sol' else 12)
     height,terrain=terrain_for(config,'assets/data/simulation-terrain.npz')
-    # Sol coarsens the grid/output, not the corrected physical mechanisms.
-    model=Model(config,height,grid_limit=SOL_GRID_KM if profile=='sol' else 12)
+    model_type=Model
+    if profile=='sol':
+        from .sol import SolModel
+        model_type=SolModel
+    model=model_type(config,height,grid_limit=SOL_GRID_KM if profile=='sol' else 12)
     acceleration=select_backends(model)
     lon,lat=model.lon,model.lat
     return json.dumps({'schema':2,'engine':VERSION,'status':'running','simulation':True,
-        'source_sha256':source_digest('experiment.py','browser.py'),
+        'source_sha256':source_digest('experiment.py','browser.py',*(['sol.py'] if profile=='sol' else [])),
         'execution':'browser','edition':profile,'product_version':'2','config':config,'terrain':terrain,'frames':[],'acceleration':acceleration,
         'rain_grid':model.surface_rain.grid(lon,lat),
         'seed_streams':dict(zip(['initial_temperature','initial_moisture','time_evolution','synoptic','convective_cells'],model.seed_ids)),

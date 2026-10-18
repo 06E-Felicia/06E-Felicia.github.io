@@ -1,0 +1,42 @@
+{
+  "edition": "sol",
+  "engine": "4.5.1-coastal-front-delay",
+  "source_sha256": "714c558780972ee0130f5f066aad0df0542581b85269ffc76197df2af7be302a",
+  "grid_km": 28,
+  "native_scope": "Real terrain, same-seed 12-hour integrations; connected strong echoes require activity > 0.1 and composite >= 40 dBZ, with eight-neighbour connectivity.",
+  "native_comparisons": [
+    {"seed": 20260421, "before_peak_connected_cells": 3, "after_peak_connected_cells": 11, "before_peak_active_cells": 12, "after_peak_active_cells": 26, "after_max_water_relative_residual": 3.171287502895118e-9},
+    {"seed": 20260423, "before_peak_connected_cells": 0, "after_peak_connected_cells": 10, "before_peak_active_cells": 3, "after_peak_active_cells": 13, "after_max_water_relative_residual": 7.766779153189074e-10},
+    {"seed": 20261017, "before_peak_connected_cells": 0, "after_peak_connected_cells": 14, "before_peak_active_cells": 2, "after_peak_active_cells": 15, "after_max_water_relative_residual": 2.400212655504246e-9}
+  ],
+  "native_additional_seeds": [
+    {"seed": 20260425, "peak_connected_cells": 30, "peak_active_cells": 34, "max_water_relative_residual": 7.778552726687521e-9},
+    {"seed": 20261018, "peak_connected_cells": 8, "peak_active_cells": 12, "max_water_relative_residual": 7.259320844908047e-10}
+  ],
+  "browser": {
+    "runtime": "Real Chrome/Pyodide Worker, not mock weather",
+    "seed": 20261017,
+    "hours": 72,
+    "frames": 73,
+    "wall_seconds": 352.443,
+    "complete_budget_storage_and_replay_checks_passed": true,
+    "five_minute_target_passed": false,
+    "benchmark_exit_note": "The legacy benchmark's final wall < 300 assertion failed after all full-process functional assertions passed. Timing overlapped native validation jobs; not an isolated-device performance measurement.",
+    "max_water_relative_residual": 8.102471500695233e-8,
+    "max_grid_rain_mm_h": 65.93439390817302,
+    "max_grid_total_mm": 51.68000411987305,
+    "point_rain5_peak_mm": 24.68302345275879,
+    "point_total_max_mm": 79.39606475830078,
+    "gust_peak_m_s": 32
+  },
+  "astra_isolation": {
+    "shared_physics_and_astra_html_unchanged_from_git": true,
+    "before_after_compared_steps": 40,
+    "before_after_equal_output_fields": 39,
+    "before_after_equal_field_sha256": "c92ea321c7b0926bb931e0cec0846176974995794acdf7b23467631ae989642c",
+    "whole_astra_process_rerun": false
+  },
+  "unit_tests_passed": 14,
+  "ui_worker_path_regression_passed": true,
+  "frame_decode_regression_passed": true
+}

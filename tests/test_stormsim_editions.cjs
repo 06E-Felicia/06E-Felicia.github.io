@@ -7,7 +7,7 @@ const {chromium}=require('playwright');
  try{
   const context=await browser.newContext({viewport:{width:1440,height:1000}}),root=path.resolve(__dirname,'..'),errors=[];
   await context.addInitScript(()=>{window.Worker=class{
-   constructor(){window.__worker=this;this.terminated=false;}
+   constructor(url){window.__worker=this;window.__workerURL=url;this.terminated=false;}
    postMessage(message){if(message.type!=='start')return;window.__start=message;const sol=message.profile==='sol';this.onmessage({data:{type:'manifest',manifest:{schema:2,edition:message.profile,config:{seed:message.seed||20260421,month:4,grid_km:sol?28:6,hours:message.controls.hours},grid:{nominal_km:sol?28:6},frames:[]}}});}
    terminate(){this.terminated=true;sessionStorage.setItem('test-terminated','yes');}
   };});
@@ -23,6 +23,7 @@ const {chromium}=require('playwright');
   await page.goto('http://127.0.0.1:14331/nested/simulator.html');await ready();
   assert.equal(await page.title(),'StormSim 2 Astra · 深中气象');assert.equal(await page.locator('h1').innerText(),'StormSim 2 Astra');
   await start();assert.equal(await page.locator('#start-simulation').isDisabled(),true);
+  assert.equal(await page.evaluate(()=>window.__workerURL),'assets/scripts/simulation-local-worker.js?v=5.5.1','Astra retains its existing Worker cache path');
   await progress(.5,1);assert.equal(await page.locator('#sol-suggestion').isVisible(),false,'wait for actual timing, not a guessed device class');
   await progress(1,2);assert.equal(await page.locator('#sol-suggestion').isVisible(),false,'under five minutes: no prompt');
   assert.equal(await page.locator('#sol-suggestion').getAttribute('data-enabled'),'true','Sol recommendation must be enabled after reopening');
@@ -45,6 +46,7 @@ const {chromium}=require('playwright');
   assert.equal(await page.locator('#local-grid').inputValue(),'28');assert.equal(await page.locator('#frame-interval').inputValue(),'60');
   assert.equal(await page.locator('#station-select option').count(),32);
   await start();assert.equal(await page.evaluate(()=>window.__start.profile),'sol');assert.equal(await page.evaluate(()=>window.__start.seed),20260421);
+  assert.equal(await page.evaluate(()=>window.__workerURL),'assets/scripts/simulation-local-worker.js?v=5.5.2-sol','only Sol loads the repaired Worker path');
   assert.equal(new URL(page.url()).searchParams.has('seed'),false,'refreshing must not silently reuse a transferred seed');
   await progress(.5,4);assert.equal(await page.locator('#sol-suggestion').count(),0,'Sol never prompts to switch to itself');
   await page.locator('#stop-compute').click();await start();assert.equal(await page.evaluate(()=>window.__start.seed),null,'transfer seed is used only once; later starts get fresh worker RNG');await page.locator('#stop-compute').click();
