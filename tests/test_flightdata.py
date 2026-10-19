@@ -26,7 +26,7 @@ class FlightdataIntegrationTests(unittest.TestCase):
         index=json.loads((DATA/'index.json').read_text())
         status=json.loads((DATA/'status.json').read_text())
         self.assertGreater(index['refresh_hours'],0)  # Saved snapshots may predate the current schedule.
-        self.assertEqual(json.loads((ROOT/'flightdata/config.json').read_text())['refresh_hours'],0.5)
+        self.assertAlmostEqual(json.loads((ROOT/'flightdata/config.json').read_text())['refresh_hours']*60,10)
         self.assertEqual({a['iata'] for a in index['airports']},{'SZX','PEK','PVG','CAN','HKG'})
         for airport in index['airports']:
             code=airport['iata'];d=json.loads((DATA/f'{code.lower()}.json').read_text())
@@ -217,12 +217,15 @@ class FlightdataIntegrationTests(unittest.TestCase):
             with patch.multiple(m,DATA_DIR=root/'cache',SITE_DATA_DIR=root/'public',STATUS_PATH=root/'public/status.json',PHOTO_CACHE_PATH=root/'cache/photos.json'), \
                     patch.object(m,'load_config',return_value=cfg), \
                     patch.object(m,'collect_all',return_value={ap['iata']:(flights,None)}), \
+                    patch.dict(m.os.environ,{'FLIGHTDATA_CHECKED_AT':str(int(m.time.time())-90)}), \
                     patch.object(m,'attach_photos'):
                 m.write_json(root/'cache'/f"history_{ap['iata'].lower()}.json",{'flights':{'old-departure':old_departure}})
                 self.assertEqual(m.run(),0)
             status=json.loads((root/'public/status.json').read_text())
             self.assertTrue(status['ok']);self.assertTrue(status['partial'])
             self.assertEqual(status['successes'],1)
+            self.assertGreaterEqual(status['collection_started_at']-status['schedule_checked_at'],90)
+            self.assertAlmostEqual(status['refresh_hours']*60,10)
             self.assertIn('Just a moment',status['airports'][ap['iata']]['errors']['departures'])
             snapshot=json.loads((root/'public'/f"{ap['iata'].lower()}.json").read_text())
             self.assertEqual([f['id'] for f in snapshot['flights']],['offline-arrival'])

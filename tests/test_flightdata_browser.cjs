@@ -8,7 +8,8 @@ const NOW_MS=original('SZX').generated_at*1000;
 const read=code=>{
  const d=original(code),now=NOW_MS/1000;
  const time=f=>Number(f.estimated_ts)>0?Number(f.estimated_ts):Number(f.scheduled_ts)||0;
- d.today=d.today.filter(f=>Math.floor((time(f)+28800)/86400)===Math.floor((now+28800)/86400));
+ d.today=d.today.filter(f=>time(f)>=now && Math.floor((time(f)+28800)/86400)===Math.floor((now+28800)/86400)
+  && (f.is_special_livery||f.is_foreign||f.is_widebody||f.is_four_engine||f.is_cargo));
  for(const [rows,key] of [[d.flights,'stats'],[d.today,'today_stats']]){
   d[key]={...d[key],total:rows.length,special:rows.length,widebody:rows.filter(f=>f.is_widebody).length};
  }
@@ -60,8 +61,11 @@ const newPage=async context=>{const page=await context.newPage();await page.cloc
   assert.equal(await page.locator('#list .row').count(),0);assert.match(await page.locator('#list').innerText(),/没有匹配的航班/);
   await page.locator('#clearFilters').click();
   await page.locator('#btnReload').click();await page.waitForFunction(()=>document.querySelector('#toastText').textContent.includes('不会启动抓取'));
-  assert.match(await page.locator('#runLink').getAttribute('href'),/06E-Felicia.github.io\/actions\/(workflows\/flightdata.yml|runs\/\d+)$/);
-  assert.match(await page.locator('#freqTag').innerText(),/30MIN/);
+  assert.match(await page.locator('.statusbar').innerText(),/^更新时间\s+\S+/);
+  assert.equal(await page.locator('.statusbar .item').count(),1);
+  assert.equal(await page.locator('#freqTag,#countdown,#nextUpdate,#cycleBar').count(),0);
+  assert.equal(await page.locator('[data-chip="bizjet"],.badge.bizjet').count(),0);
+  assert.equal(await page.locator('#s-four').innerText(),String(read('SZX').today.filter(f=>f.is_four_engine).length));
 
   // A slow old airport response must never overwrite a newly selected one.
   let release;const gate=new Promise(r=>release=r);
@@ -123,7 +127,8 @@ const newPage=async context=>{const page=await context.newPage();await page.cloc
   assert.equal(await partialPage.locator('#list .row').count(),read('SZX').today.length);
   await partialContext.close();
 
-  // Full-day history remains available; locate the user at the current time.
+  // Default to remaining-today flights; history expands ABOVE now without
+  // changing counters or the reader's current-time viewport anchor.
   const windowContext=await browser.newContext();
   await windowContext.route('**/*',r=>new URL(r.request().url()).hostname==='127.0.0.1'?r.continue():r.abort());
   const now=Date.parse('2026-10-19T15:42:00+08:00')/1000;
@@ -131,7 +136,10 @@ const newPage=async context=>{const page=await context.newPage();await page.cloc
    status:'scheduled',status_cn:'计划',status_kind:'muted',last_seen_ts:now,from_history:true,...extra});
   const samples=[make('OLD-1210',-12720),make('EXPIRED',-3601),make('BOUNDARY',-3600),
    make('RECENT',-2820),make('LANDED',-1800,{status:'landed',status_cn:'已到达',status_kind:'ok'}),
-   make('FUTURE',1800),make('DELAYED',-12000,{estimated_ts:now+1200}),make('TOMORROW',12*3600),
+   make('FUTURE',1800),make('DELAYED',-12000,{estimated_ts:now+1200}),make('NOW',0),
+   make('DAY-END',Date.parse('2026-10-19T23:59:59+08:00')/1000-now),
+   make('LIVERY',2400,{is_special_livery:true,is_four_engine:true,livery:'特别彩绘 <测试> 多行涂装名称',is_foreign:false}),
+   make('ONLY-BIZJET',3600,{is_bizjet:true,is_widebody:false}),make('TOMORROW',12*3600),
    make('NO-TIME',0,{scheduled_ts:null,estimated_ts:null})];
   const windowData={...original('SZX'),service_day:'2026-10-19',generated_at:now,today:samples,flights:samples};
   await windowContext.route('**/szx.json?*',r=>r.fulfill({json:windowData}));
@@ -139,23 +147,42 @@ const newPage=async context=>{const page=await context.newPage();await page.cloc
   windowPage.on('pageerror',e=>errors.push(e.message));
   await windowPage.clock.setFixedTime(new Date(now*1000));
   await windowPage.goto(base+'/Flightdat.html');
-  await windowPage.waitForFunction(()=>document.querySelectorAll('#list .row').length===7);
+  await windowPage.waitForFunction(()=>document.querySelectorAll('#list .row').length===5);
   const names=()=>windowPage.locator('#list .flight .f').allTextContents();
-  assert.deepEqual((await names()).sort(),['BOUNDARY','DELAYED','EXPIRED','FUTURE','LANDED','OLD-1210','RECENT']);
-  assert.equal(await windowPage.locator('#s-total').innerText(),'7');
-  assert.equal(await windowPage.locator('#s-widebody').innerText(),'7');
+  assert.deepEqual((await names()).sort(),['DAY-END','DELAYED','FUTURE','LIVERY','NOW']);
+  assert.equal(await windowPage.locator('#s-total').innerText(),'5');
+  assert.equal(await windowPage.locator('#s-widebody').innerText(),'5');
+  assert.equal(await windowPage.locator('#s-four').innerText(),'1');
+  assert.equal(await windowPage.locator('#c-featured').innerText(),'5');
+  assert.match(await windowPage.locator('#resultText').innerText(),/今日剩余\s+5\s+班/);
+  assert.equal(await windowPage.locator('#showEarlier').getAttribute('aria-expanded'),'false');
+  assert.match(await windowPage.locator('#showEarlier').innerText(),/5 班/);
   await windowPage.waitForFunction(()=>{
    const marker=document.querySelector('#currentTimeMarker')?.getBoundingClientRect();
    return marker&&marker.top>=0&&marker.bottom<=innerHeight&&scrollY>0;
   });
+  assert.ok(await windowPage.locator('#showEarlier').evaluate(e=>{const r=e.getBoundingClientRect();return r.top>=0&&r.bottom<innerHeight;}));
+  const anchor=await windowPage.locator('#currentTimeMarker').evaluate(e=>e.getBoundingClientRect().top);
+  await windowPage.locator('#showEarlier').click();
+  assert.equal(await windowPage.locator('#pastFlights .row').count(),5);
+  assert.equal(await windowPage.locator('#s-total').innerText(),'5','history must not inflate remaining counters');
+  assert.equal(await windowPage.locator('#c-featured').innerText(),'5');
+  assert.ok(Math.abs(await windowPage.locator('#currentTimeMarker').evaluate(e=>e.getBoundingClientRect().top)-anchor)<3,'expanding history must preserve the now anchor');
+  assert.ok(await windowPage.locator('#pastFlights').evaluate(e=>e.getBoundingClientRect().bottom<=document.querySelector('#currentTimeMarker').getBoundingClientRect().top));
   const row=id=>windowPage.locator('#list .row').filter({has:windowPage.locator('.flight .f',{hasText:id})});
   assert.equal(await row('RECENT').locator('.pill').innerText(),'待核实');
   assert.match(await row('RECENT').locator('.pill').getAttribute('title'),/不代表航班已结束/);
   assert.equal(await row('LANDED').locator('.pill').innerText(),'已落地');
   assert.match(await row('LANDED').locator('.pill').getAttribute('title'),/源站已报告/);
+  assert.equal(await row('LIVERY').locator('.badge.livery').innerText(),'✦ 彩绘机');
+  assert.equal(await row('LIVERY').locator('.lv').innerText(),'✦\n特别彩绘 <测试> 多行涂装名称');
+  assert.equal(await row('LANDED').evaluate(e=>getComputedStyle(e).opacity),'1','past text must not be faded');
+  assert.equal(await row('FUTURE').locator('.flight .f').evaluate(e=>getComputedStyle(e).color),'rgb(20, 44, 64)');
   await windowPage.clock.setFixedTime(new Date((now+120)*1000));
   await windowPage.waitForTimeout(1100);
-  assert.equal(await windowPage.locator('#list .row').count(),7,'morning history must not expire after an hour');
+  assert.equal(await windowPage.locator('#list .row').count(),10,'history must remain available');
+  assert.equal(await windowPage.locator('#s-total').innerText(),'4','the current-time flight must expire from remaining counts');
+  assert.equal(await windowPage.locator('#pastFlights .row').count(),6);
   await windowPage.evaluate(()=>scrollTo(0,0));
   await windowPage.locator('#btnReload').click();
   await windowPage.waitForFunction(()=>document.querySelector('#toastText').textContent.includes('不会启动抓取'));
@@ -163,25 +190,44 @@ const newPage=async context=>{const page=await context.newPage();await page.cloc
   assert.equal(await windowPage.evaluate(()=>scrollY),0,'background/manual reload must not force another time jump');
   await windowPage.locator('#jumpNow').click();
   assert.ok(await windowPage.evaluate(()=>scrollY)>0,'explicit return-to-now button locates the time divider');
-  await windowPage.locator('label.switch').click();
-  assert.equal(await windowPage.locator('#todayToggle').isChecked(),false);
-  assert.ok((await names()).includes('TOMORROW'));
-  assert.ok((await names()).includes('OLD-1210'));
+  await windowPage.selectOption('#sortSel','time-desc');
+  assert.equal(await windowPage.locator('#pastFlights .row').count(),6,'all sorts keep history above now');
+  assert.ok(!(await names()).includes('TOMORROW'));
+  await windowPage.locator('#showEarlier').click();
+  assert.equal(await windowPage.locator('#pastFlights .row').count(),0);
+  assert.equal(await windowPage.locator('#list .row').count(),4);
+  assert.equal(await windowPage.locator('#showEarlier').getAttribute('aria-expanded'),'false');
+  await windowPage.setViewportSize({width:390,height:844});
+  await windowPage.locator('#showEarlier').click();
+  assert.equal(await windowPage.locator('#pastFlights .row').count(),6);
+  assert.equal(await windowPage.locator('#s-total').innerText(),'4');
+  assert.ok(await windowPage.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+  await windowPage.locator('#showEarlier').click();
+  await windowPage.setViewportSize({width:1440,height:1000});
+  await windowPage.locator('#chips [data-chip="four"]').click();
+  assert.deepEqual(await names(),['LIVERY']);
+  assert.equal(await windowPage.locator('#s-total').innerText(),'4');
+  await windowPage.locator('#clearFilters').click();
   windowData.today=[];
-  await windowPage.locator('label.switch').click();
-  assert.equal(await windowPage.locator('#todayToggle').isChecked(),true);
   await windowPage.locator('#btnReload').click();
   await windowPage.waitForFunction(()=>document.querySelectorAll('#list .row').length===0);
   assert.equal(await windowPage.locator('#s-total').innerText(),'0','empty today must not fall back to all snapshot flights');
+  assert.equal(await windowPage.locator('#historyTools').isVisible(),false);
+  windowData.today=samples.filter(f=>f.flight_number==='OLD-1210');
+  await windowPage.locator('#btnReload').click();
+  await windowPage.waitForFunction(()=>!document.querySelector('#historyTools').hidden);
+  assert.equal(await windowPage.locator('#list .row').count(),0,'past-only day has no remaining flights');
+  await windowPage.locator('#showEarlier').click();
+  assert.deepEqual(await names(),['OLD-1210'],'past-only day can still expand earlier flights');
   await windowPage.clock.setFixedTime(new Date('2026-10-20T00:15:00+08:00'));
   const nextTime=Date.parse('2026-10-20T00:30:00+08:00')/1000;
   windowData.service_day='2026-10-20';windowData.generated_at=nextTime-900;
   windowData.today=windowData.flights=[make('NEW-DAY',0,{scheduled_ts:nextTime,from_history:false})];
   await windowPage.locator('#btnReload').click();
-  await windowPage.waitForFunction(()=>document.querySelectorAll('#list .row').length===1);
+  await windowPage.waitForFunction(()=>document.querySelector('#list .flight .f')?.textContent==='NEW-DAY');
   assert.deepEqual(await names(),['NEW-DAY'],'new-day snapshot replaces all old-day rows in memory');
   await windowContext.close();
   assert.deepEqual(errors,[]);
-  console.log('PASS Flightdat: five airports, filters, responsive layouts, full-day accumulation, first-entry current-time jump, no forced re-jump on reload, return-to-now button, delayed flights, empty today, next-day replacement, clear statuses, 30-minute display; no live scrape');
+  console.log('PASS Flightdat: five airports, remaining-today counts, expandable anchored history, first-entry current-time jump, delayed flights, midnight boundary, filters/sorts, no business-jet category, strong livery labels/dark text, timestamp-only update bar, mobile layouts, empty/past-only days, next-day replacement; no live scrape');
  }finally{await browser?.close();server.closeAllConnections();await new Promise(r=>server.close(r));}
 })().catch(e=>{console.error(e);process.exitCode=1;});

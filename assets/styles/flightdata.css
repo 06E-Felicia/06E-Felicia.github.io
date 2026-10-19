@@ -1,5 +1,5 @@
 /* Flightdat: quiet aviation palette, compact controls, readable mobile cards. */
-:root{--bg:#f2f5fa;--text:#1b3045;--muted:#687e91;--dim:#8495a6;--line:#dfe7ef;--cyan:#248397;--blue:#476cbd;--shadow:0 4px 22px -12px #25476326}
+:root{--bg:#f2f5fa;--text:#13283c;--muted:#3e5368;--dim:#4c6175;--line:#dfe7ef;--cyan:#206b7d;--blue:#365b9f;--shadow:0 4px 22px -12px #25476326}
 .bg{background:radial-gradient(ellipse at 4% 5%,#e1f0f3a8,transparent 40%),radial-gradient(ellipse at 96% 2%,#e8e5f5a1,transparent 42%),linear-gradient(160deg,#f5f8fb,#edf2f7)}
 .grid{opacity:.22;background-size:72px 72px}
 .wrap{max-width:1500px;padding:0 28px 40px}
@@ -36,3 +36,30 @@
 @media(max-width:1180px){.head-row{display:none}.row{grid-template-columns:1fr auto;gap:8px 14px;padding:16px 18px;grid-template-areas:"time status" "flight photo" "airline airline" "route route" "type reg" "tags tags"}.cell.tags{justify-content:flex-start}.cell.flight{display:flex;align-items:baseline;gap:9px}.flight .c{margin-top:0}.cell.photo{align-self:center}.photo-thumb{width:144px;height:81px}.stats{grid-template-columns:repeat(3,minmax(0,1fr))}.stat .value{font-size:30px}.clock{display:none}}
 @media(max-width:760px){.wrap{padding:0 18px 30px}.topbar{margin:0 -18px 13px;padding:14px 18px}.brand h1{font-size:25px}.wordmark-label{display:none}.logo{width:44px;height:44px;border-radius:14px}.brand p.airport-name{font-size:10px}.top-right .live{display:none}.top-right{gap:0}.site-nav{flex-wrap:nowrap;overflow-x:auto;white-space:nowrap;margin-bottom:16px;gap:3px;scrollbar-width:none}.site-nav::-webkit-scrollbar{display:none}.site-nav a{flex:none;padding:7px 9px;font-size:11px}.toolbar{padding:12px;gap:10px}.toolbar-tools{padding-top:10px;gap:9px}.chips{gap:6px}.chip{padding:7px 9px;font-size:11px}.airport-pick select{width:100%}.statusbar{padding:11px 12px;gap:8px 14px}.statusbar .item{font-size:10px}.stats{gap:9px;margin-bottom:15px}.stat{padding:13px 12px;border-radius:14px}.stat .label{font-size:11px}.stat .value{font-size:29px;margin-top:5px}.stat .sub{display:none}.stat .bar{margin-top:9px}.stat::after{top:14px;height:16px}.photo-thumb{width:132px;height:75px}}
 @media(max-width:560px){.wrap{padding:0 12px 24px}.topbar{margin:0 -12px 12px;padding:12px;gap:8px;flex-wrap:nowrap}.brand{gap:9px;flex:1;min-width:0}.brand h1{font-size:23px}.logo{width:39px;height:39px;border-radius:13px}.brand p.airport-name{display:flex;max-width:158px;gap:4px;margin-top:4px}.airport-name #brandName{overflow:hidden;text-overflow:ellipsis;min-width:0;font-size:9px}.airport-name .iata{font-size:9px;padding:1px 3px}.top-right{flex:none}.btn{padding:8px 9px;font-size:11px;gap:4px;border-radius:10px}.btn svg{width:12px}.stats{grid-template-columns:repeat(3,minmax(0,1fr))}.stat{padding:12px 10px}.stat .value{font-size:27px}.stat .label{font-size:10px;white-space:nowrap}.statusbar .item:nth-child(4){display:none}.statusbar{gap:7px 12px}.row{padding:14px;gap:8px 11px}.row .airline .a{font-size:12px}.row .airline .en{font-size:10px}.photo-thumb{width:120px;height:68px}.toast{bottom:16px}.cell.tags{gap:4px}}
+
+/* Remaining-today board: stronger text, unmistakable livery, expandable past. */
+.stats{grid-template-columns:repeat(5,minmax(0,1fr))}
+.stat .label,.stat .sub{color:#455b70}.chip,.toolbar-info{color:#42586d}
+.statusbar .item{color:#43596e}.statusbar .item b{color:#203b50;font-size:12px}
+.board{overflow-anchor:none}.head-row{color:#445b70;font-weight:650}
+.row,.row.is-past{opacity:1;animation:none;color:#172d41}
+.row .time .t,.row .flight .f,.row .airline .a{color:#142c40}
+.row .flight .c,.row .airline .en,.row .airline .flag,.row .time .d,
+.row .type .tf,.row .route .code,.row .reg .r.none{color:#4a5f73}
+.row .time .d.late{color:#93420b}.row .time .d.early{color:#006247}
+.row .route,.row .type .tc,.row .reg .r{color:#2a435a}
+.row .route .home,.row .route .home .code{color:#155b70}
+.row .pill.muted,.row .badge.hist{color:#435569}.row .pill{font-weight:650}
+.row .badge.foreign{color:#315e86}.row .badge.widebody{color:#554293}
+.row.hit-livery{background:linear-gradient(95deg,#fff0f8,#fffafd 48%,#fff)}
+.row.hit-livery::before{width:4px;opacity:1;background:linear-gradient(#bc2871,#7545ad)}
+.row .badge.livery{color:#8d174f;background:#ffe2f1;border-color:#dba0bf;font-size:10px;font-weight:750}
+.row .airline .lv{color:#8d174f;font-size:11px;font-weight:650;white-space:normal;overflow-wrap:anywhere;line-height:1.5;align-items:flex-start;margin-top:6px}
+.livery-icon{flex:none;color:#913f97}.row .photo-thumb.empty{color:#4d6377}
+.history-tools{padding:12px 20px;background:#f4f7fb;border-bottom:1px solid #dfe7ef}
+.history-tools[hidden],#pastFlights[hidden]{display:none}
+.history-toggle{font:650 12px var(--sans);border:1px solid #b8cbd9;border-radius:9px;padding:9px 14px;color:#25485f;background:#fff;cursor:pointer;max-width:100%}
+.history-toggle:hover{background:#e9f4f7;border-color:#5d9aaa}.history-toggle:focus-visible{outline:3px solid #67c5da;outline-offset:2px}
+#pastFlights{border-bottom:1px solid #c9d7e2}.now-divider{color:#285e72}
+@media(max-width:1180px){.stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:560px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stat[data-chip=featured]{grid-column:1/-1}.history-tools{padding:10px 14px}.history-toggle{width:100%;font-size:11px}}

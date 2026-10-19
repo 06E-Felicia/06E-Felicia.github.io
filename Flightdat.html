@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
 <title>Flightdat · 航班精选 · 深中气象</title>
-<meta name="description" content="五机场 FR24 航班精选：深圳宝安、北京首都、上海浦东、广州白云、香港。支持宽体客机、彩绘、外航、四发机、货机和公务机筛选，每30分钟尝试更新快照。">
+<meta name="description" content="五机场 FR24 航班精选：深圳宝安、北京首都、上海浦东、广州白云、香港。支持宽体客机、彩绘、外航、四发机和货机筛选，每10分钟尝试更新快照。">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
 <style>
 :root{
@@ -173,7 +173,6 @@ body{
 .chip[data-chip="heavy"].on, .chip[data-chip="heavies"].on{background:#fffbeb;border-color:#fde68a;color:#b45309}
 .chip[data-chip="rare"].on{background:#fffbeb;border-color:#fde68a;color:#b45309}
 .chip[data-chip="cargo"].on{background:#f5f3ff;border-color:#ddd6fe;color:#6d28d9}
-.chip[data-chip="bizjet"].on{background:#ecfdf5;border-color:#a7f3d0;color:#047857}
 .chip[data-chip="widebody"].on{background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8}
 .chip[data-chip="livery_foreign"].on{background:#fdf2f8;border-color:#f9a8d4;color:#be185d}
 .chip[data-chip="four"].on{background:#fffbeb;border-color:#fde68a;color:#b45309}
@@ -231,7 +230,6 @@ body{
 .row.hit-widebody::before{background:linear-gradient(180deg,var(--blue),var(--cyan))}
 .row.hit-rare::before{background:linear-gradient(180deg,var(--amber),#ea580c)}
 .row.hit-heavy::before{background:linear-gradient(180deg,#f59e0b,#e11d48)}
-.row.hit-bizjet::before{background:linear-gradient(180deg,var(--green),var(--cyan))}
 .row.hit-cargo::before{background:linear-gradient(180deg,var(--violet),#6366f1)}
 .row.hit-foreign::before{background:linear-gradient(180deg,#2563eb,#0891b2)}
 .row.hit-four::before{background:linear-gradient(180deg,#f59e0b,#e11d48)}
@@ -296,7 +294,6 @@ body{
 .badge.rare{color:#b45309;background:#fffbeb;border-color:#fde68a}
 .badge.heavy{color:#b45309;background:#fffbeb;border-color:#fde68a}
 .badge.cargo{color:#6d28d9;background:#f5f3ff;border-color:#ddd6fe}
-.badge.bizjet{color:#047857;background:#ecfdf5;border-color:#a7f3d0}
 .badge.foreign{color:#1d4ed8;background:#eff6ff;border-color:#bfdbfe}
 .badge.four{color:#b45309;background:#fffbeb;border-color:#fde68a}
 .badge.hist{color:#64748b;background:#f8fafc;border-color:#e2e8f0}
@@ -436,7 +433,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
 }
 
 </style>
-<link rel="stylesheet" href="assets/styles/flightdata.css?v=1.1.1">
+<link rel="stylesheet" href="assets/styles/flightdata.css?v=1.2.0">
 </head>
 <body>
 <div class="bg"></div><div class="grid"></div>
@@ -471,20 +468,15 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     <a href="Flightdat.html" aria-current="page">Flightdat 航班精选</a>
   </nav>
 
-  <section class="statusbar">
-    <div class="item">最后成功 <b id="lastUpdate">--:--:--</b></div>
-    <div class="item">下次预计 <b id="nextUpdate">--:--</b> <span class="countdown" id="countdown">--:--:--</span></div>
-    <div class="item">更新方式 <span class="tag" id="freqTag">GH ACTIONS · 30MIN</span></div>
-    <div class="item">覆盖时段 <span class="tag" id="windowTag">--</span></div>
-    <div class="cycle"><i id="cycleBar"></i></div>
-    <div class="status-msg" id="statusMsg"><span class="mini-spin"></span><span id="statusText">正在载入…</span></div>
+  <section class="statusbar" aria-label="数据更新时间">
+    <div class="item">更新时间 <b id="lastUpdate">--:--:--</b></div>
   </section>
 
   <div class="alert" id="alert"><span class="ic" id="alertIcon">⚠️</span><span id="alertText"></span></div>
 
   <section class="stats">
     <button class="stat" data-chip="featured" style="--c:#0891b2">
-      <span class="label">精选航班</span><b class="value" id="s-total">--</b><span class="sub">宽体 · 彩绘 · 外航 · 特殊机型</span>
+      <span class="label">剩余精选航班</span><b class="value" id="s-total">--</b><span class="sub">现在至今日结束 · 各分类可重叠</span>
       <i class="bar"><b id="b-all"></b></i>
     </button>
     <button class="stat" data-chip="livery_foreign" style="--c:#db2777">
@@ -502,10 +494,6 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     <button class="stat" data-chip="cargo" style="--c:#6d28d9">
       <span class="label">货机</span><b class="value" id="s-cargo">--</b><span class="sub">货运航班</span>
       <i class="bar"><b id="b-cargo"></b></i>
-    </button>
-    <button class="stat" data-chip="bizjet" style="--c:#059669">
-      <span class="label">公务机</span><b class="value" id="s-bizjet">--</b><span class="sub">仅统计 FR24 收录的</span>
-      <i class="bar"><b id="b-bizjet"></b></i>
     </button>
   </section>
 
@@ -526,16 +514,12 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
       <button class="chip" data-chip="special">特殊机型 <span class="n" id="c-special">0</span></button>
       <button class="chip" data-chip="four">四发 <span class="n" id="c-four">0</span></button>
       <button class="chip" data-chip="cargo">货机 <span class="n" id="c-cargo">0</span></button>
-      <button class="chip" data-chip="bizjet">公务机 <span class="n" id="c-bizjet">0</span></button>
     </div>
     </div>
     <div class="toolbar-tools">
     <span class="toolbar-info" id="resultText">正在载入…</span>
     <button class="link-btn" id="clearFilters" hidden>清除筛选</button>
     <button class="link-btn" id="jumpNow" title="定位到当前时间附近的航班">回到当前时间</button>
-    <label class="switch" title="累计显示北京时间当天已抓取的航班，包括已经完成的航班">
-      <input type="checkbox" id="todayToggle" checked><span class="track"></span>仅当日
-    </label>
     <div class="sort" title="排序方式">
       <select id="sortSel" aria-label="排序方式">
         <option value="time-asc">时间 ↑</option>
@@ -564,6 +548,9 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
       <div class="cell tags">标记</div>
       <div class="cell photo">机型照片</div>
     </div>
+    <div class="history-tools" id="historyTools" hidden>
+      <button class="history-toggle" id="showEarlier" aria-expanded="false" aria-controls="pastFlights">↑ 显示之前时刻的航班</button>
+    </div>
     <div id="list"><div class="skeleton">
       <div class="sk-row"></div><div class="sk-row"></div><div class="sk-row"></div>
       <div class="sk-row"></div><div class="sk-row"></div><div class="sk-row"></div>
@@ -573,7 +560,6 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
   <footer>
     <div>数据来源 <a id="sourceLink" href="https://www.flightradar24.com/data/airports/szx" target="_blank" rel="noopener">FlightRadar24</a> · 机型照片 <a href="https://www.planespotters.net" target="_blank" rel="noopener">PlaneSpotters</a>（版权归摄影师）· 定时快照，非实时航班保障信息</div>
     <div>状态说明：待核实＝计划或预计时间已过，但尚无起降确认；已落地＝源站已报告落地或抵达。</div>
-    <div class="mono">SNAPSHOT <span id="snapTime">--</span> · WINDOW <span id="snapWindow">--</span> · COST <span id="durText">--</span> · <a id="runLink" href="#" target="_blank" rel="noopener">LAST RUN</a></div>
   </footer>
 </div>
 
@@ -589,7 +575,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
   const INDEX_URL = DATA_BASE + "index.json";
   const STATUS_URL = DATA_BASE + "status.json";
   const REPO_URL = "https://github.com/06E-Felicia/06E-Felicia.github.io";
-  const REFRESH_HOURS = 0.5; // Current deployed schedule; do not inherit old snapshots' 2-hour metadata.
+  const REFRESH_HOURS = 1 / 6; // Ten-minute collection; ignore old snapshot interval metadata.
   let flightRequest = 0;
   const SKELETON_HTML = '<div class="skeleton">' + '<div class="sk-row"></div>'.repeat(6) + '</div>';
   const TZ = "Asia/Shanghai";
@@ -674,8 +660,8 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     "Leipzig": "莱比锡", "Anchorage": "安克雷奇", "Bishkek": "比什凯克", "Tashkent": "塔什干"
   };
 
-  const isFeatured = f => !!(f.is_special_livery || f.is_foreign || f.is_widebody || f.is_four_engine || f.is_cargo || f.is_bizjet);
-  const isSpecialType = f => !!(f.is_four_engine || f.is_cargo || f.is_bizjet);
+  const isFeatured = f => !!(f.is_special_livery || f.is_foreign || f.is_widebody || f.is_four_engine || f.is_cargo);
+  const isSpecialType = f => !!(f.is_four_engine || f.is_cargo);
   const isLiveryForeign = f => !!(f.is_special_livery || f.is_foreign);
 
   const CHIP_TEST = {
@@ -684,27 +670,24 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     livery_foreign: isLiveryForeign,
     special: isSpecialType,
     four: f => !!f.is_four_engine,
-    cargo: f => !!f.is_cargo,
-    bizjet: f => !!f.is_bizjet
+    cargo: f => !!f.is_cargo
   };
 
   const state = {
-    board: "all", chip: "featured", q: "", today: true, sort: "time-asc",
+    board: "all", chip: "featured", q: "", showEarlier: false, sort: "time-asc",
     airport: "SZX", index: null,
     data: null, status: null, lastSuccessSeen: null, offline: false
   };
 
   const $ = s => document.querySelector(s);
   const el = {
-    clock: $("#clock"), lastUpdate: $("#lastUpdate"), nextUpdate: $("#nextUpdate"),
-    countdown: $("#countdown"), freqTag: $("#freqTag"), windowTag: $("#windowTag"),
-    cycleBar: $("#cycleBar"), statusMsg: $("#statusMsg"), statusText: $("#statusText"),
+    clock: $("#clock"), lastUpdate: $("#lastUpdate"),
     list: $("#list"), toast: $("#toast"), toastText: $("#toastText"),
-    snapTime: $("#snapTime"), snapWindow: $("#snapWindow"), runLink: $("#runLink"),
-    btnReload: $("#btnReload"), search: $("#search"), todayToggle: $("#todayToggle"),
+    btnReload: $("#btnReload"), search: $("#search"),
+    historyTools: $("#historyTools"), showEarlier: $("#showEarlier"),
     alert: $("#alert"), alertIcon: $("#alertIcon"), alertText: $("#alertText"),
     sortSel: $("#sortSel"), searchClear: $("#searchClear"), clearFilters: $("#clearFilters"),
-    resultText: $("#resultText"), toTop: $("#toTop"), durText: $("#durText"),
+    resultText: $("#resultText"), toTop: $("#toTop"),
     brandIata: $("#brandIata"), brandName: $("#brandName"), airportSel: $("#airportSel")
   };
 
@@ -832,6 +815,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
       if (request !== flightRequest || airport !== state.airport) return false;
       state.dataError = false;
       const locate = !state.data || (j.service_day && j.service_day !== state.data.service_day);
+      if (locate) state.showEarlier = false;
       const isNew = state.lastSuccessSeen && j.generated_at !== state.lastSuccessSeen;
       state.data = j;
       state.lastSuccessSeen = j.generated_at;
@@ -856,6 +840,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
   }
 
   function showNoData() {
+    el.historyTools.hidden = true;
     const link = actionsUrl();
     el.list.innerHTML = `<div class="placeholder">
       <div class="ico">🛰️</div>
@@ -873,39 +858,9 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     const hours = REFRESH_HOURS;
     const last = st.last_success_at || data.generated_at;
 
-    const mode = state.status?.updated_by === "local" ? "LOCAL" : "GH ACTIONS";
-    el.freqTag.textContent = `${mode} · ${Math.round(hours * 60)}MIN`;
-
-    if (last) {
-      el.lastUpdate.textContent = fmtStamp(last);
-      el.snapTime.textContent = fmtStamp(last);
-    }
-    if (data.coverage_from && data.coverage_to) {
-      const span = `${fmtTime(data.coverage_from)}–${fmtTime(data.coverage_to)}`;
-      el.windowTag.textContent = span;
-      el.snapWindow.textContent = span;
-    } else if (data.window_hours) {
-      el.windowTag.textContent = data.window_hours + " H";
-      el.snapWindow.textContent = data.window_hours + "H";
-    }
-    const cost = st.duration_sec ?? data.duration_sec;
-    el.durText.textContent = cost != null ? `${cost}s` : "--";
-
-    const next = last ? last + hours * 3600 : null;
-    if (next) el.nextUpdate.textContent = fmtStamp(next, false);
-
-    const runUrl = state.status?.run_url;
-    const link = runUrl || actionsUrl();
-    if (link) {
-      el.runLink.href = link;
-      el.runLink.textContent = runUrl ? "最近运行 ↗" : "ACTIONS ↗";
-      el.runLink.style.display = "";
-    } else {
-      el.runLink.style.display = "none";
-    }
+    el.lastUpdate.textContent = fmtStamp(last);
 
     // 状态提示
-    el.statusMsg.classList.remove("show");
     el.alert.classList.remove("show");
 
     const now = Date.now() / 1000;
@@ -935,36 +890,14 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
       el.alert.className = "alert warn show";
       el.alertIcon.textContent = "⏳";
       el.alertText.textContent = `数据已 ${(age / 3600).toFixed(1)} 小时未更新。请在 Actions 页面核对源站读取与任务运行状态，不能仅凭更新时间判断失败原因。`;
-    } else if (!state.data) {
-      el.statusMsg.classList.add("show");
-      el.statusText.textContent = "正在载入数据…";
-    }
-
-    if (last && next && next > last) {
-      const p = ((now - last) / (next - last)) * 100;
-      el.cycleBar.style.width = Math.max(0, Math.min(100, p)).toFixed(1) + "%";
     }
   }
 
   function tick() {
     el.clock.textContent = fmtHMS.format(new Date());
-    // Update the time divider / CN calendar day without jumping the reader.
-    if (state.data && state.windowMinute !== Math.floor(Date.now() / 60000)) render();
-    const st = (state.status?.airports || {})[state.airport] || {};
-    const hours = REFRESH_HOURS;
-    const last = st.last_success_at || state.data?.generated_at;
-    if (!last) return;
-    const next = last + hours * 3600;
-    const sec = Math.floor(next - Date.now() / 1000);
-    if (sec <= 0) {
-      el.countdown.textContent = "等待定时任务";
-      el.countdown.style.color = "var(--amber)";
-    } else {
-      const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), s = sec % 60;
-      el.countdown.textContent = `${pad2(h)}:${pad2(m)}:${pad2(s)}`;
-      el.countdown.style.color = "";
-    }
-    el.cycleBar.style.width = Math.max(0, Math.min(100, ((next - sec) - last) / (hours * 3600) * 100)).toFixed(1) + "%";
+    // Counts expire at the actual event time; also refresh the CN day/minute.
+    if (state.data && (state.windowMinute !== Math.floor(Date.now() / 60000)
+        || (state.nextFlightTime && Date.now() / 1000 > state.nextFlightTime))) render();
   }
 
   // ------------------------------ 渲染 ------------------------------
@@ -979,14 +912,14 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
   function baseFlights() {
     const d = state.data;
     if (!d) return [];
-    const arr = (state.today && Array.isArray(d.today)) ? d.today : (d.flights || []);
+    const arr = Array.isArray(d.today) ? d.today : (d.flights || []);
     const now = Date.now() / 1000;
     const day = Math.floor((now + 8 * 3600) / 86400); // China standard time; no host timezone dependency.
     // 普通宽体客机同样进入精选；普通窄体仍需满足其他精选条件。
     return arr.filter(f => {
       const time = flightEventTime(f);
       return isFeatured(f) && time > 0
-        && (!state.today || Math.floor((time + 8 * 3600) / 86400) === day);
+        && Math.floor((time + 8 * 3600) / 86400) === day;
     });
   }
 
@@ -1011,26 +944,27 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     livery_foreign: rows.filter(CHIP_TEST.livery_foreign).length,
     special: rows.filter(CHIP_TEST.special).length,
     four: rows.filter(CHIP_TEST.four).length,
-    cargo: rows.filter(CHIP_TEST.cargo).length,
-    bizjet: rows.filter(CHIP_TEST.bizjet).length
+    cargo: rows.filter(CHIP_TEST.cargo).length
   });
 
   function render() {
     state.windowMinute = Math.floor(Date.now() / 60000);
+    const now = Date.now() / 1000;
     const boardRows = boardFlights();
-    const c = counts(boardRows);
+    const upcoming = baseFlights().filter(f => flightEventTime(f) >= now);
+    state.nextFlightTime = upcoming.length ? Math.min(...upcoming.map(flightEventTime)) : 0;
+    const c = counts(boardRows.filter(f => flightEventTime(f) >= now));
     Object.keys(c).forEach(k => {
       const node = document.getElementById("c-" + k.replace(/_/g, "-"));
       if (node) node.textContent = c[k];
     });
 
-    // Stats and chips describe the same full-day accumulated list.
-    const active = baseFlights();
-    const st = {...counts(active), total:active.length, special:active.length};
+    // All counters exclude the past, even while the history is expanded.
+    const st = {...counts(upcoming), total:upcoming.length};
     const setStat = (id, v) => { const n = document.getElementById(id); if (n) n.textContent = v ?? 0; };
-    setStat("s-total", st.special); setStat("s-livery-foreign", st.livery_foreign);
-    setStat("s-widebody", st.widebody); setStat("s-four", st.four_engine);
-    setStat("s-cargo", st.cargo); setStat("s-bizjet", st.bizjet);
+    setStat("s-total", st.total); setStat("s-livery-foreign", st.livery_foreign);
+    setStat("s-widebody", st.widebody); setStat("s-four", st.four);
+    setStat("s-cargo", st.cargo);
 
     document.querySelectorAll(".stat").forEach(n => n.classList.toggle("active", n.dataset.chip === state.chip));
     document.querySelectorAll(".chip").forEach(n => n.classList.toggle("on", n.dataset.chip === state.chip));
@@ -1045,55 +979,44 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     setBar("b-all", 1, 1);
     setBar("b-livery-foreign", st.livery_foreign, total);
     setBar("b-widebody", st.widebody, total);
-    setBar("b-four", st.four_engine, total);
+    setBar("b-four", st.four, total);
     setBar("b-cargo", st.cargo, total);
-    setBar("b-bizjet", st.bizjet, total);
 
     const q = state.q.trim().toLowerCase();
     const test = CHIP_TEST[state.chip] || CHIP_TEST.featured;
-    let rows = boardRows.filter(f => test(f) && matchSearch(f, q));
-    rows = sortRows(rows);
+    const matched = boardRows.filter(f => test(f) && matchSearch(f, q));
+    const past = matched.filter(f => flightEventTime(f) < now)
+      .sort((a,b) => flightEventTime(a) - flightEventTime(b));
+    const rows = sortRows(matched.filter(f => flightEventTime(f) >= now));
+    el.historyTools.hidden = !past.length;
+    el.showEarlier.textContent = state.showEarlier
+      ? `收起之前时刻的航班 · ${past.length} 班`
+      : `↑ 显示之前时刻的航班 · ${past.length} 班`;
+    el.showEarlier.setAttribute("aria-expanded", String(state.showEarlier));
 
     // 结果摘要
     const arrN = rows.filter(f => f.board === "arrivals").length;
-    const withPhoto = rows.filter(f => f.photo && f.photo.src).length;
-    el.resultText.innerHTML = `展示 <b>${rows.length}</b> 班`
+    el.resultText.innerHTML = `今日剩余 <b>${rows.length}</b> 班`
       + ` <span class="sep">·</span> 到达 <b>${arrN}</b>`
       + ` <span class="sep">·</span> 出发 <b>${rows.length - arrN}</b>`
-      + ` <span class="sep">·</span> 含照片 <b>${withPhoto}</b>`
-      + ` <span class="sep">·</span> ${state.today ? "当日累计" : "本轮快照"}`;
-    const dirty = !!q || state.chip !== "featured" || state.board !== "all" || !state.today;
+      + ` <span class="sep">·</span> 现在至今日结束`;
+    const dirty = !!q || state.chip !== "featured" || state.board !== "all";
     el.clearFilters.hidden = !dirty;
 
-    if (!rows.length) {
-      el.list.innerHTML = placeholder(
-        "🛬",
-        q ? "没有匹配的航班" : (state.chip === "featured" ? "当前窗口暂无精选航班" : "当前筛选条件下没有航班"),
-        q ? "换个关键词试试，或点击「清除筛选」查看全部航班。"
-          : "可以切换到「全部」查看所有航班，或等待下一次自动更新。"
-      );
-      return;
-    }
-
-    // 时间正序时插入“现在”分隔线
-    const ascending = state.sort === "time-asc";
-    const nowSec = Date.now() / 1000;
-    let html = "";
-    let inserted = false;
-    rows.forEach((f, i) => {
-      if (ascending && !inserted && flightEventTime(f) >= nowSec) {
-        html += nowDividerHTML();
-        inserted = true;
-      }
-      html += rowHTML(f, i);
-    });
-    if (ascending && !inserted) html += nowDividerHTML();
-    el.list.innerHTML = html;
+    // Keep earlier records ABOVE now in every sorting mode; opening history
+    // preserves this divider's viewport position so the reader can scroll up.
+    const history = `<section id="pastFlights" aria-label="今日之前时刻的航班"${state.showEarlier ? "" : " hidden"}>`
+      + (state.showEarlier ? past.map(rowHTML).join("") : "") + `</section>`;
+    el.list.innerHTML = history + nowDividerHTML() + (rows.length ? rows.map(rowHTML).join("") : placeholder(
+      "🛬", q ? "没有匹配的航班" : "今日剩余时段暂无符合条件的航班",
+      past.length ? "可点击上方按钮，向上浏览今日之前时刻的航班。"
+        : "可以调整筛选，或等待下一次自动更新。"
+    ));
   }
 
   const specialScore = f =>
     (f.is_special_livery ? 8 : 0) + (f.is_foreign ? 6 : 0) + (f.is_four_engine ? 5 : 0)
-    + (f.is_bizjet ? 3 : 0) + (f.is_cargo ? 2 : 0);
+    + (f.is_cargo ? 2 : 0);
 
   function sortRows(rows) {
     const t = flightEventTime;
@@ -1114,7 +1037,11 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
   function jumpToNow() {
     const marker = document.getElementById("currentTimeMarker");
     if (marker) {
-      marker.scrollIntoView({block:"center", behavior:"instant"});
+      const top = marker.getBoundingClientRect().top + window.scrollY
+        - document.querySelector(".topbar").getBoundingClientRect().height
+        - (document.querySelector(".head-row").getBoundingClientRect().height || 0)
+        - (el.historyTools.hidden ? 0 : el.historyTools.getBoundingClientRect().height) - 12;
+      window.scrollTo({top:Math.max(0,top), behavior:"instant"});
       return;
     }
     // Other sort modes can still locate the nearest operation time.
@@ -1153,12 +1080,11 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
 
     const fourLabel = { B747: "747", A340: "A340", A380: "A380", IL96: "IL96", AN124: "AN124" }[f.type_family];
     const tags = [];
-    if (f.is_special_livery) tags.push(`<span class="badge livery" title="${esc(f.livery || "彩绘涂装")}">彩绘</span>`);
+    if (f.is_special_livery) tags.push(`<span class="badge livery" title="${esc(f.livery || "特殊彩绘涂装")}"><span aria-hidden="true">✦</span> 彩绘机</span>`);
     if (f.is_foreign) tags.push(`<span class="badge foreign" title="外国航司">外航</span>`);
     if (f.is_widebody) tags.push(`<span class="badge widebody" title="宽体机（含普通宽体客机）">宽体</span>`);
     if (f.is_four_engine) tags.push(`<span class="badge four" title="四发机型">${esc(fourLabel || "四发")}</span>`);
     if (f.is_cargo) tags.push(`<span class="badge cargo" title="货运航班">货机</span>`);
-    if (f.is_bizjet) tags.push(`<span class="badge bizjet" title="公务机 / 私人飞机">公务机</span>`);
     if (f.from_history) tags.push(`<span class="badge hist">今日</span>`);
 
     const cls = ["row"];
@@ -1167,14 +1093,13 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     else if (f.is_widebody) cls.push("hit-widebody");
     else if (f.is_four_engine) cls.push("hit-four");
     else if (f.is_cargo) cls.push("hit-cargo");
-    else if (f.is_bizjet) cls.push("hit-bizjet");
-    if (f.from_history) cls.push("is-past");
+    if (flightEventTime(f) < Date.now() / 1000) cls.push("is-past");
 
     const cnName = airlineCN(f.airline);
     const flightStatus = statusOf(f);
     const enName = f.airline_raw || f.airline || "";
     const liveryLine = f.is_special_livery
-      ? `<span class="lv" title="彩绘：${esc(f.livery || "")}">🎨 ${esc(f.livery || "特殊涂装")}</span>`
+      ? `<span class="lv" title="彩绘：${esc(f.livery || "特殊涂装")}"><span class="livery-icon" aria-hidden="true">✦</span><span>${esc(f.livery || "特殊彩绘涂装")}</span></span>`
       : (enName && enName !== cnName ? `<span class="en">${esc(enName)}</span>` : "");
 
     return `<article class="${cls.join(" ")}" data-event-time="${flightEventTime(f)}" style="animation-delay:${Math.min(i, 24) * 10}ms">
@@ -1266,14 +1191,23 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
   el.searchClear.addEventListener("click", () => {
     state.q = ""; el.search.value = ""; el.searchClear.hidden = true; el.search.focus(); render();
   });
-  el.todayToggle.addEventListener("change", e => { state.today = e.target.checked; render(); });
+  el.showEarlier.addEventListener("click", () => {
+    const before = document.getElementById("currentTimeMarker")?.getBoundingClientRect().top;
+    state.showEarlier = !state.showEarlier;
+    render();
+    if (before != null) {
+      const after = document.getElementById("currentTimeMarker").getBoundingClientRect().top;
+      window.scrollBy({top:after-before, behavior:"instant"});
+    }
+    if (!state.showEarlier) el.showEarlier.focus({preventScroll:true});
+  });
   document.getElementById("jumpNow").addEventListener("click", jumpToNow);
   el.sortSel.addEventListener("change", e => { state.sort = e.target.value; render(); });
 
   el.clearFilters.addEventListener("click", () => {
-    state.board = "all"; state.chip = "featured"; state.q = ""; state.today = true; state.sort = "time-asc";
+    state.board = "all"; state.chip = "featured"; state.q = ""; state.showEarlier = false; state.sort = "time-asc";
     el.search.value = ""; el.searchClear.hidden = true;
-    el.todayToggle.checked = true; el.sortSel.value = "time-asc";
+    el.sortSel.value = "time-asc";
     render();
   });
 
@@ -1300,6 +1234,8 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     state.airport = e.target.value;
     try { localStorage.setItem("fr24-airport", state.airport); } catch (err) { /* ignore */ }
     state.data = null;
+    state.showEarlier = false;
+    el.historyTools.hidden = true;
     state.dataError = false;
     state.lastSuccessSeen = null;
     el.list.innerHTML = SKELETON_HTML;

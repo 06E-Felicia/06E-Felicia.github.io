@@ -1151,7 +1151,7 @@ def build_latest(
             "city": airport.get("city", ""),
             "timezone": "Asia/Shanghai",
         },
-        "refresh_hours": cfg.get("refresh_hours", 0.5),
+        "refresh_hours": cfg.get("refresh_hours", 1/6),
         "window_hours": window_hours,
         "coverage_from": coverage_from,
         "coverage_to": coverage_to,
@@ -1260,7 +1260,7 @@ def run(headless: bool = True, debug: bool = False) -> int:
     index = {
         "generated_at": now,
         "generated_at_iso": ts_iso(now),
-        "refresh_hours": cfg.get("refresh_hours", 0.5),
+        "refresh_hours": cfg.get("refresh_hours", 1/6),
         "default_airport": cfg.get("default_airport", "SZX"),
         "duration_sec": round(time.time() - started, 1),
         "airports": index_airports,
@@ -1269,15 +1269,22 @@ def run(headless: bool = True, debug: bool = False) -> int:
 
     repo = os.environ.get("GITHUB_REPOSITORY")
     run_id = os.environ.get("GITHUB_RUN_ID")
+    try:
+        checked_at = int(os.environ.get("FLIGHTDATA_CHECKED_AT", "0"))
+    except ValueError:
+        checked_at = 0
+    if not started-3600 <= checked_at <= started:
+        checked_at = int(started)
     status = {
         "collection_started_at": int(started),
+        "schedule_checked_at": checked_at,
         "ok": successes > 0,
         "partial": successes < len(airports) or any(r.get("partial") for r in results.values()),
         "successes": successes,
         "total_airports": len(airports),
         "updated_at": now,
         "updated_at_iso": ts_iso(now),
-        "refresh_hours": cfg.get("refresh_hours", 0.5),
+        "refresh_hours": cfg.get("refresh_hours", 1/6),
         "default_airport": cfg.get("default_airport", "SZX"),
         "duration_sec": round(time.time() - started, 1),
         "airports": results,
