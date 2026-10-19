@@ -67,7 +67,6 @@ TZ_CN = timezone(timedelta(hours=8))
 LOG = logging.getLogger("fr24")
 
 BOARDS = ("arrivals", "departures")
-DISPLAY_LOOKBACK_SECONDS = 3600
 
 # ---------------------------------------------------------------------------
 # 机型归一化：把 ICAO / IATA 各种写法映射到“家族”
@@ -424,10 +423,16 @@ class _DataIslandParser(HTMLParser):
     """Read the response's actual data, not the initial DOM's stale data-page."""
     raw = None
 
+    def __init__(self):
+        super().__init__()
+        self.links = []
+
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
         if attrs.get("id") == "app" and attrs.get("data-page"):
             self.raw = attrs["data-page"]
+        if tag == "a" and attrs.get("href"):
+            self.links.append(attrs["href"])
 
 
 def _decode_island(raw):
@@ -444,6 +449,28 @@ def _validate_board(data, airport):
     got = ((props.get("airport") or {}).get("iata") or "").upper()
     if got and got != airport["iata"].upper():
         raise RuntimeError(f"机场不匹配：{got}")
+    return data
+
+
+def _response_board(response, airport):
+    """Read the actual response before frontend hydration can stall a tab."""
+    if response.status in (401, 403, 429):
+        raise SourceAccessError(f"源站拒绝访问 HTTP {response.status}；不重试访问验证")
+    if response.status >= 400:
+        raise RuntimeError(f"源站返回 HTTP {response.status}")
+    body = response.text()
+    if "application/json" in response.headers.get("content-type", "").lower():
+        return _validate_board(json.loads(body), airport)
+    parser = _DataIslandParser()
+    parser.feed(body)
+    if not parser.raw:
+        title = re.search(r"<title[^>]*>(.*?)</title>", body, re.I | re.S)
+        title = html.unescape(title.group(1)).strip() if title else "空"
+        error_type = SourceAccessError if _is_challenge_title(title) else RuntimeError
+        raise error_type(f"服务器响应未包含航班数据岛（标题：{title}）")
+    data = _validate_board(_decode_island(parser.raw), airport)
+    # These are links observed in the server response, not guessed endpoints.
+    data["_pagination_links"] = parser.links
     return data
 
 
@@ -507,6 +534,18 @@ def fetch_board(
                 raise RuntimeError(f"源站返回 HTTP {status}：{url}")
             page.wait_for_timeout(random.randint(900, 2200))
 
+            # Prefer server-rendered data and preserve its real pagination
+            # links. Avoid relying on a DOM that FR24 may already be replacing.
+            if response is not None:
+                try:
+                    data = _response_board(response, airport)
+                    LOG.info("[%s] 服务器响应成功：%d 条航班", tag, len(data["props"]["flights"]))
+                    return data
+                except SourceAccessError:
+                    raise
+                except (RuntimeError, ValueError, TypeError):
+                    pass  # A legitimate client-rendered page can still fill the DOM below.
+
             raw = _wait_for_island(page, timeout=70)
             if not raw:
                 title = _title_safe(page)
@@ -564,6 +603,8 @@ def fetch_next_board(page, board, airport, cfg, debug, previous):
     Let the site's own client set its navigation headers. Never synthesize
     an API, copy credentials, or replay a blocked request through another host.
     """
+    if airport["iata"].upper() == "SZX" and board == "arrivals":
+        return fetch_next_document(page, board, airport, cfg, debug, previous)
     meta = previous["props"].get("meta") or {}
     next_page = str(meta.get("nextPage") or "")
     expected_path = f"/data/airports/{airport['iata'].lower()}/{board}"
@@ -642,6 +683,54 @@ def fetch_next_board(page, board, airport, cfg, debug, previous):
     except Exception:
         _debug_screenshot(page, airport, f"{board}-page-{next_page}", debug)
         raise
+
+
+def fetch_next_document(page, board, airport, cfg, debug, previous):
+    """SZX arrivals: isolated browser document, no click/focus/hydration wait.
+
+    Still uses the same browser context/cookies and the site's observed link.
+    A source refusal is reported, never retried via a different identity.
+    """
+    next_page = str((previous["props"].get("meta") or {}).get("nextPage") or "")
+    expected_path = f"/data/airports/{airport['iata'].lower()}/{board}"
+    links = previous.get("_pagination_links")
+    if links is None:
+        links = page.locator("a[href]").evaluate_all("es => es.map(e => e.getAttribute('href'))")
+    target = None
+    for href in links:
+        parsed = urlsplit(urljoin(page.url, href))
+        if (parsed.scheme == "https" and parsed.hostname == "www.flightradar24.com"
+                and parsed.path.rstrip("/") == expected_path
+                and parse_qs(parsed.query).get("page") == [next_page]):
+            target = parsed.geturl()
+            break
+    if not target:
+        raise RuntimeError(f"服务器响应没有第 {next_page} 页的官网链接，停止猜测 URL")
+    page.wait_for_timeout(max(0, min(15000, int(cfg.get("pagination_delay_ms", 2500)))))
+    document = page.context.new_page()
+    try:
+        LOG.info("[%s %s p%s] 独立标签读取官网 HTML：%s", airport["iata"], board, next_page, target)
+        # commit waits for HTTP response headers, not completion of the
+        # scripts that made both click() and press() hang in production.
+        response = document.goto(target, referer=page.url, wait_until="commit", timeout=45000)
+        if response is None:
+            raise RuntimeError("分页没有返回 HTTP 响应")
+        data = _response_board(response, airport)
+        if data["props"]["flights"] and data["props"]["flights"] == previous["props"]["flights"]:
+            raise RuntimeError(f"第 {next_page} 页重复返回上一页数据")
+        LOG.info("[%s %s p%s] 官网 HTML 分页成功：%d 条", airport["iata"], board,
+                 next_page, len(data["props"]["flights"]))
+        return data
+    except Exception:
+        # Avoid renderer-dependent screenshots in the very path introduced
+        # to recover from a stuck renderer; the HTTP error remains in status.
+        LOG.exception("[%s %s p%s] HTML 分页失败", airport["iata"], board, next_page)
+        raise
+    finally:
+        try:
+            document.close()
+        except Exception as exc:  # noqa: BLE001
+            LOG.warning("关闭分页标签失败：%s", exc)
 
 
 def fetch_board_pages(
@@ -936,6 +1025,44 @@ def flight_event_time(flight):
     return 0
 
 
+def day_window(timestamp):
+    local = datetime.fromtimestamp(timestamp, TZ_CN)
+    start = int(local.replace(hour=0, minute=0, second=0, microsecond=0).timestamp())
+    return local.date().isoformat(), start, start+86400
+
+
+def rollover_airport(airport, timestamp):
+    """Reset yesterday's accumulated records on the first run of a new CN day.
+
+    Also runs before collection: a failed first capture must not carry an
+    ever-growing previous day's cache or republish yesterday as today's data.
+    """
+    day, start, end = day_window(timestamp)
+    history_path = DATA_DIR / f"history_{airport['iata'].lower()}.json"
+    history = read_json(history_path, {})
+    if not isinstance(history, dict):
+        history = {}
+    old = history.get("flights") or {}
+    if not isinstance(old, dict) or (history.get("service_day") and history["service_day"] != day):
+        old = {}
+    flights = {key: f for key, f in old.items()
+               if isinstance(f, dict) and start <= flight_event_time(f) < end}
+    if history.get("service_day") != day or flights != history.get("flights"):
+        history = {"service_day": day, "updated_at": timestamp, "updated_at_iso": ts_iso(timestamp), "flights": flights}
+        write_json(history_path, history)
+    snapshot_path = SITE_DATA_DIR / f"{airport['iata'].lower()}.json"
+    snapshot = read_json(snapshot_path, {})
+    if isinstance(snapshot, dict) and snapshot.get("generated_at"):
+        snapshot_day = snapshot.get("service_day") or day_window(snapshot["generated_at"])[0]
+        if snapshot_day != day:
+            # Keep the real last-success time, never fake a successful capture.
+            snapshot.update(service_day=day, cleared_for_day=day, flights=[], today=[],
+                            stats=stats_of([]), today_stats=stats_of([]),
+                            coverage_from=None, coverage_to=None, coverage_hours=None)
+            write_json(snapshot_path, snapshot)
+    return history
+
+
 def build_latest(
     cfg: dict[str, Any],
     airport: dict[str, Any],
@@ -947,28 +1074,19 @@ def build_latest(
     iata = airport["iata"]
     history_path = DATA_DIR / f"history_{iata.lower()}.json"
     generated = now_ts()
-    display_from = generated - DISPLAY_LOOKBACK_SECONDS
+    day, today_start, today_end = day_window(generated)
 
     for f in flights:
         f["last_seen_ts"] = now_ts()
     flights.sort(key=lambda f: (f.get("scheduled_ts") or 0, f.get("flight_number") or ""))
 
-    history: dict[str, Any] = read_json(history_path, {})
+    history: dict[str, Any] = rollover_airport(airport, generated)
     if not isinstance(history, dict) or not isinstance(history.get("flights"), dict):
         history = {"flights": {}}
     for f in flights:
-        history["flights"][f["id"]] = f
-
-    keep_days = int(cfg.get("history_days", 3))
-    cutoff = now_ts() - keep_days * 86400
-    pruned: dict[str, Any] = {}
-    for fid, f in history["flights"].items():
-        try:
-            ts = int(f.get("scheduled_ts") or 0)
-        except (TypeError, ValueError):
-            ts = 0
-        if ts >= cutoff:
-            pruned[fid] = f
+        if today_start <= flight_event_time(f) < today_end:
+            history["flights"][f["id"]] = f
+    pruned = history["flights"]
 
     four_fams = set(cfg.get("four_engine_families") or {"A340", "A380", "B747", "IL96", "AN124"})
     for f in pruned.values():
@@ -981,23 +1099,20 @@ def build_latest(
         )
 
     write_json(history_path, {
+        "service_day": day,
         "updated_at": now_ts(),
         "updated_at_iso": ts_iso(now_ts()),
         "flights": pruned,
     })
 
-    # Retain the configured cache history without publishing the whole day's
-    # completed flights again every time another board is collected.
-    flights = [f for f in flights if flight_event_time(f) >= display_from]
-    today_start = int(
-        datetime.fromtimestamp(generated, TZ_CN).replace(hour=0, minute=0, second=0, microsecond=0).timestamp()
-    )
-    today_end = today_start + 86400
+    # A source board can still include last night's flights around midnight.
+    # Do not reintroduce them into the new day's published snapshot.
+    flights = [f for f in flights if flight_event_time(f) >= today_start]
     current_ids = {f["id"] for f in flights}
     seen: dict[tuple, dict] = {}
     for f in pruned.values():
         ts = flight_event_time(f)
-        if ts < max(today_start, display_from) or ts >= today_end:
+        if ts < today_start or ts >= today_end:
             continue
         key = (f.get("board"), f.get("flight_number"), f.get("scheduled_ts"))
         prev = seen.get(key)
@@ -1027,8 +1142,7 @@ def build_latest(
     return {
         "generated_at": generated,
         "generated_at_iso": ts_iso(generated),
-        "lookback_hours": 1,
-        "display_from": display_from,
+        "service_day": day,
         "duration_sec": round(time.time() - started, 1),
         "airport": {
             "iata": airport["iata"],
@@ -1056,6 +1170,8 @@ def run(headless: bool = True, debug: bool = False) -> int:
     started = time.time()
     prev_status = read_json(STATUS_PATH, {}) or {}
     prev_airports = prev_status.get("airports") or {}
+    for airport in airports:
+        rollover_airport(airport, int(started))
 
     LOG.info("开始抓取 %d 个机场：%s（headless=%s）",
              len(airports), ", ".join(a["iata"] for a in airports), headless)
@@ -1154,6 +1270,7 @@ def run(headless: bool = True, debug: bool = False) -> int:
     repo = os.environ.get("GITHUB_REPOSITORY")
     run_id = os.environ.get("GITHUB_RUN_ID")
     status = {
+        "collection_started_at": int(started),
         "ok": successes > 0,
         "partial": successes < len(airports) or any(r.get("partial") for r in results.values()),
         "successes": successes,

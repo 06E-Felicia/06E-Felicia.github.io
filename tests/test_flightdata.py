@@ -122,7 +122,7 @@ class FlightdataIntegrationTests(unittest.TestCase):
         self.assertTrue(flights.boards['departures']['ok'])
 
     def pagination_fixture(self,m):
-        cfg=m.load_config();ap=cfg['airports'][0];iata=ap['iata'].lower()
+        cfg=m.load_config();ap=cfg['airports'][1];iata=ap['iata'].lower()
         previous={'props':{'airport':{'iata':ap['iata']},'flights':[self.raw_flight(m,'p1')],
                            'meta':{'nextPage':2,'hasMoreNextData':True}}}
         page=MagicMock();page.url=f'https://www.flightradar24.com/data/airports/{iata}/arrivals'
@@ -234,7 +234,8 @@ class FlightdataIntegrationTests(unittest.TestCase):
         failed=m.AirportFlights(errors={'departures':'Just a moment...'},boards={'departures':{'ok':False}})
         for startup_error in [False,True]:
             with self.subTest(startup_error=startup_error), tempfile.TemporaryDirectory(prefix='flightdat-failure-') as temporary:
-                root=Path(temporary);old={'generated_at':123456,'generated_at_iso':'old-time','flights':[{'id':'keep-me'}],'stats':{'total':1}}
+                root=Path(temporary);old_time=m.day_window(m.now_ts())[1]+1
+                old={'generated_at':old_time,'generated_at_iso':'old-time','flights':[{'id':'keep-me'}],'stats':{'total':1}}
                 with patch.multiple(m,DATA_DIR=root/'cache',SITE_DATA_DIR=root/'public',STATUS_PATH=root/'public/status.json',PHOTO_CACHE_PATH=root/'cache/photos.json'), \
                         patch.object(m,'load_config',return_value=cfg), \
                         patch.object(m,'collect_all',side_effect=RuntimeError('browser executable missing') if startup_error else None,
@@ -246,11 +247,11 @@ class FlightdataIntegrationTests(unittest.TestCase):
                 status=json.loads((root/'public/status.json').read_text())
                 self.assertFalse(status['ok']);self.assertEqual(status['successes'],0)
                 state=status['airports'][ap['iata']]
-                self.assertEqual(state['last_success_at'],123456)
+                self.assertEqual(state['last_success_at'],old_time)
                 self.assertIn('browser executable missing' if startup_error else 'Just a moment',state['error'])
                 if startup_error:self.assertNotIn('Cloudflare',state['error'])
 
-    def test_snapshot_looks_back_one_hour_without_destroying_history(self):
+    def test_snapshot_accumulates_the_entire_day_without_a_one_hour_cutoff(self):
         m=self.collector();cfg=m.load_config();ap=cfg['airports'][0]
         now=int(m.datetime.fromisoformat('2026-10-19T15:42:00+08:00').timestamp())
         def flight(fid,offset,estimate=None):
@@ -261,7 +262,7 @@ class FlightdataIntegrationTests(unittest.TestCase):
                  flight('recent',-1200),flight('future',1800),flight('delayed',-12000,1200),
                  flight('tomorrow',12*3600)]
         cached=flight('history-recent',-3000)
-        expected={'boundary','recent','future','delayed','history-recent'}
+        expected={'old-1210','too-old','boundary','recent','future','delayed','history-recent'}
         with tempfile.TemporaryDirectory(prefix='flightdat-lookback-') as temporary:
             root=Path(temporary)
             with patch.multiple(m,DATA_DIR=root,SITE_DATA_DIR=root/'public',PHOTO_CACHE_PATH=root/'photos.json'), \
@@ -273,11 +274,41 @@ class FlightdataIntegrationTests(unittest.TestCase):
                 self.assertEqual({f['id'] for f in latest['flights']},expected-{'history-recent'}|{'tomorrow'})
                 self.assertEqual(latest['today_stats']['total'],len(expected))
                 self.assertEqual(latest['stats']['scanned_total'],len(current))
-                self.assertEqual(latest['display_from'],now-3600)
+                self.assertEqual(latest['service_day'],'2026-10-19')
                 self.assertIn('old-1210',m.read_json(history,{})['flights'])
                 # Re-reading an old flight must not reset its operation time.
                 again=m.build_latest(cfg,ap,current,None,m.time.time(),len(current))
-                self.assertNotIn('old-1210',{f['id'] for f in again['today']})
+                self.assertIn('old-1210',{f['id'] for f in again['today']})
+
+    def test_next_day_first_failed_capture_clears_yesterday_without_faking_success(self):
+        m=self.collector();cfg=m.load_config();ap=cfg['airports'][0];cfg['airports']=[ap]
+        first=int(m.datetime.fromisoformat('2026-10-19T15:42:00+08:00').timestamp())
+        next_day=int(m.datetime.fromisoformat('2026-10-20T00:10:00+08:00').timestamp())
+        old=m.build_flight({**self.raw_flight(m),'scheduledTime':first},'arrivals',cfg,{},{})
+        with tempfile.TemporaryDirectory(prefix='flightdat-rollover-') as temporary:
+            root=Path(temporary)
+            with patch.multiple(m,DATA_DIR=root/'cache',SITE_DATA_DIR=root/'public',STATUS_PATH=root/'public/status.json',PHOTO_CACHE_PATH=root/'cache/photos.json'), \
+                    patch.object(m,'load_config',return_value=cfg):
+                with patch.object(m,'now_ts',return_value=first):
+                    snapshot=m.build_latest(cfg,ap,[old],None,m.time.time())
+                    m.write_json(root/'public'/f"{ap['iata'].lower()}.json",snapshot)
+                with patch.object(m.time,'time',return_value=next_day), \
+                        patch.object(m,'collect_all',side_effect=RuntimeError('source unavailable')):
+                    self.assertEqual(m.run(),1)
+                cache=m.read_json(root/'cache'/f"history_{ap['iata'].lower()}.json",{})
+                snapshot=m.read_json(root/'public'/f"{ap['iata'].lower()}.json",{})
+                self.assertEqual(cache['service_day'],'2026-10-20');self.assertEqual(cache['flights'],{})
+                self.assertEqual(snapshot['today'],[]);self.assertEqual(snapshot['flights'],[])
+                self.assertEqual(snapshot['generated_at'],first)
+                status=m.read_json(root/'public/status.json',{})
+                self.assertFalse(status['ok']);self.assertEqual(status['airports'][ap['iata']]['last_success_at'],first)
+                # Even if the source re-sends last night's flight after
+                # midnight, it must not resurrect the previous day's cache.
+                new=m.build_flight({**self.raw_flight(m,'new-day'),'scheduledTime':next_day},'arrivals',cfg,{},{})
+                with patch.object(m,'now_ts',return_value=next_day):
+                    latest=m.build_latest(cfg,ap,[old,new],None,m.time.time())
+                self.assertEqual([f['id'] for f in latest['today']],['new-day'])
+                self.assertEqual([f['id'] for f in latest['flights']],['new-day'])
 
     def test_invalid_estimate_falls_back_to_scheduled_time(self):
         m=self.collector()
@@ -297,7 +328,9 @@ class FlightdataIntegrationTests(unittest.TestCase):
         flights=(ROOT/'.github/workflows/flightdata.yml').read_text()
         weather=(ROOT/'.github/workflows/update.yml').read_text()
         self.assertIn('name: 更新航班数据',flights)
-        self.assertIn("cron: '5,35 * * * *'",flights)
+        self.assertIn("cron: '8,18,28,38,48,58 * * * *'",flights)
+        self.assertIn('python3 flightdata/schedule.py',flights)
+        self.assertIn("if: needs.collect.outputs.should_run == 'true'",flights)
         self.assertIn('python flightdata/scraper.py',flights)
         self.assertIn('git add flightdata/docs/data flightdata/data',flights)
         for workflow in [flights,weather]:

@@ -532,7 +532,8 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     <div class="toolbar-tools">
     <span class="toolbar-info" id="resultText">正在载入…</span>
     <button class="link-btn" id="clearFilters" hidden>清除筛选</button>
-    <label class="switch" title="只显示今日航班；所有列表均仅回溯最近 1 小时，延误按预计时间判断">
+    <button class="link-btn" id="jumpNow" title="定位到当前时间附近的航班">回到当前时间</button>
+    <label class="switch" title="累计显示北京时间当天已抓取的航班，包括已经完成的航班">
       <input type="checkbox" id="todayToggle" checked><span class="track"></span>仅当日
     </label>
     <div class="sort" title="排序方式">
@@ -830,12 +831,16 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
       if (!j || !Array.isArray(j.flights)) throw new Error("数据格式异常");
       if (request !== flightRequest || airport !== state.airport) return false;
       state.dataError = false;
+      const locate = !state.data || (j.service_day && j.service_day !== state.data.service_day);
       const isNew = state.lastSuccessSeen && j.generated_at !== state.lastSuccessSeen;
       state.data = j;
       state.lastSuccessSeen = j.generated_at;
       updateBrand();
       render();
       updateStatusUI();
+      if (locate) requestAnimationFrame(() => {
+        if (request === flightRequest && airport === state.airport) jumpToNow();
+      });
       if (isNew) {
         const s = j.stats || {};
         toast(`数据已更新 · 彩绘 ${s.livery ?? 0} · 特殊机型 ${s.special ?? 0}`);
@@ -943,7 +948,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
 
   function tick() {
     el.clock.textContent = fmtHMS.format(new Date());
-    // Expire old rows even when the published snapshot has not changed.
+    // Update the time divider / CN calendar day without jumping the reader.
     if (state.data && state.windowMinute !== Math.floor(Date.now() / 60000)) render();
     const st = (state.status?.airports || {})[state.airport] || {};
     const hours = REFRESH_HOURS;
@@ -980,7 +985,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     // 普通宽体客机同样进入精选；普通窄体仍需满足其他精选条件。
     return arr.filter(f => {
       const time = flightEventTime(f);
-      return isFeatured(f) && time >= now - 3600
+      return isFeatured(f) && time > 0
         && (!state.today || Math.floor((time + 8 * 3600) / 86400) === day);
     });
   }
@@ -1019,8 +1024,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
       if (node) node.textContent = c[k];
     });
 
-    // Snapshot totals may include hours-old history. Stats and chips must
-    // describe the same rolling window as the currently visible flights.
+    // Stats and chips describe the same full-day accumulated list.
     const active = baseFlights();
     const st = {...counts(active), total:active.length, special:active.length};
     const setStat = (id, v) => { const n = document.getElementById(id); if (n) n.textContent = v ?? 0; };
@@ -1057,7 +1061,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
       + ` <span class="sep">·</span> 到达 <b>${arrN}</b>`
       + ` <span class="sep">·</span> 出发 <b>${rows.length - arrN}</b>`
       + ` <span class="sep">·</span> 含照片 <b>${withPhoto}</b>`
-      + ` <span class="sep">·</span> 回溯 1 小时`;
+      + ` <span class="sep">·</span> ${state.today ? "当日累计" : "本轮快照"}`;
     const dirty = !!q || state.chip !== "featured" || state.board !== "all" || !state.today;
     el.clearFilters.hidden = !dirty;
 
@@ -1104,7 +1108,20 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
   }
 
   function nowDividerHTML() {
-    return `<div class="now-divider"><span class="dot"></span><span>现在 · ${fmtHM.format(new Date())}</span><i></i></div>`;
+    return `<div class="now-divider" id="currentTimeMarker"><span class="dot"></span><span>现在 · ${fmtHM.format(new Date())}</span><i></i></div>`;
+  }
+
+  function jumpToNow() {
+    const marker = document.getElementById("currentTimeMarker");
+    if (marker) {
+      marker.scrollIntoView({block:"center", behavior:"instant"});
+      return;
+    }
+    // Other sort modes can still locate the nearest operation time.
+    const now = Date.now() / 1000;
+    const nearest = [...el.list.querySelectorAll(".row[data-event-time]")]
+      .sort((a,b) => Math.abs(Number(a.dataset.eventTime)-now)-Math.abs(Number(b.dataset.eventTime)-now))[0];
+    nearest?.scrollIntoView({block:"center", behavior:"instant"});
   }
 
   function statusOf(f) {
@@ -1160,7 +1177,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
       ? `<span class="lv" title="彩绘：${esc(f.livery || "")}">🎨 ${esc(f.livery || "特殊涂装")}</span>`
       : (enName && enName !== cnName ? `<span class="en">${esc(enName)}</span>` : "");
 
-    return `<article class="${cls.join(" ")}" style="animation-delay:${Math.min(i, 24) * 10}ms">
+    return `<article class="${cls.join(" ")}" data-event-time="${flightEventTime(f)}" style="animation-delay:${Math.min(i, 24) * 10}ms">
       <div class="cell time">
         <div class="t">${esc(t)}</div>
         <span class="d ${deltaCls}">${day ? `<span class="day">${esc(day)}</span> ` : ""}${esc(delta || "计划")}</span>
@@ -1250,6 +1267,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     state.q = ""; el.search.value = ""; el.searchClear.hidden = true; el.search.focus(); render();
   });
   el.todayToggle.addEventListener("change", e => { state.today = e.target.checked; render(); });
+  document.getElementById("jumpNow").addEventListener("click", jumpToNow);
   el.sortSel.addEventListener("change", e => { state.sort = e.target.value; render(); });
 
   el.clearFilters.addEventListener("click", () => {

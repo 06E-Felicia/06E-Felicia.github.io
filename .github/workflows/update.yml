@@ -54,14 +54,30 @@ jobs:
         env:
           EVENT_NAME: ${{ github.event_name }}
           EVENT_SCHEDULE: ${{ github.event.schedule }}
+          SOURCE_RUN_URL: ${{ github.event.workflow_run.html_url }}
+          GH_REPOSITORY: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           python3 - <<'PY'
-          import os
+          import json, os, urllib.request
           from datetime import datetime, timedelta, timezone
           month = datetime.now(timezone(timedelta(hours=8))).month
           seasonal = 3 <= month <= 5
           fast = os.environ.get("EVENT_SCHEDULE") == "7,17,27,37,47,57 * * * *"
           run = os.environ["EVENT_NAME"] != "schedule" or fast == seasonal
+          # A freshness-only flight wake-up did not save data. Do not republish
+          # the whole weather site for every skipped ten-minute check.
+          if os.environ["EVENT_NAME"] == "workflow_run":
+              url = f'https://api.github.com/repos/{os.environ["GH_REPOSITORY"]}/contents/flightdata/docs/data/status.json'
+              request = urllib.request.Request(url, headers={
+                  'Accept': 'application/vnd.github.raw+json',
+                  'Authorization': 'Bearer '+os.environ['GH_TOKEN']})
+              try:
+                  with urllib.request.urlopen(request, timeout=15) as response:
+                      status = json.load(response)
+                  run = status.get('run_url') == os.environ['SOURCE_RUN_URL']
+              except Exception as error:
+                  print(f'::warning::无法核对航班状态，保守保留本次发布：{type(error).__name__}')
           with open(os.environ["GITHUB_OUTPUT"], "a") as output:
               output.write(f"run={str(run).lower()}\n")
           PY

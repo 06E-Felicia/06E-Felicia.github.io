@@ -4,7 +4,7 @@
   "server_port": 8787,
   "headless": true,
   "max_retries": 3,
-  "history_days": 3,
+  "history_days": 1,
   "_彩绘说明": "FR24 会在航司名后用括号标注彩绘涂装，例如 AirAsia (Legend Heroes Park Livery)。括号内容会被自动识别为彩绘。manual_liveries 可手动补充注册号 -> 涂装名。抓到的注册号会自动学习进 data/livery_registry.json。",
   "livery_keywords": [
     "livery",

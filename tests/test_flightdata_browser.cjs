@@ -8,9 +8,7 @@ const NOW_MS=original('SZX').generated_at*1000;
 const read=code=>{
  const d=original(code),now=NOW_MS/1000;
  const time=f=>Number(f.estimated_ts)>0?Number(f.estimated_ts):Number(f.scheduled_ts)||0;
- const within=f=>time(f)>=now-3600;
- d.flights=d.flights.filter(within);
- d.today=d.today.filter(f=>within(f)&&Math.floor((time(f)+28800)/86400)===Math.floor((now+28800)/86400));
+ d.today=d.today.filter(f=>Math.floor((time(f)+28800)/86400)===Math.floor((now+28800)/86400));
  for(const [rows,key] of [[d.flights,'stats'],[d.today,'today_stats']]){
   d[key]={...d[key],total:rows.length,special:rows.length,widebody:rows.filter(f=>f.is_widebody).length};
  }
@@ -125,7 +123,7 @@ const newPage=async context=>{const page=await context.newPage();await page.cloc
   assert.equal(await partialPage.locator('#list .row').count(),read('SZX').today.length);
   await partialContext.close();
 
-  // 15:42: retire the 12:10 record even if it was just re-fetched or in history.
+  // Full-day history remains available; locate the user at the current time.
   const windowContext=await browser.newContext();
   await windowContext.route('**/*',r=>new URL(r.request().url()).hostname==='127.0.0.1'?r.continue():r.abort());
   const now=Date.parse('2026-10-19T15:42:00+08:00')/1000;
@@ -135,40 +133,55 @@ const newPage=async context=>{const page=await context.newPage();await page.cloc
    make('RECENT',-2820),make('LANDED',-1800,{status:'landed',status_cn:'已到达',status_kind:'ok'}),
    make('FUTURE',1800),make('DELAYED',-12000,{estimated_ts:now+1200}),make('TOMORROW',12*3600),
    make('NO-TIME',0,{scheduled_ts:null,estimated_ts:null})];
-  const windowData={...original('SZX'),generated_at:now,today:samples,flights:samples};
+  const windowData={...original('SZX'),service_day:'2026-10-19',generated_at:now,today:samples,flights:samples};
   await windowContext.route('**/szx.json?*',r=>r.fulfill({json:windowData}));
   const windowPage=await windowContext.newPage();
   windowPage.on('pageerror',e=>errors.push(e.message));
   await windowPage.clock.setFixedTime(new Date(now*1000));
   await windowPage.goto(base+'/Flightdat.html');
-  await windowPage.waitForFunction(()=>document.querySelectorAll('#list .row').length===5);
+  await windowPage.waitForFunction(()=>document.querySelectorAll('#list .row').length===7);
   const names=()=>windowPage.locator('#list .flight .f').allTextContents();
-  assert.deepEqual((await names()).sort(),['BOUNDARY','DELAYED','FUTURE','LANDED','RECENT']);
-  assert.equal(await windowPage.locator('#s-total').innerText(),'5');
-  assert.equal(await windowPage.locator('#s-widebody').innerText(),'5');
+  assert.deepEqual((await names()).sort(),['BOUNDARY','DELAYED','EXPIRED','FUTURE','LANDED','OLD-1210','RECENT']);
+  assert.equal(await windowPage.locator('#s-total').innerText(),'7');
+  assert.equal(await windowPage.locator('#s-widebody').innerText(),'7');
+  await windowPage.waitForFunction(()=>{
+   const marker=document.querySelector('#currentTimeMarker')?.getBoundingClientRect();
+   return marker&&marker.top>=0&&marker.bottom<=innerHeight&&scrollY>0;
+  });
   const row=id=>windowPage.locator('#list .row').filter({has:windowPage.locator('.flight .f',{hasText:id})});
   assert.equal(await row('RECENT').locator('.pill').innerText(),'待核实');
   assert.match(await row('RECENT').locator('.pill').getAttribute('title'),/不代表航班已结束/);
   assert.equal(await row('LANDED').locator('.pill').innerText(),'已落地');
   assert.match(await row('LANDED').locator('.pill').getAttribute('title'),/源站已报告/);
   await windowPage.clock.setFixedTime(new Date((now+120)*1000));
-  await windowPage.waitForFunction(()=>document.querySelectorAll('#list .row').length===4);
-  assert.ok(!(await names()).includes('BOUNDARY'),'rows expire without waiting for another scrape');
+  await windowPage.waitForTimeout(1100);
+  assert.equal(await windowPage.locator('#list .row').count(),7,'morning history must not expire after an hour');
+  await windowPage.evaluate(()=>scrollTo(0,0));
   await windowPage.locator('#btnReload').click();
   await windowPage.waitForFunction(()=>document.querySelector('#toastText').textContent.includes('不会启动抓取'));
-  assert.ok(!(await names()).includes('OLD-1210'),'reload must not resurrect stale history');
+  assert.ok((await names()).includes('OLD-1210'),'reload keeps the whole-day accumulation');
+  assert.equal(await windowPage.evaluate(()=>scrollY),0,'background/manual reload must not force another time jump');
+  await windowPage.locator('#jumpNow').click();
+  assert.ok(await windowPage.evaluate(()=>scrollY)>0,'explicit return-to-now button locates the time divider');
   await windowPage.locator('label.switch').click();
   assert.equal(await windowPage.locator('#todayToggle').isChecked(),false);
   assert.ok((await names()).includes('TOMORROW'));
-  assert.ok(!(await names()).includes('OLD-1210'),'one-hour cutoff also applies outside today mode');
+  assert.ok((await names()).includes('OLD-1210'));
   windowData.today=[];
   await windowPage.locator('label.switch').click();
   assert.equal(await windowPage.locator('#todayToggle').isChecked(),true);
   await windowPage.locator('#btnReload').click();
   await windowPage.waitForFunction(()=>document.querySelectorAll('#list .row').length===0);
   assert.equal(await windowPage.locator('#s-total').innerText(),'0','empty today must not fall back to all snapshot flights');
+  await windowPage.clock.setFixedTime(new Date('2026-10-20T00:15:00+08:00'));
+  const nextTime=Date.parse('2026-10-20T00:30:00+08:00')/1000;
+  windowData.service_day='2026-10-20';windowData.generated_at=nextTime-900;
+  windowData.today=windowData.flights=[make('NEW-DAY',0,{scheduled_ts:nextTime,from_history:false})];
+  await windowPage.locator('#btnReload').click();
+  await windowPage.waitForFunction(()=>document.querySelectorAll('#list .row').length===1);
+  assert.deepEqual(await names(),['NEW-DAY'],'new-day snapshot replaces all old-day rows in memory');
   await windowContext.close();
   assert.deepEqual(errors,[]);
-  console.log('PASS Flightdat: home entry, five airports, widebody, filters, stats, search, reload, race, responsive layouts, relative paths, warnings, rolling 1h cutoff + expiry + delayed flights, empty today, clear status labels, 30-minute display; no live scrape');
+  console.log('PASS Flightdat: five airports, filters, responsive layouts, full-day accumulation, first-entry current-time jump, no forced re-jump on reload, return-to-now button, delayed flights, empty today, next-day replacement, clear statuses, 30-minute display; no live scrape');
  }finally{await browser?.close();server.closeAllConnections();await new Promise(r=>server.close(r));}
 })().catch(e=>{console.error(e);process.exitCode=1;});

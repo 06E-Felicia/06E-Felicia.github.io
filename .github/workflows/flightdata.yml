@@ -2,7 +2,9 @@ name: 更新航班数据
 
 on:
   schedule:
-    - cron: '5,35 * * * *'
+    # More wake-up opportunities; the freshness gate limits actual collection
+    # to once per 30 minutes. GitHub cron is still best-effort, not an SLA.
+    - cron: '8,18,28,38,48,58 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -22,11 +24,19 @@ jobs:
       contents: read
     outputs:
       scrape_outcome: ${{ steps.scrape.outcome }}
+      should_run: ${{ steps.freshness.outputs.run }}
     steps:
       - name: 检出主项目（不检出原导入文件夹的嵌套仓库）
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+
+      - name: 检查是否满30分钟（跨日与失败可提前补偿）
+        id: freshness
+        run: python3 flightdata/schedule.py
 
       - name: 安装 Python
+        if: steps.freshness.outputs.run == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -34,6 +44,7 @@ jobs:
           cache-dependency-path: flightdata/requirements.txt
 
       - name: 安装完整 Chrome 与窗口环境（与本地浏览器一致）
+        if: steps.freshness.outputs.run == 'true'
         run: |
           python -m pip install -r flightdata/requirements.txt
           python -m playwright install --with-deps chrome
@@ -41,9 +52,11 @@ jobs:
           sudo apt-get install -y xvfb xauth
 
       - name: 验证第二页原生翻页链路（离线样例，不访问 FR24）
+        if: steps.freshness.outputs.run == 'true'
         run: python tests/test_flightdata_pagination.py -v
 
       - name: 抓取五机场航班快照
+        if: steps.freshness.outputs.run == 'true'
         id: scrape
         continue-on-error: true
         env:
@@ -51,7 +64,7 @@ jobs:
         run: xvfb-run -a python flightdata/scraper.py --headed --debug
 
       - name: 汇总实际采集结果（区分部分更新与全部失败）
-        if: always() && steps.scrape.outcome != '' && steps.scrape.outcome != 'skipped'
+        if: always() && steps.freshness.outputs.run == 'true' && steps.scrape.outcome != '' && steps.scrape.outcome != 'skipped'
         run: |
           python - <<'PY'
           import json, os
@@ -70,7 +83,7 @@ jobs:
           PY
 
       - name: 保存抓取诊断截图
-        if: always() && (steps.scrape.outcome == 'failure' || steps.scrape.outcome == 'success')
+        if: always() && steps.freshness.outputs.run == 'true' && (steps.scrape.outcome == 'failure' || steps.scrape.outcome == 'success')
         uses: actions/upload-artifact@v4
         with:
           name: flightdata-debug
@@ -79,10 +92,12 @@ jobs:
           retention-days: 7
 
       - name: 打包采集结果（不包含代码或凭据）
+        if: steps.freshness.outputs.run == 'true'
         run: |
           tar --exclude='debug-*.png' -czf "$RUNNER_TEMP/flightdata-snapshots.tgz" flightdata/docs/data flightdata/data
 
       - name: 保存本轮快照与缓存
+        if: steps.freshness.outputs.run == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: flightdata-snapshots
@@ -91,6 +106,7 @@ jobs:
 
   save:
     needs: collect
+    if: needs.collect.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     # 仅在短暂保存阶段与天气任务串行；检出时取得最新主分支。
