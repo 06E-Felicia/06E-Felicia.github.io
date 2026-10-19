@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
 <title>Flightdat · 航班精选 · 深中气象</title>
-<meta name="description" content="五机场 FR24 航班精选：深圳宝安、北京首都、上海浦东、广州白云、香港。支持宽体客机、彩绘、外航、四发机、货机和公务机筛选，每两小时尝试更新快照。">
+<meta name="description" content="五机场 FR24 航班精选：深圳宝安、北京首都、上海浦东、广州白云、香港。支持宽体客机、彩绘、外航、四发机、货机和公务机筛选，每30分钟尝试更新快照。">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
 <style>
 :root{
@@ -474,7 +474,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
   <section class="statusbar">
     <div class="item">最后成功 <b id="lastUpdate">--:--:--</b></div>
     <div class="item">下次预计 <b id="nextUpdate">--:--</b> <span class="countdown" id="countdown">--:--:--</span></div>
-    <div class="item">更新方式 <span class="tag" id="freqTag">GH ACTIONS · 2H</span></div>
+    <div class="item">更新方式 <span class="tag" id="freqTag">GH ACTIONS · 30MIN</span></div>
     <div class="item">覆盖时段 <span class="tag" id="windowTag">--</span></div>
     <div class="cycle"><i id="cycleBar"></i></div>
     <div class="status-msg" id="statusMsg"><span class="mini-spin"></span><span id="statusText">正在载入…</span></div>
@@ -532,7 +532,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     <div class="toolbar-tools">
     <span class="toolbar-info" id="resultText">正在载入…</span>
     <button class="link-btn" id="clearFilters" hidden>清除筛选</button>
-    <label class="switch" title="只显示当天 00:00–24:00 的航班（含已结束）">
+    <label class="switch" title="只显示今日航班；所有列表均仅回溯最近 1 小时，延误按预计时间判断">
       <input type="checkbox" id="todayToggle" checked><span class="track"></span>仅当日
     </label>
     <div class="sort" title="排序方式">
@@ -571,6 +571,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
 
   <footer>
     <div>数据来源 <a id="sourceLink" href="https://www.flightradar24.com/data/airports/szx" target="_blank" rel="noopener">FlightRadar24</a> · 机型照片 <a href="https://www.planespotters.net" target="_blank" rel="noopener">PlaneSpotters</a>（版权归摄影师）· 定时快照，非实时航班保障信息</div>
+    <div>状态说明：待核实＝计划或预计时间已过，但尚无起降确认；已落地＝源站已报告落地或抵达。</div>
     <div class="mono">SNAPSHOT <span id="snapTime">--</span> · WINDOW <span id="snapWindow">--</span> · COST <span id="durText">--</span> · <a id="runLink" href="#" target="_blank" rel="noopener">LAST RUN</a></div>
   </footer>
 </div>
@@ -587,6 +588,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
   const INDEX_URL = DATA_BASE + "index.json";
   const STATUS_URL = DATA_BASE + "status.json";
   const REPO_URL = "https://github.com/06E-Felicia/06E-Felicia.github.io";
+  const REFRESH_HOURS = 0.5; // Current deployed schedule; do not inherit old snapshots' 2-hour metadata.
   let flightRequest = 0;
   const SKELETON_HTML = '<div class="skeleton">' + '<div class="sk-row"></div>'.repeat(6) + '</div>';
   const TZ = "Asia/Shanghai";
@@ -768,7 +770,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
       data = {
         airports: [{ iata: "SZX", icao: "ZGSZ", name: "深圳宝安国际机场", city: "Shenzhen" }],
         default_airport: "SZX",
-        refresh_hours: 2
+        refresh_hours: REFRESH_HOURS
       };
     }
     state.index = data;
@@ -863,11 +865,11 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
   function updateStatusUI() {
     const st = (state.status?.airports || {})[state.airport] || {};
     const data = state.data || {};
-    const hours = state.index?.refresh_hours || data.refresh_hours || 2;
+    const hours = REFRESH_HOURS;
     const last = st.last_success_at || data.generated_at;
 
     const mode = state.status?.updated_by === "local" ? "LOCAL" : "GH ACTIONS";
-    el.freqTag.textContent = `${mode} · ${hours}H`;
+    el.freqTag.textContent = `${mode} · ${Math.round(hours * 60)}MIN`;
 
     if (last) {
       el.lastUpdate.textContent = fmtStamp(last);
@@ -941,8 +943,10 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
 
   function tick() {
     el.clock.textContent = fmtHMS.format(new Date());
+    // Expire old rows even when the published snapshot has not changed.
+    if (state.data && state.windowMinute !== Math.floor(Date.now() / 60000)) render();
     const st = (state.status?.airports || {})[state.airport] || {};
-    const hours = state.index?.refresh_hours || state.data?.refresh_hours || 2;
+    const hours = REFRESH_HOURS;
     const last = st.last_success_at || state.data?.generated_at;
     if (!last) return;
     const next = last + hours * 3600;
@@ -959,12 +963,26 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
   }
 
   // ------------------------------ 渲染 ------------------------------
+  function flightEventTime(f) {
+    for (const key of ["estimated_ts", "scheduled_ts"]) {
+      const time = Number(f[key]);
+      if (Number.isFinite(time) && time > 0) return time;
+    }
+    return 0;
+  }
+
   function baseFlights() {
     const d = state.data;
     if (!d) return [];
-    const arr = (state.today && Array.isArray(d.today) && d.today.length) ? d.today : (d.flights || []);
+    const arr = (state.today && Array.isArray(d.today)) ? d.today : (d.flights || []);
+    const now = Date.now() / 1000;
+    const day = Math.floor((now + 8 * 3600) / 86400); // China standard time; no host timezone dependency.
     // 普通宽体客机同样进入精选；普通窄体仍需满足其他精选条件。
-    return arr.filter(isFeatured);
+    return arr.filter(f => {
+      const time = flightEventTime(f);
+      return isFeatured(f) && time >= now - 3600
+        && (!state.today || Math.floor((time + 8 * 3600) / 86400) === day);
+    });
   }
 
   const boardFlights = () => {
@@ -993,6 +1011,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
   });
 
   function render() {
+    state.windowMinute = Math.floor(Date.now() / 60000);
     const boardRows = boardFlights();
     const c = counts(boardRows);
     Object.keys(c).forEach(k => {
@@ -1000,7 +1019,10 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
       if (node) node.textContent = c[k];
     });
 
-    const st = (state.today ? state.data?.today_stats : state.data?.stats) || {};
+    // Snapshot totals may include hours-old history. Stats and chips must
+    // describe the same rolling window as the currently visible flights.
+    const active = baseFlights();
+    const st = {...counts(active), total:active.length, special:active.length};
     const setStat = (id, v) => { const n = document.getElementById(id); if (n) n.textContent = v ?? 0; };
     setStat("s-total", st.special); setStat("s-livery-foreign", st.livery_foreign);
     setStat("s-widebody", st.widebody); setStat("s-four", st.four_engine);
@@ -1034,7 +1056,8 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     el.resultText.innerHTML = `展示 <b>${rows.length}</b> 班`
       + ` <span class="sep">·</span> 到达 <b>${arrN}</b>`
       + ` <span class="sep">·</span> 出发 <b>${rows.length - arrN}</b>`
-      + ` <span class="sep">·</span> 含照片 <b>${withPhoto}</b>`;
+      + ` <span class="sep">·</span> 含照片 <b>${withPhoto}</b>`
+      + ` <span class="sep">·</span> 回溯 1 小时`;
     const dirty = !!q || state.chip !== "featured" || state.board !== "all" || !state.today;
     el.clearFilters.hidden = !dirty;
 
@@ -1054,7 +1077,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     let html = "";
     let inserted = false;
     rows.forEach((f, i) => {
-      if (ascending && !inserted && (f.scheduled_ts || 0) >= nowSec) {
+      if (ascending && !inserted && flightEventTime(f) >= nowSec) {
         html += nowDividerHTML();
         inserted = true;
       }
@@ -1069,7 +1092,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     + (f.is_bizjet ? 3 : 0) + (f.is_cargo ? 2 : 0);
 
   function sortRows(rows) {
-    const t = f => f.scheduled_ts || 0;
+    const t = flightEventTime;
     const arr = rows.slice();
     switch (state.sort) {
       case "time-desc": return arr.sort((a, b) => t(b) - t(a));
@@ -1085,10 +1108,13 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
   }
 
   function statusOf(f) {
-    const past = (f.scheduled_ts || 0) < Date.now() / 1000 - 25 * 60;
+    const past = flightEventTime(f) < Date.now() / 1000 - 25 * 60;
     const st = (f.status || "").toLowerCase();
-    if (past && (st === "scheduled" || st === "estimated" || st === "unknown" || !st)) {
-      return { cn: "已结束", kind: "muted" };
+    if (st === "landed" || st === "arrived") {
+      return { cn: "已落地", kind: "ok", title: "源站已报告航班落地或抵达，不是按计划时间推断" };
+    }
+    if (past && (st === "scheduled" || st === "estimated" || st === "expected" || st === "unknown" || !st)) {
+      return { cn: "待核实", kind: "muted", title: "计划或预计时间已过25分钟，但未取得起飞或落地确认；不代表航班已结束" };
     }
     return { cn: f.status_cn || f.status || "未知", kind: f.status_kind || "muted" };
   }
@@ -1128,6 +1154,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     if (f.from_history) cls.push("is-past");
 
     const cnName = airlineCN(f.airline);
+    const flightStatus = statusOf(f);
     const enName = f.airline_raw || f.airline || "";
     const liveryLine = f.is_special_livery
       ? `<span class="lv" title="彩绘：${esc(f.livery || "")}">🎨 ${esc(f.livery || "特殊涂装")}</span>`
@@ -1159,7 +1186,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
         ${f.registration ? `<span class="r">${esc(f.registration)}</span>` : `<span class="r none">未分配</span>`}
       </div>
       <div class="cell status">
-        <span class="pill ${esc(statusOf(f).kind)}">${esc(statusOf(f).cn)}</span>
+        <span class="pill ${esc(flightStatus.kind)}" title="${esc(flightStatus.title || flightStatus.cn)}">${esc(flightStatus.cn)}</span>
       </div>
       <div class="cell tags">${tags.join("")}</div>
       <div class="cell photo">${photoThumb(f)}</div>
@@ -1285,7 +1312,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
       if (state.lastSuccessSeen && state.lastSuccessSeen !== before) await fetchData();
     }, 60000);
     // 兜底：按配置间隔强制重读
-    const hours = state.index?.refresh_hours || 2;
+    const hours = REFRESH_HOURS;
     setInterval(() => { fetchStatus(); fetchData(); }, hours * 3600 * 1000);
   }
 

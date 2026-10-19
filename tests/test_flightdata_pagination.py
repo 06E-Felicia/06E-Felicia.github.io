@@ -30,8 +30,8 @@ class NativePaginationTests(unittest.TestCase):
         with sync_playwright() as pw:
             browser = pw.chromium.launch(channel='chrome', headless=True)
             try:
-                for denied in [False, True]:
-                    with self.subTest(denied=denied):
+                for mode in ['normal', 'footer-overlay', 'denied']:
+                    with self.subTest(mode=mode):
                         context = browser.new_context()
                         requested = []
 
@@ -44,7 +44,7 @@ class NativePaginationTests(unittest.TestCase):
                             number = int(parse_qs(parsed.query).get('page', ['1'])[0])
                             requested.append((number, request.resource_type, request.headers.get('x-inertia')))
                             if number == 2:
-                                if denied or request.headers.get('x-inertia') != 'true':
+                                if mode=='denied' or request.headers.get('x-inertia') != 'true':
                                     route.fulfill(status=403, content_type='text/html', body='<title>Just a moment...</title>')
                                 else:
                                     route.fulfill(content_type='application/json', body=json.dumps(payload(2)))
@@ -65,13 +65,19 @@ class NativePaginationTests(unittest.TestCase):
                               link.onclick=null;
                             };
                             </script>'''
+                            # Reproduce a long SZX board with a sticky footer
+                            # covering the link: pointer-click times out but
+                            # native keyboard activation remains functional.
+                            if mode=='footer-overlay' and number==1:
+                                app+='<div style="height:18000px"></div>'
+                                link+='<div style="position:fixed;inset:0;z-index:100;background:transparent"></div>'
                             route.fulfill(content_type='text/html', body=app+link+script)
 
                         context.route('**/*', respond)
                         page = context.new_page()
                         cfg = {'max_retries': 1, 'pages_per_board': 3, 'pagination_delay_ms': 0}
                         pages = collector.fetch_board_pages(page, 'arrivals', {'iata': 'SZX'}, cfg, False)
-                        if denied:
+                        if mode=='denied':
                             self.assertEqual(len(pages), 1)
                             self.assertIn('HTTP 403', pages.warning)
                             self.assertEqual([n for n, _, _ in requested], [1, 2])

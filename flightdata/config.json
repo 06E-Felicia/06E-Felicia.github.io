@@ -1,6 +1,6 @@
 {
   "_说明": "SZX 航班监控配置。修改后重启 server.py 生效。",
-  "refresh_hours": 2,
+  "refresh_hours": 0.5,
   "server_port": 8787,
   "headless": true,
   "max_retries": 3,

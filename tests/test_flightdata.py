@@ -25,7 +25,8 @@ class FlightdataIntegrationTests(unittest.TestCase):
     def test_five_airport_snapshots_and_stats_are_consistent(self):
         index=json.loads((DATA/'index.json').read_text())
         status=json.loads((DATA/'status.json').read_text())
-        self.assertEqual(index['refresh_hours'],2)
+        self.assertGreater(index['refresh_hours'],0)  # Saved snapshots may predate the current schedule.
+        self.assertEqual(json.loads((ROOT/'flightdata/config.json').read_text())['refresh_hours'],0.5)
         self.assertEqual({a['iata'] for a in index['airports']},{'SZX','PEK','PVG','CAN','HKG'})
         for airport in index['airports']:
             code=airport['iata'];d=json.loads((DATA/f'{code.lower()}.json').read_text())
@@ -146,7 +147,8 @@ class FlightdataIntegrationTests(unittest.TestCase):
                 self.assertEqual(result['props']['flights'][0]['id'],'p2')
                 self.assertEqual(result['props']['airport']['iata'],ap['iata'])
                 page.goto.assert_not_called();page.get_attribute.assert_not_called()
-                page.locator.return_value.first.click.assert_called_once()
+                page.locator.return_value.first.press.assert_called_once_with('Enter',timeout=12000,no_wait_after=True)
+                page.locator.return_value.first.click.assert_not_called()
                 matcher=page.expect_response.call_args.args[0]
                 self.assertTrue(matcher(response))
                 response.url=url.replace('page=2','page=1');self.assertFalse(matcher(response))
@@ -248,11 +250,54 @@ class FlightdataIntegrationTests(unittest.TestCase):
                 self.assertIn('browser executable missing' if startup_error else 'Just a moment',state['error'])
                 if startup_error:self.assertNotIn('Cloudflare',state['error'])
 
+    def test_snapshot_looks_back_one_hour_without_destroying_history(self):
+        m=self.collector();cfg=m.load_config();ap=cfg['airports'][0]
+        now=int(m.datetime.fromisoformat('2026-10-19T15:42:00+08:00').timestamp())
+        def flight(fid,offset,estimate=None):
+            raw={**self.raw_flight(m,fid),'flightNumber':fid,'scheduledTime':now+offset}
+            if estimate is not None:raw['estimatedTime']=now+estimate
+            return m.build_flight(raw,'arrivals',cfg,{},{})
+        current=[flight('old-1210',-12720),flight('too-old',-3601),flight('boundary',-3600),
+                 flight('recent',-1200),flight('future',1800),flight('delayed',-12000,1200),
+                 flight('tomorrow',12*3600)]
+        cached=flight('history-recent',-3000)
+        expected={'boundary','recent','future','delayed','history-recent'}
+        with tempfile.TemporaryDirectory(prefix='flightdat-lookback-') as temporary:
+            root=Path(temporary)
+            with patch.multiple(m,DATA_DIR=root,SITE_DATA_DIR=root/'public',PHOTO_CACHE_PATH=root/'photos.json'), \
+                    patch.object(m,'now_ts',return_value=now):
+                history=root/f"history_{ap['iata'].lower()}.json"
+                m.write_json(history,{'flights':{cached['id']:cached}})
+                latest=m.build_latest(cfg,ap,current,None,m.time.time(),len(current))
+                self.assertEqual({f['id'] for f in latest['today']},expected)
+                self.assertEqual({f['id'] for f in latest['flights']},expected-{'history-recent'}|{'tomorrow'})
+                self.assertEqual(latest['today_stats']['total'],len(expected))
+                self.assertEqual(latest['stats']['scanned_total'],len(current))
+                self.assertEqual(latest['display_from'],now-3600)
+                self.assertIn('old-1210',m.read_json(history,{})['flights'])
+                # Re-reading an old flight must not reset its operation time.
+                again=m.build_latest(cfg,ap,current,None,m.time.time(),len(current))
+                self.assertNotIn('old-1210',{f['id'] for f in again['today']})
+
+    def test_invalid_estimate_falls_back_to_scheduled_time(self):
+        m=self.collector()
+        for estimate in [None,'bad',-1,0]:
+            with self.subTest(estimate=estimate):
+                self.assertEqual(m.flight_event_time({'estimated_ts':estimate,'scheduled_ts':123}),123)
+        self.assertEqual(m.flight_event_time({}),0)
+
+    def test_confirmed_landing_uses_clear_three_character_label(self):
+        m=self.collector();cfg=m.load_config()
+        for state in ['landed','arrived']:
+            f=m.build_flight({**self.raw_flight(m),'status':{'name':state}},'arrivals',cfg,{},{})
+            self.assertEqual(f['status_cn'],'已落地')
+            self.assertEqual(len(f['status_cn']),3)
+
     def test_workflow_is_rooted_and_reuses_the_existing_site_publisher(self):
         flights=(ROOT/'.github/workflows/flightdata.yml').read_text()
         weather=(ROOT/'.github/workflows/update.yml').read_text()
         self.assertIn('name: 更新航班数据',flights)
-        self.assertIn("cron: '5 */2 * * *'",flights)
+        self.assertIn("cron: '5,35 * * * *'",flights)
         self.assertIn('python flightdata/scraper.py',flights)
         self.assertIn('git add flightdata/docs/data flightdata/data',flights)
         for workflow in [flights,weather]:

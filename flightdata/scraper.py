@@ -67,6 +67,7 @@ TZ_CN = timezone(timedelta(hours=8))
 LOG = logging.getLogger("fr24")
 
 BOARDS = ("arrivals", "departures")
+DISPLAY_LOOKBACK_SECONDS = 3600
 
 # ---------------------------------------------------------------------------
 # 机型归一化：把 ICAO / IATA 各种写法映射到“家族”
@@ -139,8 +140,8 @@ STATUS_MAP: dict[str, tuple[str, str]] = {
     "estimated": ("预计", "info"),
     "expected": ("预计", "info"),
     "delayed": ("延误", "warn"),
-    "landed": ("已到达", "ok"),
-    "arrived": ("已到达", "ok"),
+    "landed": ("已落地", "ok"),
+    "arrived": ("已落地", "ok"),
     "departed": ("已起飞", "ok"),
     "en-route": ("飞行中", "info"),
     "enroute": ("飞行中", "info"),
@@ -598,11 +599,20 @@ def fetch_next_board(page, board, airport, cfg, debug, previous):
 
     # Space normal page interactions; do not hammer the server with reloads.
     page.wait_for_timeout(max(0, min(15000, int(cfg.get("pagination_delay_ms", 2500)))))
-    LOG.info("[%s %s p%s] 点击官网分页链接 %s", airport["iata"], board, next_page, href)
+    LOG.info("[%s %s p%s] 键盘激活官网分页链接 %s", airport["iata"], board, next_page, href)
     try:
         with page.expect_response(is_target, timeout=45000) as captured:
-            page.locator(f"a[href={json.dumps(href)}]:visible").first.click(timeout=12000)
+            # A long arrivals board can reflow while scrolling or have a
+            # sticky banner over its footer. Native Enter activates the same
+            # anchor/website handler without pointer hit-testing and scroll
+            # stability waits. Response waiting belongs to expect_response,
+            # not to the interaction's separate 12-second timeout.
+            page.locator(f"a[href={json.dumps(href)}]:visible").first.press(
+                "Enter", timeout=12000, no_wait_after=True
+            )
         response = captured.value
+        LOG.info("[%s %s p%s] 分页响应 HTTP %s（%s）", airport["iata"], board,
+                 next_page, response.status, response.request.resource_type)
         if response.status in (401, 403, 429):
             raise SourceAccessError(f"官网第 {next_page} 页返回 HTTP {response.status}；源站拒绝当前会话访问")
         if response.status >= 400:
@@ -914,6 +924,18 @@ def stats_of(items: list[dict[str, Any]]) -> dict[str, int]:
     }
 
 
+def flight_event_time(flight):
+    """Use the latest known operation time, not when a record was re-fetched."""
+    for key in ("estimated_ts", "scheduled_ts"):
+        try:
+            value = int(flight.get(key) or 0)
+        except (TypeError, ValueError):
+            continue
+        if value > 0:
+            return value
+    return 0
+
+
 def build_latest(
     cfg: dict[str, Any],
     airport: dict[str, Any],
@@ -924,6 +946,8 @@ def build_latest(
 ) -> dict[str, Any]:
     iata = airport["iata"]
     history_path = DATA_DIR / f"history_{iata.lower()}.json"
+    generated = now_ts()
+    display_from = generated - DISPLAY_LOOKBACK_SECONDS
 
     for f in flights:
         f["last_seen_ts"] = now_ts()
@@ -962,15 +986,18 @@ def build_latest(
         "flights": pruned,
     })
 
+    # Retain the configured cache history without publishing the whole day's
+    # completed flights again every time another board is collected.
+    flights = [f for f in flights if flight_event_time(f) >= display_from]
     today_start = int(
-        datetime.now(TZ_CN).replace(hour=0, minute=0, second=0, microsecond=0).timestamp()
+        datetime.fromtimestamp(generated, TZ_CN).replace(hour=0, minute=0, second=0, microsecond=0).timestamp()
     )
     today_end = today_start + 86400
     current_ids = {f["id"] for f in flights}
     seen: dict[tuple, dict] = {}
     for f in pruned.values():
-        ts = int(f.get("scheduled_ts") or 0)
-        if ts < today_start or ts >= today_end:
+        ts = flight_event_time(f)
+        if ts < max(today_start, display_from) or ts >= today_end:
             continue
         key = (f.get("board"), f.get("flight_number"), f.get("scheduled_ts"))
         prev = seen.get(key)
@@ -998,8 +1025,10 @@ def build_latest(
     stats["scanned_total"] = scanned_total if scanned_total is not None else len(flights)
 
     return {
-        "generated_at": now_ts(),
-        "generated_at_iso": ts_iso(now_ts()),
+        "generated_at": generated,
+        "generated_at_iso": ts_iso(generated),
+        "lookback_hours": 1,
+        "display_from": display_from,
         "duration_sec": round(time.time() - started, 1),
         "airport": {
             "iata": airport["iata"],
@@ -1008,7 +1037,7 @@ def build_latest(
             "city": airport.get("city", ""),
             "timezone": "Asia/Shanghai",
         },
-        "refresh_hours": cfg.get("refresh_hours", 2),
+        "refresh_hours": cfg.get("refresh_hours", 0.5),
         "window_hours": window_hours,
         "coverage_from": coverage_from,
         "coverage_to": coverage_to,
@@ -1115,7 +1144,7 @@ def run(headless: bool = True, debug: bool = False) -> int:
     index = {
         "generated_at": now,
         "generated_at_iso": ts_iso(now),
-        "refresh_hours": cfg.get("refresh_hours", 2),
+        "refresh_hours": cfg.get("refresh_hours", 0.5),
         "default_airport": cfg.get("default_airport", "SZX"),
         "duration_sec": round(time.time() - started, 1),
         "airports": index_airports,
@@ -1131,7 +1160,7 @@ def run(headless: bool = True, debug: bool = False) -> int:
         "total_airports": len(airports),
         "updated_at": now,
         "updated_at_iso": ts_iso(now),
-        "refresh_hours": cfg.get("refresh_hours", 2),
+        "refresh_hours": cfg.get("refresh_hours", 0.5),
         "default_airport": cfg.get("default_airport", "SZX"),
         "duration_sec": round(time.time() - started, 1),
         "airports": results,
