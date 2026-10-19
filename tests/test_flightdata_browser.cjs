@@ -91,7 +91,26 @@ const read=code=>JSON.parse(fs.readFileSync(path.join(root,'flightdata/docs/data
   await wp.locator('#chips [data-chip="widebody"]').click();assert.equal(await wp.locator('#list .flight .f').filter({hasText:'TEST-WIDE'}).count(),1);
   await wp.locator('#chips [data-chip="special"]').click();assert.equal(await wp.locator('#list .flight .f').filter({hasText:'TEST-WIDE'}).count(),0);
   await wc.close();
+
+  // A successful board plus a blocked board is a visible partial update, not an empty success.
+  const partialContext=await browser.newContext();
+  await partialContext.route('**/*',r=>new URL(r.request().url()).hostname==='127.0.0.1'?r.continue():r.abort());
+  const partialStatus={updated_by:'github-actions',airports:{SZX:{ok:true,partial:true,
+   last_success_at:read('SZX').generated_at,errors:{departures:'Just a moment...；源站显示访问验证'}}}};
+  await partialContext.route('**/status.json?*',r=>r.fulfill({json:partialStatus}));
+  const partialPage=await partialContext.newPage();
+  partialPage.on('pageerror',e=>errors.push(e.message));
+  await partialPage.goto(base+'/Flightdat.html');
+  await partialPage.locator('#alert.warn.show').waitFor();
+  assert.match(await partialPage.locator('#alertText').innerText(),/部分更新.*出发.*Just a moment/);
+  assert.equal(await partialPage.locator('#list .row').count(),read('SZX').today.length);
+  partialStatus.airports.SZX={ok:false,error:'HTTP 403',last_success_at:read('SZX').generated_at};
+  await partialPage.locator('#btnReload').click();
+  await partialPage.locator('#alert.bad.show').waitFor();
+  assert.match(await partialPage.locator('#alertText').innerText(),/抓取失败.*HTTP 403/);
+  assert.equal(await partialPage.locator('#list .row').count(),read('SZX').today.length);
+  await partialContext.close();
   assert.deepEqual(errors,[]);
-  console.log('PASS Flightdat: home entry, five airports, ordinary widebody display + independent filter, stats, search, reload, stale-request race, responsive layouts, subdirectory paths, missing-data guidance; no live scrape');
+  console.log('PASS Flightdat: home entry, five airports, ordinary widebody display + independent filter, stats, search, reload, stale-request race, responsive layouts, subdirectory paths, missing-data guidance, partial-update and failed-update warnings retaining rows; no live scrape');
  }finally{await browser?.close();server.closeAllConnections();await new Promise(r=>server.close(r));}
 })().catch(e=>{console.error(e);process.exitCode=1;});

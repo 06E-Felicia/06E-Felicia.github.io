@@ -15,8 +15,8 @@ FlightRadar24 的机场看板把数据服务端渲染进 Inertia 数据岛：
 GitHub Actions 适配
 -------------------
 * 每次运行使用全新的浏览器上下文（不依赖本地 profile）；
-* headless 失败时可用 `--headed` 配合 xvfb-run 再试一次（更不容易被识别）；
-* 支持 `PROXY_URL` 环境变量（住宅代理可显著降低被 Cloudflare 拦截的概率）；
+* CI 使用完整 Chrome 与 xvfb 窗口环境，与本地 Chrome 使用相同浏览器引擎；
+* 后续页通过官网分页链接加载，兼容 Inertia JSON 和整页 HTML 响应；
 * 抓取失败不会覆盖上一次成功的数据，只更新 status.json，页面会提示“数据可能过期”。
 
 输出
@@ -46,9 +46,10 @@ import time
 import urllib.error
 import urllib.request
 from datetime import datetime, timedelta, timezone
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
-from urllib.parse import quote
+from urllib.parse import parse_qs, quote, urljoin, urlsplit
 
 BASE_DIR = Path(__file__).resolve().parent
 DOCS_DIR = BASE_DIR / "docs"
@@ -66,30 +67,6 @@ TZ_CN = timezone(timedelta(hours=8))
 LOG = logging.getLogger("fr24")
 
 BOARDS = ("arrivals", "departures")
-
-STEALTH_JS = """
-Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
-Object.defineProperty(navigator, 'languages', { get: () => ['zh-CN', 'zh', 'en-US', 'en'] });
-Object.defineProperty(navigator, 'plugins', {
-  get: () => [1, 2, 3, 4, 5].map(() => ({ name: 'Chrome PDF Plugin' })),
-});
-window.chrome = window.chrome || { runtime: {} };
-const _query = window.navigator.permissions && window.navigator.permissions.query;
-if (_query) {
-  window.navigator.permissions.query = (p) =>
-    p && p.name === 'notifications'
-      ? Promise.resolve({ state: Notification.permission })
-      : _query(p);
-}
-try {
-  const getParameter = WebGLRenderingContext.prototype.getParameter;
-  WebGLRenderingContext.prototype.getParameter = function (p) {
-    if (p === 37445) return 'Intel Inc.';
-    if (p === 37446) return 'Intel Iris OpenGL Engine';
-    return getParameter.call(this, p);
-  };
-} catch (e) {}
-"""
 
 # ---------------------------------------------------------------------------
 # 机型归一化：把 ICAO / IATA 各种写法映射到“家族”
@@ -404,7 +381,6 @@ def build_flight(
 # ---------------------------------------------------------------------------
 def _browser_args() -> list[str]:
     return [
-        "--disable-blink-features=AutomationControlled",
         "--disable-dev-shm-usage",
         "--no-first-run",
         "--no-default-browser-check",
@@ -426,6 +402,68 @@ def _is_challenge_title(title: str) -> bool:
     return "just a moment" in low or "attention required" in low
 
 
+class SourceAccessError(RuntimeError):
+    """Explicit source access refusal: report it instead of repeated challenges."""
+
+
+class AirportFlights(list):
+    """Parsed flights plus board diagnostics; never turn an exception into empty success."""
+    def __init__(self, items=(), *, errors=None, boards=None):
+        super().__init__(items)
+        self.errors = dict(errors or {})
+        self.boards = dict(boards or {})
+
+
+class BoardPages(list):
+    """Successful pages survive a later page failing; keep that warning too."""
+    warning = None
+
+
+class _DataIslandParser(HTMLParser):
+    """Read the response's actual data, not the initial DOM's stale data-page."""
+    raw = None
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if attrs.get("id") == "app" and attrs.get("data-page"):
+            self.raw = attrs["data-page"]
+
+
+def _decode_island(raw):
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError:
+        return json.loads(html.unescape(raw))
+
+
+def _validate_board(data, airport):
+    props = data.get("props") if isinstance(data, dict) else None
+    if not isinstance(props, dict) or not isinstance(props.get("flights"), list):
+        raise RuntimeError("数据岛缺少 flights 列表；页面字段可能变化")
+    got = ((props.get("airport") or {}).get("iata") or "").upper()
+    if got and got != airport["iata"].upper():
+        raise RuntimeError(f"机场不匹配：{got}")
+    return data
+
+
+def _debug_screenshot(page, airport, label, debug):
+    if not debug:
+        return
+    shot = DATA_DIR / f"debug-{airport['iata'].lower()}-{label}.png"
+    shot.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        page.screenshot(path=str(shot), full_page=False)
+        LOG.warning("已保存截图：%s", shot)
+    except Exception:  # noqa: BLE001
+        pass
+
+
+def capture_error(flights) -> str:
+    labels = {"arrivals": "到达", "departures": "出发", "browser": "浏览器"}
+    errors = getattr(flights, "errors", {})
+    return "；".join(f"{labels.get(key, key)}：{str(value)[:600]}" for key, value in errors.items())
+
+
 def _wait_for_island(page, timeout: float) -> str | None:
     """轮询等待 #app[data-page]，期间让 Cloudflare 挑战自行完成。"""
     deadline = time.time() + timeout
@@ -434,7 +472,7 @@ def _wait_for_island(page, timeout: float) -> str | None:
             raw = page.get_attribute("#app", "data-page", timeout=1500)
         except Exception:  # noqa: BLE001
             raw = None
-        if raw and len(raw) > 1000:
+        if raw and raw.strip():
             return raw
         page.wait_for_timeout(600)
     return None
@@ -459,34 +497,31 @@ def fetch_board(
     for attempt in range(1, attempts + 1):
         try:
             LOG.info("[%s] 第 %d/%d 次打开 %s", tag, attempt, attempts, url)
-            page.goto(url, timeout=75_000, wait_until="domcontentloaded")
+            response = page.goto(url, timeout=75_000, wait_until="domcontentloaded")
+            status = response.status if response is not None else None
+            if status in (401, 403, 429):
+                _debug_screenshot(page, airport, f"{board}-{attempt}", debug)
+                raise SourceAccessError(f"源站拒绝访问 HTTP {status}（标题：{_title_safe(page) or '空'}）；停止重试，请核对源站访问权限或限流")
+            if status is not None and status >= 400:
+                raise RuntimeError(f"源站返回 HTTP {status}：{url}")
             page.wait_for_timeout(random.randint(900, 2200))
 
             raw = _wait_for_island(page, timeout=70)
             if not raw:
                 title = _title_safe(page)
-                if debug:
-                    shot = DATA_DIR / f"debug-{iata}-{board}-{attempt}.png"
-                    shot.parent.mkdir(parents=True, exist_ok=True)
-                    try:
-                        page.screenshot(path=str(shot), full_page=False)
-                        LOG.warning("已保存截图：%s", shot)
-                    except Exception:  # noqa: BLE001
-                        pass
-                raise RuntimeError(
+                _debug_screenshot(page, airport, f"{board}-{attempt}", debug)
+                error_type = SourceAccessError if _is_challenge_title(title) else RuntimeError
+                raise error_type(
                     f"未取得数据岛（标题：{title or '空'}；"
-                    f"{'Cloudflare 挑战未通过' if _is_challenge_title(title) else '页面结构可能变化'}）"
+                    f"{'源站显示访问验证，停止重试' if _is_challenge_title(title) else '页面结构可能变化，需检查截图与选择器'}）"
                 )
 
-            data = json.loads(html.unescape(raw))
-            props = data.get("props") or {}
-            got = ((props.get("airport") or {}).get("iata") or "").upper()
-            if got and got != airport["iata"].upper():
-                raise RuntimeError(f"机场不匹配：{got}")
-            if not props.get("flights"):
-                raise RuntimeError("flights 为空")
+            data = _validate_board(_decode_island(raw), airport)
+            props = data["props"]
             LOG.info("[%s] 成功：%d 条航班", tag, len(props["flights"]))
             return data
+        except SourceAccessError:
+            raise
         except Exception as exc:  # noqa: BLE001
             last_err = exc
             LOG.warning("[%s] 第 %d 次失败：%s", tag, attempt, exc)
@@ -516,8 +551,87 @@ def _launch_browser(pw, headless: bool, proxy: str | None, channel: str | None):
         except Exception as exc:  # noqa: BLE001
             last_err = exc
             if ch:
+                if os.environ.get("GITHUB_ACTIONS"):
+                    raise RuntimeError(f"CI 指定的 {ch} 无法启动，拒绝静默降级为不同浏览器：{exc}") from exc
                 LOG.warning("channel=%s 启动失败，回退到 Playwright Chromium：%s", ch, exc)
     raise RuntimeError(f"无法启动浏览器：{last_err}")
+
+
+def fetch_next_board(page, board, airport, cfg, debug, previous):
+    """Follow the real Later flights link in the current browser session.
+
+    Let the site's own client set its navigation headers. Never synthesize
+    an API, copy credentials, or replay a blocked request through another host.
+    """
+    meta = previous["props"].get("meta") or {}
+    next_page = str(meta.get("nextPage") or "")
+    expected_path = f"/data/airports/{airport['iata'].lower()}/{board}"
+    # Allow the frontend to render the next link after an Inertia response.
+    deadline = time.monotonic() + 8
+    target = None
+    while time.monotonic() < deadline:
+        links = page.locator("a[href]").evaluate_all(
+            "es => es.filter(e => e.getClientRects().length).map(e => e.getAttribute('href'))"
+        )
+        for href in links:
+            parsed = urlsplit(urljoin(page.url, href))
+            if (parsed.scheme == "https" and parsed.hostname == "www.flightradar24.com"
+                    and parsed.path.rstrip("/") == expected_path
+                    and parse_qs(parsed.query).get("page") == [next_page]):
+                target = (href, parsed)
+                break
+        if target:
+            break
+        page.wait_for_timeout(250)
+    if not target:
+        raise RuntimeError(f"找不到官网第 {next_page} 页的可见分页链接；停止猜测分页 URL")
+    href, target_url = target
+    target_query = parse_qs(target_url.query)
+
+    def is_target(response):
+        candidate = urlsplit(response.url)
+        query = parse_qs(candidate.query)
+        return (candidate.scheme == target_url.scheme and candidate.netloc == target_url.netloc
+                and candidate.path == target_url.path and query == target_query
+                and response.request.resource_type in ("document", "xhr", "fetch")
+                and not 300 <= response.status < 400)
+
+    # Space normal page interactions; do not hammer the server with reloads.
+    page.wait_for_timeout(max(0, min(15000, int(cfg.get("pagination_delay_ms", 2500)))))
+    LOG.info("[%s %s p%s] 点击官网分页链接 %s", airport["iata"], board, next_page, href)
+    try:
+        with page.expect_response(is_target, timeout=45000) as captured:
+            page.locator(f"a[href={json.dumps(href)}]:visible").first.click(timeout=12000)
+        response = captured.value
+        if response.status in (401, 403, 429):
+            raise SourceAccessError(f"官网第 {next_page} 页返回 HTTP {response.status}；源站拒绝当前会话访问")
+        if response.status >= 400:
+            raise RuntimeError(f"官网第 {next_page} 页返回 HTTP {response.status}")
+        body = response.text()
+        if "application/json" in response.headers.get("content-type", "").lower():
+            data = json.loads(body)
+        else:
+            parser = _DataIslandParser()
+            parser.feed(body)
+            if not parser.raw:
+                title = re.search(r"<title[^>]*>(.*?)</title>", body, re.I | re.S)
+                title = html.unescape(title.group(1)).strip() if title else _title_safe(page)
+                error_type = SourceAccessError if _is_challenge_title(title) else RuntimeError
+                raise error_type(f"官网第 {next_page} 页未返回航班数据（标题：{title or '空'}）")
+            data = _decode_island(parser.raw)
+        # Require flights in THIS response, never reuse the previous page's
+        # flights as a successful result of an incomplete/error response.
+        data = _validate_board(data, airport)
+        if "airport" not in data["props"] and previous["props"].get("airport"):
+            data["props"]["airport"] = previous["props"]["airport"]
+        current = data["props"]["flights"]
+        if current and current == previous["props"]["flights"]:
+            raise RuntimeError(f"第 {next_page} 页返回了与前页相同的航班；不计为翻页成功")
+        LOG.info("[%s %s p%s] 官网分页成功：%d 条", airport["iata"], board, next_page, len(current))
+        return data
+    except Exception:
+        _debug_screenshot(page, airport, f"{board}-page-{next_page}", debug)
+        raise
 
 
 def fetch_board_pages(
@@ -530,23 +644,17 @@ def fetch_board_pages(
 ) -> list[dict[str, Any]]:
     """抓取看板第 1 页，并沿着「加载更多」继续翻到当天结束或页数上限。"""
     max_pages = max(1, int(cfg.get("pages_per_board", 4)))
-    pages = [fetch_board(page, board, airport, cfg, debug)]
+    pages = BoardPages([fetch_board(page, board, airport, cfg, debug)])
     meta = (pages[0].get("props") or {}).get("meta") or {}
 
     for pageno in range(2, max_pages + 1):
         if not meta.get("hasMoreNextData") or not meta.get("nextPage"):
             break
-        date = meta.get("date")
-        if not date:
-            break
-        url = (
-            f"https://www.flightradar24.com/data/airports/"
-            f"{airport['iata'].lower()}/{board}?date={date}&page={pageno}"
-        )
         try:
-            data = fetch_board(page, board, airport, cfg, debug, url=url, label=f"{airport['iata']} {board} p{pageno}")
+            data = fetch_next_board(page, board, airport, cfg, debug, pages[-1])
         except Exception as exc:  # noqa: BLE001
             LOG.warning("[%s] 加载更多第 %d 页失败，保留已抓数据：%s", board, pageno, exc)
+            pages.warning = f"第 {pageno} 页未更新：{str(exc)[:1000]}"
             break
         flights = (data.get("props") or {}).get("flights") or []
         if not flights:
@@ -572,14 +680,24 @@ def collect_airport(
     learned: dict[str, Any],
     debug: bool,
 ) -> tuple[list[dict[str, Any]], int | None]:
-    flights: list[dict[str, Any]] = []
+    flights = AirportFlights()
     window_hours: int | None = None
     today_end = int(
         datetime.now(TZ_CN).replace(hour=0, minute=0, second=0, microsecond=0).timestamp()
     ) + 86400
 
     for board in BOARDS:
-        pages = fetch_board_pages(page, board, airport, cfg, debug, today_end=today_end)
+        try:
+            pages = fetch_board_pages(page, board, airport, cfg, debug, today_end=today_end)
+        except Exception as exc:  # noqa: BLE001
+            # Arrivals and departures are independent. Do not throw away a
+            # valid arrivals board when departures fails, or skip departures
+            # just because arrivals was unavailable.
+            flights.errors[board] = str(exc)[:1200]
+            flights.boards[board] = {"ok": False, "error": str(exc)[:1200]}
+            LOG.error("[%s %s] 看板失败，继续检查另一方向：%s", airport["iata"], board, exc)
+            continue
+        before_count = len(flights)
         LOG.info("[%s %s] 共抓取 %d 页", airport["iata"], board, len(pages))
         for data in pages:
             props = data.get("props") or {}
@@ -590,6 +708,12 @@ def collect_airport(
                 item = build_flight(raw, board, cfg, manual, learned)
                 if item:
                     flights.append(item)
+        warning = getattr(pages, "warning", None)
+        flights.boards[board] = {"ok": True, "pages": len(pages), "parsed_flights": len(flights)-before_count,
+                                 "partial": bool(warning)}
+        if warning:
+            flights.errors[board] = warning
+            flights.boards[board]["error"] = warning
 
     deduped: dict[tuple, dict] = {}
     for f in flights:
@@ -597,7 +721,7 @@ def collect_airport(
         deduped.setdefault(key, f)
     if len(deduped) != len(flights):
         LOG.info("[%s] 分页去重：%d → %d", airport["iata"], len(flights), len(deduped))
-    flights = list(deduped.values())
+    flights[:] = deduped.values()
 
     for f in flights:
         if f["is_special_livery"] and f["livery_source"] == "fr24" and f["registration"]:
@@ -635,13 +759,9 @@ def collect_all(
             locale="en-US",
             timezone_id="Asia/Shanghai",
             viewport={"width": 1440, "height": 1000},
-            user_agent=(
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-                "(KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
-            ),
             extra_http_headers={"Accept-Language": "en-US,en;q=0.9,zh-CN;q=0.8"},
         )
-        ctx.add_init_script(STEALTH_JS)
+        LOG.info("浏览器版本：%s；运行模式：%s", browser.version, "headless" if headless else "headed")
         try:
             page = ctx.new_page()
             page.set_default_timeout(30_000)
@@ -654,7 +774,7 @@ def collect_all(
                     )
                 except Exception as exc:  # noqa: BLE001
                     LOG.error("[%s] 采集失败：%s", iata, exc)
-                    results[iata] = ([], None)
+                    results[iata] = (AirportFlights(errors={"browser": str(exc)[:1200]}), None)
         finally:
             ctx.close()
             browser.close()
@@ -910,7 +1030,13 @@ def run(headless: bool = True, debug: bool = False) -> int:
 
     LOG.info("开始抓取 %d 个机场：%s（headless=%s）",
              len(airports), ", ".join(a["iata"] for a in airports), headless)
-    collected = collect_all(cfg, headless=headless, debug=debug)
+    try:
+        collected = collect_all(cfg, headless=headless, debug=debug)
+    except Exception as exc:  # noqa: BLE001
+        # Browser/dependency startup failures must also persist a truthful
+        # current status rather than leave yesterday's green status in place.
+        LOG.error("浏览器启动或采集环境异常：%s", exc)
+        collected = {a["iata"]: (AirportFlights(errors={"browser": str(exc)[:1200]}), None) for a in airports}
 
     # 所有机场的展示航班合并后「一次性」补图：全局共用一份预算，避免逐机场重复消耗
     all_flights: list[dict[str, Any]] = []
@@ -927,8 +1053,11 @@ def run(headless: bool = True, debug: bool = False) -> int:
         iata = airport["iata"]
         flights, window_hours = collected.get(iata, ([], None))
         t0 = time.time()
-        if not flights:
-            error = "没有解析到任何航班（可能被 Cloudflare 拦截）"
+        boards = getattr(flights, "boards", {})
+        errors = getattr(flights, "errors", {})
+        valid_empty = bool(boards) and all(b.get("ok") for b in boards.values()) and not errors
+        if not flights and not valid_empty:
+            error = capture_error(flights) or "未返回航班且没有可确认成功的看板；请查看本轮日志，不能据此断定 Cloudflare 拦截"
             prev = prev_airports.get(iata) or {}
             existing = read_json(SITE_DATA_DIR / f"{iata.lower()}.json", {}) or {}
             entry = {
@@ -937,6 +1066,7 @@ def run(headless: bool = True, debug: bool = False) -> int:
                 "last_success_at": prev.get("last_success_at") or existing.get("generated_at"),
                 "last_success_iso": prev.get("last_success_iso") or existing.get("generated_at_iso"),
                 "error": error,
+                "errors": errors, "boards": boards, "partial": False,
                 "stats": prev.get("stats") or existing.get("stats"),
                 "coverage_from": existing.get("coverage_from"),
                 "coverage_to": existing.get("coverage_to"),
@@ -957,6 +1087,7 @@ def run(headless: bool = True, debug: bool = False) -> int:
                 "last_success_at": latest["generated_at"],
                 "last_success_iso": latest["generated_at_iso"],
                 "error": None,
+                "errors": errors, "boards": boards, "partial": bool(errors),
                 "stats": latest["stats"],
                 "coverage_from": latest.get("coverage_from"),
                 "coverage_to": latest.get("coverage_to"),
@@ -995,7 +1126,7 @@ def run(headless: bool = True, debug: bool = False) -> int:
     run_id = os.environ.get("GITHUB_RUN_ID")
     status = {
         "ok": successes > 0,
-        "partial": successes < len(airports),
+        "partial": successes < len(airports) or any(r.get("partial") for r in results.values()),
         "successes": successes,
         "total_airports": len(airports),
         "updated_at": now,

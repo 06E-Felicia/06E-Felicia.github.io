@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / 'flightdata/docs/data'
@@ -87,6 +87,166 @@ class FlightdataIntegrationTests(unittest.TestCase):
         self.assertIn('06E-Felicia/06E-Felicia.github.io',cfg['photos']['user_agent'])
         self.assertTrue((ROOT/'flightdata/data/photos.json').is_file())
         self.assertIn('/爬FR24/',(ROOT/'.gitignore').read_text())
+
+    def raw_flight(self, m, fid='offline-arrival'):
+        return {'id':fid,'flightNumber':'CZ9999','scheduledTime':m.now_ts(),
+                'aircraft':{'type':'A333','registration':'B-TEST'},
+                'airline':{'name':'China Southern Airlines','iata':'CZ'}}
+
+    def test_blocked_pagination_and_departures_do_not_discard_arrivals(self):
+        m=self.collector();cfg=m.load_config();ap=cfg['airports'][0]
+        cfg['pages_per_board']=3
+        first={'props':{'airport':{'iata':ap['iata']},'flights':[self.raw_flight(m)],
+                        'meta':{'hasMoreNextData':True,'nextPage':2,'date':m.now_ts()}}}
+        blocked=m.SourceAccessError('Just a moment...；源站显示访问验证')
+        with patch.object(m,'fetch_board',side_effect=[first,blocked]) as fetch, \
+                patch.object(m,'fetch_next_board',side_effect=blocked) as next_board:
+            flights,_=m.collect_airport(MagicMock(),cfg,ap,{},{},False)
+        self.assertEqual(fetch.call_count,2);next_board.assert_called_once()
+        self.assertEqual([f['id'] for f in flights],['offline-arrival'])
+        self.assertTrue(flights.boards['arrivals']['ok'])
+        self.assertTrue(flights.boards['arrivals']['partial'])
+        self.assertFalse(flights.boards['departures']['ok'])
+        self.assertIn('第 2 页',flights.errors['arrivals'])
+        self.assertIn('Just a moment',flights.errors['departures'])
+
+    def test_failed_arrivals_does_not_skip_departures(self):
+        m=self.collector();cfg=m.load_config();ap=cfg['airports'][0]
+        first={'props':{'flights':[self.raw_flight(m)],'meta':{}}}
+        with patch.object(m,'fetch_board',side_effect=[m.SourceAccessError('HTTP 403'),first]):
+            flights,_=m.collect_airport(MagicMock(),cfg,ap,{},{},False)
+        self.assertEqual(len(flights),1)
+        self.assertEqual(flights[0]['board'],'departures')
+        self.assertIn('HTTP 403',flights.errors['arrivals'])
+        self.assertTrue(flights.boards['departures']['ok'])
+
+    def pagination_fixture(self,m):
+        cfg=m.load_config();ap=cfg['airports'][0];iata=ap['iata'].lower()
+        previous={'props':{'airport':{'iata':ap['iata']},'flights':[self.raw_flight(m,'p1')],
+                           'meta':{'nextPage':2,'hasMoreNextData':True}}}
+        page=MagicMock();page.url=f'https://www.flightradar24.com/data/airports/{iata}/arrivals'
+        href=f'/data/airports/{iata}/arrivals?date=123&page=2'
+        page.locator.return_value.evaluate_all.return_value=[href]
+        response=MagicMock();response.status=200;response.url=url='https://www.flightradar24.com'+href
+        response.request.resource_type='xhr'
+        page.expect_response.return_value.__enter__.return_value.value=response
+        return cfg,ap,previous,page,response,url
+
+    def test_native_pagination_accepts_json_and_full_html_not_stale_dom(self):
+        import html
+        m=self.collector()
+        for content_type in ['application/json','text/html']:
+            with self.subTest(content_type=content_type):
+                cfg,ap,previous,page,response,url=self.pagination_fixture(m)
+                following={'props':{'flights':[self.raw_flight(m,'p2')],'meta':{'nextPage':3,'hasMoreNextData':True}}}
+                response.headers={'content-type':content_type}
+                response.text.return_value=(json.dumps(following) if content_type=='application/json' else
+                    '<div id="app" data-page="'+html.escape(json.dumps(following),quote=True)+'"></div>')
+                result=m.fetch_next_board(page,'arrivals',ap,cfg,False,previous)
+                self.assertEqual(result['props']['flights'][0]['id'],'p2')
+                self.assertEqual(result['props']['airport']['iata'],ap['iata'])
+                page.goto.assert_not_called();page.get_attribute.assert_not_called()
+                page.locator.return_value.first.click.assert_called_once()
+                matcher=page.expect_response.call_args.args[0]
+                self.assertTrue(matcher(response))
+                response.url=url.replace('page=2','page=1');self.assertFalse(matcher(response))
+                response.url=url.replace('www.flightradar24.com','unrelated.example');self.assertFalse(matcher(response))
+
+    def test_native_pagination_refuses_duplicate_or_missing_flights(self):
+        m=self.collector()
+        for payload in [None,{},'duplicate','blocked']:
+            with self.subTest(payload=payload):
+                cfg,ap,previous,page,response,_=self.pagination_fixture(m)
+                response.headers={'content-type':'application/json'}
+                response.text.return_value=json.dumps(previous if payload=='duplicate' else {'props':payload})
+                if payload=='blocked':response.status=403
+                with self.assertRaises(RuntimeError):
+                    m.fetch_next_board(page,'arrivals',ap,cfg,False,previous)
+                page.goto.assert_not_called()
+
+    def test_ci_uses_full_chrome_and_never_silently_downgrades(self):
+        m=self.collector();pw=MagicMock()
+        pw.chromium.launch.side_effect=RuntimeError('Chrome missing')
+        with patch.dict(m.os.environ,{'GITHUB_ACTIONS':'true'}):
+            with self.assertRaisesRegex(RuntimeError,'拒绝静默降级'):
+                m._launch_browser(pw,False,None,'chrome')
+        self.assertEqual(pw.chromium.launch.call_count,1)
+        workflow=(ROOT/'.github/workflows/flightdata.yml').read_text()
+        self.assertIn('playwright install --with-deps chrome',workflow)
+        self.assertIn('PLAYWRIGHT_CHANNEL: chrome',workflow)
+        self.assertIn('xvfb-run -a python flightdata/scraper.py --headed --debug',workflow)
+        source=(ROOT/'flightdata/scraper.py').read_text()
+        self.assertNotIn('Chrome/131.0.0.0',source)
+        self.assertNotIn('ctx.add_init_script(STEALTH_JS)',source)
+
+    def test_source_refusal_stops_retries_and_retains_exact_cause(self):
+        m=self.collector();cfg=m.load_config();ap=cfg['airports'][0]
+        for status in [401,403,429]:
+            with self.subTest(status=status):
+                page=MagicMock();page.goto.return_value.status=status
+                with patch.object(m,'_wait_for_island') as wait:
+                    with self.assertRaisesRegex(m.SourceAccessError,f'HTTP {status}'):
+                        m.fetch_board(page,'arrivals',ap,cfg,False)
+                self.assertEqual(page.goto.call_count,1);wait.assert_not_called()
+        page=MagicMock();page.goto.return_value.status=200
+        page.title.return_value='Just a moment...'
+        with patch.object(m,'_wait_for_island',return_value=None):
+            with self.assertRaisesRegex(m.SourceAccessError,'访问验证'):
+                m.fetch_board(page,'arrivals',ap,cfg,False)
+        self.assertEqual(page.goto.call_count,1)
+
+    def test_short_valid_data_island_and_empty_board_are_valid(self):
+        m=self.collector();cfg=m.load_config();ap=cfg['airports'][0]
+        data={'props':{'flights':[],'airport':{'iata':ap['iata'],'name':'A &quot; B'}}}
+        page=MagicMock();page.goto.return_value.status=200
+        page.get_attribute.return_value=json.dumps(data)
+        self.assertLess(len(page.get_attribute.return_value),1000)
+        self.assertEqual(m.fetch_board(page,'arrivals',ap,cfg,False),data)
+        page.wait_for_timeout.assert_called_once()  # no retry or island polling wait
+
+    def test_partial_run_publishes_available_flights_and_honest_status(self):
+        m=self.collector();cfg=m.load_config();ap=cfg['airports'][0];cfg['airports']=[ap]
+        arrival=m.build_flight(self.raw_flight(m),'arrivals',cfg,{},{})
+        old_departure=m.build_flight(self.raw_flight(m,'old-departure'),'departures',cfg,{},{})
+        flights=m.AirportFlights([arrival],errors={'departures':'Just a moment...'},
+                                boards={'arrivals':{'ok':True},'departures':{'ok':False}})
+        with tempfile.TemporaryDirectory(prefix='flightdat-partial-') as temporary:
+            root=Path(temporary)
+            with patch.multiple(m,DATA_DIR=root/'cache',SITE_DATA_DIR=root/'public',STATUS_PATH=root/'public/status.json',PHOTO_CACHE_PATH=root/'cache/photos.json'), \
+                    patch.object(m,'load_config',return_value=cfg), \
+                    patch.object(m,'collect_all',return_value={ap['iata']:(flights,None)}), \
+                    patch.object(m,'attach_photos'):
+                m.write_json(root/'cache'/f"history_{ap['iata'].lower()}.json",{'flights':{'old-departure':old_departure}})
+                self.assertEqual(m.run(),0)
+            status=json.loads((root/'public/status.json').read_text())
+            self.assertTrue(status['ok']);self.assertTrue(status['partial'])
+            self.assertEqual(status['successes'],1)
+            self.assertIn('Just a moment',status['airports'][ap['iata']]['errors']['departures'])
+            snapshot=json.loads((root/'public'/f"{ap['iata'].lower()}.json").read_text())
+            self.assertEqual([f['id'] for f in snapshot['flights']],['offline-arrival'])
+            self.assertEqual({f['id'] for f in snapshot['today']},{'offline-arrival','old-departure'})
+            self.assertTrue(next(f for f in snapshot['today'] if f['id']=='old-departure')['from_history'])
+
+    def test_total_failure_or_browser_failure_keeps_old_snapshot_and_timestamp(self):
+        m=self.collector();cfg=m.load_config();ap=cfg['airports'][0];cfg['airports']=[ap]
+        failed=m.AirportFlights(errors={'departures':'Just a moment...'},boards={'departures':{'ok':False}})
+        for startup_error in [False,True]:
+            with self.subTest(startup_error=startup_error), tempfile.TemporaryDirectory(prefix='flightdat-failure-') as temporary:
+                root=Path(temporary);old={'generated_at':123456,'generated_at_iso':'old-time','flights':[{'id':'keep-me'}],'stats':{'total':1}}
+                with patch.multiple(m,DATA_DIR=root/'cache',SITE_DATA_DIR=root/'public',STATUS_PATH=root/'public/status.json',PHOTO_CACHE_PATH=root/'cache/photos.json'), \
+                        patch.object(m,'load_config',return_value=cfg), \
+                        patch.object(m,'collect_all',side_effect=RuntimeError('browser executable missing') if startup_error else None,
+                                     return_value={ap['iata']:(failed,None)}):
+                    snapshot=root/'public'/f"{ap['iata'].lower()}.json"
+                    m.write_json(snapshot,old);before=snapshot.read_bytes()
+                    self.assertEqual(m.run(),1)
+                    self.assertEqual(snapshot.read_bytes(),before)
+                status=json.loads((root/'public/status.json').read_text())
+                self.assertFalse(status['ok']);self.assertEqual(status['successes'],0)
+                state=status['airports'][ap['iata']]
+                self.assertEqual(state['last_success_at'],123456)
+                self.assertIn('browser executable missing' if startup_error else 'Just a moment',state['error'])
+                if startup_error:self.assertNotIn('Cloudflare',state['error'])
 
     def test_workflow_is_rooted_and_reuses_the_existing_site_publisher(self):
         flights=(ROOT/'.github/workflows/flightdata.yml').read_text()

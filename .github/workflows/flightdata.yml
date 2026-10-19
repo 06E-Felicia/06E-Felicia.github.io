@@ -16,7 +16,7 @@ concurrency:
 jobs:
   collect:
     if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 60
     permissions:
       contents: read
@@ -33,18 +33,44 @@ jobs:
           cache: pip
           cache-dependency-path: flightdata/requirements.txt
 
-      - name: 安装抓取依赖与浏览器
+      - name: 安装完整 Chrome 与窗口环境（与本地浏览器一致）
         run: |
           python -m pip install -r flightdata/requirements.txt
-          python -m playwright install --with-deps chromium
+          python -m playwright install --with-deps chrome
+          sudo apt-get update
+          sudo apt-get install -y xvfb xauth
+
+      - name: 验证第二页原生翻页链路（离线样例，不访问 FR24）
+        run: python tests/test_flightdata_pagination.py -v
 
       - name: 抓取五机场航班快照
         id: scrape
         continue-on-error: true
-        run: python flightdata/scraper.py --debug
+        env:
+          PLAYWRIGHT_CHANNEL: chrome
+        run: xvfb-run -a python flightdata/scraper.py --headed --debug
+
+      - name: 汇总实际采集结果（区分部分更新与全部失败）
+        if: always() && steps.scrape.outcome != '' && steps.scrape.outcome != 'skipped'
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p = Path('flightdata/docs/data/status.json')
+          data = json.loads(p.read_text()) if p.exists() else {}
+          lines = ['## Flightdat 采集结果', '', '保存任务仅负责提交；数据完整性见下表。', '', '| 机场 | 结果 | 具体原因 |', '| --- | --- | --- |']
+          for code, state in data.get('airports', {}).items():
+              result = '失败，保留旧快照' if not state.get('ok') else ('部分更新，保留可用数据' if state.get('partial') else '成功')
+              errors = state.get('errors') or {}
+              detail = state.get('error') or '；'.join(f'{k}: {v}' for k, v in errors.items()) or '—'
+              detail = str(detail).replace('|', r'\|').replace('\n', ' ')
+              lines.append(f'| {code} | {result} | {detail} |')
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as output:
+              output.write('\n'.join(lines)+'\n')
+          PY
 
       - name: 保存抓取诊断截图
-        if: steps.scrape.outcome == 'failure'
+        if: always() && (steps.scrape.outcome == 'failure' || steps.scrape.outcome == 'success')
         uses: actions/upload-artifact@v4
         with:
           name: flightdata-debug
@@ -96,8 +122,8 @@ jobs:
           git commit -m "Update Flightdat snapshots $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
           git push origin HEAD:"$GITHUB_REF_NAME"
 
-      - name: 标记抓取失败（保留旧快照及最新失败状态）
+      - name: 汇报上游抓取全部失败（数据保存已完成）
         if: needs.collect.outputs.scrape_outcome == 'failure'
         run: |
-          echo "::error::抓取失败；保留上次成功数据，请查看 flightdata/docs/data/status.json"
+          echo "::error::数据保存已完成，但本轮上游采集全部失败；旧快照未覆盖，具体异常见 collect 摘要与 flightdata/docs/data/status.json"
           exit 1

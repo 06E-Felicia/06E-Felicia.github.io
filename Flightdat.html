@@ -436,7 +436,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
 }
 
 </style>
-<link rel="stylesheet" href="assets/styles/flightdata.css?v=1.1.0">
+<link rel="stylesheet" href="assets/styles/flightdata.css?v=1.1.1">
 </head>
 <body>
 <div class="bg"></div><div class="grid"></div>
@@ -918,10 +918,16 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
       el.alert.className = "alert bad show";
       el.alertIcon.textContent = "⚠️";
       el.alertText.textContent = `${state.airport} 最近一次抓取失败：${st.error || "未知错误"}。下面展示的是 ${last ? fmtStamp(last, false) : "上一次"} 成功的数据。`;
+    } else if (st.partial) {
+      el.alert.className = "alert warn show";
+      el.alertIcon.textContent = "⚠️";
+      const labels = {arrivals:"到达", departures:"出发"};
+      const reasons = Object.entries(st.errors || {}).map(([board, error]) => `${labels[board] || board}：${error}`).join("；");
+      el.alertText.textContent = `${state.airport} 本轮仅部分更新：${reasons || "部分看板或分页未完成"}。已保留成功抓到的航班；今日列表可能包含此前保存的记录，未更新方向不代表没有航班。`;
     } else if (age != null && age > hours * 3600 * 1.6) {
       el.alert.className = "alert warn show";
       el.alertIcon.textContent = "⏳";
-      el.alertText.textContent = `数据已 ${(age / 3600).toFixed(1)} 小时未更新，可能被 Cloudflare 拦截或定时任务延迟。可在 Actions 页面查看运行日志并手动触发。`;
+      el.alertText.textContent = `数据已 ${(age / 3600).toFixed(1)} 小时未更新。请在 Actions 页面核对源站读取与任务运行状态，不能仅凭更新时间判断失败原因。`;
     } else if (!state.data) {
       el.statusMsg.classList.add("show");
       el.statusText.textContent = "正在载入数据…";
