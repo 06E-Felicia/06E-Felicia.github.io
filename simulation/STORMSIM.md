@@ -1,10 +1,10 @@
-# StormSim 2 Astra / Sol
+# StormSim 2.5 Astra / Sol
 
-## 当前 2
+## 当前 2.5
 
-当前产品名为 **StormSim 2 Astra / Sol**，内核 `4.5.1-coastal-front-delay`、前端/Worker 缓存标记 `5.5.1`。本轮只后移冷锋初始位置，增加约 12 小时北侧行进时间，并清理 Sol 的比较性展示措辞。沿海到达目标为第三天 12–24 时，实际时间随种子、地形与暖侧入流变化。既有飑线、云雨、冷池、分层风场、阵风、地形及数值配置保留。
+当前产品名为 **StormSim 2.5 Astra / Sol**，内核 `4.15.0-rear-circulation`、前端/Worker 缓存标记 `5.15.0`。合入用户认可的 Astra 后侧输送结果：新生对流冰云按云层 / 入流风差诊断前后方向，不再随弯曲的局部地面侧翼转向，实际冷池、局部抬升和水量预算保持原样。[本轮 Sol 实测](REAR_CIRCULATION_2_5.md) 包含两种子 10 小时原生过程及 72 小时真实浏览器流程；后者功能通过，但本机耗时 376 秒，五分钟门槛未通过，粗网格南端分段也仍需注意。此前 [4.14.2 分段前沿与供气](SEGMENTS_STRATIFORM_2_5.md) 和 [4.13 成熟期前沿](MATURE_HEAD_2_5.md) 为历史阶段记录。恢复/残余退场规则、CAPE 债、共享供气扣账、海陆 / 地形阻挡、默认网格 / 层数和地图交互保留。
 
-本轮说明与检查见 [沿海锋面时间调整](COASTAL_TIMING_2.md)。[回波与锋面形状前版](ECHO_FRONT_2.md)、[西风与暖区触发前版](WESTERLY_FIX_2.md)、[槽前逐日过程前版](SINGLE_EPISODE_2.md)、[分段结构前版](SQUALL_STRUCTURE_2.md)、[2 首版记录](STORMSIM_2.md) 和下面的 1.2 / 1.1 / 1.0 均为各自源码下的历史结果。网格、层数和默认输出间隔不变；地图、站点与回放交互保留。上传时保留 `.nojekyll` 和整个 `simulation/`、`assets/`，不要只替换 HTML。
+本轮说明与检查见 [2.5 沿海与起生后移动](COASTAL_RELEASE_2_5.md)；[长度与移向](LINE_MOTION_2_5.md)、[连贯性](CONTINUITY_2_5.md)、[引导风](STEERING_2_5.md) 和 [入流与核心降水](INFLOW_RAIN_2_5.md) 分别记录前阶段 4.11 / 4.10 / 4.9 / 4.8 内核。[2 的再生与地形推进](REGENERATION_2.md)、[动力与多轮活动](DYNAMICS_2.md)、[沿海时间](COASTAL_TIMING_2.md)、[回波与锋面形状](ECHO_FRONT_2.md) 和其他 2 / 1.2 / 1.1 / 1.0 记录均为各自源码下的历史结果。上传时保留 `.nojekyll` 和整个 `simulation/`、`assets/`，不要只替换 HTML。
 
 ## 1.2 历史记录
 

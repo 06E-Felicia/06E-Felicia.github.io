@@ -23,7 +23,7 @@ const {chromium}=require('playwright');
   const page=await context.newPage();page.on('pageerror',e=>errors.push(e.stack||e.message));
   await page.goto('http://127.0.0.1:14331/simulator.html');await page.locator('#empty-state').waitFor({state:'visible'});assert.equal(await page.locator('#play,#timeline,#reload,#follow-live').count(),0);
   assert.equal(await page.locator('#station-select option').count(),32);
-  assert.equal(await page.locator('h1').innerText(),'StormSim 2 Astra');
+  assert.equal(await page.locator('h1').innerText(),'StormSim 2.5 Astra');
   assert.equal(await page.locator('.lab-heading,.intro,.eyebrow').count(),0);
   assert.equal(await page.evaluate(()=>getComputedStyle(document.documentElement).colorScheme),'light');
   assert.doesNotMatch(await page.locator('main').innerText(),/春夏华南 ·|每轮全新天气|真实地形 ·|让天气从环境中演变|从状态出发/);

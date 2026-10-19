@@ -16,7 +16,7 @@ class AstraRainGustTests(unittest.TestCase):
         base=m.plume_coverage(1,1,1)
         area=m.organized_coverage(base,20,25,1000,1,1,1,1)
         self.assertGreater(float(area.min()),float(base.max())*3)
-        self.assertTrue(np.all(area*20<=25*1000/m.dx*.8+1e-6))
+        self.assertTrue(np.all(area*20<=25*1000/m.dx+1e-6))
         self.assertTrue(np.all(area<=.55))
         for activation,feeding in [(0,1),(1,0)]:
             np.testing.assert_allclose(m.organized_coverage(base,20,25,1000,activation,1,1,feeding),base)

@@ -28,7 +28,7 @@ const {chromium}=require('playwright');
    return {edition:s.edition,state:s.computeState,error:s.lastError,manifest:s.manifest,frames:s.replayFrames,fields:Object.keys(raw.fields),audit:raw.audit};
   });
   assert.equal(result.state,'complete',result.error);assert.equal(result.edition,'astra');assert.equal(result.manifest.edition,'astra');
-  assert.equal(result.manifest.engine,'4.5.1-coastal-front-delay');assert.equal(result.manifest.config.grid_km,km);assert.equal(result.manifest.config.seed,seed);
+  assert.equal(result.manifest.engine,'4.15.0-rear-circulation');assert.equal(result.manifest.config.grid_km,km);assert.equal(result.manifest.config.seed,seed);
   for(const key of ['u925','v925','u500','v500','u300','v300','mlcape','t3','q3','dbz3','gust','point_rain5'])assert.ok(result.fields.includes(key),key);
   assert.ok(fetched.has('/simulation/synoptic.py'),'new model dependency must really load');assert.ok(Math.abs(result.audit.water_relative_residual)<.002);
   assert.ok(fetched.has('/assets/data/simulation-terrain-detail.npz'),'coastal relief must really load, not just satellite map tiles');

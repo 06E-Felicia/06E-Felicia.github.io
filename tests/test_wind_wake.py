@@ -32,6 +32,10 @@ class WindWakeTests(unittest.TestCase):
         responses=[]
         for stable in (False,True):
             m=self.model();m.u.fill(3);m.v.fill(2);m.rain[2:9]=.001;m.plume_rain[:]=m.rain;m.rain_area[:]=m.rain*.3
+            # Isolate stability against the SAME aligned source momentum.
+            # With varying layer directions, changing which layers reach
+            # the ground need not monotonically change the final wind norm.
+            u,v=m.winds();m.momentum_u[2:9]+=20-u[2:9];m.momentum_v[2:9]-=v[2:9]
             if stable:
                 from simulation.thermo import saturation
                 m.temp[:2]-=8;m.q[:2]=np.minimum(m.q[:2],saturation(m.temp[:2],m.p[:2])*.9)

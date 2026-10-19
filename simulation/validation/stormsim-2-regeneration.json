@@ -1,0 +1,210 @@
+{
+  "engine": "4.7.0-regenerating-lines-terrain-front",
+  "frontend_worker_cache": "5.7.0",
+  "python_regression": {
+    "passed": 246,
+    "elapsed_s": 130.331
+  },
+  "source_sha256": {
+    "astra": "15f0394d9f6fc2c4697942f7533cfc37d9a9c9ab39d3bc422be2a92ce95a2b7c",
+    "sol": "263f58bb1d2bcd2b0836019e17994ddd047dabc3ad0cb41beb693f6c376c4521"
+  },
+  "native": {
+    "astra": {
+      "grid_km": 12,
+      "hours": 12,
+      "seed": 20261017,
+      "environment": {
+        "month": 5,
+        "moisture": 1.004,
+        "jet": 0.898,
+        "shear": 1.145,
+        "trough": 0.609,
+        "cold_reservoir": 1.205,
+        "stochastic": 0.429,
+        "sst_c": 26.16
+      },
+      "elapsed_s": 169.1,
+      "warm_strong_peak_cells": 100,
+      "largest_connected_ns_km": 192,
+      "frontal_strong_peak_cells": 0,
+      "warm_episode_indices": [
+        0
+      ],
+      "max_abs_water_relative_residual": 4.1471201997298785e-9,
+      "final_audit": {
+        "max_cfl": 0.45000000000000007,
+        "coldpool_max_cfl": 0.3668394494050628,
+        "coldpool_relative_residual": -1.5127377471054966e-15,
+        "point_rain5_peak_mm": 21.395484924316406,
+        "point_total_max_mm": 44.960506439208984,
+        "gust_peak_m_s": 32
+      },
+      "hour6": {
+        "warm_strong_cells": 73,
+        "line": {
+          "cells": 56,
+          "lon": 110.19326286845948,
+          "lat": 22.55572694348388,
+          "ns_km": 120,
+          "ew_km": 192,
+          "bow_departure_km": 56.26011264461116,
+          "bend_angle_deg": 62.55931182874831
+        }
+      }
+    },
+    "sol": {
+      "grid_km": 28,
+      "hours": 72,
+      "seed": 20261017,
+      "environment": {
+        "month": 5,
+        "moisture": 1.004,
+        "jet": 0.898,
+        "shear": 1.145,
+        "trough": 0.609,
+        "cold_reservoir": 1.205,
+        "stochastic": 0.429,
+        "sst_c": 26.16
+      },
+      "elapsed_s": 211.286,
+      "warm_strong_peak_cells": 30,
+      "largest_connected_ns_km": 168,
+      "frontal_strong_peak_cells": 23,
+      "warm_episode_indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "max_abs_water_relative_residual": 1.6059158427532005e-7,
+      "final_audit": {
+        "max_cfl": 0.29104204499625536,
+        "coldpool_max_cfl": 0.2378405082112142,
+        "coldpool_relative_residual": 8.079588915706212e-16,
+        "point_rain5_peak_mm": 39.865787506103516,
+        "point_total_max_mm": 151.28114318847656,
+        "gust_peak_m_s": 32
+      },
+      "material_front_lat_at_hour42": {
+        "108": 24.491367184397014,
+        "110": 24.461685907534026,
+        "112": 24.801541342186148,
+        "114": 25.137503629821403,
+        "116": 25.472623435788318
+      },
+      "no_active_deep_convection_from_hour": 63
+    },
+    "sol_additional_seed": {
+      "grid_km": 28,
+      "hours": 12,
+      "seed": 20260421,
+      "environment": {
+        "month": 4,
+        "moisture": 1.058,
+        "jet": 0.745,
+        "shear": 1.052,
+        "trough": 0.89,
+        "cold_reservoir": 0.879,
+        "stochastic": 0.779,
+        "sst_c": 23.61
+      },
+      "elapsed_s": 37.609,
+      "warm_strong_peak_cells": 43,
+      "largest_connected_ns_km": 196,
+      "frontal_strong_peak_cells": 0,
+      "warm_episode_indices": [
+        0,
+        1
+      ],
+      "max_abs_water_relative_residual": 1.5249887015788956e-9,
+      "final_audit": {
+        "max_cfl": 0.2643606116237553,
+        "coldpool_max_cfl": 0.22222390464927105,
+        "coldpool_relative_residual": 1.1179189461764616e-16,
+        "point_rain5_peak_mm": 26.97299575805664,
+        "point_total_max_mm": 76.34808349609375,
+        "gust_peak_m_s": 30.644762243353224
+      }
+    }
+  },
+  "controlled_front": {
+    "scope": "Controlled 2-hour entered-front scenario on flat terrain; not a new 72-hour forecast",
+    "cases": [
+      {
+        "edition": "astra",
+        "grid_km": 12,
+        "frontal_route_open": false,
+        "hours": 2,
+        "peak_active_cells": 0,
+        "peak_strong_cells": 0
+      },
+      {
+        "edition": "astra",
+        "grid_km": 12,
+        "frontal_route_open": true,
+        "hours": 2,
+        "peak_active_cells": 130,
+        "peak_strong_cells": 102
+      },
+      {
+        "edition": "sol",
+        "grid_km": 28,
+        "frontal_route_open": false,
+        "hours": 2,
+        "peak_active_cells": 0,
+        "peak_strong_cells": 0
+      },
+      {
+        "edition": "sol",
+        "grid_km": 28,
+        "frontal_route_open": true,
+        "hours": 2,
+        "peak_active_cells": 31,
+        "peak_strong_cells": 24
+      }
+    ]
+  },
+  "browser": {
+    "astra": {
+      "hours": 1,
+      "grid_km": 12,
+      "frames": 3,
+      "elapsed_s": 33.909,
+      "water_relative_residual": -3.503888413598453e-12,
+      "source_sha256": "15f0394d9f6fc2c4697942f7533cfc37d9a9c9ab39d3bc422be2a92ce95a2b7c"
+    },
+    "sol": {
+      "hours": 6,
+      "seed": 20261017,
+      "grid_km": 28,
+      "frames": 7,
+      "wall_seconds": 37.476,
+      "max_water_residual": 3.816850844296322e-10,
+      "point_rain5_peak_mm": 17.072404861450195,
+      "point_total_max_mm": 48.34071350097656
+    },
+    "compute_storage_auto_first_play_and_end_replay_passed": true,
+    "ui_cache_mobile_controls_passed": true,
+    "scope": "Real Chrome/Pyodide runs. Short runs are not whole-process performance guarantees."
+  },
+  "comparison": {
+    "baseline_engine": "4.6.0-frontal-convection-slower-lines",
+    "baseline_astra_source_sha256": "e20e867a612bb0de6e602eda3acd80642d84c06c059c79081c837af4a5f28cda",
+    "same_seed_grid_and_hour": {
+      "seed": 20261017,
+      "grid_km": 12,
+      "hour": 6
+    },
+    "baseline_warm_strong_cells": 31,
+    "baseline_connected_ns_km": 72,
+    "current_warm_strong_cells": 73,
+    "current_connected_ns_km": 120,
+    "scope": "Observed strong-echo connectivity, not a guarantee of identical storms in all random environments."
+  },
+  "limitations": [
+    "Astra natural 72 hours and default 6 km full process not tested in this round.",
+    "Sol full 72-hour native check is not a browser five-minute benchmark.",
+    "Reduced physical model, not a full 3-D nonhydrostatic forecast."
+  ]
+}

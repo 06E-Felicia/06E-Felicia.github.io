@@ -118,10 +118,20 @@ class PhysicsTests(unittest.TestCase):
         np.testing.assert_allclose(uniform_u,12,rtol=1e-6)
         np.testing.assert_allclose(uniform_v,-4,rtol=1e-6)
         m.steering_weights=np.zeros_like(m.mass);m.steering_weights[4]=m.mass[4]
-        low,_=m.steering(u,v)
+        low_u,low_v=m.steering(u,v)
+        np.testing.assert_allclose(low_u,u[4],rtol=1e-6)
+        np.testing.assert_allclose(low_v,v[4],rtol=1e-6)
         m.steering_weights[:]=0;m.steering_weights[9]=m.mass[9]
-        high,_=m.steering(u,v)
-        self.assertGreater(float((high-low).min()),2)
+        high_u,high_v=m.steering(u,v)
+        np.testing.assert_allclose(high_u,u[9],rtol=1e-6)
+        np.testing.assert_allclose(high_v,v[9],rtol=1e-6)
+        # Vertical turning can reduce u while increasing v. Test which
+        # layer supplies BOTH components, not a monotonic zonal profile.
+        changed_u=u.copy();changed_v=v.copy()
+        changed_u[4]+=100;changed_v[4]-=100
+        selected_u,selected_v=m.steering(changed_u,changed_v)
+        np.testing.assert_allclose(selected_u,high_u,rtol=1e-6)
+        np.testing.assert_allclose(selected_v,high_v,rtol=1e-6)
 
     def test_surface_wind_is_prognostic_and_front_is_continuous(self):
         m=self.model()
@@ -521,7 +531,10 @@ class PhysicsTests(unittest.TestCase):
         m.donors=np.broadcast_to(np.arange(m.shape[0])[:,None]*m.shape[1],m.shape).copy()
         m.mu['cin'].fill(-300);m.mu['cin'][:,0]=-30;m.land[:,4:]=False
         flat,_=m.plume_environment(np.full(m.shape,500),np.full(m.shape,20),np.zeros(m.shape))
-        self.assertLess(float(flat[:,4:].mean()),float(flat[:,1:4].mean())*.3)
+        # Charge the finite marine layer once, not an unlimited difference
+        # in whole-column CIN plus a second copy of the same entry cost.
+        self.assertLess(float(flat[:,4:].mean()),float(flat[:,1:4].mean())*.9)
+        self.assertGreater(float(flat[:,4:].mean()),float(flat[:,1:4].mean())*.3)
         m.land[:]=True;m.h[:,4:8]=1800
         ridge,hazard=m.plume_environment(np.full(m.shape,500),np.full(m.shape,20),np.zeros(m.shape))
         self.assertLess(float(ridge[:,4].mean()),.9);self.assertGreater(float(hazard[:,4].mean()),.1)

@@ -50,7 +50,7 @@ class SynopticDriver:
         self.genesis_center=None
         self.episode_index=0
 
-    def configure_genesis(self,cape,cin,lfc,height,*,fresh=None,episode=0):
+    def configure_genesis(self,cape,cin,lfc,height,*,fresh=None,episode=0,now=None):
         """One finite confluence episode, not a prescribed storm/rain object.
 
         Select a favourable western warm-sector sounding. Only pressure-flow
@@ -60,7 +60,8 @@ class SynopticDriver:
         from scipy.ndimage import gaussian_filter
         if episode!=self.episode_index:
             self.episode_index=episode
-            self.genesis_start=episode*86400+float(self.genesis_rng.uniform(.5,1.5))*3600
+            base=episode*86400 if now is None else now
+            self.genesis_start=base+float(self.genesis_rng.uniform(.5,1.5))*3600
             self.genesis_duration=float(self.genesis_rng.uniform(6,8))*3600
         eligible=(self.lon>106.8)&(self.lon<110)&(self.lat>22)&(self.lat<23.8)&(height<600)&(cape>300)&np.isfinite(lfc)
         if fresh is not None:eligible&=fresh
@@ -74,7 +75,11 @@ class SynopticDriver:
         score=np.where(eligible,score,-1)
         iy,ix=np.unravel_index(np.argmax(score),score.shape)
         self.genesis_center=(float(self.lon[iy,ix]),float(self.lat[iy,ix]))
-        self.genesis_half_length=float(self.genesis_rng.uniform(95,135))*1000
+        self.genesis_initial_center=self.genesis_center
+        # A mesoscale confluence must allow neighbouring thermals to join
+        # before one small bow departs. This sets finite pressure forcing,
+        # not the actual rain/line length; terrain and parcel work still gate it.
+        self.genesis_half_length=float(self.genesis_rng.uniform(200,240))*1000
         self.genesis_speed=float(self.genesis_rng.uniform(10,12))
 
     def genesis(self,time):
@@ -92,6 +97,23 @@ class SynopticDriver:
         flow=-self.genesis_speed*np.tanh(x/18000)*envelope*pulse
         permission=np.clip((envelope-.25)/.5,0,1)
         return flow,permission
+
+    def advect_genesis(self,dt,time,cell_u,cell_v):
+        """Translate the finite initiating confluence after actual release.
+
+        This is environmental forcing, not a storm or a radar displacement.
+        Existing cells/cold air keep their own transport. The model calls
+        this only after parcels have genuinely initiated; before that the
+        finite source can spin up. No prescribed track or speed is added.
+        """
+        _,weight=self.genesis(time)
+        weight=weight*np.isfinite(cell_u)*np.isfinite(cell_v)
+        total=float(weight.sum())
+        if dt<=0 or total<1e-9:return
+        u=float(np.sum(np.where(weight>0,cell_u,0)*weight)/total)
+        v=float(np.sum(np.where(weight>0,cell_v,0)*weight)/total)
+        lon,lat=self.genesis_center
+        self.genesis_center=(lon+u*dt/(111195*math.cos(math.radians(lat))),lat+v*dt/111195)
 
     def regional_pattern(self):
         x=self.lon[0]
@@ -118,7 +140,19 @@ class SynopticDriver:
         barrier=np.maximum(ahead-local,0)
         inside=(self.front_lat<=self.cfg['bounds'][3])&(self.front_lat>=self.cfg['bounds'][1])
         terrain_drag=np.where(inside,1/(1+.7*barrier/650),1)
-        return ((1.45+6.5*crossed)*pressure*self.regional_pattern()*wave
+        # A highest-point latitude is not a continuous wall across every
+        # valley. Allow a pressure surge down a genuinely descending/low
+        # route before that column's regional-crest switch has completed.
+        # Guangxi river corridors can therefore lead the blocked segments;
+        # mountainous Guangxi is not assigned an artificial province bonus.
+        downstream=np.minimum(ahead,self.sample_front(self.terrain,80000))
+        descent=np.maximum(local-downstream,0)
+        descending=-np.expm1(-(descent/150)**2)
+        lowland=np.exp(-(local/350)**2-(barrier/120)**2)
+        opening=np.maximum(descending,lowland)*np.exp(-barrier/250)
+        entered=.5*(1+np.tanh((25.95-self.front_lat)/.25))
+        route_release=2.8*opening*entered*(1-crossed)*inside
+        return ((1.45+6.5*crossed+route_release)*pressure*self.regional_pattern()*wave
                 *terrain_drag*getattr(self,'inflow_resistance',1))
 
     def sample_front(self,field,ahead=0):
@@ -183,6 +217,15 @@ class SynopticDriver:
         strength=self.cfg['trough']*(.85+.15*math.sin(2*math.pi*time/self.period+self.wave_phase))
         return x,y,envelope,strength
 
+    def middle_flow_turn(self,z):
+        # Retain SW shear across 1.5--3.5-km cold heads, but veer toward
+        # WSW aloft. A uniform 0.44-rad turn through 7 km gave the WHOLE
+        # buoyant cloud too much northward advection. The upper part is
+        # reduced without reversing the head's low-level normal shear.
+        lower=np.clip((z-1200)/1300,0,1)
+        upper=np.interp(z,[3500,6000,10000],[1.,.45,0.])
+        return .44*lower*upper
+
     def free_winds(self,z,time,trough_lon,noise):
         c=self.cfg;x,y,envelope,strength=self.wave(time,trough_lon)
         # A tilted, finite geostrophic streamfunction trough: southerly ahead,
@@ -205,6 +248,23 @@ class SynopticDriver:
         angle=.08+.045*math.sin(phase)+.025*np.tanh(noise)
         u=background+wu[None]*wave_z
         v=background*np.tan(angle)[None]+wv[None]*wave_z
+        # Calibrate the storm-bearing middle flow, not just an on-screen
+        # playback/cell clock. Condensate, heat and vapour then share the
+        # slower physical transport. Preserve the upper jet (>=8 km) and
+        # the separately calculated low-level moisture jet below.
+        middle=np.clip((z-650)/2550,0,1)*np.clip((8000-z)/2000,0,1)
+        transport=1-.4*middle
+        u*=transport;v*=transport
+        # The cloud-bearing flow is on the DOWNSTREAM/SOUTHWESTERLY side
+        # of the Bay trough. The old almost-zonal middle profile left only
+        # 1--2 m/s northward flow: as a pool deepened above the LLJ, its
+        # environmental meridional shear reversed and favoured SE renewal.
+        # Turn the actual depth-varying background, preserving its speed. Both
+        # condensate transport and plume/cold-head shear use this same flow;
+        # no storm position or prescribed NE propagation vector is added.
+        turning=self.middle_flow_turn(z)
+        cosine=np.cos(turning);sine=np.sin(turning)
+        u,v=u*cosine-v*sine,u*sine+v*cosine
         # Time/space-varying southwesterly 925-hPa jet; the diurnal cycle is
         # not the only evolution. Its axis/angle respond to the travelling wave.
         hour=(8+time/3600)%24

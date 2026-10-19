@@ -27,7 +27,7 @@ const {chromium}=require('playwright');
   await page.route('**/MapServer/tile/**',r=>r.abort());await page.route('**/tile.openstreetmap.org/**',r=>r.abort());
   await page.goto('http://127.0.0.1:'+server.address().port+'/simulator-sol.html?seed='+seed+'&hours='+hours);
   await page.waitForFunction(()=>window.Simulator&&!document.querySelector('#start-simulation').disabled);
-  assert.equal(await page.locator('h1').innerText(),'StormSim 2 Sol');
+  assert.equal(await page.locator('h1').innerText(),'StormSim 2.5 Sol');
   const started=Date.now();await page.locator('#start-simulation').click();
   await page.waitForFunction(()=>['complete','error'].includes(Simulator.getState().computeState),null,{timeout:600000});
   const wall=(Date.now()-started)/1000,result=await page.evaluate(()=>{const s=Simulator.getState();return {status:s.computeState,error:s.lastError,manifest:s.manifest,frames:s.replayFrames,stations:s.stationCount};});

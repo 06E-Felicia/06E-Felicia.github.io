@@ -52,6 +52,21 @@ class SynopticEvolutionTests(unittest.TestCase):
         s.front_lat[:]=s.crest-.8;after=s.speed(20000)
         self.assertTrue(np.all(after>before*2))
 
+    def test_lowland_route_is_not_held_by_an_unpassed_distant_crest(self):
+        c={'seed':20261017,'grid_km':12,'bounds':[108,23,115,26.7],'jet':1.,'cold_reservoir':1.}
+        lon,lat=grid(c['bounds'],12)
+        ridge=950*np.exp(-((lat-25.1)/.3)**2)
+        h=np.where(lon<111,40,ridge)
+        s=SynopticDriver(c,lon,lat,h);s.front_lat.fill(25.65);s.crest.fill(25.15)
+        speed=s.speed(0);west=lon[0]<110;east=lon[0]>113
+        self.assertGreater(float(speed[west].mean()),1.5*float(speed[east].mean()))
+        # Swap the terrain, not the province names: the unobstructed eastern
+        # corridor must then lead. No hard-coded Guangxi multiplier exists.
+        swapped=SynopticDriver(c,lon,lat,np.where(lon>111,40,ridge))
+        swapped.front_lat.fill(25.65);swapped.crest.fill(25.15)
+        speed=swapped.speed(0)
+        self.assertGreater(float(speed[east].mean()),1.5*float(speed[west].mean()))
+
     def test_day_two_warm_sector_is_not_swept_away_by_early_front(self):
         for seed in [20260421,20260422,20260423,20260425,20261017]:
             s=self.model(seed).synoptic
@@ -83,15 +98,56 @@ class SynopticEvolutionTests(unittest.TestCase):
             self.assertEqual(s.genesis_start,earlier.genesis_start)
             np.testing.assert_array_equal(s.ascent(0,111),earlier.ascent(0,111))
 
-    def test_500hpa_steering_is_westerly_to_west_southwesterly(self):
+    def test_500hpa_steering_is_on_the_southwesterly_downstream_side(self):
         for seed in [20260421,20260423,20260425,20261017,20261018]:
             m=self.model(seed)
             for hour in [0,6,12,24,36,48,72]:
                 m.time=hour*3600;f=m.fields(include_mixed=False)
                 # Meteorological FROM bearing, not arrow travel direction.
                 bearing=(np.degrees(np.arctan2(-f['u500'],-f['v500']))+360)%360
-                self.assertGreaterEqual(float(bearing.min()),247.5)
+                self.assertGreaterEqual(float(bearing.min()),225)
                 self.assertLessEqual(float(bearing.max()),270)
+
+    def test_deepening_warm_pool_does_not_reverse_normal_background_shear_south(self):
+        for seed in [20260421,20261017,20261018]:
+            m=self.model(seed);warm=(m.lat>21)&(m.lat<23.7)&(m.air<.1)
+            for hour in [0,6,12]:
+                m.time=hour*3600;u,v=m.winds()
+                for depth in [1200,1600]:
+                    du,dv=m.environmental_shear(u,v,np.full(m.shape,depth))
+                    self.assertGreater(float(np.median(du[warm])),0)
+                    self.assertGreater(float(np.median(dv[warm])),0)
+
+    def test_middle_turn_does_not_rewrite_low_level_jet_or_upper_jet_speed(self):
+        m=self.model();s=m.synoptic;z=Z[:,None,None]
+        u,v,ju,jv=s.free_winds(z,6*3600,111,np.zeros(m.shape))
+        # This regression bounds the profile, not the final storm position.
+        bearing=np.degrees(np.arctan2(v,u))
+        self.assertGreater(float(np.median(bearing[8:10])),12)
+        self.assertLess(float(np.median(bearing[8:10])),30)
+        self.assertGreater(float(np.median(bearing[7])),20)
+        self.assertLess(float(np.max(bearing[0])),15)
+        self.assertLess(float(np.max(bearing[-1])),15)
+        self.assertGreater(float(np.mean(np.hypot(u[11],v[11]))),30)
+        self.assertGreater(float(np.mean(jv[3:5])),1)
+
+    def test_upper_cloud_northward_flow_is_reduced_without_losing_low_level_shear(self):
+        m=self.model();s=m.synoptic;z=Z[:,None,None]
+        for hour in [0,6,12,24,48]:
+            # Compare the exact same speeds/waves/LLJ, only the former
+            # uniform middle turn versus the new vertically veering turn.
+            u,v,ju,jv=s.free_winds(z,hour*3600,111,np.zeros(m.shape))
+            current=s.middle_flow_turn(z)
+            previous=.44*np.clip((z-1200)/1300,0,1)*np.clip((10000-z)/3000,0,1)
+            change=previous-current
+            old_u=u*np.cos(change)-v*np.sin(change)
+            old_v=u*np.sin(change)+v*np.cos(change)
+            np.testing.assert_allclose(np.hypot(u,v),np.hypot(old_u,old_v),rtol=1e-12)
+            np.testing.assert_allclose(u[:8],old_u[:8],rtol=1e-12)
+            np.testing.assert_allclose(v[:8],old_v[:8],rtol=1e-12)
+            self.assertGreater(float(np.mean(v[9])),0)
+            self.assertLess(float(np.mean(v[9])),float(np.mean(old_v[9]))*.7)
+            self.assertTrue(np.all(u[9]>0))
 
     def test_front_does_not_cancel_inflow_far_ahead_of_its_position(self):
         m=self.model();s=m.synoptic;s.front_lat.fill(25.6)

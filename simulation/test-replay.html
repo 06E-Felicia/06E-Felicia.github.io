@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Astra 测试复现 · StormSim 2.5</title>
+<link rel="stylesheet" href="../assets/vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="../assets/styles/simulation-test-replay.css?v=1">
+</head>
+<body>
+<main>
+<header><div><span class="tag">LOCAL TEST ARCHIVE</span><h1>Astra 测试复现</h1><p>已完成的实际过程 · 逐小时快照 · 不重新计算</p></div><a href="../simulator.html">返回全新模拟</a></header>
+<section class="toolbar" aria-label="测试选择">
+<label>测试过程 <select id="test-case" disabled></select></label>
+<label>气象图 <select id="test-layer"><option value="composite">合成雷达回波</option><option value="mucape">MUCAPE</option><option value="rainrate">格点平均雨强</option><option value="rain_total">累计雨量</option></select></label>
+<label>底图 <select id="test-basemap"><option value="street">街道地图</option><option value="satellite">卫星影像</option><option value="none">无底图</option></select></label>
+<button id="test-region" type="button">华南全域</button>
+<span id="test-config"></span>
+</section>
+<section class="map-card"><div class="map-title"><strong id="test-time">读取已完成测试…</strong><span id="test-source"></span></div><div id="test-map" aria-label="测试地图"></div><div class="legend"><span id="test-legend"></span></div></section>
+<section class="timeline" aria-label="测试回放">
+<button id="test-play" disabled type="button">播放</button><button id="test-restart" disabled type="button">从头播放</button>
+<label for="test-slider">回看</label><input id="test-slider" type="range" min="0" max="0" value="0" disabled aria-label="测试时刻">
+<label>帧间隔 <select id="test-speed"><option value="1500">1.5 秒</option><option value="750">0.75 秒</option><option value="300">0.3 秒</option></select></label>
+</section>
+<p id="test-status" role="status">正在读取本机已保存的测试快照…</p>
+<section class="point-card"><strong id="test-point">点击地图查看已保存的格点数值</strong><div id="test-values"></div></section>
+<details><summary>测试信息与范围</summary><p id="test-meta"></p><p>这里只读取已归档的雷达、MUCAPE、格点雨强和累计雨量。没有保存的温度、三维测风、点位细雨核或半小时画面不会在回放中补造；图层和时间均为测试原始快照。底图需要联网，选择“无底图”可离线检查回波。</p></details>
+</main>
+<script src="../assets/vendor/leaflet/leaflet.js"></script>
+<script src="../assets/scripts/simulation-test-replay.js?v=1"></script>
+</body></html>

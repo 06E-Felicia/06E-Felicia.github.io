@@ -55,7 +55,7 @@ class SolTests(unittest.TestCase):
     def test_browser_sol_profile_is_fixed_and_keeps_physics(self):
         manifest=json.loads(browser.initialize(20260421,json.dumps({'hours':1,'grid_km':4,'frame_minutes':10}),'sol'))
         self.assertEqual(manifest['edition'],'sol')
-        self.assertEqual(manifest['product_version'],'2')
+        self.assertEqual(manifest['product_version'],'2.5')
         self.assertTrue(browser.model.astra_updates,'Sol must inherit corrected frontal/ice/downdraft physics')
         self.assertEqual(manifest['config']['grid_km'],browser.SOL_GRID_KM)
         self.assertEqual(manifest['config']['frame_minutes'],60)

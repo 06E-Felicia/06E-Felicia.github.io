@@ -1,0 +1,33 @@
+{
+  "engine": "4.6.0-frontal-convection-slower-lines",
+  "frontend_worker_cache": "5.6.0",
+  "reference_commit": "b66b9de3fe8265f5aa740b425b52ab4e68916ccf",
+  "source_sha256": {
+    "astra": "e20e867a612bb0de6e602eda3acd80642d84c06c059c79081c837af4a5f28cda",
+    "sol": "f39f3bdaebf644bb6700bb28f47df0fb8ea70794c300e3907abee05dd8f67c85"
+  },
+  "native": {
+    "astra": {"seed": 20261017, "grid_km": 12, "hours": 12, "max_water_relative_residual": 3.1568033168619638e-9, "point_rain5_peak_mm": 22.48588752746582, "point_total_max_mm": 51.618507385253906, "gust_peak_m_s": 32},
+    "sol": {"seed": 20261017, "grid_km": 28, "hours": 24, "max_water_relative_residual": 5.719264610188129e-9, "point_rain5_peak_mm": 17.733434677124023, "point_total_max_mm": 57.59201431274414, "warm_episode_indices": [0,1,2,3]}
+  },
+  "motion": {
+    "same_state_warm_pattern_median_retention": {"astra": 0.568, "sol": 0.527},
+    "astra_first_primary_track": {"longitude_window": [109,116.5], "stop_at_first_eastern_exit": true, "before_samples": 7, "after_samples": 11, "before_fit_km_h_at_23N": 231.81306178917671, "after_fit_km_h_at_23N": 140.06722076703218, "reduction_percent": 39.57751142840395},
+    "scope": "Same-state pattern calibration and an actual single-seed primary-component track; centroid tracking is approximate during regeneration/fragmentation. No claim of a universal speed ratio for all echoes or seeds."
+  },
+  "astra_bow_at_hour_6": {"before_departure_km": 56.560727186776, "after_departure_km": 27.804276268264278, "before_local_bend_angle_deg": 60.4155786466611, "after_local_bend_angle_deg": 52.94923398805658, "note": "Diagnostic uses the radar-component leading-row positions, not a fitted display contour; component length also changes."},
+  "controlled_front": {
+    "scope": "Two-hour entered, moist front over flat terrain. Warm-origin pulse disabled; compare identical final physics with the frontal permission route closed/open, not a natural 72-hour case.",
+    "astra_peak_strong_cells_closed_open": [0,109],
+    "sol_peak_strong_cells_closed_open": [0,25]
+  },
+  "real_browser": {
+    "astra": {"grid_km": 12, "hours": 1, "frames": 3, "wall_s": 49.104, "compute_storage_playback_passed": true},
+    "sol": {"grid_km": 28, "hours": 6, "frames": 7, "wall_s": 34.75, "compute_storage_playback_passed": true, "max_water_relative_residual": 2.6970566983722315e-10, "point_rain5_peak_mm": 15.457070350646973, "point_total_max_mm": 48.02887725830078},
+    "scope": "Actual Chrome/Pyodide runs, not mock weather. Short runs are not 72-hour performance guarantees."
+  },
+  "python_regression_tests_passed": 242,
+  "python_regression_elapsed_s": 134.448,
+  "ui_worker_cache_and_frame_decode_checks_passed": true,
+  "default_6km_full_process_tested": false
+}

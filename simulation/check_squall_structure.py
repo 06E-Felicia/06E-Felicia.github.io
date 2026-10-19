@@ -12,6 +12,7 @@ import numpy as np
 from scipy.ndimage import map_coordinates, label, binary_dilation, gaussian_filter1d
 from scipy.signal import find_peaks
 from .core import Model, VERSION, source_digest
+from .sol import SolModel
 from .experiment import random_environment
 from .run import terrain_for
 
@@ -64,11 +65,28 @@ def structure(m,f):
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--seed',type=int,default=20260423)
-    ap.add_argument('--hours',type=int,default=18);ap.add_argument('--grid-km',type=int,choices=[6,8,12],default=12)
+    ap.add_argument('--hours',type=int,default=18);ap.add_argument('--grid-km',type=int,choices=[6,8,12,28],default=12)
+    ap.add_argument('--edition',choices=['astra','sol'],default='astra')
+    ap.add_argument('--reference-inflow',action='store_true',help='Compare with the 4.7 inflow/coverage closures only')
     ap.add_argument('--output',required=True);args=ap.parse_args()
-    cfg=random_environment(args.seed,{'grid_km':args.grid_km,'hours':args.hours})
-    h,terrain=terrain_for(cfg,'assets/data/simulation-terrain.npz');m=Model(cfg,h)
-    digest=source_digest('experiment.py','browser.py');started=time.monotonic()
+    if args.edition=='sol':args.grid_km=28
+    cfg=random_environment(args.seed,{'grid_km':args.grid_km,'hours':args.hours},grid_limit=args.grid_km)
+    h,terrain=terrain_for(cfg,'assets/data/simulation-terrain.npz')
+    m=(Model if args.edition=='astra' else SolModel)(cfg,h,grid_limit=args.grid_km)
+    digest=source_digest('experiment.py','browser.py',*(['sol.py'] if args.edition=='sol' else []));started=time.monotonic()
+    if args.reference_inflow:
+        # Isolate the exact preceding source-wind/inflow/coverage closures;
+        # all other settings, microphysics and RNG streams stay identical.
+        from types import MethodType
+        def previous_inflow(self,cu,cv,hu,hv,u,v,nx,ny,layer=None):
+            su=self.donor_field(np.take_along_axis(u,self.mu['start_index'][None],axis=0)[0])
+            sv=self.donor_field(np.take_along_axis(v,self.mu['start_index'][None],axis=0)[0])
+            return np.maximum((cu-su)*nx+(cv-sv)*ny,(hu-su)*nx+(hv-sv)*ny)
+        def previous_coverage(self,base,updraft,inflow,depth,activation,support,efficiency,feeding,cell_area=1.,supply_depth=None):
+            flux=np.maximum(inflow,0)*np.clip(depth,0,1500)/self.dx
+            active=flux*np.minimum(1,self.organization*cell_area)*activation*feeding
+            return np.maximum(base,np.minimum(.55,active/np.maximum(updraft,1)))
+        m.head_inflow=MethodType(previous_inflow,m);m.organized_coverage=MethodType(previous_coverage,m)
     text=Path('assets/scripts/simulation-v2.js').read_text()
     block=re.search(r'const majorCities=(\{[^;]+\});',text).group(1)
     names=dict(re.findall(r"'([^']+)':'([^']+)'",block))
@@ -113,7 +131,9 @@ def main():
                        'peak5_mm':float(peak5[i]),'peak_rate_mm_h':float(peak_rate[i]),
                        'completed_passage':bool(exposure[i]>=15 and m.time-last_exposure[i]>=7200)})
     cohort=[s['since_first_40dbz_mm'] for s in gauges if s['completed_passage']]
-    result={'engine':VERSION,'source_sha256':digest,'edition':'astra','config':cfg,'grid_km':args.grid_km,'terrain':terrain,
+    if digest!=source_digest('experiment.py','browser.py',*(['sol.py'] if args.edition=='sol' else [])):
+        raise RuntimeError('Physical source changed during integration')
+    result={'engine':VERSION,'source_sha256':digest,'edition':args.edition,'reference_inflow_closures':args.reference_inflow,'config':cfg,'grid_km':args.grid_km,'terrain':terrain,
             'elapsed_s':time.monotonic()-started,'gauges':gauges,'samples':rows,
             'completed_radar_exposed_gauge_quantiles_mm':np.percentile(cohort,[10,50,90]).tolist() if cohort else [],
             'caveat':'40 dBZ composite exposure is not proof of surface core interception; all 32 gauges, unfinished passages and actual point totals are retained'}

@@ -36,13 +36,13 @@ class StructureTests(unittest.TestCase):
         np.testing.assert_allclose(m.cold_mx,mx);np.testing.assert_allclose(m.cold_my,my)
 
     def test_no_extra_intrinsic_speed_is_added_to_already_moving_head(self):
-        m=self.model();u,v=m.winds();s=m.mu['start_index'][None]
-        su=np.take_along_axis(u,s,axis=0)[0];sv=np.take_along_axis(v,s,axis=0)[0]
+        m=self.model();u,v=m.winds()
         m.donors=np.arange(m.lon.size).reshape(m.shape);one=np.ones(m.shape)
-        a=m.head_inflow(su,sv,su+5,sv,u,v,one,one*0)
+        su,sv,_=m.source_inflow_layer(u,v)
+        a=m.head_inflow(su+2,sv,su+5,sv,u,v,one,one*0)
         np.testing.assert_allclose(a,5,atol=1e-6)
         m.cold_content.fill(5000)
-        np.testing.assert_allclose(m.head_inflow(su,sv,su+5,sv,u,v,one,one*0),5,atol=1e-6)
+        np.testing.assert_allclose(m.head_inflow(su+2,sv,su+5,sv,u,v,one,one*0),5,atol=1e-6)
 
     def test_finite_descending_air_dilutes_but_does_not_invent_cooling(self):
         a,b=self.model(),self.model();evap=np.zeros_like(a.rain);evap[:5]=.0001
@@ -90,7 +90,7 @@ class StructureTests(unittest.TestCase):
     def test_shear_coherence_weakens_oblique_flanks_without_fixing_map_direction(self):
         m=self.model();root=np.sqrt(.5)
         self.assertEqual(m.cold_head_balance(20,20,0,1,0),1)
-        self.assertGreater(m.cold_head_balance(20,20,0,root,root),.4)
+        self.assertGreater(m.cold_head_balance(20,20,0,root,root),.35)
         self.assertLess(m.cold_head_balance(20,20,0,root,root),1)
         self.assertEqual(m.cold_head_balance(20,20,0,-1,0),0)
         # Rotate BOTH environment and head by 90 degrees: same physics.

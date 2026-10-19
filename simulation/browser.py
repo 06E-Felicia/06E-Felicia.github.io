@@ -63,7 +63,7 @@ def initialize(seed, controls, profile='astra'):
     lon,lat=model.lon,model.lat
     return json.dumps({'schema':2,'engine':VERSION,'status':'running','simulation':True,
         'source_sha256':source_digest('experiment.py','browser.py',*(['sol.py'] if profile=='sol' else [])),
-        'execution':'browser','edition':profile,'product_version':'2','config':config,'terrain':terrain,'frames':[],'acceleration':acceleration,
+        'execution':'browser','edition':profile,'product_version':'2.5','config':config,'terrain':terrain,'frames':[],'acceleration':acceleration,
         'rain_grid':model.surface_rain.grid(lon,lat),
         'seed_streams':dict(zip(['initial_temperature','initial_moisture','time_evolution','synoptic','convective_cells'],model.seed_ids)),
         'grid':{'nx':lon.shape[1],'ny':lon.shape[0],'west':float(lon[0,0]),'south':float(lat[0,0]),

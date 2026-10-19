@@ -1,6 +1,11 @@
 name: 自动更新天气数据
 
 on:
+  # GITHUB_TOKEN 提交不触发 push 工作流；航班更新结束后使用原有全站发布链路。
+  workflow_run:
+    workflows: ['更新航班数据']
+    types: [completed]
+    branches: [main]
   schedule:
     # 北京时间 3–5 月每 10 分钟；其他月份每 30 分钟（供手动开启使用）。
     # 错开整点高峰，GitHub 调度仍可能延迟。
@@ -25,6 +30,10 @@ concurrency:
 
 jobs:
   update-weather:
+    if: >-
+      github.event_name != 'workflow_run' ||
+      (github.event.workflow_run.head_repository.full_name == github.repository &&
+       (github.event.workflow_run.conclusion == 'success' || github.event.workflow_run.conclusion == 'failure'))
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:

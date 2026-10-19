@@ -36,6 +36,18 @@ class SurfacePrecipitationTests(unittest.TestCase):
         np.testing.assert_allclose(rain.total,2,atol=2e-6)
         np.testing.assert_allclose(rain.accumulation(300),1/6,atol=1e-6)
 
+    def test_moving_narrow_core_reaches_heavy_burst_without_extra_water(self):
+        shape=(8,8);rain=SurfaceRain(shape,20261017);zero=np.zeros(shape)
+        # A finite moving core, not a hard rain floor or changed native rain.
+        # 25 mm/h native mean is the SAME 8.333 mm event in every grid box.
+        for step in range(40):
+            rain.advance((step+1)*30,30,zero+25/120,zero,zero+.04,
+                         velocity=(zero+15,zero+5),dx=12000)
+        self.assertGreaterEqual(rain.max_five,10)
+        self.assertLessEqual(rain.max_five,20)
+        np.testing.assert_allclose(self.coarse(rain.total,shape),25/3,rtol=5e-7)
+        self.assertLessEqual(float(rain.weights(zero+.001).max()),16)
+
     def test_seeded_footprints_repeat_but_do_not_create_water(self):
         a,b,c=[SurfaceRain((3,4),seed) for seed in (13,13,14)]
         for step in range(20):

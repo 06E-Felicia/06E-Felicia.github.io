@@ -26,14 +26,16 @@ class SurfaceRain:
                                .8,mode='reflect').astype('float32')
 
     def weights(self,area):
-        # At least two quadratures represent a finite shaft. In particular we
-        # never turn a numerical 1% area tail into a 100-fold point maximum.
-        occupied=np.clip(area,2/16,1)*16
+        # One finite quadrature is the minimum resolvable shaft. Forcing two
+        # wet quadratures and then filtering/interpolating them again spread
+        # narrow convective cores over too much area. Even a numerical 1%
+        # tail remains bounded at 16x, not an arbitrary 100x point maximum.
+        occupied=np.clip(area,1/16,1)*16
         water=np.clip(occupied[...,None]-self.rank,0,1)*16/occupied[...,None]
         # Smooth finite shafts instead of hard, permanently dry quadratures.
         # The filter wraps ONLY within each quadrature block and preserves
         # its exact mean; it transports no water between model grid cells.
-        return gaussian_filter(water.reshape(*self.shape,4,4),(0,0,.45,.45),mode='wrap')
+        return gaussian_filter(water.reshape(*self.shape,4,4),(0,0,.3,.3),mode='wrap')
 
     def ranks(self):
         blocks=self.noise.reshape(self.shape[0],4,self.shape[1],4).transpose(0,2,1,3)

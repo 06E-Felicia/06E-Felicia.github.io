@@ -47,7 +47,7 @@
    const dialog=$('sol-suggestion');
    if(edition!=='astra'||solSuggested||total<=300||remaining<=0||!worker||!dialog||dialog.dataset.enabled!=='true')return;
    solSuggested=true;
-   $('sol-suggestion-text').textContent='按本机当前计算速度，Astra 本轮预计共需约 '+duration(total)+'，超过 5 分钟。可以切换到 StormSim 2 Sol。';
+   $('sol-suggestion-text').textContent='按本机当前计算速度，Astra 本轮预计共需约 '+duration(total)+'，超过 5 分钟。可以切换到 StormSim 2.5 Sol。';
    const url=new URL('simulator-sol.html',location.href);if(manifest?.config?.seed)url.searchParams.set('seed',manifest.config.seed);url.searchParams.set('hours',manifest?.config?.hours||$('local-hours').value);
    $('switch-to-sol').href=url.href;dialog.showModal();
  }
@@ -86,7 +86,7 @@
    $('compute-status').textContent='正在检查本机存储…';
    await SimulationFrameStore.prepare();
    if(archiveRun!==run||!roundLocked)return;
-   const owned=new Worker('assets/scripts/simulation-local-worker.js?v='+(edition==='sol'?'5.5.2-sol':'5.5.1'));worker=owned;
+   const owned=new Worker('assets/scripts/simulation-local-worker.js?v=5.15.0');worker=owned;
    const fail=text=>{if(worker!==owned)return;busy=false;stopCompute();lastError=text;computeState='error';$('compute-status').textContent='模拟中止：'+text+'。请检查项目文件与浏览器存储权限后重试。';};
    const watch=()=>{clearTimeout(workerWatchdog);workerWatchdog=setTimeout(()=>{if(document.hidden)watch();else fail('计算线程长时间未响应，请保持 Safari 在前台，关闭其他占用内存的页面后重试');},180000);};watch();
    owned.onerror=e=>fail(e.message||'计算线程无法加载');

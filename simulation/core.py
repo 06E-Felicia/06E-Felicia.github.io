@@ -18,7 +18,7 @@ from .coldpool import advance as advance_cold_pool, velocity as cold_velocity
 from .precipitation import SurfaceRain
 from .synoptic import SynopticDriver
 
-VERSION = '4.5.1-coastal-front-delay'
+VERSION = '4.15.0-rear-circulation'
 LF = 333700.  # freezing/melting latent heat, J/kg
 Z = np.array([30,150,350,650,1000,1500,2200,3200,4500,6000,8000,10500,13500,16500.],dtype=float)
 DZ = np.diff(np.r_[0,(Z[:-1]+Z[1:])/2,18000])
@@ -243,6 +243,12 @@ def rain_reflectivity(rain, plume_rain, rain_area, density, anvil=None,graupel=N
 
 
 class Model:
+    # Smooth moist middle troposphere for the spring warm-sector scenarios.
+    # The seeded moisture parameter, real parcel/debt budgets and northern
+    # cold-air drying still apply; this is an INITIAL water reservoir only.
+    MIDLEVEL_HUMIDITY_BOOST=.17
+    WARM_PATTERN_RETENTION=.70
+
     def __init__(self, config, height, *, grid_limit=12, astra_updates=True):
         self.cfg=settings(config,grid_limit=grid_limit);c=self.cfg
         self.astra_updates=astra_updates
@@ -252,6 +258,8 @@ class Model:
         height=np.asarray(height,dtype='float32')
         if height.shape!=self.shape or not np.isfinite(height).all(): raise ValueError('DEM and model grid do not match')
         self.land=height>0 if detail_land is None else np.asarray(detail_land)>=.5
+        self._land_fraction=(np.clip(np.asarray(detail_land,dtype=float),0,1)
+                             if self.astra_updates and detail_land is not None else None)
         self.h=np.maximum(height,0)*(1 if c['terrain'] else 0)
         self.terrain_relief=np.zeros(self.shape) if detail_relief is None else np.asarray(detail_relief)*c['terrain']
         self.terrain_peak=self.h.copy() if detail_peak is None else np.asarray(detail_peak)*c['terrain']
@@ -260,8 +268,11 @@ class Model:
         # not a claim that this DEM contains vegetation/urban land-cover data.
         sigma=max(.5,12/c['grid_km']);smooth=gaussian_filter(self.h,sigma)
         relief=np.sqrt(np.maximum(gaussian_filter(self.h**2,sigma)-smooth**2,0)+self.terrain_relief**2)
-        self.surface_z0=np.where(self.land,.08+.25*np.clip(relief/400,0,1),.0002)
-        self.surface_cd=(.4/np.log((Z[0]+self.surface_z0)/self.surface_z0))**2
+        land_z0=.08+.25*np.clip(relief/400,0,1)
+        self.land_surface_cd=(.4/np.log((Z[0]+land_z0)/land_z0))**2
+        self.surface_z0=self.land_cover*land_z0+(1-self.land_cover)*.0002
+        self.surface_cd=(self.land_cover*self.land_surface_cd
+                         +(1-self.land_cover)*(.4/np.log((Z[0]+.0002)/.0002))**2)
         # Legacy branch only: never clip live Astra/Sol CAPE to a latitude
         # lookup. Such clipping painted a zonally uniform high-CAPE ribbon.
         # The current branch puts its northward stability/moisture gradient
@@ -272,7 +283,7 @@ class Model:
         self.rngs=[np.random.default_rng(s) for s in seeds]
         self.seed_ids=[int(s.generate_state(1)[0]) for s in seeds]
         self.noise=correlated(self.rngs[2],self.shape, max(3,40/c['grid_km']))
-        self.cell_noise=correlated(self.rngs[4],self.shape,max(1,28/c['grid_km']))
+        self.cell_noise=correlated(self.rngs[4],self.shape,max(1,14/c['grid_km']))
         self.day_noise=correlated(self.rngs[3],self.shape,max(3,180/c['grid_km']))
         initial=correlated(self.rngs[0],self.shape,max(3,65/c['grid_km']))
         humidity=correlated(self.rngs[1],self.shape,max(3,50/c['grid_km']))
@@ -290,7 +301,7 @@ class Model:
         shallow=np.exp(-(Z-Z[0])/650)[:,None,None]
         self.surface_mixed_mass=np.sum(self.mass*shallow,axis=0)
         free_surface=299+(c['month']-4)*1.1-self.h*.005-.2*(self.lat-23)+initial*.6
-        surface=np.where(self.land,free_surface,c['sst_c']+273.15)
+        surface=self.land_cover*free_surface+(1-self.land_cover)*(c['sst_c']+273.15)
         lapse=.0063+(.00025*humidity)[None]
         # A cold spring sea cools the MARINE boundary layer, not the whole
         # troposphere. Cooling every level preserved artificial offshore CAPE.
@@ -305,7 +316,8 @@ class Model:
         td=294.5+(c['month']-4)*1.0+(c['moisture']-1)*13-self.h*.0018+humidity*.65-3*self.air
         qs=saturation(np.minimum(td,surface-1),self.ps)
         self.q=(qs[None]*np.exp(-np.maximum(z-850,0)/2300)).astype('float32')
-        self.q=np.maximum(self.q,saturation(self.temp,self.p)*np.clip(.55*c['moisture'],.3,.75)*np.exp(-np.maximum(z-9000,0)/2000))
+        humidity_floor=.55+self.MIDLEVEL_HUMIDITY_BOOST*np.exp(-((z-5500)/3300)**2)
+        self.q=np.maximum(self.q,saturation(self.temp,self.p)*np.clip(humidity_floor*c['moisture'],.3,.88)*np.exp(-np.maximum(z-9000,0)/2000))
         if self.astra_updates:self.q*=np.exp(-.65*north[None]*np.exp(-z/3200))
         self.q=np.minimum(self.q,saturation(self.temp,self.p)*.98)
         # Optional memory/bandwidth mode: same grid, physics, stability steps
@@ -319,7 +331,10 @@ class Model:
         # A finite wet-soil skin cannot jump back to a prescribed sunny-land
         # temperature immediately after rain. Its energy budget is separate
         # from atmospheric sensible/latent exchange.
-        self.ground_temp=self.temp[0].copy();self.ground_reference=self.temp[0].copy()
+        # The land skin is a patch temperature, not the sea/land mean air.
+        # Its finite heat capacity and flux are weighted by its area below.
+        self.ground_temp=(self.temp[0]+(self.land_cover>0)*(free_surface-surface)*np.exp(-Z[0]/850)).astype('float32')
+        self.ground_reference=self.ground_temp.copy()
         self.cloud=np.zeros_like(self.q);self.rain=np.zeros_like(self.q)
         self.anvil=np.zeros_like(self.q)  # detrained, slow-falling frozen water
         # Signed, water-weighted source orientation and normal outflow speed.
@@ -400,6 +415,13 @@ class Model:
         self.genesis_closed=False
         self.genesis_started=False
         self.convective_day=0
+        self.next_genesis_check=1800.
+
+    @property
+    def land_cover(self):
+        # Keep caller-supplied binary DEMs (and the legacy branch) binary;
+        # actual coastal DEM moments retain their continuous land coverage.
+        return self.land if self._land_fraction is None else self._land_fraction
 
     def frontal_layers(self,air=None):
         """A 1:120 cold wedge, based on the advected surface air tracer.
@@ -536,6 +558,20 @@ class Model:
         weights=self.steering_weights;denominator=np.maximum(weights.sum(axis=0),1e-9)
         return (u*weights).sum(axis=0)/denominator,(v*weights).sum(axis=0)/denominator
 
+    def storm_motion(self,u,v):
+        """Translate the convective pattern, not the environmental air.
+
+        The middle-level transport is already calibrated in free_winds.
+        Retain 70% of its warm-sector pattern steering; front-attached cells
+        retain the full local cloud-layer translation. The upper jet is not
+        reduced; cold-pool propagation still uses the active-layer solver.
+        """
+        cu,cv=self.steering(u,v)
+        if not self.astra_updates:return cu,cv
+        frontal=np.clip((self.air-.1)/.4,0,1)
+        retained=self.WARM_PATTERN_RETENTION+(1-self.WARM_PATTERN_RETENTION)*frontal
+        return cu*retained,cv*retained
+
     def available_cape(self,raw):
         """Available model energy, distinct from uncapped parcel CAPE."""
         if not self.astra_updates:return np.maximum(np.minimum(np.maximum(raw,0),self.cape_ceiling)-self.cape_deficit,0)
@@ -601,15 +637,16 @@ class Model:
         radiation=420*solar-35*(1-sun)
         soil=15*(self.ground_temp-self.ground_reference)
         ground_change=dt*(radiation-sensible-LV*land_evap-soil-rain_cooling)/200000
-        self.ground_temp+=ground_change*self.land
+        self.ground_temp+=ground_change*(self.land_cover>0)
         land_heat=sensible*dt/(CP*self.mass[0])
         sea_heat=(self.cfg['sst_c']+273.15-self.temp[0])*dt/(1800/np.maximum(wind/5,1))
-        heat=np.where(self.land,land_heat,sea_heat)
+        heat=self.land_cover*land_heat+(1-self.land_cover)*sea_heat
         sea_q=saturation(self.cfg['sst_c']+271.15,self.ps)*self.cfg['moisture']
-        exchange=np.where(self.land,land_evap*dt/self.mass[0],(sea_q-self.q[0])*dt/18000)
+        exchange=(self.land_cover*land_evap*dt/self.mass[0]
+                  +(1-self.land_cover)*(sea_q-self.q[0])*dt/18000)
         self.temp[0]+=heat;self.q[0]+=exchange
         self.external_water+=float(np.sum(exchange*self.mass[0],dtype='float64' if self.cfg['compact_transport'] else None))
-        return heat,exchange,np.where(self.land,self.ground_temp,self.cfg['sst_c']+273.15)
+        return heat,exchange,self.land_cover*self.ground_temp+(1-self.land_cover)*(self.cfg['sst_c']+273.15)
 
     def upstream_environment(self):
         """Fresh thermodynamic supply follows the evolving boundary air mass.
@@ -665,12 +702,14 @@ class Model:
 
     def drag_coefficient(self,speed):
         cd=self.surface_cd.copy()
-        if np.any(~self.land):
+        if np.any(self.land_cover<1):
             # Two bulk Charnock iterations: sea stress must also strengthen
             # in high winds; a permanently glassy-water roughness is unsafe.
+            sea_cd=np.full_like(speed,(.4/np.log((Z[0]+.0002)/.0002))**2,dtype=float)
             for _ in range(2):
-                z0=.0002+.018*cd*speed**2/G
-                cd=np.where(self.land,self.surface_cd,(.4/np.log((Z[0]+z0)/z0))**2)
+                z0=.0002+.018*sea_cd*speed**2/G
+                sea_cd=(.4/np.log((Z[0]+z0)/z0))**2
+            cd=self.land_cover*self.land_surface_cd+(1-self.land_cover)*sea_cd
         return cd
 
     def surface_friction(self,dt):
@@ -690,10 +729,15 @@ class Model:
         """Active-layer pressure drives expansion even in a still atmosphere."""
         debt=self.cold_depth*self.cape_deficit
         if self.astra_updates:
-            tracers=np.stack([debt,self.cold_depth*self.cape_capacity])
-            self.cold_depth,self.cold_content,self.cold_mx,self.cold_my,debt,capacity,external,cfl=advance_cold_pool(
+            # Boundary organization belongs to the active density current,
+            # not the slower frictional surface wind. Carry its finite-volume
+            # moment with exactly the same head flux, including wet/dry faces.
+            tracers=np.stack([debt,self.cold_depth*self.cape_capacity,
+                              self.cold_depth*self.organization])
+            self.cold_depth,self.cold_content,self.cold_mx,self.cold_my,debt,capacity,organized,external,cfl=advance_cold_pool(
                 self.cold_depth,self.cold_content,self.cold_mx,self.cold_my,self.h,dt,self.dx,tracer=tracers,higher_order=True)
             self.transported_wake_capacity=np.maximum(capacity/np.maximum(self.cold_depth,1e-9),0)
+            self.organization=np.clip(organized/np.maximum(self.cold_depth,1e-9),0,1)
         else:
             self.cold_depth,self.cold_content,self.cold_mx,self.cold_my,debt,external,cfl=advance_cold_pool(
                 self.cold_depth,self.cold_content,self.cold_mx,self.cold_my,self.h,dt,self.dx,tracer=debt,higher_order=False)
@@ -730,16 +774,54 @@ class Model:
         never alter depth, cold content, interface geometry or set a speed.
         The reference atmosphere absorbs the pressure/form-drag reaction.
         """
-        head=gaussian_filter(self.cold_content,max(.5,6/self.cfg['grid_km']))
+        head=self.cold_head_pressure()
         hy,hx=np.gradient(head,self.dx);gradient=np.hypot(hx,hy)
         nx=-hx/np.maximum(gradient,1e-12);ny=-hy/np.maximum(gradient,1e-12)
         contact=np.clip(gradient*self.dx/np.maximum(maximum_filter(head,size=3),1),0,1)
         cu,cv=cold_velocity(self.cold_depth,self.cold_mx,self.cold_my)
         outward=np.maximum((cu-self.syn_u)*nx+(cv-self.syn_v)*ny,0)
-        retained=1/(1+.8*contact*outward*dt/self.dx)
+        # Ambient resistance is not a shear-direction veto on cold AIR.
+        # The former extra 1.5 x flank penalty arrested lateral head merging
+        # between neighbouring rain shafts. Shear balance and ACTUAL inflow
+        # already decide where that spreading air may make new deep plumes.
+        # Keep finite head resistance, ground stress and real ridge drag;
+        # do not suppress their common pressure boundary a second time.
+        resistance=1.0
+        retained=1/(1+resistance*contact*outward*dt/self.dx)
         impulse=outward*(1-retained)
         self.cold_mx-=self.cold_depth*impulse*nx;self.cold_my-=self.cold_depth*impulse*ny
         self.cold_head_dissipation+=float(np.sum(.5*self.cold_depth*(outward**2-(outward*retained)**2)))
+
+    def cold_head_pressure(self,scale_km=12):
+        # Diagnose the finite head at the shared inflow/plume scale, not at
+        # each isolated rain shaft's pressure maximum. Grid-scale source
+        # patches otherwise rotate the normal into a bow's receding flank
+        # between adjacent cores and switch off their shared warm inflow.
+        # This filtered diagnostic never changes prognostic Q/H, transports
+        # cold air across dry gaps, or smooths cloud/rain/radar fields.
+        return gaussian_filter(self.cold_content,max(.5,scale_km/self.cfg['grid_km']))
+
+    def cold_head_normal(self,head):
+        """Share boundary orientation, not the amplitude of each rain shaft.
+
+        The pressure structure tensor identifies the local line's normal.
+        An isolated circular pool has no preferred axis; a coherent boundary
+        does. Its signed direction still comes from the actual pressure fall.
+        This rotates with the weather and cannot impose a north--south line.
+        """
+        gy,gx=np.gradient(head,self.dx);length=np.hypot(gx,gy)
+        nx=-gx/np.maximum(length,1e-10);ny=-gy/np.maximum(length,1e-10)
+        sigma=max(.5,36/self.cfg['grid_km'])
+        xx=gaussian_filter(gx*gx,sigma);yy=gaussian_filter(gy*gy,sigma)
+        xy=gaussian_filter(gx*gy,sigma)
+        angle=.5*np.arctan2(2*xy,xx-yy)
+        tx,ty=np.cos(angle),np.sin(angle)
+        sign=np.where(tx*nx+ty*ny>=0,1.,-1.)
+        coherence=np.hypot(xx-yy,2*xy)/np.maximum(xx+yy,1e-20)
+        weight=np.clip((coherence-.35)/.45,0,1)
+        ax=(1-weight)*nx+weight*tx*sign;ay=(1-weight)*ny+weight*ty*sign
+        magnitude=np.maximum(np.hypot(ax,ay),1e-10)
+        return ax/magnitude,ay/magnitude
 
     def recover_cold_pool(self,dt,surface_heat,sun):
         before=float(self.cold_content.sum())
@@ -774,7 +856,7 @@ class Model:
         retained=np.exp(-dt*neutral/mixing_time)
         self.cold_depth*=retained;self.cold_content*=retained
         self.cold_mx*=retained;self.cold_my*=retained
-        entrained=dt*(.006+.008*sun*self.land)*(1-neutral)*(self.cold_content>1)
+        entrained=dt*(.006+.008*sun*self.land_cover)*(1-neutral)*(self.cold_content>1)
         self.cold_depth+=entrained
         self.cold_mx+=entrained*self.syn_u;self.cold_my+=entrained*self.syn_v
         overflow=np.maximum(self.cold_depth/1800,1)
@@ -812,7 +894,7 @@ class Model:
         """Stable-layer and ridge-crossing cost of renewed plumes, not rain."""
         theta=virtual(self.temp,self.q)*(100000/self.p)**(RD/CP)
         n=np.sqrt(np.maximum(G*(theta[5]-theta[1])/(np.maximum(theta[1],200)*(Z[5]-Z[1])),1e-6))
-        marine_work=np.maximum(self.donor_field(self.mu['cin'])-self.mu['cin'],0)*(~self.land)
+        inhibition_step=np.maximum(self.donor_field(self.mu['cin'])-self.mu['cin'],0)
         connection=np.clip(self.sb['cape']/np.maximum(self.mu['cape'],100),0,1)
         incoming=np.maximum(self.donor_field(connection),self.surface_activity/np.maximum(self.activity,1e-9))
         # Surface-fed cells cannot instantly relabel themselves as elevated
@@ -821,7 +903,14 @@ class Model:
         # Keep the finite surface-entry barrier separate from the deep energy
         # supply below; a cold surface must not erase truly elevated storms.
         marine_barrier=np.minimum(np.maximum(-self.sb['cin'],0),.5*n*n*850**2)
-        marine_work+=np.maximum(incoming-connection,0)*marine_barrier*(~self.land)
+        # These two diagnostics describe the SAME marine entry barrier,
+        # not two independent losses. A whole-column MU CIN difference is
+        # not extra work across a finite shallow sea layer. Its actual CIN
+        # still gates parcel activation elsewhere, including on the coast.
+        marine_work=np.maximum(np.minimum(inhibition_step,marine_barrier),
+                               np.maximum(incoming-connection,0)*marine_barrier)*(1-self.land_cover)
+        if not self.astra_updates:
+            marine_work=(inhibition_step+np.maximum(incoming-connection,0)*marine_barrier)*(~self.land)
         gy,gx=np.gradient(gaussian_filter(self.h,max(.5,8/self.cfg['grid_km'])),self.dx)
         speed=np.maximum(np.hypot(cell_u,cell_v),2)
         relief=np.abs((cell_u*gx+cell_v*gy)/speed)*18000
@@ -852,7 +941,7 @@ class Model:
         source_sb=self.donor_field(sb)
         connection=np.clip(source_sb/np.maximum(self.donor_field(mu),100),0,1)
         origin=self.surface_activity/np.maximum(self.activity,1e-9)
-        lost=np.clip(origin-connection,0,1)*(~self.land)
+        lost=np.clip(origin-connection,0,1)*(1-self.land_cover)
         # A genuinely fresh warm donor brings ITS energy over an exhausted
         # receiver at the leading edge. Do not subtract both columns' debts.
         adjusted=fed_cape-lost*np.maximum(fed_cape-source_sb,0)
@@ -883,6 +972,48 @@ class Model:
         return ((self.air<.2)&(self.cold<1)&(buoyancy_work<10)
                 &(self.cape_deficit<.35*np.maximum(self.cape_capacity,1)))
 
+    def frontal_initiation_permission(self):
+        """An advancing material front can initiate independently of a warm pulse.
+
+        No CAPE or condensate is supplied here. The caller still applies the
+        actual parcel LFC/CIN and available-energy tests. A uniform cold air
+        mass, a stalled front, or a spent convective wake has no permission.
+        """
+        if not self.astra_updates:return np.zeros(self.shape)
+        ay,ax=np.gradient(self.air,self.dx)
+        transition=np.clip(np.hypot(ax,ay)*72000,0,1)
+        advancing=np.clip((self.front_advance-.15)/.5,0,1)
+        unused=(self.cape_deficit<.65*np.maximum(self.cape_capacity,1))
+        unprocessed=(self.cold<1)&(G*self.cold_content/295<10)
+        corridor=(self.air>.015)&(self.air<.85)
+        return transition*advancing*corridor*unused*unprocessed
+
+    def reconsider_genesis(self):
+        """A later warm-sector episode needs new, actually favourable air.
+
+        No per-day episode quota, no timed CAPE recovery and no wake reset.
+        Recheck at sounding cadence after the earlier episode has finished;
+        do not plant a second origin alongside its still-active mother line.
+        """
+        self.next_genesis_check=self.time+1800
+        finished=(self.genesis_closed or self.synoptic.genesis_center is None
+                  or self.time>=self.synoptic.genesis_start+self.synoptic.genesis_duration)
+        if not finished:return False
+        ongoing=(self.air<.2)&(self.activity>.1)&(self.last_rate>1)
+        if ongoing.any():return False
+        self.genesis_closed=True
+        required=np.maximum(self.mu_lfc-Z[self.mu['start_index']],0)
+        eligible=(self.fresh_initiation_air()&(self.available_cape(self.mu['cape'])>750)
+                  &(self.mu['cin']>-75)&(required<2000)&(self.background_w>.005))
+        if np.count_nonzero(eligible)*self.dx**2<max(2500e6,4*self.dx**2):
+            self.synoptic.genesis_center=None
+            return False
+        self.synoptic.configure_genesis(self.available_cape(self.mu['cape']),self.mu['cin'],self.mu_lfc,self.h,
+            fresh=eligible,episode=self.synoptic.episode_index+1,now=self.time)
+        if self.synoptic.genesis_center is None:return False
+        self.genesis_closed=False;self.genesis_started=False
+        return True
+
     def trigger_perturbation(self,gust_lift):
         fluctuation=140*self.cfg['stochastic']*np.clip(self.cell_noise,-2,2)*(1-self.wake_fraction())
         if self.astra_updates:
@@ -890,39 +1021,70 @@ class Model:
             fluctuation*=forcing*100/140
         return fluctuation
 
+    def convective_head_edge(self,gradient,head_depth):
+        """A filtered pressure gradient is not an already arrived cold head.
+
+        Thin numerical tails may sense the neighbouring head, but cannot
+        instantly apply its full lifting work a grid cell ahead. Recover full
+        contact at a resolution-aware fraction of the actual head volume.
+        Only plume coupling changes; no cold air or radar water is erased.
+        """
+        edge=np.clip(gradient/np.maximum(head_depth,100)*25000,0,1)
+        if not self.astra_updates:return edge
+        # A coarse finite-volume cell mixes the head with considerably more
+        # warm air. Use its actual occupied volume, but do not impose the
+        # fine-grid 15% threshold on a 28-km averaged head. Empty cells still
+        # do no work: this is not permission to jump ahead of the current.
+        occupancy=np.clip(.15*12000/self.dx,.05,.15)
+        contact=np.sqrt(np.clip(self.cold_depth/np.maximum(head_depth,30)/occupancy,0,1))
+        return edge*contact
+
     def warm_inflow(self,nx,ny,edge,balance):
         """Locate actual unprocessed air immediately ahead of an outflow.
 
         A coarse cell straddles cold downdraft and warm ascending inflow.
         Triggering both with the cold cell's sounding prevented regeneration.
-        Donors are REAL grid columns, normally at most 12 km away; on the
-        coarse Sol grid use its nearest available neighbouring column.
-        Rounding a half-cell offset otherwise always picked the cold cell
-        itself and silently disabled warm-side regeneration. Their water is
-        explicitly debited; no virtual warm parcel or synthetic rain is added.
-        Terrain differences >= 500 m prevent this subgrid exchange.
+        Donors are REAL columns along the outward normal. Try the nearest
+        column first, then at most two cells (12 km on a 6-km grid). A mature
+        finite-volume head can straddle two coarse cells: a fixed 12-km
+        lookup then samples its own numerical cold tail indefinitely. Never
+        skip an intervening ridge or an increasing cold-pressure peak. Shared
+        donor air/water are explicitly debited, not copied per receiver.
+
+        RKW balance controls subsequent lifting/work and organization, not
+        whether this real warm column exists. Vetoing the donor here as well
+        made oblique bow links fall back to their cold receiver's sounding,
+        before their finite mechanical displacement could be evaluated.
+        Positive storm-relative inflow and descendant lineage are still
+        checked by the caller; finding a donor cannot initiate a plume.
         """
-        y,x=np.indices(self.shape);distance=min(2.,max(1.,12000/self.dx))
-        yy=np.clip(np.rint(y+ny*distance).astype(int),0,self.shape[0]-1)
-        xx=np.clip(np.rint(x+nx*distance).astype(int),0,self.shape[1]-1)
-        donors=yy*self.shape[1]+xx
+        y,x=np.indices(self.shape);distance=1.
         available=self.available_cape(self.mu['cape'])
-        cape=available.ravel()[donors]
-        warmer=self.temp[0].ravel()[donors]>self.temp[0]+.2
-        usable=(edge>.08)&(balance>.03)&(cape>150)&(warmer|(cape>available+100))
         head=maximum_filter(self.cold_content,size=3,mode='nearest')
-        ahead=self.cold_content.ravel()[donors]<.35*np.maximum(head,1)
-        donor_depth=self.cold_depth.ravel()[donors]
-        donor_cold=self.cold_content.ravel()[donors]/np.maximum(donor_depth,30)
-        ahead&=(donor_depth<100)|(donor_cold<.5)
-        # Temperature soundings and density-current interfaces are not advected
-        # identically in this reduced model. Require an actual low-buoyancy
-        # warm-side donor, never another processed patch INSIDE the cold pool.
-        usable&=ahead
-        usable|=((edge>.08)&(balance>.03)&(cape>150)&ahead
-                  &(self.cold_content>self.cold_content.ravel()[donors]+100))
-        usable&=np.abs(self.h.ravel()[donors]-self.h)<500
-        return np.where(usable,donors,y*self.shape[1]+x),usable
+        donors=y*self.shape[1]+x;usable=np.zeros(self.shape,dtype=bool)
+        for reach in sorted({distance,2.}):
+            yy=np.clip(np.rint(y+ny*reach).astype(int),0,self.shape[0]-1)
+            xx=np.clip(np.rint(x+nx*reach).astype(int),0,self.shape[1]-1)
+            candidate=yy*self.shape[1]+xx
+            cape=available.ravel()[candidate]
+            content=self.cold_content.ravel()[candidate]
+            depth=self.cold_depth.ravel()[candidate]
+            cold=content/np.maximum(depth,30)
+            ahead=(content<.35*np.maximum(head,1))&((depth<100)|(cold<.5))
+            warmer=self.temp[0].ravel()[candidate]>self.temp[0]+.2
+            valid=(edge>.08)&(cape>150)&ahead
+            valid&=warmer|(cape>available+100)|(self.cold_content>content+100)
+            valid&=np.abs(self.h.ravel()[candidate]-self.h)<500
+            if reach>distance:
+                my=np.clip(np.rint(y+ny*distance).astype(int),0,self.shape[0]-1)
+                mx=np.clip(np.rint(x+nx*distance).astype(int),0,self.shape[1]-1)
+                mid=my*self.shape[1]+mx
+                middle=self.cold_content.ravel()[mid]
+                valid&=(middle<=self.cold_content+1e-6)&(content<=middle+1e-6)
+                valid&=np.abs(self.h.ravel()[mid]-self.h)<500
+            donors=np.where(valid&~usable,candidate,donors)
+            usable|=valid
+        return donors,usable
 
     def donor_field(self,a):
         return np.asarray(a).reshape((-1,self.lon.size))[:,self.donors.ravel()].reshape(a.shape)
@@ -969,11 +1131,44 @@ class Model:
             # Without this coherence factor weak normal projections sustained
             # one huge arc just as readily as the principal downshear head.
             alignment=normal/np.maximum(np.hypot(du,dv),1e-9)
-            # Normal shear is already projected once above. Do not square
-            # BOTH terms and then square them again in pressure work: that
-            # eliminated viable oblique heads in most random environments.
-            balance*=alignment**2
+            # Normal shear already reduces the circulation term above.
+            # Raising alignment to 2.5 as well starved the weak connections
+            # between bows, preventing one coherent regenerating boundary.
+            # One additional projection retains flank preference without
+            # suppressing all realistically oblique warm-side inflow.
+            balance*=alignment
         return balance
+
+    def mature_genesis_line(self,mature):
+        """Do not terminate the mother confluence after just one small bow.
+
+        A few mature grid cells met the old area-only test, especially in
+        Sol, before neighbouring thermals could join the same boundary. The
+        finite meridional confluence needs an established connected span;
+        fresh-air/energy restrictions and the finite episode end still apply.
+        This diagnoses closure only and never adds activity or cold water.
+        """
+        from scipy.ndimage import label
+        components,count=label(mature,structure=np.ones((3,3)))
+        # Extending the initiating footprint must not proportionally extend
+        # its rear anchoring after a mature shared boundary is established.
+        required=max(2*self.dx,1.5*min(self.synoptic.genesis_half_length,190000))
+        for component in range(1,count+1):
+            y,_=np.nonzero(components==component)
+            if len(y)*self.dx**2>1000e6 and (np.ptp(y)+1)*self.dx>=required:
+                return True
+        # Segmented rain shafts may already share ONE actual density current.
+        # Waiting for a pixel-perfect narrow head bridge keeps the mother
+        # confluence alive far behind a travelling line and anchors huge curls.
+        # Diagnose its established span using cold-air membership, not radar
+        # dilation; sparse isolated bows cannot close the release window.
+        pools,_=label((self.cold_depth>100)&(self.cold>.5)&(self.air<.1),structure=np.ones((3,3)))
+        for ident in np.unique(pools[mature]):
+            if not ident:continue
+            y,_=np.nonzero(mature&(pools==ident));span=np.ptp(y)+1
+            if (len(y)*self.dx**2>1000e6 and span*self.dx>=required
+                    and len(np.unique(y))/span>=.55):return True
+        return False
 
     def gust_activation(self,content,depth,edge,balance,source_height,cin):
         # RKW's nearly upright leading jet retains momentum ABOVE the head.
@@ -981,9 +1176,18 @@ class Model:
         # Requiring the head itself to touch the LFC killed regenerating lines
         # even when that actual work exceeds the parcel's diagnosed CIN.
         reach=np.exp(-source_height/np.maximum(2*depth,150))
-        work=G*content/295*(edge*reach)**2*balance
+        # Contact/occupied AREA is not a per-parcel velocity reduction.
+        # Squaring edge before comparing with CIN suppressed the actual
+        # pressure work twice in partially occupied heads and weak bow links.
+        # First test one contacted parcel against its real inhibition, then
+        # weight the activated fraction by actual contact. A dry numerical
+        # tail (edge=0), missing inflow or inadequate work still cannot fire.
+        work=G*content/295*reach**2*balance
         barrier=np.maximum(-cin,0)
-        return np.clip((work-barrier)/np.maximum(50,.5*work),0,1)
+        if not self.astra_updates:
+            work*=edge**2
+            return np.clip((work-barrier)/np.maximum(50,.5*work),0,1)
+        return np.clip(edge,0,1)*np.clip((work-barrier)/np.maximum(50,.5*work),0,1)
 
     def debit_plumes(self,cloud_gain,dt,u=None,v=None,air_flux=None,vapor_gain=None,source_inflow=None):
         """Share one donor reservoir safely among all receiving plumes."""
@@ -1081,13 +1285,22 @@ class Model:
         envelope=np.minimum(.55,(base+.72*self.organization)*cell_area*factor)
         return envelope*np.clip(self.activity,0,1)
 
-    def organized_coverage(self,base,updraft,inflow,depth,activation,support,efficiency,feeding,cell_area=1.):
+    def organized_coverage(self,base,updraft,inflow,depth,activation,support,efficiency,feeding,cell_area=1.,supply_depth=None):
         if not self.astra_updates:return base
         # An established density-current head supplies a finite horizontal
         # air flux H*V/dx. New columns must not each wait through a second
         # arbitrary updraft spin-up while an organized line crosses them.
-        through_head=np.maximum(inflow,0)*np.clip(depth,0,1500)/self.dx
-        active=through_head*np.minimum(1,self.organization*cell_area)*activation*feeding
+        # Once a pressure head can lift a real parcel, its overturning inflow
+        # includes the diagnosed moist source layer, not just the thin cold
+        # volume at the leading numerical edge. Using that tail's H as the
+        # whole supply depth throttled strong cores to drizzle-like fluxes.
+        capture=depth if supply_depth is None else np.maximum(depth,supply_depth)
+        through_head=np.maximum(inflow,0)*np.clip(capture,0,2200)/self.dx
+        # Organization diagnoses a coherent boundary, not a second occupied
+        # cloud-area fraction. Mature heads may turn the finite incoming air
+        # flux upward; weak/unformed heads still spin up continuously.
+        coherent=np.clip(self.organization/.2,0,1)*np.minimum(cell_area,1)
+        active=through_head*coherent*activation*feeding
         return np.maximum(base,np.minimum(.55,active/np.maximum(updraft,1)))
 
     def cell_variability(self):
@@ -1098,28 +1311,55 @@ class Model:
         and evaporative cold-pool supply; the links remain weaker but real.
         No seed forces a particular bow position, track or storm lifetime.
         """
-        sigma=.95*self.cfg['stochastic']
+        sigma=.65*self.cfg['stochastic']
         # This dimensionless unresolved-cluster process must retain its
         # prescribed statistical strength. Passive-scalar interpolation was
         # diffusing it into almost uniform mass flux, making a smooth giant
         # bow. Normalize the stochastic PROCESS, never rain/radar/temperature.
         # Unit mean prevents this correction from raising mean potential
         # coverage; actual shared donor budgets/area limits still apply.
-        anomaly=self.cell_noise-float(self.cell_noise.mean())
+        # Cluster variability belongs to embedded segments, not one broad
+        # 100--200 km lobe. Scalar advection preferentially erased the small
+        # scales; re-normalizing the remaining broad mode then amplified an
+        # entire giant bow. Remove only that stochastic long-wave component.
+        # Environmental CAPE/winds and prognostic cold/rain fields are intact.
+        anomaly=self.cell_noise-gaussian_filter(self.cell_noise,max(1,34/self.cfg['grid_km']))
         spread=float(anomaly.std())
         if sigma==0 or spread<1e-6:return np.ones(self.shape)
         factor=np.exp(sigma*np.clip(anomaly/spread,-2.5,2.5))
         return factor/float(factor.mean())
 
-    def head_inflow(self,cell_u,cell_v,cold_u,cold_v,u,v,nx,ny):
-        source_u=self.donor_field(np.take_along_axis(u,self.mu['start_index'][None],axis=0)[0])
-        source_v=self.donor_field(np.take_along_axis(v,self.mu['start_index'][None],axis=0)[0])
+    def source_inflow_layer(self,u,v):
+        """Mass-weighted REAL donor layer, not a friction-slowed ground wind.
+
+        The same finite moist layer is later debited by debit_plumes. An
+        elevated source uses its own layer; no fictitious surface moisture
+        or independently chosen extra air reservoir is supplied here.
+        """
+        supply,mass=self.plume_reservoir()
+        weights=np.where(supply,self.mass,0)
+        layer_u=np.sum(u*weights,axis=0)/np.maximum(mass,1)
+        layer_v=np.sum(v*weights,axis=0)/np.maximum(mass,1)
+        density=np.take_along_axis(self.mass/DZ[:,None,None],self.mu['start_index'][None],axis=0)[0]
+        depth=mass/np.maximum(density,.1)
+        return self.donor_field(layer_u),self.donor_field(layer_v),self.donor_field(depth)
+
+    def head_inflow(self,cell_u,cell_v,cold_u,cold_v,u,v,nx,ny,layer=None):
+        if not self.astra_updates:
+            su=self.donor_field(np.take_along_axis(u,self.mu['start_index'][None],axis=0)[0])
+            sv=self.donor_field(np.take_along_axis(v,self.mu['start_index'][None],axis=0)[0])
+            return np.maximum((cell_u-su)*nx+(cell_v-sv)*ny,(cold_u-su)*nx+(cold_v-sv)*ny)
+        source_u,source_v,_=self.source_inflow_layer(u,v) if layer is None else layer
         # Use an actual storm/material reference frame. Adding sqrt(g Q)
         # AGAIN to an already accelerated outflow manufactured fresh inflow
         # around the whole huge arc, including receding flanks.
         cells=(cell_u-source_u)*nx+(cell_v-source_v)*ny
         current=(cold_u-source_u)*nx+(cold_v-source_v)*ny
-        return np.maximum(cells,current)
+        # Expansion of the pool alone is NOT an independent warm inflow.
+        # In particular, the northern flank of an eastward system may be
+        # overtaken by the southerly source-layer jet. It cannot keep making
+        # new deep plumes merely because cold material also spreads north.
+        return np.where(cells>1e-6,np.maximum(cells,current),0)
 
     def downdraft_momentum(self,evaporation,dt):
         """Precipitation/evaporation work and conservative downward mixing.
@@ -1232,6 +1472,15 @@ class Model:
         # finite spin-up but let a translating, already coherent head persist.
         return np.clip(3*depth/np.maximum(speed*balance,1),120,900)
 
+    def evolve_head_organization(self,dt,target,depth,speed,balance):
+        # Updated physics already carried this memory on the density-current
+        # flux. Advecting it AGAIN with surface wind stranded coherent lift
+        # behind the leading head and restarted every connecting column.
+        if not self.astra_updates:
+            self.organization=advect(self.organization,self.u,self.v,dt,self.dx,boundary=0)
+        tau=np.where(target>self.organization,self.organization_timescale(depth,speed,balance),5400)
+        self.organization=np.clip(self.organization+(target-self.organization)*dt/tau,0,1)
+
     def accrete_cloud(self,dt):
         density=self.mass/DZ[:,None,None]
         occupied=np.clip(self.rain_area/np.maximum(self.plume_rain,1e-15),.01,1)
@@ -1259,8 +1508,8 @@ class Model:
         advancing=np.clip(mean/3,0,1)
         self.front_advance=advancing
         frontal=4*self.air*(1-self.air)
-        depth=1000*(1-frontal)+frontal*(150+550*advancing)
-        self.ascent_depth=3500*(1-frontal)+frontal*(450+1350*advancing)
+        depth=1000*(1-frontal)+frontal*(150+1250*advancing)
+        self.ascent_depth=3500*(1-frontal)+frontal*(450+2550*advancing)
         self.w=np.clip(1000*(convergence-syn_convergence)+depth*syn_convergence
                        +uphill*.12+trough_ascent,-.4,.8)
         self.background_w=np.clip(depth*syn_convergence+uphill*.12+trough_ascent,-.4,.8)
@@ -1268,13 +1517,45 @@ class Model:
         n=np.sqrt(np.maximum(G*(theta[4]-theta[1])/(np.maximum(theta[1],200)*(Z[4]-Z[1])),0))
         return 1/7200+frontal*(1-advancing)*n
 
+    def synoptic_adjustment_rate(self):
+        """Pressure-flow response must resolve an advancing frontal passage.
+
+        A fixed two-hour relaxation blurred a 30--60-minute confluence
+        impulse after lee acceleration. Use the diagnosed 18-km pressure
+        transition crossing time, not artificial CAPE or vertical forcing.
+        A stationary boundary gets no additional moving-front response.
+        """
+        _,permission=self.synoptic.genesis(self.time)
+        external=self.synoptic.external_air()
+        transition=np.maximum(4*self.air*(1-self.air),4*external*(1-external))
+        passage=np.maximum(self.synoptic.speed(self.time),0)[None]/18000
+        frontal=np.minimum(transition*passage,1/900)
+        return 1/7200+permission/1800+frontal
+
     def outflow_origin(self,u,v):
         """Source geometry for NEW ice; old ice carries its own origin.
 
-        A mature cold-pool edge sets the outward normal. Before an edge exists,
-        use the environmental cloud-layer/inflow shear, not a map direction.
+        The cloud/inflow shear sets front-to-rear export, not the normal of
+        each curved surface-pressure flank. The latter rotated southern ice
+        into the along-line flow and stranded its rear weak-echo reservoir.
+        Convective lifting still uses the actual local cold-head pressure.
         """
-        head=gaussian_filter(self.cold_content,max(.5,6/self.cfg['grid_km']))
+        if self.astra_updates:
+            cu,cv=self.storm_motion(u,v)
+            cloud_u,cloud_v=self.steering(u,v)
+            x=cloud_u-u[4];y=cloud_v-v[4]
+            length=np.maximum(np.hypot(x,y),1e-9)
+            nx=x/length;ny=y/length
+            energy=self.plume_cape(self.donor_field(self.mu['cape']))
+            # A finite bulk circulation calibration, not an imposed western
+            # echo mask. Only newly detrained CONVECTIVE ice receives it;
+            # no available source energy means no added rear circulation.
+            # Existing ice retains its transported origin moments and still
+            # falls, sublimates, aggregates and melts from its actual water.
+            speed=np.minimum(35,np.sqrt(2*np.maximum(energy,0))*.45)
+            return nx,ny,cu*nx+cv*ny-speed
+        # Retain the historical reference branch for old-model comparisons.
+        head=self.cold_head_pressure()
         hy,hx=np.gradient(head,self.dx);gradient=np.hypot(hx,hy)
         edge=np.clip(gradient/np.maximum(self.cold_depth,100)*25000,0,1)
         weight=self.activity*(.2+self.organization)*edge
@@ -1283,13 +1564,25 @@ class Model:
         nx=gaussian_filter(-hx/np.maximum(gradient,1e-10)*weight,scale)/np.maximum(norm,1e-9)
         ny=gaussian_filter(-hy/np.maximum(gradient,1e-10)*weight,scale)/np.maximum(norm,1e-9)
         coherence=np.hypot(nx,ny);nx/=np.maximum(coherence,1e-9);ny/=np.maximum(coherence,1e-9)
-        cu,cv=self.steering(u,v)
-        fallback_x=cu-u[4];fallback_y=cv-v[4]
+        cu,cv=self.storm_motion(u,v)
+        # A deliberately slower storm PATTERN is not its undamped cloud-layer
+        # wind. Subtracting a fast LLJ from the damped pattern could reverse
+        # the birth normal and send the first detrained ice AHEAD of the line.
+        cloud_u,cloud_v=self.steering(u,v)
+        fallback_x=cloud_u-u[4];fallback_y=cloud_v-v[4]
         fallback_norm=np.hypot(fallback_x,fallback_y)
         has_edge=(norm>1e-4)&(coherence>.25)
         nx=np.where(has_edge,nx,fallback_x/np.maximum(fallback_norm,1e-9))
         ny=np.where(has_edge,ny,fallback_y/np.maximum(fallback_norm,1e-9))
-        rear_speed=np.minimum(12,np.sqrt(2*np.maximum(self.mu['cape'],0))*.12)
+        # Storm-relative rearward export was too slow compared with the
+        # fall/aggregation time: almost all ice melted under the narrow head.
+        # Only new CONVECTIVE ice carries this finite circulation; ambient
+        # frontal cloud and old, already-carried source moments stay intact.
+        # A regenerating plume uses its actual WARM DONOR, not the exhausted
+        # cold column beneath its updraft. Local CAPE often vanishes there;
+        # using it shut down rear export precisely in a mature squall line.
+        source_energy=self.plume_cape(self.donor_field(self.mu['cape']))
+        rear_speed=np.minimum(20,np.sqrt(2*np.maximum(source_energy,0))*.25)
         return nx,ny,cu*nx+cv*ny-rear_speed
 
     def anvil_winds(self,u,v):
@@ -1338,7 +1631,11 @@ class Model:
         # Differential-settling collisions decrease crystal number while
         # conserving ice mass. A bulk width / collection efficiency, not an
         # age-based echo fade or a universal measured particle distribution.
-        kernel=4*math.pi*radius**2*(.3*self.ice_fall_speed())*.3
+        # Sticking is efficient near the dendritic growth zone, not uniformly
+        # in the very cold upper anvil. Constant efficiency rapidly converted
+        # its entire small-crystal population into fast-falling near-head snow.
+        sticking=.3*np.exp(-((self.temp-258.15)/12)**2)
+        kernel=4*math.pi*radius**2*(.3*self.ice_fall_speed())*sticking
         self.anvil_number/=1+.5*dt*kernel*density*self.anvil_number
 
     def graupel_fall_speed(self):
@@ -1363,8 +1660,12 @@ class Model:
         # Cold dense cores also grow precipitating aggregates: limiting the
         # fast reservoir to liquid riming parked most deep-plume condensate
         # in slow cloud ice, delaying rain into a huge, weak trailing shield.
-        aggregation=.65*np.exp(-((self.temp-250)/25)**2)*loading/(loading+2e-4)
-        precipitating=1-(1-rime_fraction)*(1-aggregation)
+        # Unrimed ice must first enter the transported ice/NUMBER reservoir.
+        # The old instantaneous aggregation split put most fresh upper ice
+        # straight into fast graupel, bypassing crystal number evolution for
+        # that fraction before any rearward transport. Unrimed ice now uses
+        # the explicit number/aggregation/fallout pathway after detrainment.
+        precipitating=rime_fraction
         rimed=detrain*plume_share*precipitating
         self.graupel+=rimed;self.graupel_area+=rimed*cover
         self.plume_cloud_area*=1-detrain*plume_share/np.maximum(self.plume_cloud,1e-15)
@@ -1522,13 +1823,9 @@ class Model:
         if self.astra_updates and int(self.time//86400)>self.convective_day:
             self.convective_day=int(self.time//86400)
             self.diagnostics()
-            # A new weather episode is allowed on the following day, not a
-            # second line rebuilt inside yesterday's still-exhausted wake.
-            # Never refill CAPE, erase cold water or reset the actual air mass.
-            fresh=self.fresh_initiation_air()
-            self.synoptic.configure_genesis(self.available_cape(self.mu['cape']),self.mu['cin'],self.mu_lfc,self.h,
-                                            fresh=fresh,episode=self.convective_day)
-            self.genesis_closed=False;self.genesis_started=False
+            self.next_genesis_check=min(self.next_genesis_check,self.time)
+        if self.astra_updates and self.time>=self.next_genesis_check:
+            self.reconsider_genesis()
         c=self.cfg;u,v=self.winds()
         upstream_temp,upstream_q=self.upstream_environment()
         au,av=self.anvil_winds(u,v) if np.any(self.anvil) else (u,v)
@@ -1536,7 +1833,8 @@ class Model:
         dt=min(90.,.45*self.dx/fastest)
         # Hit physical forcing events exactly. Display/snapshot intervals must
         # not change when a seeded perturbation is drawn or a parcel refreshed.
-        for event in [self.next_noise,self.next_cell_noise,self.next_day_noise,self.next_diagnostic,self.next_rain_history]:
+        for event in [self.next_noise,self.next_cell_noise,self.next_day_noise,self.next_diagnostic,self.next_rain_history,
+                      *([self.next_genesis_check] if self.astra_updates else [])]:
             if event>self.time+1e-6:dt=min(dt,event-self.time)
         if until is not None: dt=min(dt,until-self.time)
         if dt<=1e-8:return
@@ -1547,7 +1845,7 @@ class Model:
             self.next_noise=self.time+900
         if self.time>=self.next_cell_noise:
             alpha=math.exp(-300/1200)
-            self.cell_noise=alpha*self.cell_noise+math.sqrt(1-alpha*alpha)*correlated(self.rngs[4],self.shape,max(1,28/c['grid_km']))
+            self.cell_noise=alpha*self.cell_noise+math.sqrt(1-alpha*alpha)*correlated(self.rngs[4],self.shape,max(1,14/c['grid_km']))
             self.next_cell_noise=self.time+300
         if self.time>=self.next_day_noise:
             alpha=math.exp(-21600/86400)
@@ -1623,7 +1921,7 @@ class Model:
         surface_heat,exchange,target=self.surface_exchange(dt,solar,sun)
         self.recover_cold_pool(dt,surface_heat+.61*self.temp[0]*exchange,solar)
         self.temp[0]+=self.noise*c['stochastic']*.08*dt/3600
-        self.temp,self.q=mix_boundary_layer(self.temp,self.q,self.p,self.mass,u,v,dt,solar,self.land)
+        self.temp,self.q=mix_boundary_layer(self.temp,self.q,self.p,self.mass,u,v,dt,solar,self.land_cover)
         self.recover_cape_budget(surface_heat*self.mass[0],exchange*self.mass[0],self.surface_cape_connection(u,v))
         # The Bay trough stays west of the domain; only the independent
         # northern disturbance travels with its own phase speed.
@@ -1663,8 +1961,7 @@ class Model:
             # A 25-km mesoscale confluence adjusts faster than the regional
             # reservoir. Two successive 2-h relaxations previously filtered
             # the finite impulse away before parcels could approach the LFC.
-            _,permission=self.synoptic.genesis(self.time)
-            adjustment=adjustment+permission/1800
+            adjustment=self.synoptic_adjustment_rate()
         self.syn_u=syn_adv(su,dt)+dt*((ug-su)*adjustment+f*(sv-vg)-G*np.gradient(frontal_head,self.dx,axis=-1))
         self.syn_v=syn_adv(sv,dt)+dt*((vg-sv)*adjustment-f*(su-ug)-G*np.gradient(frontal_head,self.dx,axis=-2))
         syn_drag=1+dt/21600*(smooth_h/1500)**2
@@ -1683,7 +1980,7 @@ class Model:
         syn_convergence=-(np.gradient(self.syn_u,self.dx,axis=-1)+np.gradient(self.syn_v,self.dx,axis=-2))
         uphill=self.u*np.gradient(smooth_h,self.dx,axis=-1)+self.v*np.gradient(smooth_h,self.dx,axis=-2)
         self.temp-=G/CP*uphill[None]*.12*dt*np.exp(-Z[:,None,None]/1500)
-        thermal=.22*np.sqrt(np.maximum(target-self.temp[0],0))*solar*self.land
+        thermal=.22*np.sqrt(np.maximum(target-self.temp[0],0))*solar*self.land_cover
         # Synoptic ascent downstream of the southern trough; coherent forcing
         # evolves with the trough, it is NOT an imposed precipitation stripe.
         trough_ascent=.08*c['trough']*np.exp(-((self.lon-self.trough_lon-.8)/1.0)**2)
@@ -1709,21 +2006,31 @@ class Model:
         # is set by the pressure head BEHIND that edge, not by tail depth.
         # Using grad(temperature deficit) missed edges of an isothermal pool
         # with variable thickness and stopped regeneration altogether.
-        head=gaussian_filter(self.cold_content,max(.5,6/c['grid_km']))
+        head=self.cold_head_pressure()
         cy,cx=np.gradient(head,self.dx)
         grad=np.hypot(cx,cy);nx=-cx/np.maximum(grad,1e-10);ny=-cy/np.maximum(grad,1e-10)
+        if self.astra_updates:
+            nx,ny=self.cold_head_normal(head)
+            # Share the boundary's DIRECTION between neighbouring shafts,
+            # but retain the resolved head's actual pressure slope for its
+            # contact/lifting strength. Broadening both quantities erased
+            # thin connecting heads while leaving the big cores intact.
+            resolved=gaussian_filter(self.cold_content,max(.5,6/c['grid_km']))
+            gy,gx=np.gradient(resolved,self.dx)
+            grad=np.hypot(gx,gy)
         head_depth=maximum_filter(self.cold_depth,size=3,mode='nearest')
         head_content=maximum_filter(self.cold_content,size=3,mode='nearest')
         # Sign matters: shear aids lifting on the downshear flank, not equally
         # on both sides of every outflow (abs() spuriously made circular rings).
-        self.donors,_=self.warm_inflow(nx,ny,np.clip(grad/np.maximum(head_depth,100)*25000,0,1),np.ones(self.shape))
+        self.donors,_=self.warm_inflow(nx,ny,self.convective_head_edge(grad,head_depth),np.ones(self.shape))
         shear_u,shear_v=self.environmental_shear(u,v,head_depth)
         density_speed=np.sqrt(2*G*head_content/295)
         balance=self.cold_head_balance(density_speed,shear_u,shear_v,nx,ny)
-        edge=np.clip(grad/np.maximum(head_depth,100)*25000,0,1)
+        edge=self.convective_head_edge(grad,head_depth)
         self.donors,feeding=self.warm_inflow(nx,ny,edge,balance)
-        cell_u,cell_v=self.steering(u,v)
-        approach=self.head_inflow(cell_u,cell_v,cold_u,cold_v,u,v,nx,ny)
+        cell_u,cell_v=self.storm_motion(u,v)
+        inflow_layer=self.source_inflow_layer(u,v)
+        approach=self.head_inflow(cell_u,cell_v,cold_u,cold_v,u,v,nx,ny,layer=inflow_layer)
         if self.astra_updates:
             feeding&=approach>0
             # Only descendants of the existing episode may regenerate. A
@@ -1777,16 +2084,15 @@ class Model:
         elevated=np.clip((elevated_lift-displacement)/500,0,1)*(self.available_cape(self.mu['cape'])>150)*(self.mu['start_index']>0)
         elevated*=np.exp(self.mu['cin']/np.maximum(40+elevated_lift*.12,1))
         if self.astra_updates:
-            # One mother system per episode, not one for the whole 72 hours.
-            # No autonomous second initiation site in the same spent wake;
-            # real fresh-air cold-head regeneration remains unrestricted by
-            # the genesis footprint. Resolved frontal/stratiform rain is NOT
-            # gated and no existing condensate/radar field is erased.
+            # The finite mother-system window gates only WARM-sector origin.
+            # An independently advancing material front must not be disabled
+            # simply because that earlier window closed hours beforehand.
             _,permission=self.synoptic.genesis(self.time)
             if self.genesis_closed:permission=np.zeros(self.shape)
             permission*=self.fresh_initiation_air()
-            activation*=permission;elevated*=permission
-            if np.any(np.maximum(activation,elevated)>.1):self.genesis_started=True
+            if np.any(np.maximum(activation,elevated)*permission>.1):self.genesis_started=True
+            allowed=np.maximum(permission,self.frontal_initiation_permission())
+            activation*=allowed;elevated*=allowed
             # Organization alone can be a weak, dry outflow. Closing the
             # finite pressure episode then stranded inhibited parcels before
             # a rain-producing, self-regenerating mother system existed.
@@ -1794,7 +2100,7 @@ class Model:
             # This measures the narrow regenerating HEAD, not the entire
             # storm's area. Requiring 3000 km2 of head kept the old origin
             # firing after a mature line had already left it behind.
-            if self.genesis_started and (np.count_nonzero(mature)*self.dx**2>1000e6
+            if self.genesis_started and (self.mature_genesis_line(mature)
                     or self.time>self.synoptic.genesis_start+self.synoptic.genesis_duration):
                 self.genesis_closed=True
         target_activity=np.maximum(np.maximum(activation,elevated),fed_activation)
@@ -1819,7 +2125,6 @@ class Model:
         # Organization is a prognostic edge memory, not a storm object or a
         # fixed lifetime. Convergence and balanced outflow expand the fraction
         # occupied by plumes; drying or lost lifting makes it decay again.
-        self.organization=advect(self.organization,self.u,self.v,dt,self.dx,boundary=0)
         if not self.astra_updates:
             source_u=self.donor_field(np.take_along_axis(u,self.mu['start_index'][None],axis=0)[0])
             source_v=self.donor_field(np.take_along_axis(v,self.mu['start_index'][None],axis=0)[0])
@@ -1828,13 +2133,12 @@ class Model:
         # when a grid's surface convergence estimate momentarily changes sign.
         organized_target=edge*balance*np.clip(approach/8,0,1)*feeding
         if not self.astra_updates:organized_target*=support*efficiency
-        tau=np.where(organized_target>self.organization,self.organization_timescale(head_depth,density_speed,balance),5400)
-        self.organization=np.clip(self.organization+(organized_target-self.organization)*dt/tau,0,1)
+        self.evolve_head_organization(dt,organized_target,head_depth,density_speed,balance)
         cell_area=self.cell_variability() if self.astra_updates else np.exp(.45*c['stochastic']*np.clip(self.cell_noise,-2.5,2.5))
         self.plume_fraction=self.plume_coverage(support,cell_area,efficiency)
         updraft=np.minimum(35,np.sqrt(2*self.plume_cape(fed_cape))*.32)
         self.plume_fraction=self.organized_coverage(self.plume_fraction,updraft,approach,
-            head_depth,target_activity,support,efficiency,feeding,cell_area)
+            head_depth,target_activity,support,efficiency,feeding,cell_area,supply_depth=inflow_layer[2])
         wprofile=self.resolved_ascent(u,v)
         # Resolved column exchange only. The dedicated plume closure below
         # already withdraws convective moisture from the source reservoir;
@@ -1959,7 +2263,10 @@ class Model:
         self.surface_rain.advance(self.time+dt,dt,convective_fallen,np.maximum(falling-convective_fallen,0),fraction,
                                   velocity=(cell_u,cell_v),dx=self.dx)
         self.time+=dt;self.steps+=1
-        if self.astra_updates:self.synoptic.advance(dt,self.time-dt,self.syn_u,self.syn_v)
+        if self.astra_updates:
+            self.synoptic.advance(dt,self.time-dt,self.syn_u,self.syn_v)
+            if self.genesis_started:
+                self.synoptic.advect_genesis(dt,self.time-dt,cell_u,cell_v)
         self.gust_peak=max(self.gust_peak,float(self.surface_gust().max()))
         self.meanwind_peak=max(self.meanwind_peak,float(np.hypot(self.u,self.v).max()))
         if self.time>=self.next_rain_history-1e-6:

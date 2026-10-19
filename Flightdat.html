@@ -1,0 +1,1290 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Flightdat · 航班精选 · 深中气象</title>
+<meta name="description" content="五机场 FR24 航班精选：深圳宝安、北京首都、上海浦东、广州白云、香港。支持宽体客机、彩绘、外航、四发机、货机和公务机筛选，每两小时尝试更新快照。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
+<style>
+:root{
+  --bg:#f4f6fb;
+  --panel:#ffffff;
+  --panel-soft:#f8fafc;
+  --line:rgba(15,23,42,.10);
+  --line-soft:rgba(15,23,42,.06);
+  --text:#0f172a;
+  --muted:#5b6b82;
+  --dim:#8a99ad;
+  --cyan:#0891b2;
+  --blue:#2563eb;
+  --violet:#7c3aed;
+  --pink:#db2777;
+  --amber:#d97706;
+  --green:#059669;
+  --red:#dc2626;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"SF Pro SC","PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;
+  --topbar-h:73px;
+  --shadow:0 1px 2px rgba(15,23,42,.04),0 14px 34px -26px rgba(15,23,42,.45);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  min-height:100vh;background:var(--bg);color:var(--text);
+  font-family:var(--sans);font-size:14px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;color-scheme:light;
+}
+.bg,.grid{position:fixed;inset:0;pointer-events:none}
+.bg{z-index:-2;background:
+  radial-gradient(900px 520px at 10% -12%,rgba(8,145,178,.10),transparent 62%),
+  radial-gradient(760px 460px at 92% -8%,rgba(124,58,237,.08),transparent 60%),
+  radial-gradient(900px 700px at 50% 115%,rgba(37,99,235,.05),transparent 62%),
+  linear-gradient(#f7f9fd,#eef2f9);}
+.grid{z-index:-1;opacity:.55;background-image:
+  linear-gradient(rgba(15,23,42,.045) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(15,23,42,.045) 1px,transparent 1px);
+  background-size:58px 58px;
+  -webkit-mask-image:radial-gradient(circle at 50% 20%,#000 0%,transparent 78%);
+  mask-image:radial-gradient(circle at 50% 20%,#000 0%,transparent 78%);}
+
+.wrap{max-width:1580px;margin:0 auto;padding:0 22px 40px}
+
+.topbar{
+  position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;
+  gap:18px;padding:14px 22px;margin:0 -22px 18px;
+  background:rgba(255,255,255,.86);backdrop-filter:blur(18px) saturate(150%);
+  -webkit-backdrop-filter:blur(18px) saturate(150%);
+  border-bottom:1px solid var(--line);
+}
+.brand{display:flex;align-items:center;gap:13px;min-width:0}
+.site-nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.site-nav a{padding:7px 12px;border-radius:9px;color:#526279;text-decoration:none;font-size:12px;background:#ffffffb8;border:1px solid var(--line)}
+.site-nav a:hover,.site-nav a[aria-current="page"]{color:#0e7490;background:#ecfeff;border-color:#a5dce7}
+.site-nav a:focus-visible,.btn:focus-visible{outline:3px solid #67c5da;outline-offset:3px}
+.logo{
+  width:44px;height:44px;flex:none;border-radius:13px;display:grid;place-items:center;
+  background:linear-gradient(145deg,#e6f9fd,#eef2ff);
+  border:1px solid rgba(8,145,178,.22);
+  box-shadow:0 10px 24px -16px rgba(8,145,178,.65),inset 0 1px 0 #fff;
+}
+.logo svg{width:24px;height:24px;fill:var(--cyan);filter:drop-shadow(0 2px 4px rgba(8,145,178,.28))}
+.brand h1{font-size:19px;font-weight:750;letter-spacing:.2px;display:flex;align-items:baseline;gap:9px;white-space:nowrap;color:#0b1220}
+.brand h1 .iata{font-family:var(--mono);color:var(--cyan)}
+.brand h1 .cn{font-size:14px;font-weight:500;color:#475569}
+.brand p{font-size:10px;letter-spacing:.22em;color:var(--dim);font-family:var(--mono);margin-top:2px}
+.top-right{display:flex;align-items:center;gap:14px;flex:none}
+.live{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--green)}
+.live .pulse{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(5,150,105,.55);animation:pulse 2.2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(5,150,105,.45)}70%{box-shadow:0 0 0 9px rgba(5,150,105,0)}100%{box-shadow:0 0 0 0 rgba(5,150,105,0)}}
+.clock{font-family:var(--mono);font-size:13px;color:#475569;letter-spacing:.06em;min-width:82px;text-align:right}
+.btn{
+  display:inline-flex;align-items:center;gap:7px;cursor:pointer;border:1px solid rgba(8,145,178,.32);
+  background:#ffffff;color:#0e7490;font-family:var(--sans);font-size:12.5px;font-weight:650;
+  padding:9px 15px;border-radius:10px;transition:.18s;white-space:nowrap;text-decoration:none;
+  box-shadow:0 1px 2px rgba(15,23,42,.05);
+}
+.btn:hover{background:#ecfeff;border-color:rgba(8,145,178,.5);transform:translateY(-1px);box-shadow:0 8px 20px -14px rgba(8,145,178,.8)}
+.btn:active{transform:translateY(0)}
+.btn[disabled]{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none}
+.btn svg{width:13px;height:13px;fill:currentColor}
+.btn.spin svg{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.statusbar{
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px 26px;padding:12px 16px;margin-bottom:16px;
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);
+}
+.statusbar .item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);white-space:nowrap}
+.statusbar .item b{color:#1e293b;font-family:var(--mono);font-weight:650;font-size:12.5px}
+.statusbar .item .tag{
+  font-size:10px;padding:2px 7px;border-radius:6px;background:rgba(8,145,178,.08);
+  color:#0e7490;border:1px solid rgba(8,145,178,.18);font-family:var(--mono);letter-spacing:.06em;
+}
+.countdown{font-family:var(--mono);color:var(--cyan);font-size:12.5px;letter-spacing:.05em}
+.cycle{flex:1 1 180px;min-width:140px;height:5px;border-radius:99px;background:#e7edf5;overflow:hidden}
+.cycle i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--cyan),#6366f1);transition:width 1s linear}
+.status-msg{display:none;align-items:center;gap:8px;font-size:12px;color:var(--amber)}
+.status-msg.show{display:flex}
+.status-msg .mini-spin{width:11px;height:11px;border:2px solid rgba(217,119,6,.25);border-top-color:var(--amber);border-radius:50%;animation:spin .8s linear infinite}
+
+.alert{display:none;align-items:flex-start;gap:10px;margin-bottom:14px;padding:11px 15px;border-radius:12px;font-size:12.5px;line-height:1.6;border:1px solid}
+.alert.show{display:flex}
+.alert.warn{color:#92400e;background:#fffbeb;border-color:#fde68a}
+.alert.bad{color:#991b1b;background:#fef2f2;border-color:#fecaca}
+.alert .ic{flex:none;font-size:14px;line-height:1.4}
+
+.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:16px}
+.stat{
+  position:relative;overflow:hidden;cursor:pointer;text-align:left;
+  padding:15px 16px 14px;border-radius:14px;border:1px solid var(--line);
+  background:var(--panel);transition:.2s;font-family:inherit;color:inherit;
+  box-shadow:0 1px 2px rgba(15,23,42,.03);
+}
+.stat::after{content:"";position:absolute;left:0;top:0;height:3px;width:100%;background:var(--c,var(--cyan));opacity:.85}
+.stat:hover{transform:translateY(-2px);border-color:rgba(15,23,42,.16);box-shadow:var(--shadow)}
+.stat.active{border-color:color-mix(in srgb,var(--c,var(--cyan)) 45%,transparent);box-shadow:0 0 0 2px color-mix(in srgb,var(--c,var(--cyan)) 18%,transparent),var(--shadow)}
+.stat .label{display:block;font-size:11.5px;color:var(--muted);letter-spacing:.04em}
+.stat .value{display:block;font-family:var(--mono);font-size:27px;font-weight:750;line-height:1.2;margin-top:4px;color:var(--c,var(--cyan))}
+.stat .sub{display:block;font-size:10.5px;color:var(--dim);margin-top:3px;letter-spacing:.02em}
+.stat .bar{display:block;height:3px;border-radius:99px;background:#eef2f7;margin-top:10px;overflow:hidden}
+.stat .bar b{display:block;height:100%;width:0;border-radius:99px;background:var(--c,var(--cyan));opacity:.85;transition:width .55s cubic-bezier(.2,.8,.2,1)}
+
+.toolbar{
+  display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:12px;margin-bottom:14px;
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);
+}
+.toolbar-main{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.toolbar-tools{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:10px}
+.toolbar-tools .search{flex:0 1 280px}
+.toolbar-info{flex:1 1 auto;display:flex;align-items:center;gap:6px;min-height:32px;font-size:11.5px;color:var(--dim);flex-wrap:wrap}
+.toolbar-info b{color:#334155;font-family:var(--mono);font-weight:650}
+.toolbar-info .sep{opacity:.4}
+
+.airport-pick{position:relative;flex:none}
+.airport-pick select{
+  appearance:none;-webkit-appearance:none;cursor:pointer;
+  padding:8px 30px 8px 12px;border-radius:10px;
+  border:1px solid rgba(8,145,178,.28);background:#ecfeff;color:#0e7490;
+  font-family:inherit;font-size:12.5px;font-weight:650;outline:none;transition:.16s;
+}
+.airport-pick select:hover{border-color:rgba(8,145,178,.5);background:#e0f7fb}
+.airport-pick select:focus{border-color:rgba(8,145,178,.55);box-shadow:0 0 0 3px rgba(8,145,178,.10)}
+.airport-pick::after{content:"▾";position:absolute;right:11px;top:50%;transform:translateY(-50%);color:#0e7490;font-size:10px;pointer-events:none}
+
+.segmented{display:flex;padding:3px;background:#f1f5f9;border:1px solid var(--line);border-radius:10px}
+.segmented button{
+  border:0;background:transparent;color:var(--muted);font-family:inherit;font-size:12.5px;font-weight:600;
+  padding:7px 14px;border-radius:8px;cursor:pointer;transition:.16s;white-space:nowrap;
+}
+.segmented button:hover{color:#0f172a}
+.segmented button.on{background:#fff;color:#0e7490;box-shadow:0 1px 3px rgba(15,23,42,.12),0 0 0 1px rgba(8,145,178,.18)}
+.chips{display:flex;flex-wrap:wrap;gap:7px;flex:1}
+.chip{
+  display:inline-flex;align-items:center;gap:6px;cursor:pointer;
+  border:1px solid var(--line);background:#fff;color:var(--muted);
+  font-family:inherit;font-size:12px;font-weight:500;padding:6px 11px;border-radius:99px;transition:.16s;white-space:nowrap;
+}
+.chip:hover{border-color:rgba(15,23,42,.22);color:#0f172a}
+.chip.on{background:#ecfeff;border-color:rgba(8,145,178,.42);color:#0e7490}
+.chip .n{font-family:var(--mono);font-size:10.5px;opacity:.9;padding:1px 5px;border-radius:5px;background:rgba(15,23,42,.06)}
+.chip[data-chip="livery"].on{background:#fdf2f8;border-color:#f9a8d4;color:#be185d}
+.chip[data-chip="heavy"].on, .chip[data-chip="heavies"].on{background:#fffbeb;border-color:#fde68a;color:#b45309}
+.chip[data-chip="rare"].on{background:#fffbeb;border-color:#fde68a;color:#b45309}
+.chip[data-chip="cargo"].on{background:#f5f3ff;border-color:#ddd6fe;color:#6d28d9}
+.chip[data-chip="bizjet"].on{background:#ecfdf5;border-color:#a7f3d0;color:#047857}
+.chip[data-chip="widebody"].on{background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8}
+.chip[data-chip="livery_foreign"].on{background:#fdf2f8;border-color:#f9a8d4;color:#be185d}
+.chip[data-chip="four"].on{background:#fffbeb;border-color:#fde68a;color:#b45309}
+
+.search{position:relative;flex:0 1 260px;min-width:180px}
+.search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:14px;height:14px;fill:var(--dim)}
+.search input{
+  width:100%;padding:9px 34px 9px 33px;border-radius:10px;border:1px solid var(--line);
+  background:#fff;color:var(--text);font-family:inherit;font-size:12.5px;outline:none;transition:.16s;
+}
+.search input::placeholder{color:var(--dim)}
+.search input:focus{border-color:rgba(8,145,178,.45);box-shadow:0 0 0 3px rgba(8,145,178,.10)}
+.search .clear{
+  position:absolute;right:6px;top:50%;transform:translateY(-50%);
+  width:22px;height:22px;border:0;border-radius:6px;background:#f1f5f9;
+  color:#64748b;font-size:11px;line-height:1;cursor:pointer;display:grid;place-items:center;
+}
+.search .clear:hover{background:#e2e8f0;color:#0f172a}
+.search .clear[hidden]{display:none}
+
+.sort{position:relative;flex:none}
+.sort select{
+  appearance:none;-webkit-appearance:none;cursor:pointer;
+  padding:8px 28px 8px 12px;border-radius:10px;border:1px solid var(--line);
+  background:#fff;color:#334155;font-family:inherit;font-size:12px;outline:none;transition:.16s;
+}
+.sort select:hover{border-color:rgba(15,23,42,.22)}
+.sort select:focus{border-color:rgba(8,145,178,.45);box-shadow:0 0 0 3px rgba(8,145,178,.10)}
+.sort::after{content:"▾";position:absolute;right:11px;top:50%;transform:translateY(-50%);color:var(--dim);font-size:10px;pointer-events:none}
+
+.switch{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);cursor:pointer;user-select:none;white-space:nowrap}
+.switch input{display:none}
+.switch .track{width:34px;height:19px;border-radius:99px;background:#e2e8f0;position:relative;transition:.2s}
+.switch .track::after{content:"";position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(15,23,42,.25);transition:.2s}
+.switch input:checked + .track{background:#0891b2}
+.switch input:checked + .track::after{transform:translateX(15px)}
+
+.board{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+.head-row,.row{
+  display:grid;align-items:center;gap:16px;padding:17px 20px;
+  grid-template-columns:90px 108px minmax(132px,1fr) minmax(150px,1.15fr) 86px 104px 82px minmax(96px,.8fr) 206px;
+  grid-template-areas:"time flight airline route type reg status tags photo";
+}
+.head-row{
+  position:sticky;top:var(--topbar-h);z-index:20;
+  font-size:10.5px;letter-spacing:.13em;color:#7c8ba1;text-transform:uppercase;
+  border-bottom:1px solid var(--line);border-radius:16px 16px 0 0;
+  background:rgba(248,250,252,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+}
+.row:last-child{border-radius:0 0 16px 16px}
+.row{position:relative;border-bottom:1px solid var(--line-soft);transition:background .16s;animation:rowIn .3s ease both;background:#fff}
+.row:hover{background:#f7fbff}
+.row::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent;transition:.2s}
+.row.hit-livery::before{background:linear-gradient(180deg,var(--pink),var(--violet))}
+.row.hit-widebody::before{background:linear-gradient(180deg,var(--blue),var(--cyan))}
+.row.hit-rare::before{background:linear-gradient(180deg,var(--amber),#ea580c)}
+.row.hit-heavy::before{background:linear-gradient(180deg,#f59e0b,#e11d48)}
+.row.hit-bizjet::before{background:linear-gradient(180deg,var(--green),var(--cyan))}
+.row.hit-cargo::before{background:linear-gradient(180deg,var(--violet),#6366f1)}
+.row.hit-foreign::before{background:linear-gradient(180deg,#2563eb,#0891b2)}
+.row.hit-four::before{background:linear-gradient(180deg,#f59e0b,#e11d48)}
+.row.hit-livery{background:linear-gradient(90deg,rgba(219,39,119,.045),transparent 38%)}
+.row.is-past{opacity:.72}
+@keyframes rowIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+.cell{min-width:0}
+.cell.time{grid-area:time}
+.cell.flight{grid-area:flight}
+.cell.airline{grid-area:airline}
+.cell.route{grid-area:route}
+.cell.type{grid-area:type}
+.cell.reg{grid-area:reg}
+.cell.status{grid-area:status}
+.cell.tags{grid-area:tags;display:flex;flex-wrap:wrap;gap:5px;justify-content:flex-end}
+.cell.photo{grid-area:photo;display:flex;justify-content:flex-end}
+
+.time .t{font-family:var(--mono);font-size:16px;font-weight:650;color:#0f172a;letter-spacing:.02em;font-variant-numeric:tabular-nums}
+.time .d{display:block;font-size:10.5px;color:var(--dim);font-family:var(--mono);margin-top:2px}
+.time .d.late{color:var(--amber)}
+.time .d.early{color:var(--green)}
+.time .day{color:var(--violet)}
+
+.flight .f{font-family:var(--mono);font-size:14.5px;font-weight:750;letter-spacing:.03em;color:#0b1220}
+.flight .c{display:block;font-size:10px;color:var(--dim);font-family:var(--mono);letter-spacing:.1em;margin-top:2px}
+
+.airline .a{font-size:13.5px;font-weight:650;color:#1e293b;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.airline .a .flag{font-size:10px;color:var(--dim);font-family:var(--mono);margin-left:6px;font-weight:400}
+.airline .lv{display:flex;align-items:center;gap:5px;font-size:10.5px;color:#be185d;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.airline .en{display:block;font-size:10.5px;color:var(--dim);margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.route{display:flex;align-items:center;gap:8px;font-size:12.5px;color:#334155;min-width:0}
+.route .pt{display:flex;flex-direction:column;min-width:0;line-height:1.25}
+.route .pt .city{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.route .pt .code{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--dim)}
+.route .arw{flex:none;color:#94a3b8;font-size:12px;display:flex;align-items:center;gap:3px}
+.route .arw svg{width:12px;height:12px;fill:currentColor;opacity:.9}
+.route .home{color:#0e7490;font-weight:650}
+.route .home .code{color:rgba(14,116,144,.7)}
+
+.type .tc{font-family:var(--mono);font-size:12.5px;font-weight:650;color:#334155;letter-spacing:.04em}
+.type .tf{display:block;font-size:10px;color:var(--dim);margin-top:2px}
+
+.reg .r{
+  display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.05em;color:#334155;
+  padding:3px 7px;border-radius:5px;background:#f1f5f9;border:1px solid #e2e8f0;
+}
+.reg .r.none{color:var(--dim);background:transparent;border-style:dashed;border-color:#e2e8f0}
+
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:4px 9px;border-radius:99px;border:1px solid transparent;white-space:nowrap}
+.pill::before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.9}
+.pill.ok{color:#047857;background:#ecfdf5;border-color:#a7f3d0}
+.pill.info{color:#0369a1;background:#f0f9ff;border-color:#bae6fd}
+.pill.warn{color:#b45309;background:#fffbeb;border-color:#fde68a}
+.pill.bad{color:#b91c1c;background:#fef2f2;border-color:#fecaca}
+.pill.muted{color:#64748b;background:#f8fafc;border-color:#e2e8f0}
+
+.badge{font-size:9.5px;font-weight:700;letter-spacing:.08em;padding:2.5px 6px;border-radius:5px;border:1px solid transparent;white-space:nowrap;line-height:1.35}
+.badge.livery{color:#be185d;background:#fdf2f8;border-color:#fbcfe8}
+.badge.widebody{color:#1d4ed8;background:#eff6ff;border-color:#bfdbfe}
+.badge.rare{color:#b45309;background:#fffbeb;border-color:#fde68a}
+.badge.heavy{color:#b45309;background:#fffbeb;border-color:#fde68a}
+.badge.cargo{color:#6d28d9;background:#f5f3ff;border-color:#ddd6fe}
+.badge.bizjet{color:#047857;background:#ecfdf5;border-color:#a7f3d0}
+.badge.foreign{color:#1d4ed8;background:#eff6ff;border-color:#bfdbfe}
+.badge.four{color:#b45309;background:#fffbeb;border-color:#fde68a}
+.badge.hist{color:#64748b;background:#f8fafc;border-color:#e2e8f0}
+
+.photo-thumb{
+  position:relative;display:block;width:200px;height:112px;flex:none;border-radius:12px;overflow:hidden;
+  background:#eef2f7;border:1px solid #e2e8f0;transition:.2s;
+}
+.photo-thumb img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .35s ease}
+.photo-thumb:hover{border-color:#bae6fd;box-shadow:0 8px 20px -14px rgba(8,145,178,.6)}
+.photo-thumb:hover img{transform:scale(1.05)}
+.photo-thumb .credit{
+  position:absolute;left:0;right:0;bottom:0;padding:4px 7px;font-size:9.5px;letter-spacing:.02em;
+  color:#fff;background:linear-gradient(transparent,rgba(2,6,23,.72));
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.photo-thumb.empty{
+  display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:10.5px;
+  background:repeating-linear-gradient(45deg,#f8fafc,#f8fafc 6px,#f1f5f9 6px,#f1f5f9 12px);
+  border-style:dashed;
+}
+
+.placeholder{padding:70px 20px;text-align:center;color:var(--muted)}
+.placeholder .ico{font-size:34px;opacity:.6;margin-bottom:10px}
+.placeholder h3{font-size:15px;color:#1e293b;font-weight:650;margin-bottom:6px}
+.placeholder p{font-size:12px;color:var(--dim);max-width:460px;margin:0 auto;line-height:1.7}
+.placeholder a{color:var(--cyan)}
+.skeleton{padding:18px}
+.sk-row{height:52px;border-radius:9px;margin-bottom:9px;background:linear-gradient(90deg,#f1f5f9 25%,#e8eef5 37%,#f1f5f9 63%);background-size:400% 100%;animation:shimmer 1.5s infinite}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
+
+.now-divider{
+  display:flex;align-items:center;gap:9px;padding:6px 18px;
+  background:linear-gradient(90deg,rgba(8,145,178,.07),rgba(8,145,178,0) 55%);
+  border-top:1px solid rgba(8,145,178,.2);border-bottom:1px solid rgba(8,145,178,.08);
+}
+.now-divider .dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 0 3px rgba(8,145,178,.15);flex:none}
+.now-divider span{font-size:10px;letter-spacing:.16em;color:#0e7490;font-family:var(--mono);text-transform:uppercase;white-space:nowrap}
+.now-divider i{flex:1;height:1px;background:linear-gradient(90deg,rgba(8,145,178,.3),transparent)}
+
+.link-btn{border:0;background:transparent;color:var(--cyan);font-family:inherit;font-size:11.5px;cursor:pointer;padding:2px 4px;border-radius:5px;font-weight:500}
+.link-btn:hover{text-decoration:underline}
+.link-btn[hidden]{display:none}
+
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translate(-50%,24px);z-index:60;opacity:0;pointer-events:none;
+  display:flex;align-items:center;gap:9px;padding:11px 18px;border-radius:12px;
+  background:#fff;border:1px solid rgba(8,145,178,.3);color:#0f172a;font-size:12.5px;
+  box-shadow:0 18px 44px -16px rgba(15,23,42,.35);transition:.28s cubic-bezier(.2,.9,.3,1);max-width:90vw;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast.err{border-color:rgba(220,38,38,.35);color:#991b1b}
+.toast .dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);flex:none}
+.toast.err .dot{background:var(--red)}
+
+.to-top{
+  position:fixed;right:22px;bottom:22px;z-index:40;width:40px;height:40px;border-radius:12px;
+  border:1px solid var(--line);background:#fff;color:#0e7490;font-size:16px;cursor:pointer;
+  opacity:0;pointer-events:none;transform:translateY(10px);transition:.22s;
+  box-shadow:0 12px 30px -14px rgba(15,23,42,.4);
+}
+.to-top.show{opacity:1;pointer-events:auto;transform:none}
+.to-top:hover{background:#ecfeff;border-color:#a5f3fc}
+
+footer{
+  margin-top:22px;padding:16px 4px 0;border-top:1px solid var(--line);
+  display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between;font-size:11px;color:var(--dim);
+}
+footer a{color:#64748b;text-decoration:none;border-bottom:1px dotted rgba(100,116,139,.45)}
+footer a:hover{color:var(--cyan)}
+footer .mono{font-family:var(--mono);letter-spacing:.03em}
+
+@media(max-width:1240px){
+  .head-row,.row{grid-template-columns:84px 100px minmax(118px,1fr) minmax(136px,1.05fr) 82px 94px 78px minmax(86px,.75fr) 172px;gap:13px;padding:14px 16px}
+  .stats{grid-template-columns:repeat(6,1fr);gap:9px}
+  .stat{padding:13px 12px}
+  .stat .value{font-size:23px}
+  .photo-thumb{width:172px;height:97px}
+}
+@media(max-width:1020px){
+  .head-row{display:none}
+  .row{
+    grid-template-columns:1fr auto;gap:8px 12px;padding:13px 16px;
+    grid-template-areas:
+      "time status"
+      "flight photo"
+      "airline airline"
+      "route route"
+      "type reg"
+      "tags tags";
+  }
+  .cell.tags{justify-content:flex-start}
+  .cell.flight{display:flex;align-items:baseline;gap:9px}
+  .flight .c{margin-top:0}
+  .cell.photo{align-self:center}
+  .photo-thumb{width:144px;height:81px}
+  .stats{grid-template-columns:repeat(3,1fr)}
+  .brand h1{font-size:16px}
+  .brand h1 .cn{font-size:12px}
+  .clock{display:none}
+  .search{flex:1 1 100%;order:9}
+}
+@media(max-width:760px){
+  .toolbar{gap:8px;padding:10px}
+  .toolbar-main{flex-direction:column;align-items:stretch;gap:8px}
+  .airport-pick select{width:100%}
+  .segmented{flex:1 1 100%}
+  .segmented button{flex:1;padding:7px 8px}
+  .chips{flex:1 1 100%;gap:6px}
+  .chip{font-size:11.5px;padding:5px 9px}
+  .toolbar-tools{justify-content:stretch;gap:8px}
+  .toolbar-info{flex:1 1 100%;min-height:auto}
+  .toolbar-tools .search{flex:1 1 100%;min-width:0;order:9}
+  .toolbar-tools .sort{flex:1 1 calc(50% - 4px)}
+  .sort select{width:100%}
+  .statusbar .item{font-size:11.5px}
+}
+@media(max-width:560px){
+  :root{--topbar-h:61px}
+  .wrap{padding:0 12px 30px}
+  .topbar{padding:11px 12px;margin:0 -12px 14px}
+  .topbar{flex-wrap:wrap;gap:10px}
+  .top-right{margin-left:auto}
+  .brand p{display:none}
+  .brand h1{font-size:15px}
+  .logo{width:38px;height:38px;border-radius:11px}
+  .live span.t{display:none}
+  .btn{padding:8px 11px;font-size:12px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .statusbar{gap:8px 16px;padding:11px 13px}
+  .statusbar .item:nth-child(4){display:none}
+  .cycle{display:none}
+  .photo-thumb{width:120px;height:68px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+
+</style>
+<link rel="stylesheet" href="assets/styles/flightdata.css?v=1.1.0">
+</head>
+<body>
+<div class="bg"></div><div class="grid"></div>
+
+<div class="wrap">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">
+        <svg viewBox="0 0 24 24"><path d="M21.5 15.5v-2l-8-4.5V3.2a1.5 1.5 0 0 0-3 0v5.8l-8 4.5v2l8-2.5v4.6l-2.2 1.6v1.6l3.7-1.1 3.7 1.1v-1.6L13.5 17.6V13l8 2.5Z"/></svg>
+      </div>
+      <div>
+        <h1>Flightdat <span class="wordmark-label">航班精选</span></h1>
+        <p class="airport-name"><span class="iata" id="brandIata">SZX</span><span id="brandName">深圳宝安国际机场</span></p>
+      </div>
+    </div>
+    <div class="top-right">
+      <div class="live"><span class="pulse"></span><span class="t">SNAPSHOT</span></div>
+      <div class="clock" id="clock">--:--:--</div>
+      <button class="btn" id="btnReload" title="重新读取最新数据">
+        <svg viewBox="0 0 24 24"><path d="M12 5V2L8 6l4 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7Z"/></svg>
+        <span>重新载入</span>
+      </button>
+    </div>
+  </header>
+
+  <nav class="site-nav" aria-label="网站导航">
+    <a href="index.html">← 返回首页</a>
+    <a href="forecast.html">一周天气</a>
+    <a href="warnings.html">预警</a>
+    <a href="simulator.html">StormSim Astra</a>
+    <a href="simulator-sol.html">StormSim Sol</a>
+    <a href="Flightdat.html" aria-current="page">Flightdat 航班精选</a>
+  </nav>
+
+  <section class="statusbar">
+    <div class="item">最后成功 <b id="lastUpdate">--:--:--</b></div>
+    <div class="item">下次预计 <b id="nextUpdate">--:--</b> <span class="countdown" id="countdown">--:--:--</span></div>
+    <div class="item">更新方式 <span class="tag" id="freqTag">GH ACTIONS · 2H</span></div>
+    <div class="item">覆盖时段 <span class="tag" id="windowTag">--</span></div>
+    <div class="cycle"><i id="cycleBar"></i></div>
+    <div class="status-msg" id="statusMsg"><span class="mini-spin"></span><span id="statusText">正在载入…</span></div>
+  </section>
+
+  <div class="alert" id="alert"><span class="ic" id="alertIcon">⚠️</span><span id="alertText"></span></div>
+
+  <section class="stats">
+    <button class="stat" data-chip="featured" style="--c:#0891b2">
+      <span class="label">精选航班</span><b class="value" id="s-total">--</b><span class="sub">宽体 · 彩绘 · 外航 · 特殊机型</span>
+      <i class="bar"><b id="b-all"></b></i>
+    </button>
+    <button class="stat" data-chip="livery_foreign" style="--c:#db2777">
+      <span class="label">彩绘 · 外航</span><b class="value" id="s-livery-foreign">--</b><span class="sub">特殊涂装 + 外国航司</span>
+      <i class="bar"><b id="b-livery-foreign"></b></i>
+    </button>
+    <button class="stat" data-chip="widebody" style="--c:#6366c6">
+      <span class="label">宽体机</span><b class="value" id="s-widebody">--</b><span class="sub">含普通国内宽体客机</span>
+      <i class="bar"><b id="b-widebody"></b></i>
+    </button>
+    <button class="stat" data-chip="four" style="--c:#d97706">
+      <span class="label">四发</span><b class="value" id="s-four">--</b><span class="sub">747 / A340 / A380</span>
+      <i class="bar"><b id="b-four"></b></i>
+    </button>
+    <button class="stat" data-chip="cargo" style="--c:#6d28d9">
+      <span class="label">货机</span><b class="value" id="s-cargo">--</b><span class="sub">货运航班</span>
+      <i class="bar"><b id="b-cargo"></b></i>
+    </button>
+    <button class="stat" data-chip="bizjet" style="--c:#059669">
+      <span class="label">公务机</span><b class="value" id="s-bizjet">--</b><span class="sub">仅统计 FR24 收录的</span>
+      <i class="bar"><b id="b-bizjet"></b></i>
+    </button>
+  </section>
+
+  <section class="toolbar">
+    <div class="toolbar-main">
+    <div class="airport-pick">
+      <select id="airportSel" aria-label="选择机场"></select>
+    </div>
+    <div class="segmented" id="boardSeg">
+      <button data-board="all" class="on">全部</button>
+      <button data-board="arrivals">到达</button>
+      <button data-board="departures">出发</button>
+    </div>
+    <div class="chips" id="chips">
+      <button class="chip on" data-chip="featured">全部展示 <span class="n" id="c-featured">0</span></button>
+      <button class="chip" data-chip="widebody">宽体机 <span class="n" id="c-widebody">0</span></button>
+      <button class="chip" data-chip="livery_foreign">彩绘·外航 <span class="n" id="c-livery-foreign">0</span></button>
+      <button class="chip" data-chip="special">特殊机型 <span class="n" id="c-special">0</span></button>
+      <button class="chip" data-chip="four">四发 <span class="n" id="c-four">0</span></button>
+      <button class="chip" data-chip="cargo">货机 <span class="n" id="c-cargo">0</span></button>
+      <button class="chip" data-chip="bizjet">公务机 <span class="n" id="c-bizjet">0</span></button>
+    </div>
+    </div>
+    <div class="toolbar-tools">
+    <span class="toolbar-info" id="resultText">正在载入…</span>
+    <button class="link-btn" id="clearFilters" hidden>清除筛选</button>
+    <label class="switch" title="只显示当天 00:00–24:00 的航班（含已结束）">
+      <input type="checkbox" id="todayToggle" checked><span class="track"></span>仅当日
+    </label>
+    <div class="sort" title="排序方式">
+      <select id="sortSel" aria-label="排序方式">
+        <option value="time-asc">时间 ↑</option>
+        <option value="time-desc">时间 ↓</option>
+        <option value="special-first">彩绘 / 特殊优先</option>
+        <option value="airline">按航司</option>
+      </select>
+    </div>
+    <div class="search">
+      <svg viewBox="0 0 24 24"><path d="M10 2a8 8 0 1 0 4.9 14.3l5.4 5.4 1.4-1.4-5.4-5.4A8 8 0 0 0 10 2Zm0 2a6 6 0 1 1 0 12 6 6 0 0 1 0-12Z"/></svg>
+      <input id="search" type="search" placeholder="航班号 / 注册号 / 航司 / 城市" title="按 / 快速聚焦搜索" autocomplete="off" spellcheck="false">
+      <button class="clear" id="searchClear" title="清空搜索" hidden>✕</button>
+    </div>
+    </div>
+  </section>
+
+  <main class="board">
+    <div class="head-row">
+      <div class="cell time">时间</div>
+      <div class="cell flight">航班</div>
+      <div class="cell airline">航空公司</div>
+      <div class="cell route">航线</div>
+      <div class="cell type">机型</div>
+      <div class="cell reg">注册号</div>
+      <div class="cell status">状态</div>
+      <div class="cell tags">标记</div>
+      <div class="cell photo">机型照片</div>
+    </div>
+    <div id="list"><div class="skeleton">
+      <div class="sk-row"></div><div class="sk-row"></div><div class="sk-row"></div>
+      <div class="sk-row"></div><div class="sk-row"></div><div class="sk-row"></div>
+    </div></div>
+  </main>
+
+  <footer>
+    <div>数据来源 <a id="sourceLink" href="https://www.flightradar24.com/data/airports/szx" target="_blank" rel="noopener">FlightRadar24</a> · 机型照片 <a href="https://www.planespotters.net" target="_blank" rel="noopener">PlaneSpotters</a>（版权归摄影师）· 定时快照，非实时航班保障信息</div>
+    <div class="mono">SNAPSHOT <span id="snapTime">--</span> · WINDOW <span id="snapWindow">--</span> · COST <span id="durText">--</span> · <a id="runLink" href="#" target="_blank" rel="noopener">LAST RUN</a></div>
+  </footer>
+</div>
+
+<button class="to-top" id="toTop" title="回到顶部" aria-label="回到顶部">↑</button>
+
+<div class="toast" id="toast"><span class="dot"></span><span id="toastText"></span></div>
+
+<script>
+(() => {
+  "use strict";
+
+  const DATA_BASE = "./flightdata/docs/data/";
+  const INDEX_URL = DATA_BASE + "index.json";
+  const STATUS_URL = DATA_BASE + "status.json";
+  const REPO_URL = "https://github.com/06E-Felicia/06E-Felicia.github.io";
+  let flightRequest = 0;
+  const SKELETON_HTML = '<div class="skeleton">' + '<div class="sk-row"></div>'.repeat(6) + '</div>';
+  const TZ = "Asia/Shanghai";
+
+  const fmtHM = new Intl.DateTimeFormat("zh-CN", { timeZone: TZ, hour: "2-digit", minute: "2-digit", hourCycle: "h23" });
+  const fmtHMS = new Intl.DateTimeFormat("zh-CN", { timeZone: TZ, hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23" });
+  const fmtMD = new Intl.DateTimeFormat("zh-CN", { timeZone: TZ, month: "2-digit", day: "2-digit" });
+
+  const AIRLINE_CN = {
+    "China Southern Airlines": "中国南方航空", "China Southern": "中国南方航空",
+    "Shenzhen Airlines": "深圳航空", "China Eastern Airlines": "中国东方航空",
+    "China Eastern": "中国东方航空", "Air China": "中国国际航空", "Hainan Airlines": "海南航空",
+    "Xiamen Air": "厦门航空", "Spring Airlines": "春秋航空", "Donghai Airlines": "东海航空",
+    "Shanghai Airlines": "上海航空", "Xizang Airlines": "西藏航空", "Tibet Airlines": "西藏航空",
+    "Chengdu Airlines": "成都航空", "Suparna Airlines": "金鹏航空", "OKAir": "奥凯航空",
+    "Shandong Airlines": "山东航空", "Juneyao Air": "吉祥航空", "Loong Air": "长龙航空",
+    "Sichuan Airlines": "四川航空", "Chongqing Airlines": "重庆航空", "Capital Airlines": "首都航空",
+    "Tianjin Airlines": "天津航空", "Hebei Airlines": "河北航空", "Lucky Air": "祥鹏航空",
+    "West Air": "西部航空", "Ruili Airlines": "瑞丽航空", "China United Airlines": "中国联合航空",
+    "9 Air": "九元航空", "Colorful Guizhou Airlines": "多彩贵州航空", "Jiangxi Air": "江西航空",
+    "GX Airlines": "北部湾航空", "Urumqi Air": "乌鲁木齐航空", "Fuzhou Airlines": "福州航空",
+    "Kunming Airlines": "昆明航空", "AirAsia": "亚洲航空", "AirAsia X": "亚洲航空 X",
+    "Thai AirAsia": "泰国亚洲航空", "SF Airlines": "顺丰航空", "YTO Cargo Airlines": "圆通航空",
+    "China Cargo Airlines": "中国货运航空", "DHL": "DHL 货运", "FedEx": "联邦快递", "UPS": "UPS 货运",
+    "Korean Air": "大韩航空", "Asiana Airlines": "韩亚航空", "Cathay Pacific": "国泰航空",
+    "Singapore Airlines": "新加坡航空", "Scoot": "酷航", "Air Macau": "澳门航空",
+    "EVA Air": "长荣航空", "China Airlines": "中华航空", "Vietjet Air": "越捷航空",
+    "Vietnam Airlines": "越南航空", "Philippine Airlines": "菲律宾航空", "Cebu Pacific": "宿务太平洋",
+    "Malaysia Airlines": "马来西亚航空", "Batik Air": "巴迪航空", "Lion Air": "狮航",
+    "Garuda Indonesia": "印尼鹰航", "Japan Airlines": "日本航空", "All Nippon Airways": "全日空",
+    "Peach": "乐桃航空", "Turkish Airlines": "土耳其航空", "Emirates": "阿联酋航空",
+    "Qatar Airways": "卡塔尔航空", "Ethiopian Airlines": "埃塞俄比亚航空", "Aeroflot": "俄罗斯航空",
+    "S7 Airlines": "S7 航空", "Hong Kong Airlines": "香港航空", "HK Express": "香港快运",
+    "Greater Bay Airlines": "大湾区航空", "Jeju Air": "济州航空", "T'way Air": "德威航空",
+    "Air Seoul": "首尔航空", "Jin Air": "真航空", "Cargolux": "卢森堡货运",
+    "Silk Way West Airlines": "丝路西部航空", "Atlas Air": "阿特拉斯航空",
+    "Western Global Airlines": "西方环球航空", "Kalitta Air": "卡利塔航空",
+    "Polar Air Cargo": "博立航空", "Nippon Cargo Airlines": "日本货运航空",
+    "Korean Air Cargo": "大韩航空货运", "Asiana Cargo": "韩亚航空货运",
+    "Turkish Cargo": "土耳其货运", "Ethiopian Cargo": "埃塞俄比亚货运",
+    "Lufthansa Cargo": "汉莎货运", "Cathay Cargo": "国泰货运", "MASkargo": "马来西亚货运",
+    "AirBridgeCargo": "空桥货运",
+    "Private owner": "私人所有", "Private": "私人飞机", "Unknown": "未知",
+    "VistaJet": "维思达公务机", "NetJets": "耐特杰", "Flexjet": "弗莱捷特",
+    "Jet Aviation": "Jet Aviation", "Executive Jet Management": "公务机管理"
+  };
+
+  const CITY_CN = {
+    "Shenzhen": "深圳", "Guangzhou": "广州", "Shanghai": "上海", "Beijing": "北京", "Chengdu": "成都", "Hangzhou": "杭州",
+    "Chongqing": "重庆", "Xi'an": "西安", "Xian": "西安", "Wuhan": "武汉", "Nanjing": "南京",
+    "Changsha": "长沙", "Zhengzhou": "郑州", "Qingdao": "青岛", "Xiamen": "厦门",
+    "Kunming": "昆明", "Sanya": "三亚", "Haikou": "海口", "Tianjin": "天津", "Dalian": "大连",
+    "Harbin": "哈尔滨", "Shenyang": "沈阳", "Jinan": "济南", "Hefei": "合肥", "Fuzhou": "福州",
+    "Nanchang": "南昌", "Guiyang": "贵阳", "Nanning": "南宁", "Lanzhou": "兰州",
+    "Urumqi": "乌鲁木齐", "Yinchuan": "银川", "Xining": "西宁", "Hohhot": "呼和浩特",
+    "Taiyuan": "太原", "Shijiazhuang": "石家庄", "Wenzhou": "温州", "Ningbo": "宁波",
+    "Yiwu": "义乌", "Changzhou": "常州", "Wuxi": "无锡", "Nantong": "南通", "Yangzhou": "扬州",
+    "Linyi": "临沂", "Yantai": "烟台", "Zhuhai": "珠海", "Jieyang": "揭阳", "Zhanjiang": "湛江",
+    "Ganzhou": "赣州", "Yichang": "宜昌", "Mianyang": "绵阳", "Luzhou": "泸州", "Yibin": "宜宾",
+    "Zunyi": "遵义", "Lijiang": "丽江", "Dali": "大理", "Jinghong": "景洪", "Wanzhou": "万州",
+    "Dazhou": "达州", "Baoshan": "保山", "Tengchong": "腾冲", "Diqing": "迪庆", "Xiangyang": "襄阳",
+    "Enshi": "恩施", "Huai'an": "淮安", "Jining": "济宁", "Luoyang": "洛阳", "Weihai": "威海",
+    "Jingdezhen": "景德镇", "Quanzhou": "泉州", "Shantou": "汕头", "Meizhou": "梅州",
+    "Guilin": "桂林", "Changde": "常德", "Zhangjiajie": "张家界", "Hengyang": "衡阳",
+    "Yueyang": "岳阳", "Huangshan": "黄山", "Anqing": "安庆", "Fuyang": "阜阳", "Xuzhou": "徐州",
+    "Lianyungang": "连云港", "Yancheng": "盐城", "Taizhou": "台州", "Quzhou": "衢州",
+    "Zhoushan": "舟山", "Wuyishan": "武夷山", "Sanming": "三明", "Longyan": "龙岩",
+    "Shangrao": "上饶", "Yichun": "宜春", "Aksu": "阿克苏", "Korla": "库尔勒", "Hotan": "和田",
+    "Kashgar": "喀什", "Yining": "伊宁", "Altay": "阿勒泰", "Dunhuang": "敦煌", "Jiayuguan": "嘉峪关",
+    "Hong Kong": "香港", "Macau": "澳门", "Taipei": "台北", "Kaohsiung": "高雄", "Taichung": "台中",
+    "Seoul": "首尔", "Busan": "釜山", "Jeju": "济州", "Tokyo": "东京", "Osaka": "大阪",
+    "Nagoya": "名古屋", "Fukuoka": "福冈", "Sapporo": "札幌", "Okinawa": "冲绳",
+    "Bangkok": "曼谷", "Chiang Mai": "清迈", "Phuket": "普吉", "Krabi": "甲米",
+    "Singapore": "新加坡", "Kuala Lumpur": "吉隆坡", "Jakarta": "雅加达", "Bali": "巴厘岛",
+    "Manila": "马尼拉", "Cebu": "宿务", "Hanoi": "河内", "Ho Chi Minh City": "胡志明市",
+    "Da Nang": "岘港", "Nha Trang": "芽庄", "Phnom Penh": "金边", "Siem Reap": "暹粒",
+    "Yangon": "仰光", "Vientiane": "万象", "Dubai": "迪拜", "Doha": "多哈",
+    "Istanbul": "伊斯坦布尔", "Moscow": "莫斯科", "London": "伦敦", "Paris": "巴黎",
+    "Frankfurt": "法兰克福", "Amsterdam": "阿姆斯特丹", "Sydney": "悉尼", "Melbourne": "墨尔本",
+    "Auckland": "奥克兰", "Los Angeles": "洛杉矶", "New York": "纽约", "San Francisco": "旧金山",
+    "Vancouver": "温哥华", "Toronto": "多伦多", "Brussels": "布鲁塞尔", "Liege": "列日",
+    "Leipzig": "莱比锡", "Anchorage": "安克雷奇", "Bishkek": "比什凯克", "Tashkent": "塔什干"
+  };
+
+  const isFeatured = f => !!(f.is_special_livery || f.is_foreign || f.is_widebody || f.is_four_engine || f.is_cargo || f.is_bizjet);
+  const isSpecialType = f => !!(f.is_four_engine || f.is_cargo || f.is_bizjet);
+  const isLiveryForeign = f => !!(f.is_special_livery || f.is_foreign);
+
+  const CHIP_TEST = {
+    featured: isFeatured,
+    widebody: f => !!f.is_widebody,
+    livery_foreign: isLiveryForeign,
+    special: isSpecialType,
+    four: f => !!f.is_four_engine,
+    cargo: f => !!f.is_cargo,
+    bizjet: f => !!f.is_bizjet
+  };
+
+  const state = {
+    board: "all", chip: "featured", q: "", today: true, sort: "time-asc",
+    airport: "SZX", index: null,
+    data: null, status: null, lastSuccessSeen: null, offline: false
+  };
+
+  const $ = s => document.querySelector(s);
+  const el = {
+    clock: $("#clock"), lastUpdate: $("#lastUpdate"), nextUpdate: $("#nextUpdate"),
+    countdown: $("#countdown"), freqTag: $("#freqTag"), windowTag: $("#windowTag"),
+    cycleBar: $("#cycleBar"), statusMsg: $("#statusMsg"), statusText: $("#statusText"),
+    list: $("#list"), toast: $("#toast"), toastText: $("#toastText"),
+    snapTime: $("#snapTime"), snapWindow: $("#snapWindow"), runLink: $("#runLink"),
+    btnReload: $("#btnReload"), search: $("#search"), todayToggle: $("#todayToggle"),
+    alert: $("#alert"), alertIcon: $("#alertIcon"), alertText: $("#alertText"),
+    sortSel: $("#sortSel"), searchClear: $("#searchClear"), clearFilters: $("#clearFilters"),
+    resultText: $("#resultText"), toTop: $("#toTop"), durText: $("#durText"),
+    brandIata: $("#brandIata"), brandName: $("#brandName"), airportSel: $("#airportSel")
+  };
+
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[c]));
+
+  const pad2 = n => String(n).padStart(2, "0");
+  const fmtTime = ts => ts ? fmtHM.format(new Date(ts * 1000)) : "--:--";
+
+  function fmtStamp(ts, withSeconds = true) {
+    if (!ts) return "--";
+    const d = new Date(ts * 1000);
+    const key = x => new Intl.DateTimeFormat("en-CA", {
+      timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit"
+    }).format(x);
+    const time = withSeconds ? fmtHMS.format(d) : fmtHM.format(d);
+    return key(d) === key(new Date()) ? time : `${fmtMD.format(d).replace("/", "-")} ${time}`;
+  }
+
+  function dayLabel(ts) {
+    if (!ts) return "";
+    const key = d => new Intl.DateTimeFormat("en-CA", {
+      timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit"
+    }).format(d);
+    const d = new Date(ts * 1000);
+    if (key(d) === key(new Date())) return "";
+    return fmtMD.format(d).replace("/", "-");
+  }
+
+  const AIRLINE_CN_LOWER = Object.fromEntries(
+    Object.entries(AIRLINE_CN).map(([k, v]) => [k.toLowerCase(), v])
+  );
+
+  function airlineCN(name) {
+    if (!name) return "";
+    if (AIRLINE_CN[name]) return AIRLINE_CN[name];
+    const stripped = name.replace(/\s*\(.*\)\s*$/, "").trim();
+    return AIRLINE_CN[stripped] || AIRLINE_CN_LOWER[stripped.toLowerCase()] || stripped;
+  }
+
+  const cityCN = n => n ? (CITY_CN[n] || n) : "";
+
+  function toast(msg, isErr = false) {
+    el.toastText.textContent = msg;
+    el.toast.classList.toggle("err", isErr);
+    el.toast.classList.add("show");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => el.toast.classList.remove("show"), 4200);
+  }
+
+  function actionsUrl() {
+    return REPO_URL + "/actions/workflows/flightdata.yml";
+  }
+
+  // ------------------------------ 数据读取（静态 JSON） ------------------------------
+  async function fetchIndex() {
+    let data = null;
+    try {
+      const r = await fetch(INDEX_URL + "?v=" + Date.now(), { cache: "no-store" });
+      if (r.ok) data = await r.json();
+    } catch (e) { /* 离线时回退 */ }
+    if (!data || !Array.isArray(data.airports) || !data.airports.length) {
+      data = {
+        airports: [{ iata: "SZX", icao: "ZGSZ", name: "深圳宝安国际机场", city: "Shenzhen" }],
+        default_airport: "SZX",
+        refresh_hours: 2
+      };
+    }
+    state.index = data;
+    const codes = data.airports.map(a => a.iata);
+    let saved = null;
+    try { saved = localStorage.getItem("fr24-airport"); } catch (e) { saved = null; }
+    state.airport = (saved && codes.includes(saved))
+      ? saved
+      : (codes.includes(data.default_airport) ? data.default_airport : codes[0]);
+    buildAirportSelect();
+  }
+
+  function buildAirportSelect() {
+    const list = state.index?.airports || [];
+    el.airportSel.innerHTML = list.map(a =>
+      `<option value="${esc(a.iata)}">${esc(a.iata)} · ${esc((a.name || "").replace(/国际机场$/, ""))}</option>`
+    ).join("");
+    el.airportSel.value = state.airport;
+  }
+
+  function updateBrand() {
+    const meta = (state.index?.airports || []).find(a => a.iata === state.airport) || {};
+    const dataAirport = state.data?.airport || {};
+    const name = dataAirport.name || meta.name || state.airport;
+    el.brandIata.textContent = state.airport;
+    el.brandName.textContent = name;
+    document.title = `Flightdat · ${state.airport} ${name} · 深中气象`;
+    document.getElementById("sourceLink").href = `https://www.flightradar24.com/data/airports/${state.airport.toLowerCase()}`;
+  }
+
+  async function fetchStatus(silent = true) {
+    try {
+      const r = await fetch(STATUS_URL + "?v=" + Date.now(), { cache: "no-store" });
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      state.status = await r.json();
+      state.offline = false;
+      updateStatusUI();
+      const ap = (state.status.airports || {})[state.airport] || {};
+      const changed = ap.last_success_at &&
+        state.lastSuccessSeen && ap.last_success_at !== state.lastSuccessSeen;
+      if (changed) await fetchData();
+      return true;
+    } catch (e) {
+      state.offline = true;
+      if (!silent) toast("状态文件读取失败", true);
+      updateStatusUI();
+      return false;
+    }
+  }
+
+  async function fetchData() {
+    const airport = state.airport, request = ++flightRequest;
+    try {
+      const r = await fetch(`${DATA_BASE}${airport.toLowerCase()}.json?v=${Date.now()}`, { cache: "no-store" });
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      const j = await r.json();
+      if (!j || !Array.isArray(j.flights)) throw new Error("数据格式异常");
+      if (request !== flightRequest || airport !== state.airport) return false;
+      state.dataError = false;
+      const isNew = state.lastSuccessSeen && j.generated_at !== state.lastSuccessSeen;
+      state.data = j;
+      state.lastSuccessSeen = j.generated_at;
+      updateBrand();
+      render();
+      updateStatusUI();
+      if (isNew) {
+        const s = j.stats || {};
+        toast(`数据已更新 · 彩绘 ${s.livery ?? 0} · 特殊机型 ${s.special ?? 0}`);
+      }
+      return true;
+    } catch (e) {
+      if (request !== flightRequest || airport !== state.airport) return false;
+      state.dataError = true;
+      if (!state.data) showNoData();
+      updateStatusUI();
+      return false;
+    }
+  }
+
+  function showNoData() {
+    const link = actionsUrl();
+    el.list.innerHTML = `<div class="placeholder">
+      <div class="ico">🛰️</div>
+      <h3>还没有可用的航班数据</h3>
+      <p>${esc(state.airport)} 还没有数据：GitHub Actions 尚未完成第一次抓取，或文件还未部署。<br>
+      你可以在 ${link ? `<a href="${link}" target="_blank" rel="noopener">Actions 页面</a>` : "Actions 页面"} 手动触发一次
+      <code>更新航班数据</code>；完成后由现有天气发布工作流部署全站。</p>
+    </div>`;
+  }
+
+  // ------------------------------ 状态栏 ------------------------------
+  function updateStatusUI() {
+    const st = (state.status?.airports || {})[state.airport] || {};
+    const data = state.data || {};
+    const hours = state.index?.refresh_hours || data.refresh_hours || 2;
+    const last = st.last_success_at || data.generated_at;
+
+    const mode = state.status?.updated_by === "local" ? "LOCAL" : "GH ACTIONS";
+    el.freqTag.textContent = `${mode} · ${hours}H`;
+
+    if (last) {
+      el.lastUpdate.textContent = fmtStamp(last);
+      el.snapTime.textContent = fmtStamp(last);
+    }
+    if (data.coverage_from && data.coverage_to) {
+      const span = `${fmtTime(data.coverage_from)}–${fmtTime(data.coverage_to)}`;
+      el.windowTag.textContent = span;
+      el.snapWindow.textContent = span;
+    } else if (data.window_hours) {
+      el.windowTag.textContent = data.window_hours + " H";
+      el.snapWindow.textContent = data.window_hours + "H";
+    }
+    const cost = st.duration_sec ?? data.duration_sec;
+    el.durText.textContent = cost != null ? `${cost}s` : "--";
+
+    const next = last ? last + hours * 3600 : null;
+    if (next) el.nextUpdate.textContent = fmtStamp(next, false);
+
+    const runUrl = state.status?.run_url;
+    const link = runUrl || actionsUrl();
+    if (link) {
+      el.runLink.href = link;
+      el.runLink.textContent = runUrl ? "最近运行 ↗" : "ACTIONS ↗";
+      el.runLink.style.display = "";
+    } else {
+      el.runLink.style.display = "none";
+    }
+
+    // 状态提示
+    el.statusMsg.classList.remove("show");
+    el.alert.classList.remove("show");
+
+    const now = Date.now() / 1000;
+    const age = last ? now - last : null;
+
+    if (state.dataError) {
+      el.alert.className = "alert bad show";
+      el.alertIcon.textContent = "🔌";
+      el.alertText.textContent = state.data
+        ? "最新航班快照读取失败，保留上次已载入的数据。请稍后重新载入。"
+        : "无法读取 flightdata/docs/data/*.json。请上传完整 flightdata 文件夹，保持本站从项目根目录发布；本地请使用 HTTP 预览，不要用 file:// 打开。";
+    } else if (state.offline) {
+      el.alert.className = "alert warn show";
+      el.alertIcon.textContent = "⚠️";
+      el.alertText.textContent = "更新状态暂时无法读取；当前航班为已保存的快照，请核对最后成功时间。";
+    } else if (st.ok === false) {
+      el.alert.className = "alert bad show";
+      el.alertIcon.textContent = "⚠️";
+      el.alertText.textContent = `${state.airport} 最近一次抓取失败：${st.error || "未知错误"}。下面展示的是 ${last ? fmtStamp(last, false) : "上一次"} 成功的数据。`;
+    } else if (age != null && age > hours * 3600 * 1.6) {
+      el.alert.className = "alert warn show";
+      el.alertIcon.textContent = "⏳";
+      el.alertText.textContent = `数据已 ${(age / 3600).toFixed(1)} 小时未更新，可能被 Cloudflare 拦截或定时任务延迟。可在 Actions 页面查看运行日志并手动触发。`;
+    } else if (!state.data) {
+      el.statusMsg.classList.add("show");
+      el.statusText.textContent = "正在载入数据…";
+    }
+
+    if (last && next && next > last) {
+      const p = ((now - last) / (next - last)) * 100;
+      el.cycleBar.style.width = Math.max(0, Math.min(100, p)).toFixed(1) + "%";
+    }
+  }
+
+  function tick() {
+    el.clock.textContent = fmtHMS.format(new Date());
+    const st = (state.status?.airports || {})[state.airport] || {};
+    const hours = state.index?.refresh_hours || state.data?.refresh_hours || 2;
+    const last = st.last_success_at || state.data?.generated_at;
+    if (!last) return;
+    const next = last + hours * 3600;
+    const sec = Math.floor(next - Date.now() / 1000);
+    if (sec <= 0) {
+      el.countdown.textContent = "等待定时任务";
+      el.countdown.style.color = "var(--amber)";
+    } else {
+      const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), s = sec % 60;
+      el.countdown.textContent = `${pad2(h)}:${pad2(m)}:${pad2(s)}`;
+      el.countdown.style.color = "";
+    }
+    el.cycleBar.style.width = Math.max(0, Math.min(100, ((next - sec) - last) / (hours * 3600) * 100)).toFixed(1) + "%";
+  }
+
+  // ------------------------------ 渲染 ------------------------------
+  function baseFlights() {
+    const d = state.data;
+    if (!d) return [];
+    const arr = (state.today && Array.isArray(d.today) && d.today.length) ? d.today : (d.flights || []);
+    // 普通宽体客机同样进入精选；普通窄体仍需满足其他精选条件。
+    return arr.filter(isFeatured);
+  }
+
+  const boardFlights = () => {
+    const arr = baseFlights();
+    return state.board === "all" ? arr : arr.filter(f => f.board === state.board);
+  };
+
+  function matchSearch(f, q) {
+    if (!q) return true;
+    const hay = [
+      f.flight_number, f.callsign, f.registration, f.airline, f.airline_raw,
+      f.type, f.type_family, f.livery, f.endpoint?.city, f.endpoint?.iata,
+      f.endpoint?.name, f.status_cn
+    ].filter(Boolean).join(" ").toLowerCase();
+    return q.split(/\s+/).filter(Boolean).every(tok => hay.includes(tok));
+  }
+
+  const counts = rows => ({
+    featured: rows.filter(CHIP_TEST.featured).length,
+    widebody: rows.filter(CHIP_TEST.widebody).length,
+    livery_foreign: rows.filter(CHIP_TEST.livery_foreign).length,
+    special: rows.filter(CHIP_TEST.special).length,
+    four: rows.filter(CHIP_TEST.four).length,
+    cargo: rows.filter(CHIP_TEST.cargo).length,
+    bizjet: rows.filter(CHIP_TEST.bizjet).length
+  });
+
+  function render() {
+    const boardRows = boardFlights();
+    const c = counts(boardRows);
+    Object.keys(c).forEach(k => {
+      const node = document.getElementById("c-" + k.replace(/_/g, "-"));
+      if (node) node.textContent = c[k];
+    });
+
+    const st = (state.today ? state.data?.today_stats : state.data?.stats) || {};
+    const setStat = (id, v) => { const n = document.getElementById(id); if (n) n.textContent = v ?? 0; };
+    setStat("s-total", st.special); setStat("s-livery-foreign", st.livery_foreign);
+    setStat("s-widebody", st.widebody); setStat("s-four", st.four_engine);
+    setStat("s-cargo", st.cargo); setStat("s-bizjet", st.bizjet);
+
+    document.querySelectorAll(".stat").forEach(n => n.classList.toggle("active", n.dataset.chip === state.chip));
+    document.querySelectorAll(".chip").forEach(n => n.classList.toggle("on", n.dataset.chip === state.chip));
+    document.querySelectorAll("#boardSeg button").forEach(n => n.classList.toggle("on", n.dataset.board === state.board));
+
+    // 比例条
+    const total = Math.max(1, st.total || boardRows.length || 1);
+    const setBar = (id, v, denom) => {
+      const n = document.getElementById(id);
+      if (n) n.style.width = (Math.max(0, Math.min(100, (v || 0) / Math.max(1, denom) * 100))).toFixed(1) + "%";
+    };
+    setBar("b-all", 1, 1);
+    setBar("b-livery-foreign", st.livery_foreign, total);
+    setBar("b-widebody", st.widebody, total);
+    setBar("b-four", st.four_engine, total);
+    setBar("b-cargo", st.cargo, total);
+    setBar("b-bizjet", st.bizjet, total);
+
+    const q = state.q.trim().toLowerCase();
+    const test = CHIP_TEST[state.chip] || CHIP_TEST.featured;
+    let rows = boardRows.filter(f => test(f) && matchSearch(f, q));
+    rows = sortRows(rows);
+
+    // 结果摘要
+    const arrN = rows.filter(f => f.board === "arrivals").length;
+    const withPhoto = rows.filter(f => f.photo && f.photo.src).length;
+    el.resultText.innerHTML = `展示 <b>${rows.length}</b> 班`
+      + ` <span class="sep">·</span> 到达 <b>${arrN}</b>`
+      + ` <span class="sep">·</span> 出发 <b>${rows.length - arrN}</b>`
+      + ` <span class="sep">·</span> 含照片 <b>${withPhoto}</b>`;
+    const dirty = !!q || state.chip !== "featured" || state.board !== "all" || !state.today;
+    el.clearFilters.hidden = !dirty;
+
+    if (!rows.length) {
+      el.list.innerHTML = placeholder(
+        "🛬",
+        q ? "没有匹配的航班" : (state.chip === "featured" ? "当前窗口暂无精选航班" : "当前筛选条件下没有航班"),
+        q ? "换个关键词试试，或点击「清除筛选」查看全部航班。"
+          : "可以切换到「全部」查看所有航班，或等待下一次自动更新。"
+      );
+      return;
+    }
+
+    // 时间正序时插入“现在”分隔线
+    const ascending = state.sort === "time-asc";
+    const nowSec = Date.now() / 1000;
+    let html = "";
+    let inserted = false;
+    rows.forEach((f, i) => {
+      if (ascending && !inserted && (f.scheduled_ts || 0) >= nowSec) {
+        html += nowDividerHTML();
+        inserted = true;
+      }
+      html += rowHTML(f, i);
+    });
+    if (ascending && !inserted) html += nowDividerHTML();
+    el.list.innerHTML = html;
+  }
+
+  const specialScore = f =>
+    (f.is_special_livery ? 8 : 0) + (f.is_foreign ? 6 : 0) + (f.is_four_engine ? 5 : 0)
+    + (f.is_bizjet ? 3 : 0) + (f.is_cargo ? 2 : 0);
+
+  function sortRows(rows) {
+    const t = f => f.scheduled_ts || 0;
+    const arr = rows.slice();
+    switch (state.sort) {
+      case "time-desc": return arr.sort((a, b) => t(b) - t(a));
+      case "special-first": return arr.sort((a, b) => specialScore(b) - specialScore(a) || t(a) - t(b));
+      case "airline": return arr.sort((a, b) =>
+        airlineCN(a.airline).localeCompare(airlineCN(b.airline), "zh-Hans-CN") || t(a) - t(b));
+      default: return arr.sort((a, b) => t(a) - t(b));
+    }
+  }
+
+  function nowDividerHTML() {
+    return `<div class="now-divider"><span class="dot"></span><span>现在 · ${fmtHM.format(new Date())}</span><i></i></div>`;
+  }
+
+  function statusOf(f) {
+    const past = (f.scheduled_ts || 0) < Date.now() / 1000 - 25 * 60;
+    const st = (f.status || "").toLowerCase();
+    if (past && (st === "scheduled" || st === "estimated" || st === "unknown" || !st)) {
+      return { cn: "已结束", kind: "muted" };
+    }
+    return { cn: f.status_cn || f.status || "未知", kind: f.status_kind || "muted" };
+  }
+
+  function rowHTML(f, i) {
+    const isArr = f.board === "arrivals";
+    const ep = f.endpoint || {};
+    const homeAp = state.data?.airport || {};
+    const home = { city: homeAp.city || "Shenzhen", iata: homeAp.iata || state.airport };
+    const origin = isArr ? { city: ep.city, iata: ep.iata } : home;
+    const dest = isArr ? home : { city: ep.city, iata: ep.iata };
+    const t = fmtTime(f.scheduled_ts);
+    const day = dayLabel(f.scheduled_ts);
+
+    let delta = "", deltaCls = "";
+    if (f.delay_min != null && f.delay_min > 0) { delta = `+${f.delay_min}m`; deltaCls = "late"; }
+    else if (f.delay_min != null && f.delay_min < -3) { delta = `${f.delay_min}m`; deltaCls = "early"; }
+    else if (f.estimated_ts && f.estimated_ts !== f.scheduled_ts) { delta = "预计 " + fmtTime(f.estimated_ts); }
+
+    const fourLabel = { B747: "747", A340: "A340", A380: "A380", IL96: "IL96", AN124: "AN124" }[f.type_family];
+    const tags = [];
+    if (f.is_special_livery) tags.push(`<span class="badge livery" title="${esc(f.livery || "彩绘涂装")}">彩绘</span>`);
+    if (f.is_foreign) tags.push(`<span class="badge foreign" title="外国航司">外航</span>`);
+    if (f.is_widebody) tags.push(`<span class="badge widebody" title="宽体机（含普通宽体客机）">宽体</span>`);
+    if (f.is_four_engine) tags.push(`<span class="badge four" title="四发机型">${esc(fourLabel || "四发")}</span>`);
+    if (f.is_cargo) tags.push(`<span class="badge cargo" title="货运航班">货机</span>`);
+    if (f.is_bizjet) tags.push(`<span class="badge bizjet" title="公务机 / 私人飞机">公务机</span>`);
+    if (f.from_history) tags.push(`<span class="badge hist">今日</span>`);
+
+    const cls = ["row"];
+    if (f.is_special_livery) cls.push("hit-livery");
+    else if (f.is_foreign) cls.push("hit-foreign");
+    else if (f.is_widebody) cls.push("hit-widebody");
+    else if (f.is_four_engine) cls.push("hit-four");
+    else if (f.is_cargo) cls.push("hit-cargo");
+    else if (f.is_bizjet) cls.push("hit-bizjet");
+    if (f.from_history) cls.push("is-past");
+
+    const cnName = airlineCN(f.airline);
+    const enName = f.airline_raw || f.airline || "";
+    const liveryLine = f.is_special_livery
+      ? `<span class="lv" title="彩绘：${esc(f.livery || "")}">🎨 ${esc(f.livery || "特殊涂装")}</span>`
+      : (enName && enName !== cnName ? `<span class="en">${esc(enName)}</span>` : "");
+
+    return `<article class="${cls.join(" ")}" style="animation-delay:${Math.min(i, 24) * 10}ms">
+      <div class="cell time">
+        <div class="t">${esc(t)}</div>
+        <span class="d ${deltaCls}">${day ? `<span class="day">${esc(day)}</span> ` : ""}${esc(delta || "计划")}</span>
+      </div>
+      <div class="cell flight">
+        <div class="f">${esc(f.flight_number)}</div>
+        ${f.callsign ? `<span class="c">${esc(f.callsign)}</span>` : ""}
+      </div>
+      <div class="cell airline">
+        <span class="a">${esc(cnName)}<span class="flag">${esc(f.airline_iata || "")}</span></span>
+        ${liveryLine}
+      </div>
+      <div class="cell route">
+        <span class="pt ${isArr ? "" : "home"}"><span class="city">${esc(cityCN(origin.city) || "—")}</span><span class="code">${esc(origin.iata || "")}</span></span>
+        <span class="arw"><svg viewBox="0 0 24 24"><path d="M4 11h13.2l-4.6-4.6L14 5l7 7-7 7-1.4-1.4 4.6-4.6H4v-2Z"/></svg></span>
+        <span class="pt ${isArr ? "home" : ""}"><span class="city">${esc(cityCN(dest.city) || "—")}</span><span class="code">${esc(dest.iata || "")}</span></span>
+      </div>
+      <div class="cell type">
+        <span class="tc">${esc(f.type || "—")}</span>
+        <span class="tf">${esc(f.type_family || "")}</span>
+      </div>
+      <div class="cell reg">
+        ${f.registration ? `<span class="r">${esc(f.registration)}</span>` : `<span class="r none">未分配</span>`}
+      </div>
+      <div class="cell status">
+        <span class="pill ${esc(statusOf(f).kind)}">${esc(statusOf(f).cn)}</span>
+      </div>
+      <div class="cell tags">${tags.join("")}</div>
+      <div class="cell photo">${photoThumb(f)}</div>
+    </article>`;
+  }
+
+
+  function photoThumb(f) {
+    const ph = f.photo;
+    if (ph && ph.src) {
+      const credit = ph.photographer ? `© ${ph.photographer}` : "PlaneSpotters";
+      return `<a class="photo-thumb" href="${esc(ph.link || ph.src)}" target="_blank" rel="noopener"
+        title="${esc(credit)} · PlaneSpotters">
+        <img src="${esc(ph.src)}" alt="${esc(f.registration || f.flight_number)}" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+        <span class="credit">${esc(credit)}</span>
+      </a>`;
+    }
+    return `<span class="photo-thumb empty">${f.registration ? "暂无照片" : "无注册号"}</span>`;
+  }
+
+  // 外部图片被拦截或失效时保留卡片尺寸，不显示破图或影响航班列表。
+  el.list.addEventListener("error", event => {
+    if (!(event.target instanceof HTMLImageElement)) return;
+    const frame = event.target.closest(".photo-thumb");
+    if (!frame) return;
+    const empty = document.createElement("span");
+    empty.className = "photo-thumb empty";
+    empty.textContent = "照片暂不可用";
+    frame.replaceWith(empty);
+  }, true);
+
+  function placeholder(ico, title, desc) {
+    return `<div class="placeholder"><div class="ico">${ico}</div><h3>${esc(title)}</h3><p>${desc}</p></div>`;
+  }
+
+  // ------------------------------ 事件 ------------------------------
+  document.getElementById("boardSeg").addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    state.board = b.dataset.board; render();
+  });
+
+  document.getElementById("chips").addEventListener("click", e => {
+    const c = e.target.closest(".chip"); if (!c) return;
+    state.chip = c.dataset.chip; render();
+  });
+
+  document.querySelectorAll(".stat").forEach(node => {
+    node.addEventListener("click", () => {
+      state.chip = node.dataset.chip;
+      render();
+      window.scrollTo({ top: document.querySelector(".toolbar").offsetTop - 80, behavior: "smooth" });
+    });
+  });
+
+  el.search.addEventListener("input", e => {
+    state.q = e.target.value;
+    el.searchClear.hidden = !state.q;
+    render();
+  });
+  el.searchClear.addEventListener("click", () => {
+    state.q = ""; el.search.value = ""; el.searchClear.hidden = true; el.search.focus(); render();
+  });
+  el.todayToggle.addEventListener("change", e => { state.today = e.target.checked; render(); });
+  el.sortSel.addEventListener("change", e => { state.sort = e.target.value; render(); });
+
+  el.clearFilters.addEventListener("click", () => {
+    state.board = "all"; state.chip = "featured"; state.q = ""; state.today = true; state.sort = "time-asc";
+    el.search.value = ""; el.searchClear.hidden = true;
+    el.todayToggle.checked = true; el.sortSel.value = "time-asc";
+    render();
+  });
+
+  document.addEventListener("keydown", e => {
+    const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || "");
+    if (e.key === "/" && !typing) { e.preventDefault(); el.search.focus(); }
+    if (e.key === "Escape" && document.activeElement === el.search) { el.search.blur(); }
+  });
+
+  window.addEventListener("scroll", () => {
+    el.toTop.classList.toggle("show", window.scrollY > 620);
+  }, { passive: true });
+  el.toTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+
+  el.btnReload.addEventListener("click", async () => {
+    el.btnReload.classList.add("spin");
+    await fetchStatus(false);
+    const loaded = await fetchData();
+    setTimeout(() => el.btnReload.classList.remove("spin"), 500);
+    toast(loaded ? "已重新读取已发布的快照（不会启动抓取）" : "快照读取失败，请查看页面提示", !loaded);
+  });
+
+  el.airportSel.addEventListener("change", async e => {
+    state.airport = e.target.value;
+    try { localStorage.setItem("fr24-airport", state.airport); } catch (err) { /* ignore */ }
+    state.data = null;
+    state.dataError = false;
+    state.lastSuccessSeen = null;
+    el.list.innerHTML = SKELETON_HTML;
+    updateBrand();
+    await fetchStatus();
+    await fetchData();
+  });
+
+  // ------------------------------ 启动 ------------------------------
+  const topbar = document.querySelector(".topbar");
+  const syncTopbar = () => document.documentElement.style.setProperty("--topbar-h", `${topbar.getBoundingClientRect().height}px`);
+  syncTopbar();
+  if (typeof ResizeObserver !== "undefined") new ResizeObserver(syncTopbar).observe(topbar);
+  else window.addEventListener("resize", syncTopbar);
+
+  async function boot() {
+    tick();
+    await fetchIndex();
+    updateBrand();
+    await fetchStatus(false);
+    await fetchData();
+    updateStatusUI();
+    setInterval(tick, 1000);
+    // 每 60 秒检查当前机场是否有新快照
+    setInterval(async () => {
+      const before = state.lastSuccessSeen;
+      await fetchStatus();
+      if (state.lastSuccessSeen && state.lastSuccessSeen !== before) await fetchData();
+    }, 60000);
+    // 兜底：按配置间隔强制重读
+    const hours = state.index?.refresh_hours || 2;
+    setInterval(() => { fetchStatus(); fetchData(); }, hours * 3600 * 1000);
+  }
+
+  boot();
+})();
+</script>
+</body>
+</html>

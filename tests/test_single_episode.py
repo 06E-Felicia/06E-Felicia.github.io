@@ -31,9 +31,24 @@ class SingleEpisodeTests(unittest.TestCase):
         for hour in [12,24,48,72]:
             np.testing.assert_array_equal(a.synoptic.genesis(hour*3600)[1],0)
 
+    def test_longer_finite_confluence_is_seeded_but_does_not_paint_a_long_line(self):
+        a=self.model();b=self.model();c=self.model(20260423)
+        self.assertEqual(a.synoptic.genesis_half_length,b.synoptic.genesis_half_length)
+        self.assertNotEqual(a.synoptic.genesis_half_length,c.synoptic.genesis_half_length)
+        self.assertGreaterEqual(a.synoptic.genesis_half_length,200000)
+        self.assertLessEqual(a.synoptic.genesis_half_length,240000)
+        s=a.synoptic;t=s.genesis_start+.5*s.genesis_duration
+        _,permission=s.genesis(t);near=np.abs(a.lon-s.genesis_center[0])<.1
+        ys=a.lat[(permission>.7)&near]
+        self.assertGreater(float(np.ptp(ys))*111195,320000)
+        np.testing.assert_array_equal(a.activity,0)
+        np.testing.assert_array_equal(a.cold_content,0)
+        np.testing.assert_array_equal(a.total,0)
+
     def test_next_day_can_open_new_episode_without_cape_or_cold_pool_reset(self):
         m=self.model();m.time=86400;m.genesis_closed=True;m.genesis_started=True
         m.cape_deficit.fill(100);m.cold_depth[:,0]=500;m.cold_content[:,0]=1500;m.cold_diagnostics()
+        m.background_w.fill(.02)
         cold=m.cold_content.copy();debt=m.cape_deficit.copy()
         m.step(86401)
         self.assertEqual(m.convective_day,1);self.assertIsNotNone(m.synoptic.genesis_center)
