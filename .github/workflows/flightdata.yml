@@ -1,6 +1,10 @@
 name: 更新航班数据
 
 on:
+  # Temporary acceptance trigger; removed after the authorized live test.
+  push:
+    branches: [main]
+    paths: ['.github/workflows/flightdata.yml']
   schedule:
     # More wake-up opportunities; the freshness gate limits actual collection
     # to once per 10 minutes. GitHub cron is still best-effort, not an SLA.
