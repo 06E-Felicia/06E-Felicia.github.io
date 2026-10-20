@@ -86,7 +86,7 @@ def run(codes=None, prefetched=None, client=None, detail_limit=DEFAULT_DETAIL_LI
     states = dict(previous_status.get('airports') or {})
     rollover(airports, now)
     client = client or (Client() if not enrich_only or detail_limit else None)
-    successes, fatal, pending = 0, None, []
+    successes, fatal, pending, previous_snapshots = 0, None, [], []
     detail_stats, photo_stats = {}, {}
     try:
         if client:
@@ -97,6 +97,8 @@ def run(codes=None, prefetched=None, client=None, detail_limit=DEFAULT_DETAIL_LI
             code = airport['iata']
             path = DATA / (code.lower()+'.json')
             previous = read_json(path, {})
+            if previous.get('source') == 'variflight-mcp':
+                previous_snapshots.append(previous)
             if enrich_only:
                 if (previous.get('source') == 'variflight-mcp' and previous.get('airport',{}).get('iata') == code
                         and isinstance(previous.get('flights'),list) and previous.get('generated_at')):
@@ -138,18 +140,24 @@ def run(codes=None, prefetched=None, client=None, detail_limit=DEFAULT_DETAIL_LI
         if snapshots:
             try:
                 detail_stats = enrich_snapshots(snapshots, client, limit=0 if fatal else detail_limit,
-                                                prefetched=prefetched_details)
+                                                prefetched=prefetched_details, previous=previous_snapshots)
                 if detail_stats.get('fatal_status'):
                     fatal = '详情补齐遇到授权或限流错误，已停止新增查询；看板数据保留'
-                photo_stats = attach_photos(snapshots, limit=photo_limit)
+                photo_stats = attach_photos(snapshots, limit=photo_limit, previous=previous_snapshots)
             except (MCPError,PhotoError) as error:
                 # Optional metadata must never erase a valid airport board.
                 print('补充资料未全部完成：%s' % error, flush=True)
             for code,path,data in pending:
+                coverage = data.get('detail_coverage') or {}
+                data['metadata_status'] = 'complete' if coverage.get('registration',0) == len(data['flights']) else 'partial'
                 write_json(path,data)
                 states.setdefault(code, {'ok':True,'last_success_at':data['generated_at']})
                 states[code]['last_enriched_at'] = data.get('enriched_at')
                 states[code]['detail_coverage'] = data.get('detail_coverage')
+                print('%s 资料覆盖：注册号 %d/%d，机型 %d/%d，预取图片 %d/%d' % (
+                    code,coverage.get('registration',0),coverage.get('total',0),
+                    coverage.get('aircraft_type',0),coverage.get('total',0),
+                    coverage.get('photo',0),coverage.get('total',0)),flush=True)
             print('详情：本轮 %d 次航线查询，已匹配 %d 班；照片：本轮 %d 个注册号查询。' % (
                 detail_stats.get('route_calls',0), detail_stats.get('matched',0), photo_stats.get('calls',0)), flush=True)
     except (MCPError, KeyErrorSafe) as error:
@@ -166,12 +174,18 @@ def run(codes=None, prefetched=None, client=None, detail_limit=DEFAULT_DETAIL_LI
         'duration_sec': round(time.time()-now, 1), 'airports': states, 'error': fatal,
         'enrichment': {'details':detail_stats, 'photos':photo_stats},
         'run_url': 'https://github.com/%s/actions/runs/%s' % (repo, run_id) if repo and run_id else None}
+    detail_registrations = sum(bool(f.get('registration')) and f.get('detail_source')=='getFlightStatus'
+                              for _,_,snapshot in pending for f in snapshot.get('flights',[]))
+    state['detail_registrations'] = detail_registrations
+    state['metadata_failed'] = bool(detail_limit and pending and not detail_registrations)
     write_json(STATUS, state)
     # Index contains configuration, not an invented last-success timestamp.
     index.update(source='variflight-mcp', connection_state=state['connection_state'])
     write_json(INDEX, index)
     print('本轮 %d/%d 机场取得有效快照；定时任务每天北京时间12时运行一次。' % (successes, len(selected)), flush=True)
-    return 0 if successes else 1
+    if state['metadata_failed']:
+        print('详情补齐未取得普通航班注册号；看板保留，但本轮不冒充完整成功。',flush=True)
+    return 0 if successes and not state['metadata_failed'] else 1
 
 
 if __name__ == '__main__':

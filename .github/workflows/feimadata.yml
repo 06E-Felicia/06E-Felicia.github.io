@@ -29,6 +29,8 @@ jobs:
 
       - name: 每天北京时间12时仅运行一次
         id: daily
+        env:
+          EVENT_NAME: ${{ github.event_name }}
         run: python3 -B -m feimadata.schedule
 
       - name: 恢复注册号和照片缓存（不包含密钥）
@@ -56,6 +58,10 @@ jobs:
             exit 1
           fi
           python3 -B -m feimadata.collect --detail-limit 40 --photo-limit 60
+
+      - name: 显示本轮真实注册号与图片覆盖率
+        if: always() && steps.daily.outputs.run == 'true' && steps.collect.outcome != 'skipped'
+        run: python3 -B -m feimadata.report
 
       - name: 发布前隐私检查（失败即禁止上传）
         if: always() && steps.daily.outputs.run == 'true'
@@ -97,9 +103,10 @@ jobs:
     timeout-minutes: 5
     permissions:
       contents: write
-    # The existing weather and Flightdat save jobs use this same short lock.
+    # Do not share GitHub's single pending-job slot with frequent weather jobs.
+    # A rejected non-fast-forward push is rebased below, never force-pushed.
     concurrency:
-      group: weather-update-${{ github.ref }}
+      group: feimadat-save-${{ github.ref }}
       cancel-in-progress: false
     steps:
       - uses: actions/checkout@v5
@@ -120,7 +127,15 @@ jobs:
             exit 0
           fi
           git commit -m "Update Feimadat daily snapshots $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-          git push origin HEAD:"$GITHUB_REF_NAME"
+          for attempt in 1 2 3; do
+            if git push origin HEAD:"$GITHUB_REF_NAME"; then
+              exit 0
+            fi
+            git fetch origin "$GITHUB_REF_NAME"
+            git rebase "origin/$GITHUB_REF_NAME"
+          done
+          echo '::error::并发提交后仍无法保存；本轮快照 artifact 已保留，未强制覆盖远端。'
+          exit 1
       - name: 汇报采集失败
         if: needs.collect.outputs.outcome == 'failure'
         run: |

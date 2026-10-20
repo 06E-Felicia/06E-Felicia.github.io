@@ -85,13 +85,22 @@ def fetch_photo(reg, opener=None):
         raise PhotoError('照片元数据读取失败；不影响航班数据') from None
 
 
-def attach_photos(snapshots, limit=60, now=None, path=None, fetcher=None, delay=0.35):
+def attach_photos(snapshots, limit=60, now=None, path=None, fetcher=None, delay=0.35, previous=None):
     if type(limit) is not int or not 0 <= limit <= 2000:
         raise PhotoError('照片查询上限须为 0–2000')
     now, path, fetcher = int(time.time()) if now is None else now, path or CACHE_PATH, fetcher or fetch_photo
     raw = read_cache(path, {})
     cache = {k:v for k,v in (raw.get('entries') or {}).items() if isinstance(v,dict)
         and type(v.get('checked_at')) is int and 0 <= now-v['checked_at'] <= 30*86400}
+    for snapshot in list(previous or [])+snapshots:
+        for f in snapshot.get('flights',[])+snapshot.get('today',[]):
+            reg,photo = registration(f.get('registration')),f.get('photo') or {}
+            at = f.get('photo_checked_at') or snapshot.get('enriched_at')
+            if (reg and type(at) is int and 0 <= now-at < 30*86400 and photo.get('source')=='planespotters'
+                    and photo.get('reg')==reg and safe_url(photo.get('src'),True)
+                    and safe_url(photo.get('link')) and text(photo.get('photographer'))
+                    and at > (cache.get(reg) or {}).get('checked_at',0)):
+                cache[reg] = {'checked_at':at,'photo':photo}
     refs = {}
     for snapshot in snapshots:
         for f in snapshot.get('flights',[])+snapshot.get('today',[]):
@@ -133,6 +142,7 @@ def attach_photos(snapshots, limit=60, now=None, path=None, fetcher=None, delay=
                     and safe_url(photo.get('link')) and text(photo.get('photographer'))):
                 for f in refs[reg]:
                     f['photo'] = dict(photo)
+                    f['photo_checked_at'] = entry['checked_at']
                 stats['covered'] += 1
     write_cache(path, {'schema_version':1,'entries':cache})
     for snapshot in snapshots:

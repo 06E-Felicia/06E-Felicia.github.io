@@ -176,7 +176,7 @@ class Client:
                 raise ValueError
         except (ValueError, TypeError):
             raise MCPError('航班查询日期不正确') from None
-        if any(not isinstance(code, str) or not re.fullmatch(r'[A-Z]{3}', code) for code in (dep, arr)):
+        if any(not isinstance(code, str) or not re.fullmatch(r'[A-Z]{3}(?:,[A-Z]{3}){0,7}', code) for code in (dep, arr)):
             raise MCPError('航班查询机场不正确')
         arguments = {'date': date, 'dep': dep, 'arr': arr}
         if fnum is not None:

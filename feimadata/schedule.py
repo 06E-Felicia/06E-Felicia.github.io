@@ -9,7 +9,11 @@ CN = timezone(timedelta(hours=8))
 STATUS = Path(__file__).resolve().parent / 'data' / 'status.json'
 
 
-def due(status, now):
+def due(status, now, event='schedule'):
+    # A manual acceptance/recovery run is intentional, not an automatic retry.
+    # Local sample snapshots must never cause a user-triggered run to be skipped.
+    if event == 'workflow_dispatch':
+        return True
     local = datetime.fromtimestamp(now,CN)
     if local.hour < 12:
         return False
@@ -28,11 +32,16 @@ def main():
         status = json.loads(STATUS.read_text(encoding='utf-8'))
     except (ValueError,OSError):
         status = {}
-    run = due(status,time.time())
+    event = os.environ.get('EVENT_NAME','schedule')
+    run = due(status,time.time(),event)
     if os.environ.get('GITHUB_OUTPUT'):
         with open(os.environ['GITHUB_OUTPUT'],'a') as output:
             output.write('run=%s\n' % str(run).lower())
-    print('Feimadat：北京时间12时后的本日首次采集' if run else 'Feimadat：未到12时或今天已运行，跳过以节省积分')
+    reason = ('手动立即更新，将使用账号额度' if event=='workflow_dispatch' else '北京时间12时后的本日首次自动采集') if run else '未到12时或今天已自动采集，跳过以节省积分'
+    print('Feimadat：'+reason)
+    if os.environ.get('GITHUB_STEP_SUMMARY'):
+        with open(os.environ['GITHUB_STEP_SUMMARY'],'a',encoding='utf-8') as out:
+            out.write('## Feimadat 运行方式\n\n'+reason+'。\n\n自动任务仍为每天北京时间12:00一次；手动运行明确绕过当天限制。\n')
     return 0
 
 

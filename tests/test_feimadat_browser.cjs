@@ -23,6 +23,13 @@ async function localPage(browser,base,options={}){
   const url=new URL(route.request().url());requests.push(url);
   return url.hostname==='127.0.0.1'?route.continue():route.abort();
  });
+ if(options.photos){
+  await context.route('https://api.planespotters.net/pub/photos/reg/*',route=>route.fulfill({json:{photos:[{
+   thumbnail_large:{src:'https://t.plnspttrs.net/1/test.jpg'},link:'https://www.planespotters.net/photo/1/b-2043-test',
+   photographer:'Lazy Test author'}]}}));
+  await context.route('https://t.plnspttrs.net/1/test.jpg',route=>route.fulfill({contentType:'image/svg+xml',
+   body:'<svg xmlns="http://www.w3.org/2000/svg" width="120" height="80"><rect width="120" height="80" fill="blue"/></svg>'}));
+ }
  if(options.active){
   await context.route('**/feimadata/data/status.json?*',route=>route.fulfill({json:status}));
   await context.route('**/feimadata/data/szx.json?*',route=>route.fulfill({json:options.data||snapshot}));
@@ -47,7 +54,7 @@ async function localPage(browser,base,options={}){
   if(!file.startsWith(root+path.sep)||name.split('/').some(p=>p.startsWith('.'))||!fs.existsSync(file)||!fs.statSync(file).isFile()){
    res.writeHead(404);res.end();return;
   }
-  res.setHeader('Content-Type',file.endsWith('.html')?'text/html; charset=utf-8':file.endsWith('.json')?'application/json':file.endsWith('.css')?'text/css':'application/octet-stream');
+  res.setHeader('Content-Type',file.endsWith('.html')?'text/html; charset=utf-8':file.endsWith('.json')?'application/json':file.endsWith('.css')?'text/css':file.endsWith('.js')?'text/javascript':'application/octet-stream');
   fs.createReadStream(file).pipe(res);
  });
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));let browser;
@@ -140,6 +147,17 @@ async function localPage(browser,base,options={}){
   assert.match(await enriched.page.locator('#detailBody').innerText(),/飞常准航班详情/);
   assert.match(await enriched.page.locator('#detailBody').innerText(),/同注册号资料照片/);
   assert.deepEqual(enriched.errors,[]);await enriched.context.close();
+
+  const lazyRows=[fixture('UI-LAZY',1800,{registration:'B-2043',photo:null,type:'777-39L'})];
+  const lazy=await localPage(browser,base,{active:true,photos:true,data:{...snapshot,flights:lazyRows,today:lazyRows}});
+  await lazy.page.getByText('B-2043',{exact:true}).waitFor();
+  await lazy.page.locator('#list .row').scrollIntoViewIfNeeded();
+  await lazy.page.getByText(/Lazy Test author/).first().waitFor();
+  assert.equal(await lazy.page.locator('#list .photo-thumb img').count(),1);
+  await lazy.page.locator('#list .row').click();
+  await lazy.page.locator('#detailBody .detail-photo img').waitFor();
+  assert.match(await lazy.page.locator('#detailBody figcaption').innerText(),/非本航班实拍/);
+  assert.deepEqual(lazy.errors,[]);await lazy.context.close();
 
   // A tab opened before the first capture must discover it on the next poll.
   const transition=await localPage(browser,base);

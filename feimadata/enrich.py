@@ -21,6 +21,34 @@ CACHE_PATH = Path(__file__).resolve().parent / '.cache' / 'details.json'
 DEFAULT_DETAIL_LIMIT = 40  # Route queries, not one paid query per displayed row.
 
 
+def seed_from_snapshots(snapshots):
+    """Recover sanitized, already-public details after a cold Actions Cache miss."""
+    entries = {}
+    for snapshot in snapshots:
+        if snapshot.get('source') != 'variflight-mcp':
+            continue
+        for f in snapshot.get('flights',[])+snapshot.get('today',[]):
+            at = f.get('detail_checked_at')
+            query = query_for(f,snapshot['airport']['iata'])
+            if f.get('detail_source') != 'getFlightStatus' or type(at) is not int or not query:
+                continue
+            fields = {k:f.get(k) for k in ('type','type_family','is_widebody','is_four_engine')}
+            fields.update(registration=registration(f.get('registration')),
+                airline_name=text(f.get('airline_raw'),150) or None,
+                arrival_terminal=f.get('terminal') if f['board']=='arrivals' else None,
+                departure_terminal=f.get('terminal') if f['board']=='departures' else None,
+                gate=f.get('gate') if f['board']=='departures' else None,
+                livery=text(f.get('livery')) or None,
+                photo=f.get('photo') if (f.get('photo') or {}).get('source') != 'planespotters' else None)
+            key = query_key(query)
+            old = entries.get(key)
+            if not old or old['checked_at'] < at:
+                entries[key] = {'query':query,'checked_at':at,'fields':fields}
+            elif old['checked_at'] == at:
+                old['fields'].update({k:v for k,v in fields.items() if v is not None})
+    return entries
+
+
 def read_cache(path, default):
     try:
         value = json.loads(path.read_text(encoding='utf-8'))
@@ -193,7 +221,7 @@ def clear_old_details(flight):
     flight.pop('detail_stale', None)
 
 
-def enrich_snapshots(snapshots, client, limit=DEFAULT_DETAIL_LIMIT, now=None, path=None, prefetched=None):
+def enrich_snapshots(snapshots, client, limit=DEFAULT_DETAIL_LIMIT, now=None, path=None, prefetched=None, previous=None):
     """Bound the paid route requests; use valid cache even with limit=0."""
     if type(limit) is not int or not 0 <= limit <= 2000:
         raise MCPError('详情航线查询上限须为 0–2000')
@@ -206,6 +234,9 @@ def enrich_snapshots(snapshots, client, limit=DEFAULT_DETAIL_LIMIT, now=None, pa
     old = cache.get('entries') or {}
     entries = {k:v for k,v in old.items() if isinstance(v,dict) and
                cutoff <= str((v.get('query') or {}).get('date','')) <= upper}
+    for key,entry in seed_from_snapshots(list(previous or [])+snapshots).items():
+        if cutoff <= entry['query']['date'] <= upper and entry['checked_at'] > (entries.get(key) or {}).get('checked_at',0):
+            entries[key] = entry
     refs = defaultdict(list)
     for snapshot in snapshots:
         for flight in snapshot.get('flights', [])+snapshot.get('today', []):
@@ -224,22 +255,48 @@ def enrich_snapshots(snapshots, client, limit=DEFAULT_DETAIL_LIMIT, now=None, pa
         times = [event_time(f) for key in routes[route] for f in refs[key]]
         future = [t for t in times if t >= now]
         return (0, min(future)-now) if future else (1, now-max(times))
-    stats = {'route_calls':0, 'cache_hits':0, 'matched':0, 'pending_routes':0, 'errors':0, 'fatal_status':None}
+    stats = {'route_calls':0, 'batch_routes':0, 'cache_hits':0, 'matched':0, 'pending_routes':0, 'errors':0, 'fatal_status':None}
     supplied = dict(prefetched or {})
     deadline = time.monotonic()+10*60
-    for route in sorted(routes, key=priority):
+    pending = set(routes)
+    homes = {s['airport']['iata'] for s in snapshots}
+    while pending:
+        # Another batch may already have returned these exact records.
+        pending = {r for r in pending if any(not fresh(entries.get(k),refs[k][0],now) for k in routes[r])}
+        allowed = pending if stats['route_calls'] < limit else pending.intersection(supplied)
+        if not allowed:
+            break
         if time.monotonic() >= deadline:
             break
-        if route not in supplied and stats['route_calls'] >= limit:
-            continue
+        route = min(allowed,key=priority)
+        batch = [route]
+        if route not in supplied:
+            options = []
+            for fixed in (1,2):
+                if route[fixed] not in homes:
+                    continue
+                selected,weight = [route],len(routes[route])
+                for other in sorted(pending-{route},key=priority):
+                    if other[0] != route[0] or other[fixed] != route[fixed]:
+                        continue
+                    if len(selected) >= 3 or weight+len(routes[other]) > 60:
+                        continue
+                    selected.append(other);weight += len(routes[other])
+                options.append(selected)
+            if options:
+                batch = max(options,key=lambda group:sum(len(routes[r]) for r in group))
+        pending.difference_update(batch)
         try:
             if route in supplied:
                 response, checked = supplied[route]
             else:
                 stats['route_calls'] += 1
-                response, checked = client.get_status(*route), int(time.time()) if now is None else now
+                arguments = (route[0],','.join(dict.fromkeys(r[1] for r in batch)),
+                             ','.join(dict.fromkeys(r[2] for r in batch)))
+                response, checked = client.get_status(*arguments), now
+                stats['batch_routes'] += len(batch)
             parsed = parse_details(response)
-            for key in routes[route]:
+            for key in set().union(*(routes[r] for r in batch)):
                 if key not in parsed:
                     entries[key] = {'query':refs[key][0]['detail_query'], 'fields':{}, 'checked_at':checked}
             for key, entry in parsed.items():

@@ -582,6 +582,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
   <div id="detailBody"></div>
 </dialog>
 
+<script src="assets/scripts/feimadat-photos.js?v=2.1"></script>
 <script>
 (() => {
   "use strict";
@@ -1046,6 +1047,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
       past.length ? "可点击上方按钮，向上浏览今日之前时刻的航班。"
         : "可以调整筛选，或等待下一次自动更新。"
     ));
+    window.FeimadatPhotos?.observe(el.list);
   }
 
   const specialScore = f =>
@@ -1183,7 +1185,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
         <span class="credit">${esc(credit)}</span>
       </a>`;
     }
-    return `<span class="photo-thumb empty">${f.registration ? "暂无照片" : "无注册号"}</span>`;
+    return `<span class="photo-thumb empty"${f.registration ? ` data-photo-reg="${esc(f.registration)}"` : ""}>${f.registration ? "正在读取资料照片" : "暂无注册号资料"}</span>`;
   }
 
   const safeWebURL = value => {
@@ -1208,7 +1210,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     const airport = a => `<div><span>${esc(cityCN(a.city) || a.name || "未提供")}</span><strong>${esc(a.iata || "—")}</strong><small>${esc(a.name || "")}${a.icao ? ` · ${esc(a.icao)}` : ""}${a.country ? ` · ${esc(a.country)}` : ""}</small></div>`;
     const photo = f.photo || {}, imageURL = safeWebURL(photo.src), photoLink = safeWebURL(photo.link || photo.src);
     const photoHTML = imageURL ? `<figure class="detail-photo"><img src="${esc(imageURL)}" alt="${esc(f.registration || f.flight_number)} 资料照片" referrerpolicy="no-referrer"><figcaption>${esc(photo.photographer ? `© ${photo.photographer} · ${photo.provider || "资料照片"}` : (photo.provider || "照片来源未提供"))}${photoLink ? ` · <a href="${esc(photoLink)}" target="_blank" rel="noopener">照片来源 ↗</a>` : ""}</figcaption></figure>`
-      : `<div class="detail-photo detail-no-photo"><span aria-hidden="true">✈</span>暂无机型照片</div>`;
+      : `<div class="detail-photo detail-no-photo"${f.registration ? ` data-photo-reg="${esc(f.registration)}"` : ""}><span aria-hidden="true">✈</span>暂无机型照片</div>`;
     const labels = [[f.is_special_livery,"彩绘机"],[f.is_widebody,"宽体机"],[f.is_foreign,"外航"],[f.is_four_engine,"四发"],[f.is_cargo,"货机"]].filter(([flag])=>flag).map(([,name])=>name).join(" · ");
     const delay = f.delay_min == null ? "未提供" : f.delay_min > 0 ? `延误 ${f.delay_min} 分钟` : f.delay_min < 0 ? `提前 ${Math.abs(f.delay_min)} 分钟` : "正点";
     const localTimes = state.airport === "HND" ? `<p class="detail-local">羽田当地（UTC+9）：计划 ${esc(fullTime(f.scheduled_ts,"Asia/Tokyo"))} · 预计 ${esc(fullTime(f.estimated_ts,"Asia/Tokyo"))}</p>` : "";
@@ -1219,6 +1221,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
       ${f.is_special_livery ? `<section class="detail-livery"><h3>✦ 彩绘涂装</h3><p>${esc(f.livery || "特殊彩绘涂装")}</p><small>识别来源：${esc(({variflight:"飞常准航班记录",manual:"人工补充",learned:"已保存的注册号记录"})[f.livery_source] || "航班记录")}</small></section>` : ""}
       <section class="detail-record"><h3>数据记录</h3><dl class="detail-grid">${info("最近观测时间",fullTime(f.last_seen_ts))}${info("快照更新时间",fullTime(state.data?.generated_at))}${info("详情查询时间",fullTime(f.detail_checked_at))}${info("注册号来源",f.registration_source === "getFlightStatus" ? "飞常准航班详情" : f.registration_source === "getAirportFlightBoard" ? "飞常准机场大屏" : null)}${info("记录来源",f.from_history ? "今日此前已保存的记录" : "本轮飞常准快照")}${info("源站状态",f.source_status || f.status)}${info("本地记录标识",f.id)}</dl><p>仅显示接口返回及本日已保存的记录，不据此宣称全天完整。未提供的字段不作推测；每日快照不保证反映后续临时换机，实际运行以机场 / 航司为准。</p></section>`;
     if (!el.detail.open) el.detail.showModal();
+    window.FeimadatPhotos?.observe(el.detailBody);
     el.detail.scrollTop = 0;
     document.body.classList.add("detail-open");
     el.closeDetail.focus({preventScroll:true});

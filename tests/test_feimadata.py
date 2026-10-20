@@ -236,7 +236,7 @@ class CollectorTests(unittest.TestCase):
             def get_status(self,*args):return result([])
             def close(self):pass
         with patch.object(collect.time,'time',return_value=NOW),contextlib.redirect_stdout(io.StringIO()):
-            self.assertEqual(collect.run(client=Fake()),0)
+            self.assertEqual(collect.run(client=Fake(),detail_limit=0,photo_limit=0),0)
         status=collect.read_json(collect.STATUS,{})
         self.assertTrue(status['airports']['SZX']['partial'])
         self.assertEqual(len(collect.read_json(self.data/'szx.json',{})['today']),1)
@@ -255,6 +255,33 @@ class CollectorTests(unittest.TestCase):
             self.assertEqual(collect.run(client=api),1)
         self.assertEqual(api.calls,1)
         self.assertFalse((self.data/'szx.json').exists())
+
+    def test_clean_checkout_collects_real_schema_details_and_does_not_need_local_cache(self):
+        class Fake:
+            def initialize(self):pass
+            def discover_board(self):pass
+            def close(self):pass
+            def get_board(self,airport,direction):
+                return result([raw()] if direction=='1' else [])
+            def get_status(self,*args):return result([detail()])
+        with patch.object(collect.time,'time',return_value=NOW),contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(collect.run(client=Fake(),photo_limit=0),0)
+        saved=collect.read_json(self.data/'szx.json',{})
+        self.assertEqual(saved['flights'][0]['registration'],'B-30EC')
+        self.assertEqual(saved['today'][0]['registration'],'B-30EC')
+        self.assertFalse(collect.read_json(collect.STATUS,{})['metadata_failed'])
+
+    def test_metadata_all_missing_is_not_reported_as_full_success(self):
+        class Fake:
+            def initialize(self):pass
+            def discover_board(self):pass
+            def close(self):pass
+            def get_board(self,*args):return result()
+            def get_status(self,*args):return result([])
+        with patch.object(collect.time,'time',return_value=NOW),contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(collect.run(client=Fake(),photo_limit=0),1)
+        self.assertTrue(collect.read_json(collect.STATUS,{})['metadata_failed'])
+        self.assertTrue((self.data/'szx.json').exists(),'valid board must still be preserved')
 
 
 class EnrichmentTests(unittest.TestCase):
@@ -369,8 +396,43 @@ class EnrichmentTests(unittest.TestCase):
         with self.assertRaises(client.MCPError):enrich.parse_details({'structuredContent':{
             'kind':'collection','items':[],'error':{'code':'DENIED'}}})
 
+    def test_multiple_airports_are_batched_without_loosening_record_identity(self):
+        class Fake:
+            calls=[]
+            def get_status(self,*args):
+                self.calls.append(args)
+                return result([detail(),detail(FlightNo='UI124',FlightDepcode='CTU',aircraftNumber='B1234')])
+        snap=snapshot([raw(),raw(flightNumber='UI124',departureCode='CTU')]);api=Fake()
+        stats=self.run_enrich(snap,api,limit=1)
+        self.assertEqual(len(api.calls),1)
+        self.assertEqual(set(api.calls[0][1].split(',')),{'PEK','CTU'})
+        self.assertEqual(api.calls[0][2],'SZX')
+        self.assertEqual({f['registration'] for f in snap['flights']},{'B-30EC','B-1234'})
+        self.assertEqual(stats['batch_routes'],2)
+
+    def test_missing_actions_cache_recovers_details_from_verified_public_snapshot(self):
+        class Fake:
+            def get_status(self,*args):return result([detail()])
+        old=snapshot();self.run_enrich(old,Fake())
+        new=snapshot()
+        # A different cache file simulates a fresh GitHub runner.
+        stats=enrich.enrich_snapshots([new],None,limit=0,now=NOW+60,
+              path=Path(self.temp.name)/'cold.json',previous=[old])
+        self.assertEqual(new['flights'][0]['registration'],'B-30EC')
+        self.assertEqual(stats['route_calls'],0)
+
 
 class PhotoTests(unittest.TestCase):
+    def test_missing_actions_cache_recovers_signed_reference_photo_metadata(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            old=snapshot([raw(aircraftNumber='B1234')]);new=snapshot([raw(aircraftNumber='B1234')])
+            old['enriched_at']=NOW
+            old['flights'][0]['photo']={'source':'planespotters','reg':'B-1234',
+                'src':'https://t.plnspttrs.net/1/test.jpg','link':'https://www.planespotters.net/photo/1/b-1234-test',
+                'photographer':'Test author','provider':'reference'}
+            stats=photos.attach_photos([new],now=NOW+60,path=Path(tmp)/'cold.json',limit=0,previous=[old],delay=0)
+            self.assertEqual(stats['calls'],0)
+            self.assertEqual(new['flights'][0]['photo']['reg'],'B-1234')
     def test_reference_photo_has_registration_source_credit_and_safe_urls(self):
         raw_photo={'thumbnail_large':{'src':'https://t.plnspttrs.net/1/image.jpg'},
                    'link':'https://www.planespotters.net/photo/1/b-30ec-test', 'photographer':'Test author'}
@@ -401,6 +463,10 @@ class PhotoTests(unittest.TestCase):
 
 
 class DailyTests(unittest.TestCase):
+    def test_manual_dispatch_never_silently_skips_collection_or_save(self):
+        self.assertTrue(schedule.due({'updated_at':NOW},NOW+60,'workflow_dispatch'))
+        self.assertTrue(schedule.due({'updated_at':NOW},NOW-60,'workflow_dispatch'))
+        self.assertFalse(schedule.due({'updated_at':NOW},NOW+60,'schedule'))
     def test_only_after_noon_once_per_china_day_including_failed_attempts(self):
         at=lambda text:int(datetime.fromisoformat(text).timestamp())
         self.assertFalse(schedule.due({},at('2026-10-20T11:59:59+08:00')))
