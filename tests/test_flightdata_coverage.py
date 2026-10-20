@@ -21,7 +21,7 @@ def board(number, times, final=False):
 
 
 class CoverageTests(unittest.TestCase):
-    def read(self, documents, limit=40):
+    def read(self, documents, limit=10):
         with patch.object(collector,'fetch_board',return_value=documents[0]), \
                 patch.object(collector,'fetch_next_board',side_effect=documents[1:]) as following:
             result = collector.fetch_board_pages(MagicMock(),'arrivals',{'iata':'SZX'},
@@ -84,7 +84,8 @@ class CoverageTests(unittest.TestCase):
         pages,calls=self.read([board(1,[END-3600],final=True)])
         self.assertEqual(calls,0)
         self.assertIsNone(pages.warning)
-        self.assertTrue(pages.coverage['coverage_complete'])
+        self.assertFalse(pages.coverage['coverage_complete'])
+        self.assertTrue(pages.coverage['available_complete'])
         self.assertFalse(pages.coverage['boundary_confirmed'])
         self.assertEqual(pages.coverage['completion_reason'],'source_exhausted')
 
@@ -119,6 +120,39 @@ class CoverageTests(unittest.TestCase):
         pages,_=self.read([first])
         self.assertEqual(pages.coverage['completion_reason'],'missing_pagination')
         self.assertIsNotNone(pages.warning)
+
+    def test_terminal_flags_support_source_numeric_string_and_null_encodings(self):
+        for flag in [False,0,'0','false','False',None]:
+            with self.subTest(flag=flag):
+                data=board(1,[END-3600]);data['props']['meta'].update(hasMoreNextData=flag,nextPage=None)
+                pages,_=self.read([data])
+                self.assertIsNone(pages.warning)
+                self.assertTrue(pages.coverage['available_complete'])
+                self.assertFalse(pages.coverage['boundary_confirmed'])
+
+    def test_twelve_hour_window_does_not_claim_full_day_coverage(self):
+        data=board(1,[END-12600]);data['props']['meta'].update(
+            date=END-55800,hoursRange=12,hasMoreNextData=0,nextPage=None)
+        pages,_=self.read([data])
+        self.assertIsNone(pages.warning)
+        self.assertEqual(pages.coverage['completion_reason'],'source_window_exhausted')
+        self.assertEqual(pages.coverage['source_window_to'],END-12600)
+        self.assertFalse(pages.coverage['coverage_complete'])
+        self.assertTrue(pages.coverage['available_complete'])
+        self.assertIn('12 小时',pages.coverage['coverage_note'])
+
+    def test_window_can_cover_day_end_without_a_flight_exactly_at_midnight(self):
+        data=board(1,[END-300],final=True);data['props']['meta'].update(date=END-3600,hoursRange=12)
+        pages,_=self.read([data])
+        self.assertIsNone(pages.warning)
+        self.assertTrue(pages.coverage['coverage_complete'])
+        self.assertFalse(pages.coverage['boundary_confirmed'])
+
+    def test_hard_ten_page_cap_even_when_old_config_says_forty(self):
+        documents=[board(n,[END-3600+n]) for n in range(1,12)]
+        pages,calls=self.read(documents,limit=40)
+        self.assertEqual((len(pages),calls),(10,9))
+        self.assertEqual(pages.coverage['completion_reason'],'page_limit')
 
     def test_arrivals_and_departures_keep_independent_coverage_diagnostics(self):
         arrival=[board(1,[END-500]),board(2,[END+60]),board(3,[END+120])]

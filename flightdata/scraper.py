@@ -746,6 +746,15 @@ def _board_time(value):
         return 0
 
 
+def _more_flag(value):
+    """The source can serialize flags as booleans, numbers or strings."""
+    if value is True or value == 1 or isinstance(value,str) and value.strip().lower() in ('true','1'):
+        return True
+    if value is False or value == 0 or isinstance(value,str) and value.strip().lower() in ('false','0'):
+        return False
+    return None
+
+
 def fetch_board_pages(
     page,
     board: str,
@@ -761,10 +770,13 @@ def fetch_board_pages(
     A mixed/invalid page resets that confirmation. This deliberately reads
     beyond midnight once, rather than trusting the maximum timestamp.
     """
-    max_pages = max(1, int(cfg.get("pages_per_board", 40)))
+    max_pages = min(10, max(1, int(cfg.get("pages_per_board", 10))))
     pages = BoardPages()
     pages.coverage = {"target_end": today_end, "coverage_complete": False,
                       "boundary_confirmed": False, "completion_reason": None,
+                      "available_complete": False, "coverage_note": None,
+                      "source_window_from": None, "source_window_to": None,
+                      "source_window_hours": None,
                       "raw_flights": 0, "scheduled_from": None, "scheduled_to": None}
     signatures, cursors = set(), set()
     beyond_pages = 0
@@ -773,6 +785,20 @@ def fetch_board_pages(
         props = data.get("props") or {}
         raw = props.get("flights") or []
         meta = props.get("meta") or {}
+        pages.coverage["pagination_meta_keys"] = list(meta)
+        pages.coverage["pagination_meta"] = {k:meta[k] for k in
+            ("date","hoursRange","hasMoreNextData","nextPage","page","currentPage","totalPages") if k in meta}
+        LOG.info("[%s %s] 分页元数据：%s",airport["iata"],board,
+                 json.dumps(pages.coverage["pagination_meta"],ensure_ascii=False))
+        # Preserve the observed window even if terminal metadata omits it.
+        window_from = _board_time(meta.get("date"))
+        hours = _board_time(meta.get("hoursRange"))
+        if window_from and pages.coverage["source_window_from"] is None:
+            pages.coverage["source_window_from"] = window_from
+        if hours:
+            pages.coverage["source_window_hours"] = hours
+        if pages.coverage["source_window_from"] and pages.coverage["source_window_hours"]:
+            pages.coverage["source_window_to"] = pages.coverage["source_window_from"] + pages.coverage["source_window_hours"]*3600
         # Also catch cycles longer than two pages; never count repeated data
         # as the second all-tomorrow confirmation page.
         if raw:
@@ -796,19 +822,32 @@ def fetch_board_pages(
                  airport["iata"], board, len(pages), len(raw),
                  ts_iso(min(valid)) if valid else "未知", ts_iso(max(valid)) if valid else "未知", beyond_pages)
         if beyond_pages >= 2:
-            pages.coverage.update(coverage_complete=True, boundary_confirmed=True,
+            pages.coverage.update(coverage_complete=True, available_complete=True, boundary_confirmed=True,
                                   completion_reason="next_day_confirmed")
             break
-        if meta.get("hasMoreNextData") is False:
+        more = _more_flag(meta.get("hasMoreNextData"))
+        # An explicit pair of null terminal fields is different from absent
+        # pagination metadata. Do not mistake numeric 0 for a missing field.
+        terminal_nulls = ("hasMoreNextData" in meta and "nextPage" in meta
+                          and meta["hasMoreNextData"] is None and meta["nextPage"] is None)
+        if more is False or terminal_nulls:
             # Source exhaustion certifies only the AVAILABLE board, not an
             # invented last flight at 23:59 or an unseen subscription window.
-            pages.coverage.update(coverage_complete=True, completion_reason="source_exhausted")
+            horizon = pages.coverage["source_window_to"]
+            limited = bool(today_end and horizon and horizon < today_end)
+            complete = not today_end or bool(horizon and horizon >= today_end)
+            pages.coverage.update(coverage_complete=complete, available_complete=True,
+                                  completion_reason="source_window_exhausted" if limited else "source_exhausted")
+            if limited:
+                pages.coverage["coverage_note"] = f'源站 {pages.coverage["source_window_hours"]} 小时可用窗口已读完，仅开放至 {ts_iso(horizon)}；当日晚间尚未全部开放'
+            elif not complete:
+                pages.coverage["coverage_note"] = '源站可用分页已读完，但未提供足够信息确认当日结束'
             break
         if not raw:
             pages.warning = "返回空页但源站未明确分页结束；未确认当日覆盖完整"
             pages.coverage["completion_reason"] = "unexpected_empty_page"
             break
-        if not meta.get("hasMoreNextData") or not meta.get("nextPage"):
+        if more is not True or not meta.get("nextPage"):
             pages.warning = "缺少明确的后续分页 / 结束信息；未确认当日覆盖完整"
             pages.coverage["completion_reason"] = "missing_pagination"
             break
@@ -1216,7 +1255,7 @@ def build_latest(
         "coverage_from": coverage_from,
         "coverage_to": coverage_to,
         "coverage_hours": coverage_hours,
-        "pages_per_board": int(cfg.get("pages_per_board", 40)),
+        "pages_per_board": min(10,max(1,int(cfg.get("pages_per_board",10)))),
         "stats": stats,
         "today_stats": stats_of(today_flights),
         "flights": flights,
@@ -1293,6 +1332,8 @@ def run(headless: bool = True, debug: bool = False) -> int:
                 "last_success_iso": latest["generated_at_iso"],
                 "error": None,
                 "errors": errors, "boards": boards, "partial": bool(errors),
+                "day_coverage_complete": bool(boards) and all(b.get("coverage_complete") for b in boards.values()),
+                "source_window_limited": any(b.get("completion_reason") == "source_window_exhausted" for b in boards.values()),
                 "stats": latest["stats"],
                 "coverage_from": latest.get("coverage_from"),
                 "coverage_to": latest.get("coverage_to"),

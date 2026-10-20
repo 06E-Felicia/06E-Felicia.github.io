@@ -76,15 +76,16 @@ jobs:
           data = json.loads(p.read_text()) if p.exists() else {}
           lines = ['## Flightdat 采集结果', '', '保存任务仅负责提交；数据完整性见下表。源站耗尽不等于已核验次日边界。', '', '| 机场 | 结果 | 分页覆盖 | 具体原因 |', '| --- | --- | --- | --- |']
           for code, state in data.get('airports', {}).items():
-              result = '失败，保留旧快照' if not state.get('ok') else ('部分更新，保留可用数据' if state.get('partial') else '成功')
+              result = '失败，保留旧快照' if not state.get('ok') else ('部分更新，保留可用数据' if state.get('partial') else ('当前窗口已更新，全天未开放' if state.get('source_window_limited') else '成功'))
               errors = state.get('errors') or {}
-              detail = state.get('error') or '；'.join(f'{k}: {v}' for k, v in errors.items()) or '—'
+              notes = [b.get('coverage_note') for b in state.get('boards', {}).values() if b.get('coverage_note')]
+              detail = state.get('error') or '；'.join(f'{k}: {v}' for k, v in errors.items()) or '；'.join(dict.fromkeys(notes)) or '—'
               detail = str(detail).replace('|', r'\|').replace('\n', ' ')
               coverage = []
               for board, info in state.get('boards', {}).items():
                   label = {'arrivals':'到达', 'departures':'出发'}.get(board, board)
                   reason = info.get('completion_reason')
-                  end = '整页跨日已核验' if info.get('boundary_confirmed') else ('源站可用页已读完' if reason == 'source_exhausted' else '覆盖未核验')
+                  end = '整页跨日已核验' if info.get('boundary_confirmed') else ('当前窗口已读完，未到全天' if reason == 'source_window_exhausted' else ('源站可用页已读完' if reason == 'source_exhausted' else '覆盖未核验'))
                   coverage.append(f'{label} {info.get("pages", 0)}页 · {end}')
               lines.append(f'| {code} | {result} | {"；".join(coverage) or "—"} | {detail} |')
           with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as output:
