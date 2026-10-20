@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
 <title>Flightdat · 航班精选 · 深中气象</title>
-<meta name="description" content="五机场 FR24 航班精选：深圳宝安、北京首都、上海浦东、广州白云、香港。支持宽体客机、彩绘、外航、四发机和货机筛选，每10分钟尝试更新快照。">
+<meta name="description" content="七机场 FR24 航班精选：深圳、北京、上海、广州、香港、成都双流、东京羽田。支持宽体、彩绘、外航、四发机和货机筛选及航班详情，每10分钟尝试更新快照。">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
 <style>
 :root{
@@ -433,7 +433,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
 }
 
 </style>
-<link rel="stylesheet" href="assets/styles/flightdata.css?v=1.2.0">
+<link rel="stylesheet" href="assets/styles/flightdata.css?v=1.3.0">
 </head>
 <body>
 <div class="bg"></div><div class="grid"></div>
@@ -471,8 +471,6 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
   <section class="statusbar" aria-label="数据更新时间">
     <div class="item">更新时间 <b id="lastUpdate">--:--:--</b></div>
   </section>
-
-  <div class="alert" id="alert"><span class="ic" id="alertIcon">⚠️</span><span id="alertText"></span></div>
 
   <section class="stats">
     <button class="stat" data-chip="featured" style="--c:#0891b2">
@@ -560,12 +558,18 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
   <footer>
     <div>数据来源 <a id="sourceLink" href="https://www.flightradar24.com/data/airports/szx" target="_blank" rel="noopener">FlightRadar24</a> · 机型照片 <a href="https://www.planespotters.net" target="_blank" rel="noopener">PlaneSpotters</a>（版权归摄影师）· 定时快照，非实时航班保障信息</div>
     <div>状态说明：待核实＝计划或预计时间已过，但尚无起降确认；已落地＝源站已报告落地或抵达。</div>
+    <div>列表时间统一为北京时间（UTC+8）。点击航班查看完整资料。</div>
   </footer>
 </div>
 
 <button class="to-top" id="toTop" title="回到顶部" aria-label="回到顶部">↑</button>
 
 <div class="toast" id="toast"><span class="dot"></span><span id="toastText"></span></div>
+
+<dialog id="flightDetail" class="flight-detail" aria-labelledby="detailTitle">
+  <div class="detail-topline"><span>FLIGHT DETAILS · 航班资料</span><button type="button" id="closeDetail" aria-label="关闭航班详情">✕</button></div>
+  <div id="detailBody"></div>
+</dialog>
 
 <script>
 (() => {
@@ -574,11 +578,19 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
   const DATA_BASE = "./flightdata/docs/data/";
   const INDEX_URL = DATA_BASE + "index.json";
   const STATUS_URL = DATA_BASE + "status.json";
-  const REPO_URL = "https://github.com/06E-Felicia/06E-Felicia.github.io";
   const REFRESH_HOURS = 1 / 6; // Ten-minute collection; ignore old snapshot interval metadata.
   let flightRequest = 0;
   const SKELETON_HTML = '<div class="skeleton">' + '<div class="sk-row"></div>'.repeat(6) + '</div>';
   const TZ = "Asia/Shanghai";
+  const DEFAULT_AIRPORTS = [
+    {iata:"SZX",icao:"ZGSZ",name:"深圳宝安国际机场",city:"Shenzhen"},
+    {iata:"PEK",icao:"ZBAA",name:"北京首都国际机场",city:"Beijing"},
+    {iata:"PVG",icao:"ZSPD",name:"上海浦东国际机场",city:"Shanghai"},
+    {iata:"CAN",icao:"ZGGG",name:"广州白云国际机场",city:"Guangzhou"},
+    {iata:"HKG",icao:"VHHH",name:"香港国际机场",city:"Hong Kong"},
+    {iata:"CTU",icao:"ZUUU",name:"成都双流国际机场",city:"Chengdu"},
+    {iata:"HND",icao:"RJTT",name:"东京羽田国际机场",city:"Tokyo"}
+  ];
 
   const fmtHM = new Intl.DateTimeFormat("zh-CN", { timeZone: TZ, hour: "2-digit", minute: "2-digit", hourCycle: "h23" });
   const fmtHMS = new Intl.DateTimeFormat("zh-CN", { timeZone: TZ, hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23" });
@@ -676,7 +688,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
   const state = {
     board: "all", chip: "featured", q: "", showEarlier: false, sort: "time-asc",
     airport: "SZX", index: null,
-    data: null, status: null, lastSuccessSeen: null, offline: false
+    data: null, status: null, lastSuccessSeen: null, offline: false, rowFlights: []
   };
 
   const $ = s => document.querySelector(s);
@@ -685,7 +697,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     list: $("#list"), toast: $("#toast"), toastText: $("#toastText"),
     btnReload: $("#btnReload"), search: $("#search"),
     historyTools: $("#historyTools"), showEarlier: $("#showEarlier"),
-    alert: $("#alert"), alertIcon: $("#alertIcon"), alertText: $("#alertText"),
+    detail: $("#flightDetail"), detailBody: $("#detailBody"), closeDetail: $("#closeDetail"),
     sortSel: $("#sortSel"), searchClear: $("#searchClear"), clearFilters: $("#clearFilters"),
     resultText: $("#resultText"), toTop: $("#toTop"),
     brandIata: $("#brandIata"), brandName: $("#brandName"), airportSel: $("#airportSel")
@@ -739,10 +751,6 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     toast._t = setTimeout(() => el.toast.classList.remove("show"), 4200);
   }
 
-  function actionsUrl() {
-    return REPO_URL + "/actions/workflows/flightdata.yml";
-  }
-
   // ------------------------------ 数据读取（静态 JSON） ------------------------------
   async function fetchIndex() {
     let data = null;
@@ -752,11 +760,13 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     } catch (e) { /* 离线时回退 */ }
     if (!data || !Array.isArray(data.airports) || !data.airports.length) {
       data = {
-        airports: [{ iata: "SZX", icao: "ZGSZ", name: "深圳宝安国际机场", city: "Shenzhen" }],
+        airports: DEFAULT_AIRPORTS,
         default_airport: "SZX",
         refresh_hours: REFRESH_HOURS
       };
     }
+    // Old published indexes may not include newly configured airports yet.
+    data.airports = [...new Map([...DEFAULT_AIRPORTS, ...data.airports].map(a => [a.iata, a])).values()];
     state.index = data;
     const codes = data.airports.map(a => a.iata);
     let saved = null;
@@ -785,7 +795,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     document.getElementById("sourceLink").href = `https://www.flightradar24.com/data/airports/${state.airport.toLowerCase()}`;
   }
 
-  async function fetchStatus(silent = true) {
+  async function fetchStatus() {
     try {
       const r = await fetch(STATUS_URL + "?v=" + Date.now(), { cache: "no-store" });
       if (!r.ok) throw new Error("HTTP " + r.status);
@@ -799,7 +809,6 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
       return true;
     } catch (e) {
       state.offline = true;
-      if (!silent) toast("状态文件读取失败", true);
       updateStatusUI();
       return false;
     }
@@ -841,56 +850,17 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
 
   function showNoData() {
     el.historyTools.hidden = true;
-    const link = actionsUrl();
-    el.list.innerHTML = `<div class="placeholder">
-      <div class="ico">🛰️</div>
-      <h3>还没有可用的航班数据</h3>
-      <p>${esc(state.airport)} 还没有数据：GitHub Actions 尚未完成第一次抓取，或文件还未部署。<br>
-      你可以在 ${link ? `<a href="${link}" target="_blank" rel="noopener">Actions 页面</a>` : "Actions 页面"} 手动触发一次
-      <code>更新航班数据</code>；完成后由现有天气发布工作流部署全站。</p>
-    </div>`;
+    state.rowFlights = [];
+    el.list.innerHTML = placeholder("✈", "航班资料正在准备", `${esc(state.airport)} 的航班将在数据就绪后显示。`);
   }
 
   // ------------------------------ 状态栏 ------------------------------
   function updateStatusUI() {
     const st = (state.status?.airports || {})[state.airport] || {};
     const data = state.data || {};
-    const hours = REFRESH_HOURS;
     const last = st.last_success_at || data.generated_at;
 
     el.lastUpdate.textContent = fmtStamp(last);
-
-    // 状态提示
-    el.alert.classList.remove("show");
-
-    const now = Date.now() / 1000;
-    const age = last ? now - last : null;
-
-    if (state.dataError) {
-      el.alert.className = "alert bad show";
-      el.alertIcon.textContent = "🔌";
-      el.alertText.textContent = state.data
-        ? "最新航班快照读取失败，保留上次已载入的数据。请稍后重新载入。"
-        : "无法读取 flightdata/docs/data/*.json。请上传完整 flightdata 文件夹，保持本站从项目根目录发布；本地请使用 HTTP 预览，不要用 file:// 打开。";
-    } else if (state.offline) {
-      el.alert.className = "alert warn show";
-      el.alertIcon.textContent = "⚠️";
-      el.alertText.textContent = "更新状态暂时无法读取；当前航班为已保存的快照，请核对最后成功时间。";
-    } else if (st.ok === false) {
-      el.alert.className = "alert bad show";
-      el.alertIcon.textContent = "⚠️";
-      el.alertText.textContent = `${state.airport} 最近一次抓取失败：${st.error || "未知错误"}。下面展示的是 ${last ? fmtStamp(last, false) : "上一次"} 成功的数据。`;
-    } else if (st.partial) {
-      el.alert.className = "alert warn show";
-      el.alertIcon.textContent = "⚠️";
-      const labels = {arrivals:"到达", departures:"出发"};
-      const reasons = Object.entries(st.errors || {}).map(([board, error]) => `${labels[board] || board}：${error}`).join("；");
-      el.alertText.textContent = `${state.airport} 本轮仅部分更新：${reasons || "部分看板或分页未完成"}。已保留成功抓到的航班；今日列表可能包含此前保存的记录，未更新方向不代表没有航班。`;
-    } else if (age != null && age > hours * 3600 * 1.6) {
-      el.alert.className = "alert warn show";
-      el.alertIcon.textContent = "⏳";
-      el.alertText.textContent = `数据已 ${(age / 3600).toFixed(1)} 小时未更新。请在 Actions 页面核对源站读取与任务运行状态，不能仅凭更新时间判断失败原因。`;
-    }
   }
 
   function tick() {
@@ -948,6 +918,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
   });
 
   function render() {
+    state.rowFlights = [];
     state.windowMinute = Math.floor(Date.now() / 60000);
     const now = Date.now() / 1000;
     const boardRows = boardFlights();
@@ -1102,7 +1073,8 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
       ? `<span class="lv" title="彩绘：${esc(f.livery || "特殊涂装")}"><span class="livery-icon" aria-hidden="true">✦</span><span>${esc(f.livery || "特殊彩绘涂装")}</span></span>`
       : (enName && enName !== cnName ? `<span class="en">${esc(enName)}</span>` : "");
 
-    return `<article class="${cls.join(" ")}" data-event-time="${flightEventTime(f)}" style="animation-delay:${Math.min(i, 24) * 10}ms">
+    const detailIndex = state.rowFlights.push(f)-1;
+    return `<article class="${cls.join(" ")}" tabindex="0" role="button" aria-haspopup="dialog" aria-label="查看 ${esc(f.flight_number)} 航班详情" data-flight-index="${detailIndex}" data-event-time="${flightEventTime(f)}" style="animation-delay:${Math.min(i, 24) * 10}ms">
       <div class="cell time">
         <div class="t">${esc(t)}</div>
         <span class="d ${deltaCls}">${day ? `<span class="day">${esc(day)}</span> ` : ""}${esc(delta || "计划")}</span>
@@ -1148,6 +1120,71 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     }
     return `<span class="photo-thumb empty">${f.registration ? "暂无照片" : "无注册号"}</span>`;
   }
+
+  const safeWebURL = value => {
+    try { const url = new URL(value); return /^(https?:)$/.test(url.protocol) ? url.href : ""; }
+    catch { return ""; }
+  };
+  const fullTime = (time, zone = TZ) => time ? new Intl.DateTimeFormat("zh-CN", {
+    timeZone:zone, month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hourCycle:"h23"
+  }).format(new Date(time*1000)) : "未提供";
+  let detailOpener = null;
+  let detailFlightKey = "";
+  function openFlightDetail(row) {
+    const f = state.rowFlights[Number(row.dataset.flightIndex)];
+    if (!f) return;
+    detailOpener = row;
+    detailFlightKey = `${f.id}|${f.board}`;
+    const home = state.data?.airport || DEFAULT_AIRPORTS.find(a => a.iata === state.airport) || {};
+    const origin = f.board === "arrivals" ? f.endpoint || {} : home;
+    const dest = f.board === "arrivals" ? home : f.endpoint || {};
+    const status = statusOf(f);
+    const info = (label, value) => `<div class="detail-field"><dt>${esc(label)}</dt><dd>${esc(value == null || value === "" ? "未提供" : value)}</dd></div>`;
+    const airport = a => `<div><span>${esc(cityCN(a.city) || a.name || "未提供")}</span><strong>${esc(a.iata || "—")}</strong><small>${esc(a.name || "")}${a.icao ? ` · ${esc(a.icao)}` : ""}${a.country ? ` · ${esc(a.country)}` : ""}</small></div>`;
+    const photo = f.photo || {}, imageURL = safeWebURL(photo.src), photoLink = safeWebURL(photo.link || photo.src);
+    const photoHTML = imageURL ? `<figure class="detail-photo"><img src="${esc(imageURL)}" alt="${esc(f.registration || f.flight_number)} 机型照片" referrerpolicy="no-referrer"><figcaption>${esc(photo.photographer ? `© ${photo.photographer}` : "PlaneSpotters")}${photoLink ? ` · <a href="${esc(photoLink)}" target="_blank" rel="noopener">照片来源 ↗</a>` : ""}</figcaption></figure>`
+      : `<div class="detail-photo detail-no-photo"><span aria-hidden="true">✈</span>暂无机型照片</div>`;
+    const labels = [[f.is_special_livery,"彩绘机"],[f.is_widebody,"宽体机"],[f.is_foreign,"外航"],[f.is_four_engine,"四发"],[f.is_cargo,"货机"]].filter(([flag])=>flag).map(([,name])=>name).join(" · ");
+    const delay = f.delay_min == null ? "未提供" : f.delay_min > 0 ? `延误 ${f.delay_min} 分钟` : f.delay_min < 0 ? `提前 ${Math.abs(f.delay_min)} 分钟` : "正点";
+    const localTimes = state.airport === "HND" ? `<p class="detail-local">羽田当地（UTC+9）：计划 ${esc(fullTime(f.scheduled_ts,"Asia/Tokyo"))} · 预计 ${esc(fullTime(f.estimated_ts,"Asia/Tokyo"))}</p>` : "";
+    el.detailBody.innerHTML = `<header class="detail-heading"><div><p>${esc(home.name || state.airport)} · ${f.board === "arrivals" ? "到达" : "出发"}</p><h2 id="detailTitle">${esc(f.flight_number)}</h2><p>${esc(airlineCN(f.airline))}${f.airline_iata ? ` · ${esc(f.airline_iata)}` : ""}</p></div><span class="pill ${esc(status.kind)}" title="${esc(status.title || status.cn)}">${esc(status.cn)}</span></header>
+      <div class="detail-route">${airport(origin)}<span class="detail-arrow" aria-hidden="true">→</span>${airport(dest)}</div>
+      <section class="detail-times" aria-label="航班时间"><p>北京时间 · UTC+8</p><dl>${info("计划时间",fullTime(f.scheduled_ts))}${info("预计时间",fullTime(f.estimated_ts))}${info("提前 / 延误",delay)}</dl>${localTimes}</section>
+      <div class="detail-columns">${photoHTML}<section><h3>飞机与航班</h3><dl class="detail-grid">${info("机型",f.type)}${info("机型系列",f.type_family)}${info("注册号",f.registration || "未分配")}${info("呼号",f.callsign)}${info("登机口",f.gate)}${info("跑道",f.runway)}${info("航空公司原名",f.airline_raw || f.airline)}${info("标记",labels || "—")}</dl></section></div>
+      ${f.is_special_livery ? `<section class="detail-livery"><h3>✦ 彩绘涂装</h3><p>${esc(f.livery || "特殊彩绘涂装")}</p><small>识别来源：${esc(({fr24:"FR24 航班记录",manual:"人工补充",learned:"已保存的注册号记录"})[f.livery_source] || "航班记录")}</small></section>` : ""}
+      <section class="detail-record"><h3>数据记录</h3><dl class="detail-grid">${info("最近观测时间",fullTime(f.last_seen_ts))}${info("快照更新时间",fullTime(state.data?.generated_at))}${info("记录来源",f.from_history ? "今日此前已保存的记录" : "本轮航班快照")}${info("源站状态",f.status)}${info("源站航班 ID",f.id)}</dl><p>定时快照，不代表实时保障信息。未提供的字段不作推测，实际运行以机场 / 航司为准。</p></section>`;
+    if (!el.detail.open) el.detail.showModal();
+    el.detail.scrollTop = 0;
+    document.body.classList.add("detail-open");
+    el.closeDetail.focus({preventScroll:true});
+  }
+  el.list.addEventListener("click", e => {
+    if (e.target.closest("a,button")) return;
+    const row = e.target.closest(".row[data-flight-index]");
+    if (row) openFlightDetail(row);
+  });
+  el.list.addEventListener("keydown", e => {
+    if ((e.key === "Enter" || e.key === " ") && e.target.matches(".row[data-flight-index]")) {
+      e.preventDefault(); openFlightDetail(e.target);
+    }
+  });
+  el.closeDetail.addEventListener("click", () => el.detail.close());
+  el.detail.addEventListener("click", e => {
+    if (e.target !== el.detail) return;
+    const rect = el.detail.getBoundingClientRect();
+    if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) el.detail.close();
+  });
+  el.detail.addEventListener("close", () => {
+    document.body.classList.remove("detail-open");
+    const index = state.rowFlights.findIndex(f => `${f.id}|${f.board}` === detailFlightKey);
+    const target = detailOpener?.isConnected ? detailOpener
+      : el.list.querySelector(`[data-flight-index="${index}"]`) || el.btnReload;
+    target.focus({preventScroll:true});
+  });
+  el.detailBody.addEventListener("error", e => {
+    if (!(e.target instanceof HTMLImageElement)) return;
+    e.target.replaceWith(document.createTextNode("照片暂不可用"));
+  }, true);
 
   // 外部图片被拦截或失效时保留卡片尺寸，不显示破图或影响航班列表。
   el.list.addEventListener("error", event => {
@@ -1212,6 +1249,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
   });
 
   document.addEventListener("keydown", e => {
+    if (el.detail.open) return;
     const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || "");
     if (e.key === "/" && !typing) { e.preventDefault(); el.search.focus(); }
     if (e.key === "Escape" && document.activeElement === el.search) { el.search.blur(); }
@@ -1227,7 +1265,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     await fetchStatus(false);
     const loaded = await fetchData();
     setTimeout(() => el.btnReload.classList.remove("spin"), 500);
-    toast(loaded ? "已重新读取已发布的快照（不会启动抓取）" : "快照读取失败，请查看页面提示", !loaded);
+    if (loaded) toast("已重新读取已发布的快照（不会启动抓取）");
   });
 
   el.airportSel.addEventListener("change", async e => {
@@ -1238,6 +1276,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     el.historyTools.hidden = true;
     state.dataError = false;
     state.lastSuccessSeen = null;
+    render();
     el.list.innerHTML = SKELETON_HTML;
     updateBrand();
     await fetchStatus();

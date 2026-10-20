@@ -1,5 +1,5 @@
 {
-  "_说明": "SZX 航班监控配置。修改后重启 server.py 生效。",
+  "_说明": "七机场航班监控配置，GitHub Actions 下次采集时读取。",
   "refresh_hours": 0.16666666666666666,
   "server_port": 8787,
   "headless": true,
@@ -269,8 +269,8 @@
     "HT",
     "SJ"
   ],
-  "pages_per_board": 6,
-  "_分页说明": "每个看板最多抓取页数（含第 1 页）。FR24 每页 100 条，约 3 小时；抓够当天 24:00 会自动停止。",
+  "pages_per_board": 40,
+  "_分页说明": "沿源站真实分页读取，连续两整页的所有计划和预计时间均达到次日北京时间 00:00 才确认跨日；源站明确无后续页时停止。40 页仅为防循环安全上限，达到上限不算完整覆盖。每页条数和覆盖小时数不固定。",
   "airports": [
     {
       "iata": "SZX",
@@ -301,6 +301,18 @@
       "icao": "VHHH",
       "name": "香港国际机场",
       "city": "Hong Kong"
+    },
+    {
+      "iata": "CTU",
+      "icao": "ZUUU",
+      "name": "成都双流国际机场",
+      "city": "Chengdu"
+    },
+    {
+      "iata": "HND",
+      "icao": "RJTT",
+      "name": "东京羽田国际机场",
+      "city": "Tokyo"
     }
   ],
   "default_airport": "SZX",

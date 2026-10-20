@@ -22,12 +22,17 @@ class FlightdataIntegrationTests(unittest.TestCase):
         self.assertNotIn('发布目录为 /docs',page)
         self.assertTrue((ROOT/'.nojekyll').is_file())
 
-    def test_five_airport_snapshots_and_stats_are_consistent(self):
+    def test_airport_configuration_and_saved_snapshots_are_consistent(self):
         index=json.loads((DATA/'index.json').read_text())
         status=json.loads((DATA/'status.json').read_text())
         self.assertGreater(index['refresh_hours'],0)  # Saved snapshots may predate the current schedule.
         self.assertAlmostEqual(json.loads((ROOT/'flightdata/config.json').read_text())['refresh_hours']*60,10)
-        self.assertEqual({a['iata'] for a in index['airports']},{'SZX','PEK','PVG','CAN','HKG'})
+        cfg=json.loads((ROOT/'flightdata/config.json').read_text())
+        configured={a['iata']:a for a in cfg['airports']}
+        self.assertEqual(set(configured),{'SZX','PEK','PVG','CAN','HKG','CTU','HND'})
+        self.assertEqual(configured['CTU']['icao'],'ZUUU')
+        self.assertEqual(configured['HND']['icao'],'RJTT')
+        self.assertLessEqual({a['iata'] for a in index['airports']},set(configured))
         for airport in index['airports']:
             code=airport['iata'];d=json.loads((DATA/f'{code.lower()}.json').read_text())
             self.assertEqual(d['airport']['iata'],code)
@@ -78,6 +83,24 @@ class FlightdataIntegrationTests(unittest.TestCase):
             self.assertEqual(d['stats']['special'],1)
             history=json.loads((root/'cache'/f"history_{ap['iata'].lower()}.json").read_text())
             self.assertIn('offline-widebody',history['flights'])
+
+    def test_seven_airport_offline_run_includes_ctu_and_hnd(self):
+        m=self.collector();cfg=m.load_config()
+        captured={}
+        for airport in cfg['airports']:
+            flight=m.build_flight(self.raw_flight(m,'offline-'+airport['iata']),'arrivals',cfg,{},{})
+            captured[airport['iata']]=(m.AirportFlights([flight],boards={'arrivals':{'ok':True,'pages':2}}),None)
+        with tempfile.TemporaryDirectory(prefix='flightdat-seven-') as temporary:
+            root=Path(temporary)
+            with patch.multiple(m,DATA_DIR=root/'cache',SITE_DATA_DIR=root/'public',STATUS_PATH=root/'public/status.json',PHOTO_CACHE_PATH=root/'cache/photos.json'), \
+                    patch.object(m,'collect_all',return_value=captured),patch.object(m,'attach_photos'):
+                self.assertEqual(m.run(),0)
+            status=json.loads((root/'public/status.json').read_text())
+            self.assertEqual(status['successes'],7)
+            for code,icao in [('CTU','ZUUU'),('HND','RJTT')]:
+                snapshot=json.loads((root/'public'/f'{code.lower()}.json').read_text())
+                self.assertEqual(snapshot['airport']['icao'],icao)
+                self.assertEqual(snapshot['flights'][0]['id'],'offline-'+code)
 
     def test_imported_collector_and_configuration_are_self_contained(self):
         source=(ROOT/'flightdata/scraper.py').read_text()

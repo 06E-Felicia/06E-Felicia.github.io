@@ -92,6 +92,21 @@ const { chromium } = require('playwright');
         assert.equal(await page.getByRole('link', { name: 'StormSim 1.0 Sol · 轻量版', exact: true }).count(), 0);
         assert.equal(await page.getByRole('link', { name: 'StormSim 2.5 Sol', exact: true }).isVisible(), true);
         assert.equal(await page.locator('.nav-bar a[href="simulator-sol.html"]').getAttribute('hidden'), null);
+        await page.keyboard.press('Escape');
+        for (const width of [768,680,430,390,375,320]) {
+            await page.setViewportSize({width,height:844});
+            assert.ok(await page.locator('.nav-bar').evaluate(nav=>{
+                const box=nav.getBoundingClientRect();
+                return [...nav.querySelectorAll('.nav-group > li > .nav-item')]
+                    .filter(a=>a.getBoundingClientRect().width>0)
+                    .every(a=>{const r=a.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth+1&&r.top>=box.top&&r.bottom<=box.bottom+1;});
+            }),`all main navigation links must fit at ${width}px`);
+            await page.locator('.nav-bar .dropdown > .nav-item').filter({hasText:/^StormSim$/}).click();
+            assert.ok(await page.locator('.nav-bar .dropdown.is-open .dropdown-menu').evaluate(menu=>{
+                const r=menu.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth+1;
+            }),`dropdown must not overflow at ${width}px`);
+            await page.keyboard.press('Escape');
+        }
         assert.deepEqual(errors, []);
         console.log('PASS: pinned dropdown across gap, outside click/Escape/keyboard/link navigation/mobile click; longest dialogue + resize/short screens/readable scrolling.');
     } finally { await browser.close(); }

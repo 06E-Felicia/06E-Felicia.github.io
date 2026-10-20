@@ -3,7 +3,14 @@
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const {chromium}=require('playwright');
 const root=path.resolve(__dirname,'..');
-const original=code=>JSON.parse(fs.readFileSync(path.join(root,'flightdata/docs/data',code.toLowerCase()+'.json'),'utf8'));
+const original=code=>{
+ const file=path.join(root,'flightdata/docs/data',code.toLowerCase()+'.json');
+ if(fs.existsSync(file))return JSON.parse(fs.readFileSync(file,'utf8'));
+ // New-airport fixtures are test-only; no production snapshots are fabricated.
+ const d=JSON.parse(fs.readFileSync(path.join(root,'flightdata/docs/data/szx.json'),'utf8'));
+ d.airport=JSON.parse(fs.readFileSync(path.join(root,'flightdata/config.json'),'utf8')).airports.find(a=>a.iata===code);
+ return d;
+};
 const NOW_MS=original('SZX').generated_at*1000;
 const read=code=>{
  const d=original(code),now=NOW_MS/1000;
@@ -30,6 +37,7 @@ const newPage=async context=>{const page=await context.newPage();await page.cloc
   browser=await chromium.launch({headless:true,channel:'chrome'});
   const context=await browser.newContext({viewport:{width:1440,height:1000}}),page=await newPage(context),errors=[];
   await context.route('**/*',r=>new URL(r.request().url()).hostname==='127.0.0.1'?r.continue():r.abort());
+  for(const code of ['CTU','HND']) await context.route('**/'+code.toLowerCase()+'.json?*',r=>r.fulfill({json:original(code)}));
   const weather=JSON.parse(fs.readFileSync(path.join(root,'config.json'),'utf8'));
   weather.ALERT_CONFIG.enabled=false;weather.THUNDER_ALERT_CONFIG={enabled:false,candidates:[],radar:{}};
   await context.route('**/config.json*',r=>r.fulfill({json:weather}));
@@ -38,8 +46,8 @@ const newPage=async context=>{const page=await context.newPage();await page.cloc
   await page.goto(base+'/index.html');await page.locator('#update-close').click();
   await page.locator('.nav-item[href="Flightdat.html"]').click();await page.waitForURL('**/Flightdat.html');
   await page.waitForFunction(()=>document.querySelector('#list .row'));
-  assert.equal(await page.locator('#airportSel option').count(),5);
-  for(const code of ['SZX','PEK','PVG','CAN','HKG']){
+  assert.equal(await page.locator('#airportSel option').count(),7);
+  for(const code of ['SZX','PEK','PVG','CAN','HKG','CTU','HND']){
    await page.selectOption('#airportSel',code);const d=read(code);
    await page.waitForFunction(n=>document.querySelector('#list').querySelectorAll('.row').length===n,d.today.length);
    assert.equal(await page.locator('#brandIata').innerText(),code);
@@ -47,6 +55,10 @@ const newPage=async context=>{const page=await context.newPage();await page.cloc
    assert.match(await page.title(),new RegExp('Flightdat.*'+code));
    assert.match(await page.locator('#sourceLink').getAttribute('href'),new RegExp('/'+code.toLowerCase()+'$'));
   }
+  await page.locator('#list .row').first().click();
+  await page.locator('#flightDetail[open]').waitFor();
+  assert.match(await page.locator('#detailBody').innerText(),/羽田当地（UTC\+9）/);
+  await page.locator('#closeDetail').click();
   await page.selectOption('#airportSel','SZX');await page.waitForFunction(n=>document.querySelector('#list').querySelectorAll('.row').length===n,read('SZX').today.length);
   await page.locator('#boardSeg [data-board="arrivals"]').click();
   assert.equal(await page.locator('#list .row').count(),read('SZX').today.filter(f=>f.board==='arrivals').length);
@@ -91,9 +103,8 @@ const newPage=async context=>{const page=await context.newPage();await page.cloc
   await sub.locator('.site-nav a[href="index.html"]').click();await sub.waitForURL('**/project/index.html');
 
   const bad=await newPage(context);await bad.route('**/docs/data/can.json?*',r=>r.fulfill({status:404,body:''}));
-  await bad.goto(base+'/Flightdat.html');await bad.waitForFunction(()=>document.querySelector('#alertText').textContent.includes('flightdata/docs/data'));
-  assert.match(await bad.locator('#alert').innerText(),/项目根目录/);
-  assert.match(await bad.locator('#list').innerText(),/还没有可用的航班数据/);
+  await bad.goto(base+'/Flightdat.html');await bad.getByText('航班资料正在准备',{exact:true}).waitFor();
+  assert.doesNotMatch(await bad.locator('body').innerText(),/HTTP 404|读取失败|未更新|flightdata\/docs\/data/);
 
   // An ordinary domestic widebody must not be discarded by the old special-only front-end gate.
   const injected=read('SZX'),ordinary={...injected.today[0],id:'offline-test',flight_number:'TEST-WIDE',
@@ -108,7 +119,7 @@ const newPage=async context=>{const page=await context.newPage();await page.cloc
   await wp.locator('#chips [data-chip="special"]').click();assert.equal(await wp.locator('#list .flight .f').filter({hasText:'TEST-WIDE'}).count(),0);
   await wc.close();
 
-  // A successful board plus a blocked board is a visible partial update, not an empty success.
+  // Source errors remain backend diagnostics, never public banners/toasts.
   const partialContext=await browser.newContext();
   await partialContext.route('**/*',r=>new URL(r.request().url()).hostname==='127.0.0.1'?r.continue():r.abort());
   const partialStatus={updated_by:'github-actions',airports:{SZX:{ok:true,partial:true,
@@ -117,14 +128,20 @@ const newPage=async context=>{const page=await context.newPage();await page.cloc
   const partialPage=await newPage(partialContext);
   partialPage.on('pageerror',e=>errors.push(e.message));
   await partialPage.goto(base+'/Flightdat.html');
-  await partialPage.locator('#alert.warn.show').waitFor();
-  assert.match(await partialPage.locator('#alertText').innerText(),/部分更新.*出发.*Just a moment/);
+  await partialPage.waitForFunction(()=>document.querySelector('#list .row'));
+  assert.equal(await partialPage.locator('#alert').count(),0);
+  assert.doesNotMatch(await partialPage.locator('body').innerText(),/部分更新|Just a moment|小时未更新/);
   assert.equal(await partialPage.locator('#list .row').count(),read('SZX').today.length);
   partialStatus.airports.SZX={ok:false,error:'HTTP 403',last_success_at:read('SZX').generated_at};
   await partialPage.locator('#btnReload').click();
-  await partialPage.locator('#alert.bad.show').waitFor();
-  assert.match(await partialPage.locator('#alertText').innerText(),/抓取失败.*HTTP 403/);
+  await partialPage.waitForFunction(()=>document.querySelector('#toastText').textContent.includes('不会启动抓取'));
+  assert.doesNotMatch(await partialPage.locator('body').innerText(),/抓取失败|HTTP 403|小时未更新/);
   assert.equal(await partialPage.locator('#list .row').count(),read('SZX').today.length);
+  await partialPage.route('**/szx.json?*',r=>r.fulfill({status:500,body:'source error'}));
+  await partialPage.locator('#btnReload').click();
+  await partialPage.waitForTimeout(150);
+  assert.equal(await partialPage.locator('#list .row').count(),read('SZX').today.length,'failed refresh keeps loaded records');
+  assert.doesNotMatch(await partialPage.locator('body').innerText(),/读取失败|source error|HTTP 500/);
   await partialContext.close();
 
   // Default to remaining-today flights; history expands ABOVE now without
@@ -178,6 +195,20 @@ const newPage=async context=>{const page=await context.newPage();await page.cloc
   assert.equal(await row('LIVERY').locator('.lv').innerText(),'✦\n特别彩绘 <测试> 多行涂装名称');
   assert.equal(await row('LANDED').evaluate(e=>getComputedStyle(e).opacity),'1','past text must not be faded');
   assert.equal(await row('FUTURE').locator('.flight .f').evaluate(e=>getComputedStyle(e).color),'rgb(20, 44, 64)');
+  assert.equal(await row('FUTURE').evaluate(e=>getComputedStyle(e).borderBottomColor),'rgb(186, 203, 217)');
+  await row('LIVERY').click();
+  await windowPage.locator('#flightDetail[open]').waitFor();
+  assert.equal(await windowPage.locator('#detailTitle').innerText(),'LIVERY');
+  assert.match(await windowPage.locator('#detailBody').innerText(),/特别彩绘 <测试> 多行涂装名称/);
+  assert.match(await windowPage.locator('#detailBody').innerText(),/登机口[\s\S]*未提供/);
+  assert.match(await windowPage.locator('#detailBody').innerText(),/北京时间 · UTC\+8/);
+  await windowPage.screenshot({path:'/private/tmp/flightdat-detail-desktop.png'});
+  await windowPage.keyboard.press('Escape');
+  await windowPage.locator('#flightDetail[open]').waitFor({state:'hidden'});
+  assert.ok(await row('LIVERY').evaluate(e=>e===document.activeElement));
+  await windowPage.keyboard.press('Enter');
+  await windowPage.locator('#flightDetail[open]').waitFor();
+  await windowPage.locator('#closeDetail').click();
   await windowPage.clock.setFixedTime(new Date((now+120)*1000));
   await windowPage.waitForTimeout(1100);
   assert.equal(await windowPage.locator('#list .row').count(),10,'history must remain available');
@@ -198,6 +229,11 @@ const newPage=async context=>{const page=await context.newPage();await page.cloc
   assert.equal(await windowPage.locator('#list .row').count(),4);
   assert.equal(await windowPage.locator('#showEarlier').getAttribute('aria-expanded'),'false');
   await windowPage.setViewportSize({width:390,height:844});
+  await row('LIVERY').click();
+  await windowPage.locator('#flightDetail[open]').waitFor();
+  assert.ok(await windowPage.locator('#flightDetail').evaluate(e=>{const r=e.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight&&e.scrollWidth<=e.clientWidth+1;}));
+  await windowPage.screenshot({path:'/private/tmp/flightdat-detail-mobile.png'});
+  await windowPage.locator('#closeDetail').click();
   await windowPage.locator('#showEarlier').click();
   assert.equal(await windowPage.locator('#pastFlights .row').count(),6);
   assert.equal(await windowPage.locator('#s-total').innerText(),'4');
@@ -228,6 +264,6 @@ const newPage=async context=>{const page=await context.newPage();await page.cloc
   assert.deepEqual(await names(),['NEW-DAY'],'new-day snapshot replaces all old-day rows in memory');
   await windowContext.close();
   assert.deepEqual(errors,[]);
-  console.log('PASS Flightdat: five airports, remaining-today counts, expandable anchored history, first-entry current-time jump, delayed flights, midnight boundary, filters/sorts, no business-jet category, strong livery labels/dark text, timestamp-only update bar, mobile layouts, empty/past-only days, next-day replacement; no live scrape');
+  console.log('PASS Flightdat: seven airports (new-airport offline fixtures), remaining-today counts, expandable history, current-time jump, delayed flights, filters/sorts, livery/dark text/borders, timestamp-only bar, no public errors, desktop/mobile flight dialog/keyboard/focus, empty/past-only days, next-day replacement; no live scrape');
  }finally{await browser?.close();server.closeAllConnections();await new Promise(r=>server.close(r));}
 })().catch(e=>{console.error(e);process.exitCode=1;});

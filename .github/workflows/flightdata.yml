@@ -53,9 +53,11 @@ jobs:
 
       - name: 验证第二页原生翻页链路（离线样例，不访问 FR24）
         if: steps.freshness.outputs.run == 'true'
-        run: python tests/test_flightdata_pagination.py -v
+        run: |
+          python tests/test_flightdata_coverage.py -v
+          python tests/test_flightdata_pagination.py -v
 
-      - name: 抓取五机场航班快照
+      - name: 抓取七机场航班快照
         if: steps.freshness.outputs.run == 'true'
         id: scrape
         continue-on-error: true
@@ -72,13 +74,19 @@ jobs:
           from pathlib import Path
           p = Path('flightdata/docs/data/status.json')
           data = json.loads(p.read_text()) if p.exists() else {}
-          lines = ['## Flightdat 采集结果', '', '保存任务仅负责提交；数据完整性见下表。', '', '| 机场 | 结果 | 具体原因 |', '| --- | --- | --- |']
+          lines = ['## Flightdat 采集结果', '', '保存任务仅负责提交；数据完整性见下表。源站耗尽不等于已核验次日边界。', '', '| 机场 | 结果 | 分页覆盖 | 具体原因 |', '| --- | --- | --- | --- |']
           for code, state in data.get('airports', {}).items():
               result = '失败，保留旧快照' if not state.get('ok') else ('部分更新，保留可用数据' if state.get('partial') else '成功')
               errors = state.get('errors') or {}
               detail = state.get('error') or '；'.join(f'{k}: {v}' for k, v in errors.items()) or '—'
               detail = str(detail).replace('|', r'\|').replace('\n', ' ')
-              lines.append(f'| {code} | {result} | {detail} |')
+              coverage = []
+              for board, info in state.get('boards', {}).items():
+                  label = {'arrivals':'到达', 'departures':'出发'}.get(board, board)
+                  reason = info.get('completion_reason')
+                  end = '整页跨日已核验' if info.get('boundary_confirmed') else ('源站可用页已读完' if reason == 'source_exhausted' else '覆盖未核验')
+                  coverage.append(f'{label} {info.get("pages", 0)}页 · {end}')
+              lines.append(f'| {code} | {result} | {"；".join(coverage) or "—"} | {detail} |')
           with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as output:
               output.write('\n'.join(lines)+'\n')
           PY

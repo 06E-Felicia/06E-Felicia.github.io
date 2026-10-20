@@ -607,9 +607,11 @@ body {
     }
 
     .nav-bar {
-        padding: 0 10px;
+        padding: 10px;
         gap: 10px;
-        height: 62px;
+        height: auto;
+        min-height: 62px;
+        align-items: flex-start;
         overflow: visible;
     }
 
@@ -624,7 +626,7 @@ body {
     }
 
     .nav-menus {
-        /* 关键修改：改为 visible 允许下拉菜单溢出，去掉横向滚动 */
+        /* Wrap links inside the available width; keep dropdowns unclipped. */
         overflow-x: visible; 
         overflow-y: visible;
         display: flex;
@@ -632,6 +634,8 @@ body {
         align-items: center;
         gap: 10px;
         flex: 1;
+        min-width: 0;
+        flex-wrap: wrap;
         position: relative;
     }
 
@@ -640,9 +644,19 @@ body {
     }
 
     .nav-group {
-        gap: 5px;
+        gap: 4px;
         white-space: nowrap;
-        min-width: max-content;
+        min-width: 0;
+        flex-wrap: wrap;
+    }
+
+    .nav-menus .dropdown { position: static; }
+    .nav-menus .dropdown-menu {
+        left: 0;
+        top: calc(100% + 8px);
+        min-width: 0;
+        width: min(290px, 100%);
+        max-width: 100%;
     }
 
     .dropdown>.nav-item {
@@ -745,7 +759,7 @@ body {
 
 @media (max-width: 480px) {
     .nav-bar {
-        padding: 0 8px;
+        padding: 10px 8px;
         gap: 6px;
     }
 

@@ -39,6 +39,7 @@ import argparse
 import html
 import json
 import logging
+import math
 import os
 import random
 import re
@@ -416,7 +417,10 @@ class AirportFlights(list):
 
 class BoardPages(list):
     """Successful pages survive a later page failing; keep that warning too."""
-    warning = None
+    def __init__(self, items=()):
+        super().__init__(items)
+        self.warning = None
+        self.coverage = {}
 
 
 class _DataIslandParser(HTMLParser):
@@ -733,6 +737,15 @@ def fetch_next_document(page, board, airport, cfg, debug, previous):
             LOG.warning("关闭分页标签失败：%s", exc)
 
 
+def _board_time(value):
+    """A missing/bad timestamp must never certify a page as tomorrow-only."""
+    try:
+        number = float(value)
+        return int(number) if math.isfinite(number) and number > 0 else 0
+    except (TypeError, ValueError, OverflowError):
+        return 0
+
+
 def fetch_board_pages(
     page,
     board: str,
@@ -741,33 +754,82 @@ def fetch_board_pages(
     debug: bool,
     today_end: int | None = None,
 ) -> list[dict[str, Any]]:
-    """抓取看板第 1 页，并沿着「加载更多」继续翻到当天结束或页数上限。"""
-    max_pages = max(1, int(cfg.get("pages_per_board", 4)))
-    pages = BoardPages([fetch_board(page, board, airport, cfg, debug)])
-    meta = (pages[0].get("props") or {}).get("meta") or {}
+    """Read real pagination until a confirmed day boundary or source exhaustion.
 
-    for pageno in range(2, max_pages + 1):
-        if not meta.get("hasMoreNextData") or not meta.get("nextPage"):
+    One far-future outlier is not the end of the board. Require TWO complete
+    consecutive pages whose *every* scheduled and effective time is next-day.
+    A mixed/invalid page resets that confirmation. This deliberately reads
+    beyond midnight once, rather than trusting the maximum timestamp.
+    """
+    max_pages = max(1, int(cfg.get("pages_per_board", 40)))
+    pages = BoardPages()
+    pages.coverage = {"target_end": today_end, "coverage_complete": False,
+                      "boundary_confirmed": False, "completion_reason": None,
+                      "raw_flights": 0, "scheduled_from": None, "scheduled_to": None}
+    signatures, cursors = set(), set()
+    beyond_pages = 0
+    data = fetch_board(page, board, airport, cfg, debug)
+    while True:
+        props = data.get("props") or {}
+        raw = props.get("flights") or []
+        meta = props.get("meta") or {}
+        # Also catch cycles longer than two pages; never count repeated data
+        # as the second all-tomorrow confirmation page.
+        if raw:
+            signature = tuple(sorted((str(f.get("id") or ""), str(f.get("scheduledTime") or "")) for f in raw))
+            if signature in signatures:
+                pages.warning = "分页重复返回已读取的数据；未确认当日覆盖完整"
+                pages.coverage["completion_reason"] = "repeated_data"
+                break
+            signatures.add(signature)
+        pages.append(data)
+        scheduled = [_board_time(f.get("scheduledTime")) for f in raw]
+        effective = [_board_time(f.get("estimatedTime")) or t for f, t in zip(raw, scheduled)]
+        valid = [t for t in scheduled if t]
+        pages.coverage["raw_flights"] += len(raw)
+        if valid:
+            pages.coverage["scheduled_from"] = min(valid + [pages.coverage["scheduled_from"] or min(valid)])
+            pages.coverage["scheduled_to"] = max(valid + [pages.coverage["scheduled_to"] or max(valid)])
+        entirely_next_day = bool(today_end and raw and all(t >= today_end for t in scheduled + effective))
+        beyond_pages = beyond_pages + 1 if entirely_next_day else 0
+        LOG.info("[%s %s] 第 %d 页：%d 条，计划范围 %s–%s，连续整页跨日 %d/2",
+                 airport["iata"], board, len(pages), len(raw),
+                 ts_iso(min(valid)) if valid else "未知", ts_iso(max(valid)) if valid else "未知", beyond_pages)
+        if beyond_pages >= 2:
+            pages.coverage.update(coverage_complete=True, boundary_confirmed=True,
+                                  completion_reason="next_day_confirmed")
             break
+        if meta.get("hasMoreNextData") is False:
+            # Source exhaustion certifies only the AVAILABLE board, not an
+            # invented last flight at 23:59 or an unseen subscription window.
+            pages.coverage.update(coverage_complete=True, completion_reason="source_exhausted")
+            break
+        if not raw:
+            pages.warning = "返回空页但源站未明确分页结束；未确认当日覆盖完整"
+            pages.coverage["completion_reason"] = "unexpected_empty_page"
+            break
+        if not meta.get("hasMoreNextData") or not meta.get("nextPage"):
+            pages.warning = "缺少明确的后续分页 / 结束信息；未确认当日覆盖完整"
+            pages.coverage["completion_reason"] = "missing_pagination"
+            break
+        if len(pages) >= max_pages:
+            pages.warning = f"已达 {max_pages} 页安全上限，源站仍有后续数据；未确认当日覆盖完整"
+            pages.coverage["completion_reason"] = "page_limit"
+            break
+        cursor = (str(meta.get("date") or ""), str(meta["nextPage"]))
+        if cursor in cursors:
+            pages.warning = "源站重复返回相同的下一页位置；未确认当日覆盖完整"
+            pages.coverage["completion_reason"] = "repeated_cursor"
+            break
+        cursors.add(cursor)
         try:
             data = fetch_next_board(page, board, airport, cfg, debug, pages[-1])
         except Exception as exc:  # noqa: BLE001
-            LOG.warning("[%s] 加载更多第 %d 页失败，保留已抓数据：%s", board, pageno, exc)
-            pages.warning = f"第 {pageno} 页未更新：{str(exc)[:1000]}"
+            pages.warning = f"第 {len(pages)+1} 页未更新：{str(exc)[:1000]}"
+            pages.coverage["completion_reason"] = "page_failed"
             break
-        flights = (data.get("props") or {}).get("flights") or []
-        if not flights:
-            break
-        pages.append(data)
-        meta = (data.get("props") or {}).get("meta") or {}
-        LOG.info("[%s] 第 %d 页：%d 条", board, pageno, len(flights))
-
-        if today_end:
-            times = [int(f.get("scheduledTime") or 0) for f in flights]
-            if times and max(times) >= today_end:
-                LOG.info("[%s] 已覆盖到当天结束，停止翻页", board)
-                break
-
+    LOG.info("[%s %s] 停止分页：%s；整页跨日确认=%s；%s", airport["iata"], board,
+             pages.coverage["completion_reason"], pages.coverage["boundary_confirmed"], pages.warning or "已读完目标或源站可用数据")
     return pages
 
 
@@ -781,9 +843,7 @@ def collect_airport(
 ) -> tuple[list[dict[str, Any]], int | None]:
     flights = AirportFlights()
     window_hours: int | None = None
-    today_end = int(
-        datetime.now(TZ_CN).replace(hour=0, minute=0, second=0, microsecond=0).timestamp()
-    ) + 86400
+    today_end = day_window(now_ts())[2]
 
     for board in BOARDS:
         try:
@@ -809,7 +869,7 @@ def collect_airport(
                     flights.append(item)
         warning = getattr(pages, "warning", None)
         flights.boards[board] = {"ok": True, "pages": len(pages), "parsed_flights": len(flights)-before_count,
-                                 "partial": bool(warning)}
+                                 "partial": bool(warning), **getattr(pages, "coverage", {})}
         if warning:
             flights.errors[board] = warning
             flights.boards[board]["error"] = warning
@@ -1156,7 +1216,7 @@ def build_latest(
         "coverage_from": coverage_from,
         "coverage_to": coverage_to,
         "coverage_hours": coverage_hours,
-        "pages_per_board": int(cfg.get("pages_per_board", 6)),
+        "pages_per_board": int(cfg.get("pages_per_board", 40)),
         "stats": stats,
         "today_stats": stats_of(today_flights),
         "flights": flights,
