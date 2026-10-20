@@ -839,7 +839,13 @@ def fetch_board_pages(
         # pagination metadata. Do not mistake numeric 0 for a missing field.
         terminal_nulls = ("hasMoreNextData" in meta and "nextPage" in meta
                           and meta["hasMoreNextData"] is None and meta["nextPage"] is None)
-        if more is False or terminal_nulls:
+        # Live 24h boards can leave hasMoreNextData=true on their final
+        # populated page (SZX arrivals page 6), while explicitly clearing
+        # nextPage. Require the observed page number to agree; a missing
+        # cursor or an empty/incorrect page is not terminal evidence.
+        terminal_cursor = (bool(raw) and "nextPage" in meta and meta["nextPage"] is None
+                           and _board_time(meta.get("currentPage")) == len(pages))
+        if more is False or terminal_nulls or terminal_cursor:
             # Source exhaustion certifies only the AVAILABLE board, not an
             # invented last flight at 23:59 or an unseen subscription window.
             horizon = pages.coverage["source_window_to"]

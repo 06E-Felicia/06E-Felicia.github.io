@@ -141,6 +141,38 @@ class CoverageTests(unittest.TestCase):
         self.assertTrue(pages.coverage['available_complete'])
         self.assertIn('12 小时',pages.coverage['coverage_note'])
 
+    def test_live_24h_terminal_null_cursor_overrides_stale_more_flag(self):
+        documents=[board(n,[END-3600*n]) for n in range(1,7)]
+        for number,data in enumerate(documents,1):
+            data['props']['meta'].update(date=END-14*3600,hoursRange=24,currentPage=number)
+        documents[-1]['props']['meta'].update(hasMoreNextData=True,nextPage=None)
+        pages,calls=self.read(documents)
+        self.assertEqual((len(pages),calls),(6,5))
+        self.assertIsNone(pages.warning)
+        self.assertTrue(pages.coverage['coverage_complete'])
+        self.assertFalse(pages.coverage['boundary_confirmed'])
+        self.assertEqual(pages.coverage['completion_reason'],'source_exhausted')
+
+    def test_null_cursor_needs_a_populated_matching_current_page(self):
+        for current in [None,2,'bad']:
+            with self.subTest(current=current):
+                data=board(1,[END-3600]);data['props']['meta'].update(
+                    hasMoreNextData=True,nextPage=None,currentPage=current)
+                pages,_=self.read([data])
+                self.assertEqual(pages.coverage['completion_reason'],'missing_pagination')
+                self.assertFalse(pages.coverage['coverage_complete'])
+        data=board(1,[]);data['props']['meta'].update(hasMoreNextData=True,nextPage=None,currentPage=1)
+        pages,_=self.read([data])
+        self.assertEqual(pages.coverage['completion_reason'],'unexpected_empty_page')
+
+    def test_terminal_cursor_does_not_expand_a_twelve_hour_window(self):
+        data=board(1,[END-12600]);data['props']['meta'].update(
+            date=END-55800,hoursRange=12,hasMoreNextData=True,nextPage=None,currentPage=1)
+        pages,_=self.read([data])
+        self.assertIsNone(pages.warning)
+        self.assertEqual(pages.coverage['completion_reason'],'source_window_exhausted')
+        self.assertFalse(pages.coverage['coverage_complete'])
+
     def test_window_can_cover_day_end_without_a_flight_exactly_at_midnight(self):
         data=board(1,[END-300],final=True);data['props']['meta'].update(date=END-3600,hoursRange=12)
         pages,_=self.read([data])
