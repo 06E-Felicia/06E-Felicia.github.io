@@ -46,6 +46,7 @@ const newPage=async context=>{const page=await context.newPage();await page.cloc
   await page.goto(base+'/index.html');await page.locator('#update-close').click();
   await page.locator('.nav-item[href="Flightdat.html"]').click();await page.waitForURL('**/Flightdat.html');
   await page.waitForFunction(()=>document.querySelector('#list .row'));
+  assert.equal(await page.evaluate(()=>scrollY),0,'entering from the home menu must not jump to the list');
   assert.equal(await page.locator('#airportSel option').count(),7);
   for(const code of ['SZX','PEK','PVG','CAN','HKG','CTU','HND']){
    await page.selectOption('#airportSel',code);const d=read(code);
@@ -174,10 +175,9 @@ const newPage=async context=>{const page=await context.newPage();await page.cloc
   assert.match(await windowPage.locator('#resultText').innerText(),/今日剩余\s+5\s+班/);
   assert.equal(await windowPage.locator('#showEarlier').getAttribute('aria-expanded'),'false');
   assert.match(await windowPage.locator('#showEarlier').innerText(),/5 班/);
-  await windowPage.waitForFunction(()=>{
-   const marker=document.querySelector('#currentTimeMarker')?.getBoundingClientRect();
-   return marker&&marker.top>=0&&marker.bottom<=innerHeight&&scrollY>0;
-  });
+  assert.equal(await windowPage.evaluate(()=>scrollY),0,'entering Flightdat must stay at the page top');
+  await windowPage.locator('#jumpNow').click();
+  assert.ok(await windowPage.evaluate(()=>scrollY)>0,'manual time jump remains available');
   assert.ok(await windowPage.locator('#showEarlier').evaluate(e=>{const r=e.getBoundingClientRect();return r.top>=0&&r.bottom<innerHeight;}));
   const anchor=await windowPage.locator('#currentTimeMarker').evaluate(e=>e.getBoundingClientRect().top);
   await windowPage.locator('#showEarlier').click();

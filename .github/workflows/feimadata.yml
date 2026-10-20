@@ -2,8 +2,9 @@ name: 每日更新飞常准航班
 
 on:
   schedule:
-    # UTC 04:00 = Asia/Shanghai 12:00. GitHub cron is best-effort.
-    - cron: '0 4 * * *'
+    # UTC 22:00/06:00 = Asia/Shanghai 06:00/14:00. Best-effort delivery.
+    - cron: '0 22 * * *'
+    - cron: '0 6 * * *'
   workflow_dispatch:
 
 permissions:
@@ -17,7 +18,7 @@ jobs:
   collect:
     if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
     runs-on: ubuntu-24.04
-    timeout-minutes: 25
+    timeout-minutes: 35
     outputs:
       should_run: ${{ steps.daily.outputs.run }}
       outcome: ${{ steps.collect.outcome }}
@@ -27,10 +28,11 @@ jobs:
         with:
           ref: ${{ github.event.repository.default_branch }}
 
-      - name: 每天北京时间12时仅运行一次
+      - name: 检查北京时间06时和14时更新时段
         id: daily
         env:
           EVENT_NAME: ${{ github.event_name }}
+          EVENT_SCHEDULE: ${{ github.event.schedule }}
         run: python3 -B -m feimadata.schedule
 
       - name: 恢复注册号和照片缓存（不包含密钥）
@@ -57,7 +59,7 @@ jobs:
             echo '::error::缺少仓库 Secret VARIFLIGHT_MCP_KEY，未调用飞常准。'
             exit 1
           fi
-          python3 -B -m feimadata.collect --detail-limit 40 --photo-limit 60
+          python3 -B -m feimadata.collect --airports SZX --detail-limit 200 --photo-limit 60
 
       - name: 显示本轮真实注册号与图片覆盖率
         if: always() && steps.daily.outputs.run == 'true' && steps.collect.outcome != 'skipped'

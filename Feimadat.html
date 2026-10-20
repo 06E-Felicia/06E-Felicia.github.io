@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
 <title>Feimadat · 飞常准机场大屏 · 深中气象</title>
-<meta name="description" content="Feimadat 飞常准机场大屏：七机场真实 MCP 航班快照、进出港筛选、搜索、彩绘资料、当日历史与航班详情，不混用其他航班数据。">
+<meta name="description" content="Feimadat 深圳宝安机场航班精选：飞常准真实快照、彩绘和宽体筛选、P网资料照片。北京时间每天06:00和14:00更新。">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
 <style>
 :root{
@@ -484,7 +484,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
 
   <section class="stats">
     <button class="stat" data-chip="featured" style="--c:#0891b2">
-      <span class="label">剩余航班</span><b class="value" id="s-total">--</b><span class="sub">现在至今日结束 · 各分类可重叠</span>
+      <span class="label">剩余精选</span><b class="value" id="s-total">--</b><span class="sub">现在至今日结束 · 各分类可重叠</span>
       <i class="bar"><b id="b-all"></b></i>
     </button>
     <button class="stat" data-chip="livery_foreign" style="--c:#db2777">
@@ -516,7 +516,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
       <button data-board="departures">出发</button>
     </div>
     <div class="chips" id="chips">
-      <button class="chip on" data-chip="featured">全部航班 <span class="n" id="c-featured">0</span></button>
+      <button class="chip on" data-chip="featured">精选航班 <span class="n" id="c-featured">0</span></button>
       <button class="chip" data-chip="widebody">宽体机 <span class="n" id="c-widebody">0</span></button>
       <button class="chip" data-chip="livery_foreign">彩绘机 <span class="n" id="c-livery-foreign">0</span></button>
       <button class="chip" data-chip="special">特殊机型 <span class="n" id="c-special">0</span></button>
@@ -567,7 +567,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
   </main>
 
   <footer>
-    <div>数据来源 <a id="sourceLink" href="https://cmcp.variflight.com/zh/tools/#getAirportFlightBoard" target="_blank" rel="noopener">飞常准 MCP · 机场实时大屏</a> · 仅展示真实接口快照，不混用 FR24 数据 · 图片为源站主题资料，非本航班实拍</div>
+    <div>数据来源 <a id="sourceLink" href="https://cmcp.variflight.com/zh/tools/#getAirportFlightBoard" target="_blank" rel="noopener">飞常准 MCP · 机场实时大屏</a> · 不混用 FR24 航班数据 · 照片来自 PlaneSpotters，非本航班实拍</div>
     <div>状态说明：待核实＝计划或预计时间已过，但尚无起降确认；已落地＝源站已报告落地或抵达。</div>
     <div>列表时间统一为北京时间（UTC+8）。接口字段未提供时保留空缺；实际运行以机场 / 航司为准。</div>
   </footer>
@@ -582,7 +582,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
   <div id="detailBody"></div>
 </dialog>
 
-<script src="assets/scripts/feimadat-photos.js?v=2.1"></script>
+<script src="assets/scripts/feimadat-photos.js?v=2.2"></script>
 <script>
 (() => {
   "use strict";
@@ -595,13 +595,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
   const SKELETON_HTML = '<div class="skeleton">' + '<div class="sk-row"></div>'.repeat(6) + '</div>';
   const TZ = "Asia/Shanghai";
   const DEFAULT_AIRPORTS = [
-    {iata:"SZX",icao:"ZGSZ",name:"深圳宝安国际机场",city:"Shenzhen"},
-    {iata:"PEK",icao:"ZBAA",name:"北京首都国际机场",city:"Beijing"},
-    {iata:"PVG",icao:"ZSPD",name:"上海浦东国际机场",city:"Shanghai"},
-    {iata:"CAN",icao:"ZGGG",name:"广州白云国际机场",city:"Guangzhou"},
-    {iata:"HKG",icao:"VHHH",name:"香港国际机场",city:"Hong Kong"},
-    {iata:"CTU",icao:"ZUUU",name:"成都双流国际机场",city:"Chengdu"},
-    {iata:"HND",icao:"RJTT",name:"东京羽田国际机场",city:"Tokyo"}
+    {iata:"SZX",icao:"ZGSZ",name:"深圳宝安国际机场",city:"Shenzhen"}
   ];
 
   const fmtHM = new Intl.DateTimeFormat("zh-CN", { timeZone: TZ, hour: "2-digit", minute: "2-digit", hourCycle: "h23" });
@@ -684,8 +678,8 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     "Leipzig": "莱比锡", "Anchorage": "安克雷奇", "Bishkek": "比什凯克", "Tashkent": "塔什干"
   };
 
-  // The airport board includes ordinary flights even when aircraft / livery metadata is absent.
-  const isFeatured = () => true;
+  // Match Flightdat's curated selection; an unknown aircraft is not a widebody.
+  const isFeatured = f => !!(f.is_special_livery || f.is_foreign || f.is_widebody || f.is_four_engine || f.is_cargo);
   const isSpecialType = f => !!(f.is_four_engine || f.is_cargo);
   const isLiveryForeign = f => !!(f.is_special_livery || f.is_foreign);
 
@@ -781,8 +775,9 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
         refresh_hours: REFRESH_HOURS
       };
     }
-    // Old published indexes may not include newly configured airports yet.
-    data.airports = [...new Map([...DEFAULT_AIRPORTS, ...data.airports].map(a => [a.iata, a])).values()];
+    // Restrict even legacy seven-airport indexes and saved HND/PEK preferences.
+    data.airports = DEFAULT_AIRPORTS.map(a => ({...a,...data.airports.find(b=>b.iata === a.iata)}));
+    data.default_airport = "SZX";
     state.index = data;
     const codes = data.airports.map(a => a.iata);
     let saved = null;
@@ -859,9 +854,6 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
       updateBrand();
       render();
       updateStatusUI();
-      if (locate) requestAnimationFrame(() => {
-        if (request === flightRequest && airport === state.airport) jumpToNow();
-      });
       if (isNew) {
         toast("已载入新的飞常准接口快照");
       }
@@ -922,7 +914,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     const arr = Array.isArray(d.today) ? d.today : (d.flights || []);
     const now = Date.now() / 1000;
     const day = Math.floor((now + 8 * 3600) / 86400); // China standard time; no host timezone dependency.
-    // Show all real board records. Missing classification fields must not hide ordinary flights.
+    // Ordinary narrowbodies stay excluded, including when searching or expanding history.
     return arr.filter(f => {
       const time = flightEventTime(f);
       return isFeatured(f) && time > 0
@@ -971,7 +963,8 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
       ? "大屏未提供机型及货运属性，尚未补齐的分类暂不可用；机号和机型按航班详情补充，未提供不代表未分配。"
       : "机号与机型由飞常准航班详情补充；分类仅统计已识别记录，不代表全部数量。";
     if (coverage) note.textContent += ` 当前快照 ${coverage.registration}/${coverage.total} 条有注册号，${coverage.aircraft_type}/${coverage.total} 条有机型。`;
-    note.textContent += "照片为同注册号资料照或源站主题图片，非本航班实拍；列表不保证全天完整。每天北京时间12:00更新一次。";
+    if (coverage?.selected_total != null) note.textContent += ` 当日已识别精选 ${coverage.selected_registration}/${coverage.selected_total} 条有注册号。`;
+    note.textContent += "仅展示深圳已识别精选航班，普通窄体机不显示。照片仅采用 PlaneSpotters 同注册号资料照，非本航班实拍；列表不保证全天完整。每天北京时间06:00、14:00更新。";
     state.rowFlights = [];
     state.windowMinute = Math.floor(Date.now() / 60000);
     const now = Date.now() / 1000;
@@ -1174,7 +1167,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
 
 
   function photoThumb(f) {
-    const ph = f.photo;
+    const ph = referencePhoto(f);
     const imageURL = safeWebURL(ph?.src);
     const photoLink = safeWebURL(ph?.link) || imageURL;
     if (imageURL) {
@@ -1192,6 +1185,19 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     try { const url = new URL(value); return /^(https?:)$/.test(url.protocol) ? url.href : ""; }
     catch { return ""; }
   };
+  const referencePhoto = f => {
+    const ph = f.photo;
+    if (!ph || ph.source !== "planespotters" || ph.reg !== f.registration || !ph.photographer) return null;
+    try {
+      const image = new URL(ph.src), link = new URL(ph.link);
+      if (image.protocol !== "https:" || link.protocol !== "https:"
+          || !["t.plnspttrs.net","cdn.planespotters.net"].includes(image.hostname)
+          || !["www.planespotters.net","planespotters.net"].includes(link.hostname)
+          || image.username || image.password || link.username || link.password
+          || !link.pathname.startsWith("/photo/")) return null;
+      return ph;
+    } catch { return null; }
+  };
   const fullTime = (time, zone = TZ) => time ? new Intl.DateTimeFormat("zh-CN", {
     timeZone:zone, month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hourCycle:"h23"
   }).format(new Date(time*1000)) : "未提供";
@@ -1208,7 +1214,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     const status = statusOf(f);
     const info = (label, value) => `<div class="detail-field"><dt>${esc(label)}</dt><dd>${esc(value == null || value === "" ? "未提供" : value)}</dd></div>`;
     const airport = a => `<div><span>${esc(cityCN(a.city) || a.name || "未提供")}</span><strong>${esc(a.iata || "—")}</strong><small>${esc(a.name || "")}${a.icao ? ` · ${esc(a.icao)}` : ""}${a.country ? ` · ${esc(a.country)}` : ""}</small></div>`;
-    const photo = f.photo || {}, imageURL = safeWebURL(photo.src), photoLink = safeWebURL(photo.link || photo.src);
+    const photo = referencePhoto(f) || {}, imageURL = safeWebURL(photo.src), photoLink = safeWebURL(photo.link || photo.src);
     const photoHTML = imageURL ? `<figure class="detail-photo"><img src="${esc(imageURL)}" alt="${esc(f.registration || f.flight_number)} 资料照片" referrerpolicy="no-referrer"><figcaption>${esc(photo.photographer ? `© ${photo.photographer} · ${photo.provider || "资料照片"}` : (photo.provider || "照片来源未提供"))}${photoLink ? ` · <a href="${esc(photoLink)}" target="_blank" rel="noopener">照片来源 ↗</a>` : ""}</figcaption></figure>`
       : `<div class="detail-photo detail-no-photo"${f.registration ? ` data-photo-reg="${esc(f.registration)}"` : ""}><span aria-hidden="true">✈</span>暂无机型照片</div>`;
     const labels = [[f.is_special_livery,"彩绘机"],[f.is_widebody,"宽体机"],[f.is_foreign,"外航"],[f.is_four_engine,"四发"],[f.is_cargo,"货机"]].filter(([flag])=>flag).map(([,name])=>name).join(" · ");

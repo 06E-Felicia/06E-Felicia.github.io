@@ -3,12 +3,16 @@
 Manual by default. No account mutation, scheduling, scraping, or extra server.
 """
 import argparse
+from copy import deepcopy
 import json
 import os
 from pathlib import Path
 import time
 
 from .client import Client, MCPError
+from . import enrich as detail_module
+from .budget import DetailBudget
+from .schedule import slot
 from .enrich import DEFAULT_DETAIL_LIMIT, enrich_snapshots
 from .normalize import CAPABILITIES, day_window, event_time, normalize_board
 from .photos import PhotoError, attach_photos
@@ -77,13 +81,28 @@ def run(codes=None, prefetched=None, client=None, detail_limit=DEFAULT_DETAIL_LI
     if any(type(value) is not int or not 0 <= value <= 2000 for value in (detail_limit,photo_limit)):
         raise MCPError('详情和照片查询上限须为 0–2000')
     index = read_json(INDEX, {})
-    airports = index.get('airports') or []
+    airports = [a for a in (index.get('airports') or []) if a.get('iata') == 'SZX']
     selected = [a for a in airports if not codes or a['iata'] in codes]
     if not selected or (codes and set(codes)-{a['iata'] for a in selected}):
-        raise MCPError('机场选择不在已配置的七机场列表内')
+        raise MCPError('Feimadat 当前仅允许查询深圳 SZX')
     now = int(time.time())
     previous_status = read_json(STATUS, {})
-    states = dict(previous_status.get('airports') or {})
+    states = {k:v for k,v in (previous_status.get('airports') or {}).items() if k == 'SZX'}
+    def publish_budget(record):
+        current = read_json(STATUS,previous_status)
+        current['daily_detail_budget'] = record
+        write_json(STATUS,current)
+    budget = DetailBudget(detail_module.CACHE_PATH.parent/'daily-budget.json',previous_status,now,publish_budget)
+    detail_limit = min(detail_limit,budget.remaining())
+    if not enrich_only:
+        previous_status['last_attempt_at'] = now
+        slots = set(previous_status.get('schedule_slots') or [])
+        if slot(now):slots.add(slot(now))
+        previous_status['schedule_slots'] = sorted(slots)[-4:]
+        publish_budget(budget.record())
+        current = read_json(STATUS,{})
+        current.update(last_attempt_at=now,schedule_slots=previous_status['schedule_slots'])
+        write_json(STATUS,current)
     rollover(airports, now)
     client = client or (Client() if not enrich_only or detail_limit else None)
     successes, fatal, pending, previous_snapshots = 0, None, [], []
@@ -98,7 +117,7 @@ def run(codes=None, prefetched=None, client=None, detail_limit=DEFAULT_DETAIL_LI
             path = DATA / (code.lower()+'.json')
             previous = read_json(path, {})
             if previous.get('source') == 'variflight-mcp':
-                previous_snapshots.append(previous)
+                previous_snapshots.append(deepcopy(previous))
             if enrich_only:
                 if (previous.get('source') == 'variflight-mcp' and previous.get('airport',{}).get('iata') == code
                         and isinstance(previous.get('flights'),list) and previous.get('generated_at')):
@@ -140,7 +159,8 @@ def run(codes=None, prefetched=None, client=None, detail_limit=DEFAULT_DETAIL_LI
         if snapshots:
             try:
                 detail_stats = enrich_snapshots(snapshots, client, limit=0 if fatal else detail_limit,
-                                                prefetched=prefetched_details, previous=previous_snapshots)
+                                                prefetched=prefetched_details, previous=previous_snapshots,
+                                                before_request=budget.reserve)
                 if detail_stats.get('fatal_status'):
                     fatal = '详情补齐遇到授权或限流错误，已停止新增查询；看板数据保留'
                 photo_stats = attach_photos(snapshots, limit=photo_limit, previous=previous_snapshots)
@@ -178,21 +198,33 @@ def run(codes=None, prefetched=None, client=None, detail_limit=DEFAULT_DETAIL_LI
                               for _,_,snapshot in pending for f in snapshot.get('flights',[]))
     state['detail_registrations'] = detail_registrations
     state['metadata_failed'] = bool(detail_limit and pending and not detail_registrations)
+    if enrich_only and previous_status:
+        # A metadata-only operation is not a new board collection or Actions run.
+        # Keep its real provenance, timestamp and diagnostics intact.
+        metadata = {'at':at, 'details':detail_stats, 'photos':photo_stats,
+                    'error':fatal, 'metadata_failed':state['metadata_failed']}
+        state = dict(previous_status, airports=states, metadata_updated_at=at,
+                     last_metadata_enrichment=metadata, detail_registrations=detail_registrations)
+    state.update(daily_detail_budget=budget.record(),
+                 schedule_slots=previous_status.get('schedule_slots',[]),
+                 last_attempt_at=previous_status.get('last_attempt_at'))
     write_json(STATUS, state)
     # Index contains configuration, not an invented last-success timestamp.
-    index.update(source='variflight-mcp', connection_state=state['connection_state'])
+    index.update(source='variflight-mcp', connection_state=state['connection_state'],airports=airports,default_airport='SZX')
     write_json(INDEX, index)
-    print('本轮 %d/%d 机场取得有效快照；定时任务每天北京时间12时运行一次。' % (successes, len(selected)), flush=True)
-    if state['metadata_failed']:
+    print(('本轮仅补齐 %d/%d 机场的已有快照；未重新采集机场大屏。' if enrich_only else
+           '本轮 %d/%d 机场取得有效快照；仅深圳，每天北京时间06:00、14:00更新。') % (successes, len(selected)), flush=True)
+    failed_metadata = (state.get('last_metadata_enrichment') or {}).get('metadata_failed') if enrich_only else state.get('metadata_failed')
+    if failed_metadata:
         print('详情补齐未取得普通航班注册号；看板保留，但本轮不冒充完整成功。',flush=True)
-    return 0 if successes and not state['metadata_failed'] else 1
+    return 0 if successes and not failed_metadata else 1
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--airports', default='all', help='all 或用英文逗号分隔，例如 SZX,HND')
+    parser.add_argument('--airports', default='SZX', help='仅支持 SZX（all 同样仅查询深圳）')
     parser.add_argument('--detail-limit', type=int, default=DEFAULT_DETAIL_LIMIT,
-                        help='每轮最多详情航线查询次数（默认40；0仅读取缓存，不发起详情查询）')
+                        help='详情请求上限，仍受每日200次共享额度限制；0仅复用缓存')
     parser.add_argument('--photo-limit', type=int, default=60, help='每轮最多新照片元数据查询次数（默认60）')
     parser.add_argument('--enrich-only', action='store_true', help='仅补充已有快照，不重新获取机场大屏')
     args = parser.parse_args()

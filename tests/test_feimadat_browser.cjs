@@ -8,9 +8,10 @@ for(const match of html.matchAll(/<script>([\s\S]*?)<\/script>/g))new vm.Script(
 const NOW=Date.parse('2026-10-20T15:00:00+08:00')/1000;
 const fixture=(id,offset,extra={})=>({id,flight_number:id,board:'arrivals',scheduled_ts:NOW+offset,
  estimated_ts:null,status:'scheduled',airline:'测试航司',endpoint:{iata:'PEK',city:'Beijing'},...extra});
-const samples=[fixture('UI-ORDINARY',1800),fixture('UI-WIDE',3600,{is_widebody:true,type:'A359',
+const samples=[fixture('UI-LIVERY',1800,{is_special_livery:true}),fixture('UI-WIDE',3600,{is_widebody:true,type:'A359',
  gate:'<img src=x onerror="window.BAD_SCRIPT=1">',photo:{src:'javascript:window.BAD_SCRIPT=1'}}),
- fixture('UI-HISTORY',-1800),fixture('UI-TOMORROW',86400)];
+ fixture('UI-HISTORY',-1800,{is_special_livery:true}),fixture('UI-TOMORROW',86400,{is_widebody:true}),
+ fixture('UI-ORDINARY',1200,{type:'A320',is_widebody:false}),fixture('UI-UNKNOWN',900)];
 const snapshot={source:'variflight-mcp',airport:{iata:'SZX',name:'深圳宝安国际机场',city:'Shenzhen'},
  generated_at:NOW,service_day:'2026-10-20',flights:samples,today:samples};
 const status={source:'variflight-mcp',connection_state:'ready',connected:true,
@@ -18,6 +19,7 @@ const status={source:'variflight-mcp',connection_state:'ready',connected:true,
 async function localPage(browser,base,options={}){
  const context=await browser.newContext({viewport:{width:1440,height:1000}}),page=await context.newPage(),errors=[],requests=[];
  page.on('pageerror',error=>errors.push(error.message));
+ await context.addInitScript(()=>localStorage.setItem('feimadat-airport','HND'));
  await page.clock.setFixedTime(new Date((options.realTime || NOW)*1000));
  await context.route('**/*',route=>{
   const url=new URL(route.request().url());requests.push(url);
@@ -38,6 +40,8 @@ async function localPage(browser,base,options={}){
   await context.route('**/feimadata/data/status.json?*',route=>route.fulfill({json:{
    source:'variflight-mcp',connection_state:'awaiting_key',connected:false,airports:{}}}));
  }
+ if(options.legacyIndex)await context.route('**/feimadata/data/index.json?*',route=>route.fulfill({json:{
+  source:'variflight-mcp',default_airport:'HND',airports:[{iata:'HND',name:'东京羽田'},{iata:'SZX',name:'深圳宝安国际机场'}]}}));
  await page.goto(base+(options.prefix||'')+'/Feimadat.html');
  return {context,page,errors,requests};
 }
@@ -63,7 +67,7 @@ async function localPage(browser,base,options={}){
   const base='http://127.0.0.1:'+server.address().port;
   const pending=await localPage(browser,base),{page}=pending;
   await page.getByText('飞常准数据尚未接通',{exact:true}).waitFor();
-  assert.equal(await page.locator('#airportSel option').count(),7);
+  assert.equal(await page.locator('#airportSel option').count(),1);
   assert.equal(await page.locator('#sourceStateText').innerText(),'待接入');
   assert.equal(await page.locator('#lastUpdate').innerText(),'--');
   assert.deepEqual(await page.locator('.stat .value').allTextContents(),Array(5).fill('—'));
@@ -72,7 +76,7 @@ async function localPage(browser,base,options={}){
   assert.equal(pending.requests.some(u=>u.hostname!=='127.0.0.1'),false);
   assert.equal(pending.requests.some(u=>/flightdata\/|\/szx\.json/.test(u.pathname)),false);
   await page.evaluate(()=>localStorage.setItem('fr24-airport','PEK'));
-  for(const airport of ['CAN','HND','SZX']){
+  for(const airport of ['SZX']){
    await page.selectOption('#airportSel',airport);
    await page.waitForFunction(code=>document.querySelector('#brandIata').textContent===code,airport);
    await page.getByText('飞常准数据尚未接通',{exact:true}).waitFor();
@@ -95,9 +99,16 @@ async function localPage(browser,base,options={}){
   await page.screenshot({path:'/private/tmp/feimadat-pending-mobile.png'});
   assert.deepEqual(pending.errors,[]);await pending.context.close();
 
-  const active=await localPage(browser,base,{active:true});
+  const active=await localPage(browser,base,{active:true,legacyIndex:true});
   await active.page.waitForFunction(()=>document.querySelectorAll('#list .row').length===2);
+  assert.equal(await active.page.evaluate(()=>scrollY),0,'opening Feimadat must not scroll to the list');
+  assert.equal(await active.page.locator('#airportSel option').count(),1,'ignore stale multi-airport index');
+  assert.equal(await active.page.locator('#brandIata').innerText(),'SZX','ignore old HND preference');
   assert.equal(await active.page.locator('#s-total').innerText(),'2');
+  assert.doesNotMatch(await active.page.locator('#list').innerText(),/UI-ORDINARY|UI-UNKNOWN|UI-TOMORROW/);
+  await active.page.locator('#search').fill('UI-ORDINARY');
+  assert.equal(await active.page.locator('#list .row').count(),0,'search cannot bypass curated filtering');
+  await active.page.locator('#search').fill('');
   assert.equal(await active.page.locator('#sourceStateText').innerText(),'SNAPSHOT');
   assert.equal(await active.page.locator('#list .photo-thumb img').count(),0,'reject unsafe image URLs');
   await active.page.locator('#showEarlier').click();
@@ -134,11 +145,11 @@ async function localPage(browser,base,options={}){
 
   const enrichedData={...snapshot,capabilities:{aircraft_type:true,widebody:true,four:true,cargo:false},
     detail_coverage:{total:1,registration:1,aircraft_type:1,photo:1},flights:[fixture('UI-ENRICHED',1800,{
-      registration:'B-30EC',registration_source:'getFlightStatus',detail_checked_at:NOW-60,
-      type:'A321-253NX',type_family:'A320',photo:{src:base+'/__test_photo.svg',link:'https://www.planespotters.net/photo/1/b-30ec-test',
+      registration:'B-30EC',registration_source:'getFlightStatus',detail_checked_at:NOW-60,is_special_livery:true,
+      type:'A321-253NX',type_family:'A320',photo:{source:'planespotters',reg:'B-30EC',src:'https://t.plnspttrs.net/1/test.jpg',link:'https://www.planespotters.net/photo/1/b-30ec-test',
        photographer:'Test author',provider:'PlaneSpotters.net · 同注册号资料照片（非本航班实拍）'}})]};
   enrichedData.today=enrichedData.flights;
-  const enriched=await localPage(browser,base,{active:true,data:enrichedData});
+  const enriched=await localPage(browser,base,{active:true,photos:true,data:enrichedData});
   await enriched.page.getByText('B-30EC',{exact:true}).waitFor();
   assert.match(await enriched.page.locator('#list').innerText(),/A321-253NX/);
   assert.match(await enriched.page.locator('.credit').innerText(),/Test author.*非本航班实拍/);
@@ -148,12 +159,15 @@ async function localPage(browser,base,options={}){
   assert.match(await enriched.page.locator('#detailBody').innerText(),/同注册号资料照片/);
   assert.deepEqual(enriched.errors,[]);await enriched.context.close();
 
-  const lazyRows=[fixture('UI-LAZY',1800,{registration:'B-2043',photo:null,type:'777-39L'})];
+  const lazyRows=[fixture('UI-LAZY',1800,{registration:'B-2043',is_special_livery:true,
+    photo:{src:'https://file.variflight.com/theme.png',provider:'飞常准主题图片'},type:'777-39L'})];
   const lazy=await localPage(browser,base,{active:true,photos:true,data:{...snapshot,flights:lazyRows,today:lazyRows}});
   await lazy.page.getByText('B-2043',{exact:true}).waitFor();
   await lazy.page.locator('#list .row').scrollIntoViewIfNeeded();
   await lazy.page.getByText(/Lazy Test author/).first().waitFor();
   assert.equal(await lazy.page.locator('#list .photo-thumb img').count(),1);
+  assert.equal(lazy.requests.some(url=>url.hostname.endsWith('variflight.com')),false,'never load legacy theme images');
+  assert.match(await lazy.page.locator('#list .photo-thumb img').getAttribute('src'),/^https:\/\/t\.plnspttrs\.net\//);
   await lazy.page.locator('#list .row').click();
   await lazy.page.locator('#detailBody .detail-photo img').waitFor();
   assert.match(await lazy.page.locator('#detailBody figcaption').innerText(),/非本航班实拍/);
@@ -179,9 +193,9 @@ async function localPage(browser,base,options={}){
   if(liveStatus.connection_state==='ready'){
    const realTime=Math.floor(Date.now()/1000),live=await localPage(browser,base,{real:true,realTime});
    const operation=f=>Number(f.actual_ts)>0?Number(f.actual_ts):Number(f.estimated_ts)>0?Number(f.estimated_ts):Number(f.scheduled_ts)||0;
-   for(const code of ['SZX','PEK','PVG','CAN','HKG','CTU','HND']){
+   for(const code of ['SZX']){
     const d=JSON.parse(fs.readFileSync(path.join(root,'feimadata/data',code.toLowerCase()+'.json'),'utf8'));
-    const expected=d.today.filter(f=>operation(f)>=realTime&&Math.floor((operation(f)+28800)/86400)===Math.floor((realTime+28800)/86400));
+    const expected=d.today.filter(f=>(f.is_special_livery||f.is_foreign||f.is_widebody||f.is_four_engine||f.is_cargo)&&operation(f)>=realTime&&Math.floor((operation(f)+28800)/86400)===Math.floor((realTime+28800)/86400));
     await live.page.selectOption('#airportSel',code);
     await live.page.waitForFunction(({code,n})=>document.querySelector('#brandIata').textContent===code&&
       document.querySelectorAll('#list .row').length===n&&document.querySelector('#sourceStateText').textContent==='SNAPSHOT',
@@ -203,6 +217,6 @@ async function localPage(browser,base,options={}){
   await sub.page.getByText('飞常准数据尚未接通',{exact:true}).waitFor();
   assert.equal(sub.requests.some(u=>u.pathname.startsWith('/project/feimadata/')),true);
   assert.deepEqual(sub.errors,[]);await sub.context.close();
-  console.log('PASS Feimadat: pending state, isolated sources, seven airports, mobile layouts, snapshot fixtures, detail safety and project subpaths');
+  console.log('PASS Feimadat: SZX only, stale-index/preferences isolation, no entry auto-scroll, curated filters, P-only photos, mobile layouts, history, details and subpaths');
  }finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}
 })().catch(error=>{console.error(error);process.exitCode=1;});

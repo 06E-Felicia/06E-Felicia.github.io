@@ -12,7 +12,7 @@ import unittest
 from unittest.mock import patch
 import urllib.error
 
-from feimadata import client, collect, enrich, normalize, photos, private_key, schedule
+from feimadata import budget, client, collect, enrich, normalize, photos, private_key, schedule
 
 NOW = int(datetime.fromisoformat('2026-10-20T12:00:00+08:00').timestamp())
 AIRPORT = {'iata':'SZX','name':'深圳宝安国际机场','city':'Shenzhen'}
@@ -179,10 +179,10 @@ class MappingTests(unittest.TestCase):
         _,info=normalize.normalize_board(result([raw(),raw(arrPlanHour='bad')]),AIRPORT,'arrivals',NOW)
         self.assertTrue(info['partial']);self.assertEqual(info['skipped_count'],1)
 
-    def test_livery_image_is_provider_material_not_an_invented_photo_credit(self):
+    def test_livery_flag_is_kept_without_loading_provider_theme_images(self):
         parsed=self.parse(raw(flightDesc='测试彩绘',flightPic='https://file.variflight.com/theme.png',authorization='PRIVATE_TEST_KEY'))
         self.assertTrue(parsed['is_special_livery'])
-        self.assertIn('非本航班实拍',parsed['photo']['provider'])
+        self.assertIsNone(parsed['photo'])
         self.assertNotIn('PRIVATE_TEST_KEY',json.dumps(parsed))
         for url in ('javascript:alert(1)','http://127.0.0.1/private','https://other.test/image.png',
                     'https://file.variflight.com/image.png?token=private'):
@@ -201,6 +201,34 @@ class CollectorTests(unittest.TestCase):
         self.photos_patch.start()
         collect.write_json(collect.INDEX,{'source':'variflight-mcp','airports':[AIRPORT]})
     def tearDown(self):self.photos_patch.stop();self.cache_patch.stop();self.patch.stop();self.temporary.cleanup()
+
+    def test_legacy_multi_airport_index_can_only_query_shenzhen(self):
+        collect.write_json(collect.INDEX,{'airports':[AIRPORT,{'iata':'HND'}]})
+        class Fake:
+            def __init__(self):self.calls=[]
+            def initialize(self):pass
+            def discover_board(self):pass
+            def close(self):pass
+            def get_board(self,code,direction):
+                self.calls.append(code);return result([raw()] if direction=='1' else [])
+        api=Fake()
+        with patch.object(collect.time,'time',return_value=NOW),contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(collect.run(client=api,detail_limit=0,photo_limit=0),0)
+        self.assertEqual(api.calls,['SZX','SZX'])
+        self.assertEqual([a['iata'] for a in collect.read_json(collect.INDEX,{})['airports']],['SZX'])
+        with self.assertRaises(client.MCPError):collect.run(codes=['HND'],client=api,detail_limit=0)
+
+    def test_exhausted_daily_budget_still_refreshes_board_but_never_calls_details(self):
+        collect.write_json(collect.STATUS,{'daily_detail_budget':{'day':'2026-10-20','used':200}})
+        class Fake:
+            def initialize(self):pass
+            def discover_board(self):pass
+            def close(self):pass
+            def get_board(self,code,direction):return result([raw()] if direction=='1' else [])
+            def get_status(self,*args,**kw):raise AssertionError('daily cap bypassed')
+        with patch.object(collect.time,'time',return_value=NOW),contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(collect.run(client=Fake(),photo_limit=0),0)
+        self.assertEqual(collect.read_json(collect.STATUS,{})['daily_detail_budget']['used'],200)
 
     def test_publish_preserves_today_history_but_not_tomorrow(self):
         prior_row=normalize.normalize_board(result([raw(flightNumber='OLD',arrPlanHour='11:00')]),AIRPORT,'arrivals',NOW-3600)[0][0]
@@ -282,6 +310,17 @@ class CollectorTests(unittest.TestCase):
             self.assertEqual(collect.run(client=Fake(),photo_limit=0),1)
         self.assertTrue(collect.read_json(collect.STATUS,{})['metadata_failed'])
         self.assertTrue((self.data/'szx.json').exists(),'valid board must still be preserved')
+
+    def test_metadata_only_does_not_rewrite_board_collection_provenance(self):
+        collect.write_json(self.data/'szx.json',dict(snapshot(),service_day='2026-10-20'))
+        original={'source':'variflight-mcp','connection_state':'ready','updated_at':NOW-60,'run_url':'https://github.com/example/run/1',
+                  'airports':{'SZX':{'last_success_at':NOW-60}},'enrichment':{'details':{'route_calls':40}}}
+        collect.write_json(collect.STATUS,original)
+        with patch.object(collect.time,'time',return_value=NOW),contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(collect.run(enrich_only=True,detail_limit=0,photo_limit=0),0)
+        saved=collect.read_json(collect.STATUS,{})
+        for k in ['run_url','updated_at','enrichment']:self.assertEqual(saved[k],original[k])
+        self.assertEqual(saved['last_metadata_enrichment']['details']['route_calls'],0)
 
 
 class EnrichmentTests(unittest.TestCase):
@@ -410,6 +449,82 @@ class EnrichmentTests(unittest.TestCase):
         self.assertEqual({f['registration'] for f in snap['flights']},{'B-30EC','B-1234'})
         self.assertEqual(stats['batch_routes'],2)
 
+    def test_eight_airports_share_one_call_without_guessing_missing_assignments(self):
+        codes=['PEK','CTU','SHA','PVG','NKG','HFE','WUH','HRB']
+        rows=[raw(flightNumber='UI'+str(200+i),departureCode=code) for i,code in enumerate(codes)]
+        class Fake:
+            calls=[]
+            def get_status(self,*args):
+                self.calls.append(args)
+                return result([detail(FlightNo='UI'+str(200+i),FlightDepcode=code,
+                                      aircraftNumber='B1234' if i!=7 else '') for i,code in enumerate(codes)])
+        snap=snapshot(rows);api=Fake();stats=self.run_enrich(snap,api,limit=1)
+        self.assertEqual(stats['route_calls'],1)
+        self.assertEqual(set(api.calls[0][1].split(',')),set(codes))
+        self.assertEqual(sum(bool(f.get('registration')) for f in snap['flights']),7)
+
+    def test_today_curated_missing_registration_precedes_tomorrow_and_ordinary(self):
+        snap=snapshot([raw(flightNumber='UI201',departureCode='PEK',arrPlanHour='12:30'),
+            raw(flightNumber='UI202',departureCode='CTU',flightDesc='彩绘',arrPlanHour='16:00'),
+            raw(flightNumber='UI203',departureCode='SHA',depDate='2026-10-21',arrDate='2026-10-21')])
+        class Fake:
+            calls=[]
+            def get_status(self,*args):self.calls.append(args);return result([])
+        api=Fake();self.run_enrich(snap,api,limit=1)
+        self.assertEqual(api.calls[0][0],'2026-10-20')
+        self.assertEqual(api.calls[0][1].split(',')[0],'CTU')
+
+    def test_known_curated_assignment_cannot_steal_priority_from_missing_curated(self):
+        snap=snapshot([raw(flightNumber='UI201',departureCode='PEK',flightDesc='已知彩绘',aircraftNumber='B1234'),
+            raw(flightNumber='UI202',departureCode='PEK'),
+            raw(flightNumber='UI203',departureCode='CTU',flightDesc='缺号彩绘',arrPlanHour='16:00')])
+        class Fake:
+            calls=[]
+            def get_status(self,*args):self.calls.append(args);return result([])
+        api=Fake();self.run_enrich(snap,api,limit=1)
+        self.assertEqual(api.calls[0][1].split(',')[0],'CTU')
+
+    def test_slow_batch_is_split_once_within_original_call_budget(self):
+        codes=['PEK','CTU','SHA','PVG','NKG','HFE','WUH','HRB']
+        snap=snapshot([raw(flightNumber='UI'+str(200+i),departureCode=c) for i,c in enumerate(codes)])
+        class Fake:
+            def __init__(self):self.calls=[]
+            def get_status(self,*args):
+                self.calls.append(args)
+                if len(self.calls)==1:raise client.MCPError('timeout',retryable=True)
+                return result([detail(FlightNo='UI'+str(200+i),FlightDepcode=c) for i,c in enumerate(codes)])
+        api=Fake()
+        with contextlib.redirect_stdout(io.StringIO()):stats=self.run_enrich(snap,api,limit=3)
+        self.assertEqual(stats['route_calls'],2)
+        self.assertLessEqual(len(api.calls[1][1].split(',')),4)
+        self.assertTrue(all(f.get('registration') for f in snap['flights']))
+
+    def test_selected_summary_missing_registration_gets_exact_flight_fallback(self):
+        class Fake:
+            def __init__(self):self.calls=[]
+            def get_status(self,*args,fnum=None):
+                self.calls.append((args,fnum))
+                return result([detail(miniAirplaneModels='A350-941',generic='A359',
+                                      aircraftNumber='B1234' if fnum else '')])
+        snap=snapshot();api=Fake();stats=self.run_enrich(snap,api,limit=2)
+        self.assertEqual(stats['route_calls'],2);self.assertEqual(stats['single_calls'],1)
+        self.assertEqual(api.calls[1][1],'UI123')
+        self.assertEqual(snap['flights'][0]['registration'],'B-1234')
+        self.run_enrich(snap,api,limit=2,now=NOW+60)
+        self.assertEqual(len(api.calls),2,'exact lookup must reuse its real assignment')
+
+    def test_exact_empty_result_does_not_erase_verified_type_or_repeat(self):
+        class Fake:
+            def __init__(self):self.calls=0
+            def get_status(self,*args,fnum=None):
+                self.calls+=1
+                return result([] if fnum else [detail(miniAirplaneModels='A350-941',generic='A359',aircraftNumber='')])
+        snap=snapshot();api=Fake();stats=self.run_enrich(snap,api,limit=2)
+        self.assertIsNone(snap['flights'][0]['registration'])
+        self.assertEqual(snap['flights'][0]['type'],'A350-941')
+        self.run_enrich(snap,api,limit=2,now=NOW+60)
+        self.assertEqual(api.calls,2)
+
     def test_missing_actions_cache_recovers_details_from_verified_public_snapshot(self):
         class Fake:
             def get_status(self,*args):return result([detail()])
@@ -464,14 +579,23 @@ class PhotoTests(unittest.TestCase):
             photos.attach_photos([snap],now=NOW+3600,path=path,fetcher=fetch,delay=0)
             self.assertEqual(calls,['B-1234'])
 
-    def test_photo_http_limit_stops_and_does_not_erase_theme_image(self):
+    def test_photo_http_limit_stops_and_does_not_fallback_to_theme_image(self):
         with tempfile.TemporaryDirectory() as tmp:
             snap=snapshot([raw(aircraftNumber='B1234',flightPic='https://file.variflight.com/theme.png'),
                            raw(flightNumber='UI124',aircraftNumber='B5678')]);calls=[]
             def fetch(reg):calls.append(reg);raise photos.PhotoError('limited',429)
             photos.attach_photos([snap],now=NOW,path=Path(tmp)/'photos.json',fetcher=fetch,delay=0)
             self.assertEqual(len(calls),1)
-            self.assertIn('非本航班实拍',snap['flights'][0]['photo']['provider'])
+            self.assertIsNone(snap['flights'][0]['photo'])
+
+    def test_legacy_theme_image_is_removed_even_with_no_photo_budget(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            snap=snapshot([raw(aircraftNumber='B1234',flightDesc='彩绘')])
+            snap['flights'][0]['photo']={'src':'https://file.variflight.com/theme.png','provider':'theme'}
+            stats=photos.attach_photos([snap],now=NOW,path=Path(tmp)/'photos.json',limit=0,delay=0,
+                                      shared=Path(tmp)/'missing.json')
+            self.assertEqual(stats['calls'],0)
+            self.assertIsNone(snap['flights'][0]['photo'])
 
 
 class DailyTests(unittest.TestCase):
@@ -479,21 +603,44 @@ class DailyTests(unittest.TestCase):
         self.assertTrue(schedule.due({'updated_at':NOW},NOW+60,'workflow_dispatch'))
         self.assertTrue(schedule.due({'updated_at':NOW},NOW-60,'workflow_dispatch'))
         self.assertFalse(schedule.due({'updated_at':NOW},NOW+60,'schedule'))
-    def test_only_after_noon_once_per_china_day_including_failed_attempts(self):
+    def test_two_china_time_slots_and_failed_attempts(self):
         at=lambda text:int(datetime.fromisoformat(text).timestamp())
-        self.assertFalse(schedule.due({},at('2026-10-20T11:59:59+08:00')))
-        self.assertTrue(schedule.due({},NOW))
-        self.assertFalse(schedule.due({'updated_at':NOW,'successes':0},NOW+3600))
-        self.assertTrue(schedule.due({'updated_at':NOW},NOW+86400))
-        self.assertTrue(schedule.due({'updated_at':NOW-86400},NOW))
+        self.assertFalse(schedule.due({},at('2026-10-20T05:59:59+08:00')))
+        morning=at('2026-10-20T06:00:00+08:00');afternoon=at('2026-10-20T14:00:00+08:00')
+        self.assertTrue(schedule.due({},morning))
+        self.assertFalse(schedule.due({'last_attempt_at':morning,'successes':0},morning+60))
+        self.assertTrue(schedule.due({'last_attempt_at':morning},afternoon))
+        self.assertFalse(schedule.due({'schedule_slots':['2026-10-20T14:00']},afternoon+60))
+        self.assertFalse(schedule.due({},afternoon,cron='0 22 * * *'))
+        self.assertTrue(schedule.due({},morning,cron='0 22 * * *'))
+        self.assertTrue(schedule.due({'last_attempt_at':afternoon},morning+86400))
+
+    def test_shared_daily_budget_reserves_afternoon_and_persists_failures(self):
+        at=lambda text:int(datetime.fromisoformat(text).timestamp())
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/'budget.json';records=[]
+            b=budget.DetailBudget(path,{},at('2026-10-20T06:00:00+08:00'),records.append)
+            for _ in range(100):self.assertTrue(b.reserve())
+            self.assertFalse(b.reserve())
+            resumed=budget.DetailBudget(path,{},at('2026-10-20T08:00:00+08:00'))
+            self.assertEqual(resumed.remaining(),0)
+            pm=budget.DetailBudget(path,{},at('2026-10-20T14:00:00+08:00'))
+            for _ in range(100):self.assertTrue(pm.reserve())
+            self.assertFalse(pm.reserve());self.assertEqual(pm.record()['used'],200)
+            cold=budget.DetailBudget(Path(tmp)/'cold.json',{'daily_detail_budget':pm.record()},at('2026-10-20T16:00:00+08:00'))
+            self.assertEqual(cold.remaining(),0)
+            next_day=budget.DetailBudget(path,{},at('2026-10-21T06:00:00+08:00'))
+            self.assertEqual(next_day.remaining(),100)
 
     def test_workflow_runs_once_daily_and_never_exposes_key_in_source(self):
         root=Path(__file__).resolve().parents[1]
         workflow=(root/'.github/workflows/feimadata.yml').read_text()
-        self.assertEqual(workflow.count("cron: '0 4 * * *'"),1)
+        self.assertEqual(workflow.count("cron: '0 22 * * *'"),1)
+        self.assertEqual(workflow.count("cron: '0 6 * * *'"),1)
         self.assertIn('secrets.VARIFLIGHT_MCP_KEY',workflow)
         self.assertIn('feimadata.schedule',workflow)
-        self.assertIn('--detail-limit 40 --photo-limit 60',workflow)
+        self.assertEqual(enrich.DEFAULT_DETAIL_LIMIT,200)
+        self.assertIn('--airports SZX --detail-limit 200 --photo-limit 60',workflow)
         self.assertIn('steps.privacy.outcome',workflow)
         self.assertIn('/feimadata/.cache/',(root/'.gitignore').read_text())
 

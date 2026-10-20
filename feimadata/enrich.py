@@ -15,10 +15,10 @@ import tempfile
 import time
 
 from .client import MCPError
-from .normalize import day_window, event_time, registration, source_rows, text, theme_photo
+from .normalize import day_window, event_time, registration, source_rows, text
 
 CACHE_PATH = Path(__file__).resolve().parent / '.cache' / 'details.json'
-DEFAULT_DETAIL_LIMIT = 40  # Route queries, not one paid query per displayed row.
+DEFAULT_DETAIL_LIMIT = 200  # Further bounded by the persistent daily shared budget.
 
 
 def seed_from_snapshots(snapshots):
@@ -38,12 +38,12 @@ def seed_from_snapshots(snapshots):
                 arrival_terminal=f.get('terminal') if f['board']=='arrivals' else None,
                 departure_terminal=f.get('terminal') if f['board']=='departures' else None,
                 gate=f.get('gate') if f['board']=='departures' else None,
-                livery=text(f.get('livery')) or None,
-                photo=f.get('photo') if (f.get('photo') or {}).get('source') != 'planespotters' else None)
+                livery=text(f.get('livery')) or None)
             key = query_key(query)
             old = entries.get(key)
             if not old or old['checked_at'] < at:
-                entries[key] = {'query':query,'checked_at':at,'fields':fields}
+                entries[key] = {'query':query,'checked_at':at,'fields':fields,
+                                'single_checked_at':f.get('detail_single_checked_at')}
             elif old['checked_at'] == at:
                 old['fields'].update({k:v for k,v in fields.items() if v is not None})
     return entries
@@ -140,7 +140,7 @@ def parse_details(result):
             arrival_terminal=text(row.get('FlightArrTerminal'), 40) or None,
             departure_terminal=text(row.get('FlightDepTerminal'), 40) or None,
             gate=text(row.get('BoardGate'), 40) or None,
-            livery=text(row.get('flightDesc')) or None, photo=theme_photo(row.get('flightPic')))
+            livery=text(row.get('flightDesc')) or None)
         key = query_key(query)
         # Ambiguous duplicate summaries must not arbitrarily pick an aircraft.
         if key in entries and entries[key]['fields'] != fields:
@@ -192,16 +192,17 @@ def apply_details(flight, entry):
         flight['gate'] = fields['gate']
     if fields.get('livery'):
         flight.update(livery=fields['livery'], is_special_livery=True, livery_source='variflight')
-    if fields.get('photo') and not flight.get('photo'):
-        flight['photo'] = fields['photo']
     flight['detail_checked_at'] = entry['checked_at']
     flight['detail_source'] = 'getFlightStatus'
+    if entry.get('single_checked_at'):
+        flight['detail_single_checked_at'] = entry['single_checked_at']
 
 
 def clear_old_details(flight):
     """Enrichment-only updates cannot silently retain an obsolete assignment."""
     if flight.get('detail_source') != 'getFlightStatus':
         return
+    flight.pop('detail_single_checked_at',None)
     base = flight.pop('detail_base', None)
     if isinstance(base, dict):
         flight.update(base)
@@ -221,7 +222,7 @@ def clear_old_details(flight):
     flight.pop('detail_stale', None)
 
 
-def enrich_snapshots(snapshots, client, limit=DEFAULT_DETAIL_LIMIT, now=None, path=None, prefetched=None, previous=None):
+def enrich_snapshots(snapshots, client, limit=DEFAULT_DETAIL_LIMIT, now=None, path=None, prefetched=None, previous=None, before_request=None):
     """Bound the paid route requests; use valid cache even with limit=0."""
     if type(limit) is not int or not 0 <= limit <= 2000:
         raise MCPError('详情航线查询上限须为 0–2000')
@@ -250,27 +251,65 @@ def enrich_snapshots(snapshots, client, limit=DEFAULT_DETAIL_LIMIT, now=None, pa
             continue
         query = flights[0]['detail_query']
         routes[(query['date'],query['dep'],query['arr'])].add(key)
-    # Near-future routes first; old completed flights never starve today's list.
+    # Spend the same daily budget on today's visible curated flights before
+    # tomorrow's board rows or already-known assignments. Group on one fixed
+    # endpoint only: no unrelated cross-product of origin/destination airports.
+    _, start, end = day_window(now)
     def priority(route):
-        times = [event_time(f) for key in routes[route] for f in refs[key]]
+        flights = [f for key in routes[route] for f in refs[key]]
+        todays = [f for f in flights if start <= event_time(f) < end]
+        selected = [f for f in todays if any(f.get(k) for k in (
+            'is_special_livery','is_widebody','is_four_engine','is_cargo','is_foreign'))]
+        def unknown(f):
+            entry = entries.get(query_key(f['detail_query'])) or {}
+            return not (entry.get('fields',{}).get('registration') or f.get('registration'))
+        missing = any(unknown(f) for f in flights)
+        selected_missing = any(unknown(f) for f in selected)
+        times = [event_time(f) for f in (selected or todays or flights)]
         future = [t for t in times if t >= now]
-        return (0, min(future)-now) if future else (1, now-max(times))
-    stats = {'route_calls':0, 'batch_routes':0, 'cache_hits':0, 'matched':0, 'pending_routes':0, 'errors':0, 'fatal_status':None}
+        return (0 if todays else 1, 0 if selected_missing else 1,
+                0 if missing else 1, 0 if future else 1,
+                min(future)-now if future else now-max(times), route)
+    stats = {'route_calls':0, 'single_calls':0, 'batch_routes':0, 'cache_hits':0, 'matched':0, 'pending_routes':0, 'errors':0, 'fatal_status':None}
     supplied = dict(prefetched or {})
-    deadline = time.monotonic()+10*60
+    deadline = time.monotonic()+20*60
     pending = set(routes)
     homes = {s['airport']['iata'] for s in snapshots}
-    while pending:
+    attempts, batch_size = defaultdict(int), 8
+    single_attempted = set()
+    def single_candidates():
+        candidates = []
+        for key,flights in refs.items():
+            entry = entries.get(key) or {}
+            fields = entry.get('fields') or {}
+            at = entry.get('single_checked_at')
+            if key in single_attempted or fields.get('registration') or (type(at) is int and 0 <= now-at < 15*60):
+                continue
+            selected = [f for f in flights if start <= event_time(f) < end and not f.get('registration')
+                and any(f.get(k) or fields.get(k) for k in (
+                    'is_special_livery','is_widebody','is_four_engine','is_cargo','is_foreign'))]
+            if selected:
+                future = [event_time(f) for f in selected if event_time(f) >= now]
+                candidates.append(((0,min(future)-now,key) if future else (1,now-max(map(event_time,selected)),key),key))
+        return [key for _,key in sorted(candidates)]
+    while True:
         # Another batch may already have returned these exact records.
         pending = {r for r in pending if any(not fresh(entries.get(k),refs[k][0],now) for k in routes[r])}
         allowed = pending if stats['route_calls'] < limit else pending.intersection(supplied)
-        if not allowed:
+        candidates = single_candidates() if stats['route_calls'] < limit and client else []
+        # Mix broad discovery and exact lookups. Neither ordinary routes
+        # nor a long list of summaries may consume the entire daily budget.
+        single = candidates[0] if candidates and (not allowed or stats['route_calls'] % 3 != 0) else None
+        if not allowed and not single:
             break
         if time.monotonic() >= deadline:
             break
-        route = min(allowed,key=priority)
-        batch = [route]
-        if route not in supplied:
+        query = refs[single][0]['detail_query'] if single else None
+        route = (query['date'],query['dep'],query['arr']) if single else min(allowed,key=priority)
+        batch = [] if single else [route]
+        if single:
+            single_attempted.add(single)
+        elif route not in supplied:
             options = []
             for fixed in (1,2):
                 if route[fixed] not in homes:
@@ -279,29 +318,45 @@ def enrich_snapshots(snapshots, client, limit=DEFAULT_DETAIL_LIMIT, now=None, pa
                 for other in sorted(pending-{route},key=priority):
                     if other[0] != route[0] or other[fixed] != route[fixed]:
                         continue
-                    if len(selected) >= 3 or weight+len(routes[other]) > 60:
+                    if len(selected) >= batch_size or weight+len(routes[other]) > 160:
                         continue
                     selected.append(other);weight += len(routes[other])
                 options.append(selected)
             if options:
                 batch = max(options,key=lambda group:sum(len(routes[r]) for r in group))
         pending.difference_update(batch)
+        if (single or route not in supplied) and before_request and not before_request():
+            break
         try:
-            if route in supplied:
+            if not single and route in supplied:
                 response, checked = supplied[route]
+            elif single:
+                stats['route_calls'] += 1
+                stats['single_calls'] += 1
+                response, checked = client.get_status(*route,fnum=query['fnum']), now
+                print('精选缺号单班补查 %d/%d：%s' % (stats['route_calls'],limit,query['fnum']),flush=True)
             else:
                 stats['route_calls'] += 1
+                for r in batch:
+                    attempts[r] += 1
                 arguments = (route[0],','.join(dict.fromkeys(r[1] for r in batch)),
                              ','.join(dict.fromkeys(r[2] for r in batch)))
                 response, checked = client.get_status(*arguments), now
                 stats['batch_routes'] += len(batch)
+                print('详情批次 %d/%d：%d 条航线（%s）' % (
+                    stats['route_calls'],limit,len(batch),route[0]),flush=True)
             parsed = parse_details(response)
-            for key in set().union(*(routes[r] for r in batch)):
+            for key in ({single} if single else set().union(*(routes[r] for r in batch))):
                 if key not in parsed:
-                    entries[key] = {'query':refs[key][0]['detail_query'], 'fields':{}, 'checked_at':checked}
+                    if single and key in entries:
+                        entries[key]['single_checked_at'] = checked
+                    else:
+                        entries[key] = {'query':refs[key][0]['detail_query'], 'fields':{}, 'checked_at':checked}
+                        if single:entries[key]['single_checked_at'] = checked
             for key, entry in parsed.items():
                 if key in refs:  # Exact five-element match, never array position.
-                    entries[key] = dict(entry, checked_at=checked)
+                    single_at = checked if single else (entries.get(key) or {}).get('single_checked_at')
+                    entries[key] = dict(entry, checked_at=checked, single_checked_at=single_at)
                     stats['matched'] += 1
             write_cache(path, {'schema_version':1,'service_day':day,'entries':entries})
         except MCPError as error:
@@ -310,6 +365,11 @@ def enrich_snapshots(snapshots, client, limit=DEFAULT_DETAIL_LIMIT, now=None, pa
             if error.http_status in (401,403,429):
                 stats['fatal_status'] = error.http_status
                 break
+            if error.retryable:
+                # A slow large response must not strand all its routes. Split
+                # once, within the SAME paid-call/time budget; never loop on 4xx.
+                batch_size = max(1,batch_size//2)
+                pending.update(r for r in batch if attempts[r] < 2)
     for key, flights in refs.items():
         entry = entries.get(key)
         for f in flights:
@@ -330,6 +390,10 @@ def enrich_snapshots(snapshots, client, limit=DEFAULT_DETAIL_LIMIT, now=None, pa
         rows = snapshot['flights']
         coverage = {'total':len(rows),'registration':sum(bool(f.get('registration')) for f in rows),
             'aircraft_type':sum(bool(f.get('type')) for f in rows), 'photo':sum(bool(f.get('photo')) for f in rows)}
+        selected = [f for f in snapshot.get('today',[]) if start <= event_time(f) < end
+                    and any(f.get(k) for k in ('is_special_livery','is_widebody','is_four_engine','is_cargo','is_foreign'))]
+        coverage.update(selected_total=len(selected),
+                        selected_registration=sum(bool(f.get('registration')) for f in selected))
         caps = snapshot.setdefault('capabilities', {})
         caps.update(aircraft_type=bool(coverage['aircraft_type']),
             widebody=any(f.get('is_widebody') is not None for f in rows),

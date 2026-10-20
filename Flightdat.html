@@ -832,9 +832,6 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
       updateBrand();
       render();
       updateStatusUI();
-      if (locate) requestAnimationFrame(() => {
-        if (request === flightRequest && airport === state.airport) jumpToNow();
-      });
       if (isNew) {
         const s = j.stats || {};
         toast(`数据已更新 · 彩绘 ${s.livery ?? 0} · 特殊机型 ${s.special ?? 0}`);

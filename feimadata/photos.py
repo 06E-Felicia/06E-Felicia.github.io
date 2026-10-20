@@ -118,21 +118,29 @@ def attach_photos(snapshots, limit=60, now=None, path=None, fetcher=None, delay=
         for f in snapshot.get('flights',[])+snapshot.get('today',[]):
             reg = registration(f.get('registration'))
             photo = f.get('photo') or {}
-            if photo.get('source') == 'planespotters' and photo.get('reg') != reg:
+            # Reject legacy theme images as well as a previous aircraft's photo.
+            if photo and (photo.get('source') != 'planespotters' or photo.get('reg') != reg
+                    or not safe_url(photo.get('src'),True) or not safe_url(photo.get('link'))
+                    or not text(photo.get('photographer'))):
                 f['photo'] = None
+            base = f.get('detail_base')
+            if isinstance(base,dict) and (base.get('photo') or {}).get('source') != 'planespotters':
+                base['photo'] = None
             if reg:
                 refs.setdefault(reg,[]).append(f)
     stats = {'calls':0,'covered':0,'errors':0}
     deadline = time.monotonic()+3*60
     consecutive_errors = 0
     def priority(reg):
-        future = [event_time(f) for f in refs[reg] if event_time(f) >= now]
-        return (0,min(future)-now) if future else (1,0)
+        selected = [f for f in refs[reg] if any(f.get(k) for k in (
+            'is_special_livery','is_widebody','is_four_engine','is_cargo','is_foreign'))]
+        future = [event_time(f) for f in (selected or refs[reg]) if event_time(f) >= now]
+        return (0 if selected else 1, 0 if future else 1, min(future)-now if future else 0)
     for reg in sorted(refs, key=priority):
         entry = cache.get(reg)
         ttl = 7*86400 if entry and entry.get('photo') is None else 30*86400
         fresh = entry and now-entry['checked_at'] < ttl
-        # Livery theme pictures remain a fallback if the reference service fails.
+        # No theme-image fallback: every displayed image must match the aircraft.
         if not fresh and stats['calls'] < limit and time.monotonic() < deadline:
             stats['calls'] += 1
             try:

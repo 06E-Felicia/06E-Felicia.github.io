@@ -6,7 +6,6 @@ from datetime import datetime, timedelta, timezone
 import hashlib
 import math
 import re
-from urllib.parse import urlsplit
 
 from .client import MCPError
 
@@ -48,18 +47,6 @@ def registration(value):
     value = text(value, 30).upper().replace(' ', '')
     value = re.sub(r'^B([A-Z0-9]{4})$', r'B-\1', value)
     return value if re.fullmatch(r'[A-Z0-9][A-Z0-9-]{2,13}', value) and value not in ('UNKNOWN', 'NONE', 'NULL') else None
-
-
-def theme_photo(value):
-    value = text(value, 2000)
-    try:
-        parsed = urlsplit(value)
-        if (parsed.scheme == 'https' and parsed.hostname in ('file.variflight.com', 'static.variflight.com')
-                and not parsed.username and not parsed.password and not parsed.query and parsed.port in (None, 443)):
-            return {'src': value, 'link': value, 'provider': '飞常准主题图片（非本航班实拍）'}
-    except ValueError:
-        pass
-    return None
 
 
 def airport_zone(code):
@@ -142,7 +129,6 @@ def normalize_board(result, airport, board, captured_at):
             status, status_cn, kind = 'en-route', '飞行中', 'info'
         reg = registration(raw.get('aircraftNumber'))
         livery = text(raw.get('flightDesc')) or None
-        photo = theme_photo(raw.get('flightPic'))
         identity = '|'.join([board, flight_number, text(raw.get('departureCode')), text(raw.get('arrivalCode')),
                              text(raw.get('depDate')), text(raw.get('depPlanHour'))])
         fid = 'vf-' + hashlib.sha256(identity.encode('utf-8')).hexdigest()[:24]
@@ -160,7 +146,7 @@ def normalize_board(result, airport, board, captured_at):
                          'name': text(raw.get(endpoint_prefix)), 'city': text(raw.get(endpoint_prefix))},
             'is_special_livery': bool(livery), 'livery': livery, 'livery_source': 'variflight',
             'is_widebody': None, 'is_four_engine': None, 'is_cargo': None, 'is_foreign': None,
-            'photo': photo, 'last_seen_ts': captured_at, 'source': 'variflight-mcp',
+            'photo': None, 'last_seen_ts': captured_at, 'source': 'variflight-mcp',
             'source_times': {key: text(raw.get(key), 50) for key in
                              ('depDate','arrDate','depPlanHour','depEstHour','depActHour','arrPlanHour','arrEstHour','arrActHour')},
             'detail_query': {'fnum': flight_number, 'date': text(raw.get('depDate'), 10),

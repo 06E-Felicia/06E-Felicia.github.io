@@ -17,9 +17,10 @@ PROTOCOLS = {'2024-11-05', '2025-03-26', '2025-06-18', '2025-11-25'}
 
 class MCPError(RuntimeError):
     """Messages in this exception are deliberately safe for terminal output."""
-    def __init__(self, message, http_status=None):
+    def __init__(self, message, http_status=None, retryable=False):
         super().__init__(message)
         self.http_status = http_status
+        self.retryable = retryable
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -126,9 +127,10 @@ class Client:
                 raise MCPError('飞常准拒绝授权（HTTP %s），请核对 MCP Key、工具权限和账户额度' % error.code, error.code) from None
             if error.code == 429:
                 raise MCPError('飞常准请求限流（HTTP 429），已停止，不自动重试', 429) from None
-            raise MCPError('飞常准接口返回 HTTP %s，未输出响应正文' % error.code) from None
+            raise MCPError('飞常准接口返回 HTTP %s，未输出响应正文' % error.code,
+                           error.code, retryable=error.code in (502,503,504)) from None
         except Exception:
-            raise MCPError('飞常准网络请求未完成，未更新航班数据；未输出凭据或服务端正文') from None
+            raise MCPError('飞常准网络请求未完成，未更新航班数据；未输出凭据或服务端正文', retryable=True) from None
 
     def initialize(self):
         result = self._request('initialize', {'protocolVersion': '2025-03-26',
