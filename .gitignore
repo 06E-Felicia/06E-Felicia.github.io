@@ -9,3 +9,7 @@ local-test-results/
 # 保留导入前的独立仓库原件；主项目使用 flightdata/，避免 git add 创建嵌套仓库。
 /爬FR24/
 /flightdata/data/debug-*.png
+# FR24 authentication is private, never a source file or snapshot artifact.
+/flightdata/.auth/
+/playwright/.auth/
+/.venv-fr24/

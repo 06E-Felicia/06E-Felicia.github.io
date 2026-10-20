@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-FR24 深圳宝安国际机场 (SZX/ZGSZ) 起降数据采集器 · GitHub Actions 版
+FR24 七机场起降数据采集器 · GitHub Actions 版
 ====================================================================
 
 原理
@@ -9,34 +9,37 @@ FR24 深圳宝安国际机场 (SZX/ZGSZ) 起降数据采集器 · GitHub Actions
 FlightRadar24 的机场看板把数据服务端渲染进 Inertia 数据岛：
     <div id="app" data-page="{...}">
 其中含航班号、航司（彩绘会标注在括号里，如 `AirAsia (Legend Heroes Park Livery)`）、
-机型、注册号、计划/预计时间、状态与起降地。直接 requests 会撞 Cloudflare，
-所以这里用 Playwright 驱动 Chromium 打开真实页面，等挑战自动通过后再解析数据岛。
+机型、注册号、计划/预计时间、状态与起降地。使用 Playwright 读取官网真实响应，
+遇到访问拒绝或验证要求时如实失败，不复制验证通行凭据或绕过限制。
 
 GitHub Actions 适配
 -------------------
-* 每次运行使用全新的浏览器上下文（不依赖本地 profile）；
+* 每次运行使用新上下文，可从 Actions Secret 恢复用户授权的 FR24 会话；
+* 配置会话时先验证源站实际返回的 24 小时范围，失效时不静默退回匿名；
 * CI 使用完整 Chrome 与 xvfb 窗口环境，与本地 Chrome 使用相同浏览器引擎；
 * 后续页通过官网分页链接加载，兼容 Inertia JSON 和整页 HTML 响应；
-* 抓取失败不会覆盖上一次成功的数据，只更新 status.json，页面会提示“数据可能过期”。
+* 同日失败保留成功快照与真实时间，错误只保存在后台状态，不在网页公开；
+* 已登录采集禁用诊断截图，凭据不进入快照、日志或附件。
 
 输出
 ----
-docs/data/latest.json          最新成功快照（GitHub Pages 直接读取）
+docs/data/<iata>.json          各机场成功快照（GitHub Pages 直接读取）
 docs/data/status.json          每次运行的运行状态（成功/失败、时间、错误）
-data/history.json              历史累积（按 flight id 去重，保留 history_days 天）
+data/history_<iata>.json       当日累积（跨日清空旧日航班）
 data/livery_registry.json      自动学习到的“注册号 -> 彩绘涂装”对照表
 
 用法
 ----
     python3 scraper.py                # 正常抓取（headless）
     python3 scraper.py --headed       # 有头模式（CI 里配合 xvfb-run）
-    python3 scraper.py --debug        # 失败时保存页面截图到 data/debug-*.png
+    python3 scraper.py --debug        # 仅匿名模式可保存失败截图
 """
 
 from __future__ import annotations
 
 import argparse
 import html
+import importlib.util
 import json
 import logging
 import math
@@ -53,6 +56,9 @@ from typing import Any
 from urllib.parse import parse_qs, quote, urljoin, urlsplit
 
 BASE_DIR = Path(__file__).resolve().parent
+_session_spec = importlib.util.spec_from_file_location('flightdat_private_session', BASE_DIR/'fr24_session.py')
+session = importlib.util.module_from_spec(_session_spec)
+_session_spec.loader.exec_module(session)
 DOCS_DIR = BASE_DIR / "docs"
 DATA_DIR = BASE_DIR / "data"
 SITE_DATA_DIR = DOCS_DIR / "data"
@@ -479,7 +485,7 @@ def _response_board(response, airport):
 
 
 def _debug_screenshot(page, airport, label, debug):
-    if not debug:
+    if not debug or session.state_requested():
         return
     shot = DATA_DIR / f"debug-{airport['iata'].lower()}-{label}.png"
     shot.parent.mkdir(parents=True, exist_ok=True)
@@ -762,6 +768,7 @@ def fetch_board_pages(
     cfg: dict[str, Any],
     debug: bool,
     today_end: int | None = None,
+    initial_board: dict | None = None,
 ) -> list[dict[str, Any]]:
     """Read real pagination until a confirmed day boundary or source exhaustion.
 
@@ -780,7 +787,9 @@ def fetch_board_pages(
                       "raw_flights": 0, "scheduled_from": None, "scheduled_to": None}
     signatures, cursors = set(), set()
     beyond_pages = 0
-    data = fetch_board(page, board, airport, cfg, debug)
+    data = initial_board if initial_board is not None else fetch_board(page, board, airport, cfg, debug)
+    if cfg.get('_require_authenticated_24h'):
+        session.assert_24h(data)
     while True:
         props = data.get("props") or {}
         raw = props.get("flights") or []
@@ -879,6 +888,7 @@ def collect_airport(
     manual: dict[str, str],
     learned: dict[str, Any],
     debug: bool,
+    prefetched_boards: dict | None = None,
 ) -> tuple[list[dict[str, Any]], int | None]:
     flights = AirportFlights()
     window_hours: int | None = None
@@ -886,7 +896,8 @@ def collect_airport(
 
     for board in BOARDS:
         try:
-            pages = fetch_board_pages(page, board, airport, cfg, debug, today_end=today_end)
+            pages = fetch_board_pages(page, board, airport, cfg, debug, today_end=today_end,
+                                      initial_board=(prefetched_boards or {}).get(board))
         except Exception as exc:  # noqa: BLE001
             # Arrivals and departures are independent. Do not throw away a
             # valid arrivals board when departures fails, or skip departures
@@ -908,7 +919,8 @@ def collect_airport(
                     flights.append(item)
         warning = getattr(pages, "warning", None)
         flights.boards[board] = {"ok": True, "pages": len(pages), "parsed_flights": len(flights)-before_count,
-                                 "partial": bool(warning), **getattr(pages, "coverage", {})}
+                                 "partial": bool(warning), "authenticated_24h": bool(cfg.get('_require_authenticated_24h')),
+                                 **getattr(pages, "coverage", {})}
         if warning:
             flights.errors[board] = warning
             flights.boards[board]["error"] = warning
@@ -937,7 +949,7 @@ def collect_airport(
 def collect_all(
     cfg: dict[str, Any], headless: bool, debug: bool
 ) -> dict[str, tuple[list[dict[str, Any]], int | None]]:
-    """一次启动浏览器，依次抓取所有机场（复用 cookie / cf_clearance）。"""
+    """Reuse only the authorized FR24 session; never export it with snapshots."""
     from playwright.sync_api import sync_playwright
 
     manual = {str(k).upper(): str(v) for k, v in (cfg.get("manual_liveries") or {}).items()}
@@ -949,26 +961,43 @@ def collect_all(
     if proxy:
         LOG.info("使用代理：%s", re.sub(r"//[^@]*@", "//***@", proxy))
 
+    private_state = session.load_state()
+    if private_state:
+        cfg = dict(cfg, _require_authenticated_24h=True)
+        debug = False
     results: dict[str, tuple[list[dict[str, Any]], int | None]] = {}
     with sync_playwright() as pw:
         channel = (os.environ.get("PLAYWRIGHT_CHANNEL") or "").strip() or None
         browser = _launch_browser(pw, headless, proxy, channel)
-        ctx = browser.new_context(
-            locale="en-US",
-            timezone_id="Asia/Shanghai",
-            viewport={"width": 1440, "height": 1000},
-            extra_http_headers={"Accept-Language": "en-US,en;q=0.9,zh-CN;q=0.8"},
-        )
+        options = dict(locale="en-US",timezone_id="Asia/Shanghai",viewport={"width":1440,"height":1000},
+                       extra_http_headers={"Accept-Language":"en-US,en;q=0.9,zh-CN;q=0.8"})
+        if private_state:
+            options['storage_state'] = private_state
+        try:
+            ctx = browser.new_context(**options)
+        except Exception:
+            browser.close()
+            if private_state:
+                raise session.SessionError('无法载入 FR24 登录会话，请重新导出并更新 Secret') from None
+            raise
         LOG.info("浏览器版本：%s；运行模式：%s", browser.version, "headless" if headless else "headed")
         try:
             page = ctx.new_page()
             page.set_default_timeout(30_000)
-            for airport in get_airports(cfg):
+            airports = get_airports(cfg)
+            initial = None
+            if private_state:
+                # Check actual server entitlement, not just cookie presence.
+                initial = fetch_board(page,'arrivals',airports[0],cfg,False)
+                session.assert_24h(initial)
+                LOG.info('已在当前运行环境验证 FR24 的 24 小时查看范围（未记录账号或凭据）')
+            for index, airport in enumerate(airports):
                 iata = airport["iata"]
                 LOG.info("===== 开始 %s %s =====", iata, airport.get("name", ""))
                 try:
                     results[iata] = collect_airport(
-                        page, cfg, airport, manual, learned, debug
+                        page, cfg, airport, manual, learned, debug,
+                        prefetched_boards={'arrivals':initial} if index==0 and initial is not None else None
                     )
                 except Exception as exc:  # noqa: BLE001
                     LOG.error("[%s] 采集失败：%s", iata, exc)
@@ -1390,6 +1419,8 @@ def run(headless: bool = True, debug: bool = False) -> int:
         "duration_sec": round(time.time() - started, 1),
         "airports": results,
         "source": "flightradar24-web",
+        "session_requested": session.state_requested(),
+        "authenticated_24h": any(b.get('authenticated_24h') for r in results.values() for b in r.get('boards',{}).values()),
         "repo_url": f"https://github.com/{repo}" if repo else prev_status.get("repo_url"),
         "run_url": f"https://github.com/{repo}/actions/runs/{run_id}" if repo and run_id else None,
         "updated_by": "github-actions" if os.environ.get("GITHUB_ACTIONS") else "local",

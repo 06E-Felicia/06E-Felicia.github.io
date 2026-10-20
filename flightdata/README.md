@@ -27,7 +27,21 @@
 
 原“已结束”只是计划或预计时间已过 25 分钟后的前端推断，并非源站确认，现改为同为三字的“待核实”；原“已到达”对应源站 `landed` / `arrived`，现改为“已落地”。页面页脚及状态悬停说明区分两者，未确认的航班不再误标成已经结束。
 
-测试使用项目快照与离线故障样例，没有重新抓取 FR24 或触发线上工作流。
+回归测试使用项目快照与离线故障样例；线上采集结果需要另行验收。
+
+## 授权登录会话（24 小时查看范围）
+
+Actions 不自动输入密码，也不读取普通 Chrome 的个人资料。需要账号已有相应查看权限，由本人在项目专用窗口登录：双击根目录 `配置FR24登录.command`，完成登录后按回车。程序重新访问机场看板，只有实际响应的 `hoursRange >= 24` 才保存会话；仅有 Cookie 不算验证通过。
+
+导出文件在被 Git 忽略的 `flightdata/.auth/`，目录权限为 700、文件为 600。只保留 FR24 域的 Cookie / localStorage，排除其他网站和 Cloudflare 通行凭据。不要把该目录、文件内容或截图发到聊天、提交到仓库或作为附件上传。Base64 不是加密，文件相当于登录凭据，应妥善保管。
+
+在本仓库 Settings → Secrets and variables → Actions 新建 Repository secret，名称严格为 `FR24_STORAGE_STATE_B64`，值为本机 `.auth/fr24-state.b64` 的完整内容。**只保存到 Secret，不是普通变量或代码文件。** 若本机已配置 GitHub CLI，可在项目根目录用 `gh secret set FR24_STORAGE_STATE_B64 --repo 06E-Felicia/06E-Felicia.github.io < flightdata/.auth/fr24-state.b64` 导入，命令不会包含令牌正文。
+
+Secret 只传给采集步骤，在内存中还原到临时浏览器上下文；不写入 runner 文件、不传给测试和附件步骤。登录模式禁用诊断截图。每轮先验证源站的 24 小时权限，再按真实链接读取，每方向仍严格最多 10 页。Actions 摘要和 `status.json` 只记录 `session_requested` / `authenticated_24h` 及看板覆盖信息，不记录账号或凭据；24 小时权限并不代替全天分页完整性核验。
+
+登录态可能过期、被撤销，或在 GitHub 网络中不可用。本地验证成功不保证 CI 可用；失效时保留同日成功数据、记录失败，不静默降为匿名或伪造全天覆盖。请本地重新登录并更新同名 Secret；停用时删除该 Secret，必要时在 FR24 注销该会话。不要关闭账号安全保护、自动处理验证码或绕过访问拒绝。
+
+此方案使用 [Playwright 官方会话复用机制](https://playwright.dev/python/docs/auth)和 [GitHub Actions Secrets](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets)，不是共享整个个人浏览器档案。
 
 ## 当日结束的分页判断
 
