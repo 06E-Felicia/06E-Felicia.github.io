@@ -13,3 +13,5 @@ local-test-results/
 /flightdata/.auth/
 /playwright/.auth/
 /.venv-fr24/
+# Sanitized enrichment caches are local, not public Pages assets or credentials.
+/feimadata/.cache/

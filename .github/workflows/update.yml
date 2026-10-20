@@ -3,7 +3,7 @@ name: 自动更新天气数据
 on:
   # GITHUB_TOKEN 提交不触发 push 工作流；航班更新结束后使用原有全站发布链路。
   workflow_run:
-    workflows: ['更新航班数据']
+    workflows: ['更新航班数据', '每日更新飞常准航班']
     types: [completed]
     branches: [main]
   schedule:
@@ -55,6 +55,7 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           EVENT_SCHEDULE: ${{ github.event.schedule }}
           SOURCE_RUN_URL: ${{ github.event.workflow_run.html_url }}
+          SOURCE_WORKFLOW_NAME: ${{ github.event.workflow_run.name }}
           GH_REPOSITORY: ${{ github.repository }}
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -68,7 +69,8 @@ jobs:
           # A freshness-only flight wake-up did not save data. Do not republish
           # the whole weather site for every skipped ten-minute check.
           if os.environ["EVENT_NAME"] == "workflow_run":
-              url = f'https://api.github.com/repos/{os.environ["GH_REPOSITORY"]}/contents/flightdata/docs/data/status.json'
+              status_path = 'feimadata/data/status.json' if os.environ.get('SOURCE_WORKFLOW_NAME') == '每日更新飞常准航班' else 'flightdata/docs/data/status.json'
+              url = f'https://api.github.com/repos/{os.environ["GH_REPOSITORY"]}/contents/{status_path}'
               request = urllib.request.Request(url, headers={
                   'Accept': 'application/vnd.github.raw+json',
                   'Authorization': 'Bearer '+os.environ['GH_TOKEN']})

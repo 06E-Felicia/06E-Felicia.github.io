@@ -1,0 +1,128 @@
+name: 每日更新飞常准航班
+
+on:
+  schedule:
+    # UTC 04:00 = Asia/Shanghai 12:00. GitHub cron is best-effort.
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: feimadat-daily-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    outputs:
+      should_run: ${{ steps.daily.outputs.run }}
+      outcome: ${{ steps.collect.outcome }}
+      snapshots_ready: ${{ steps.pack.outcome == 'success' }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+
+      - name: 每天北京时间12时仅运行一次
+        id: daily
+        run: python3 -B -m feimadata.schedule
+
+      - name: 恢复注册号和照片缓存（不包含密钥）
+        if: steps.daily.outputs.run == 'true'
+        uses: actions/cache@v5
+        with:
+          path: feimadata/.cache
+          key: feimadat-metadata-v1-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: feimadat-metadata-v1-${{ runner.os }}-
+
+      - name: 验证字段匹配、换机、日更与隐私逻辑（不调用接口）
+        if: steps.daily.outputs.run == 'true'
+        run: python3 -B -m unittest discover -s tests -p 'test_feimadata.py' -v
+
+      - name: 采集大屏并按航线补充机号与机型
+        if: steps.daily.outputs.run == 'true'
+        id: collect
+        continue-on-error: true
+        env:
+          VARIFLIGHT_MCP_KEY: ${{ secrets.VARIFLIGHT_MCP_KEY }}
+          PYTHONUNBUFFERED: '1'
+        run: |
+          if [ -z "$VARIFLIGHT_MCP_KEY" ]; then
+            echo '::error::缺少仓库 Secret VARIFLIGHT_MCP_KEY，未调用飞常准。'
+            exit 1
+          fi
+          python3 -B -m feimadata.collect --detail-limit 40 --photo-limit 60
+
+      - name: 发布前隐私检查（失败即禁止上传）
+        if: always() && steps.daily.outputs.run == 'true'
+        id: privacy
+        env:
+          VARIFLIGHT_MCP_KEY: ${{ secrets.VARIFLIGHT_MCP_KEY }}
+        run: |
+          python3 -B - <<'PY'
+          import json, os
+          from pathlib import Path
+          # Check without printing credentials or provider bodies.
+          key = os.environ['VARIFLIGHT_MCP_KEY']
+          if not key:
+              raise SystemExit('缺少飞常准 Secret，禁止发布')
+          for p in Path('feimadata/data').glob('*.json'):
+              text = p.read_text(encoding='utf-8')
+              if key in text:
+                  raise SystemExit('公开数据隐私检查失败，禁止发布')
+              json.loads(text)
+          PY
+
+      - name: 打包可公开的航班快照（不包含缓存或凭据）
+        if: always() && steps.daily.outputs.run == 'true' && steps.privacy.outcome == 'success'
+        id: pack
+        run: tar -czf "$RUNNER_TEMP/feimadat-snapshots.tgz" feimadata/data
+
+      - name: 保存航班快照
+        if: always() && steps.pack.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: feimadat-snapshots
+          path: ${{ runner.temp }}/feimadat-snapshots.tgz
+          retention-days: 3
+
+  save:
+    needs: collect
+    if: always() && needs.collect.outputs.should_run == 'true' && needs.collect.outputs.snapshots_ready == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    # The existing weather and Flightdat save jobs use this same short lock.
+    concurrency:
+      group: weather-update-${{ github.ref }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: feimadat-snapshots
+          path: ${{ runner.temp }}/feimadat-snapshots
+      - name: 恢复本次快照并提交
+        run: |
+          tar -xzf "$RUNNER_TEMP/feimadat-snapshots/feimadat-snapshots.tgz" -C .
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add feimadata/data
+          if git diff --cached --quiet; then
+            echo '没有新快照，保留之前的数据'
+            exit 0
+          fi
+          git commit -m "Update Feimadat daily snapshots $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          git push origin HEAD:"$GITHUB_REF_NAME"
+      - name: 汇报采集失败
+        if: needs.collect.outputs.outcome == 'failure'
+        run: |
+          echo '::error::本轮采集未全部完成；旧快照保留。请检查采集步骤与仓库 Secret。'
+          exit 1
