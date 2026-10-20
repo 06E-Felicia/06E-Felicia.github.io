@@ -423,6 +423,18 @@ class EnrichmentTests(unittest.TestCase):
 
 
 class PhotoTests(unittest.TestCase):
+    def test_existing_photo_service_cache_is_reused_by_registration_only(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);shared=root/'shared.json'
+            collect.write_json(shared,{'B-1234':{'updated_at':NOW,'photo':{'source':'planespotters',
+                'src':'https://t.plnspttrs.net/1/test.jpg','link':'https://www.planespotters.net/photo/1/b-1234-test',
+                'photographer':'Test author'},'type':'WRONG','flight_number':'OTHER'}})
+            snap=snapshot([raw(aircraftNumber='B1234')])
+            stats=photos.attach_photos([snap],limit=0,now=NOW,path=root/'own.json',shared=shared,delay=0)
+            self.assertEqual(stats['calls'],0)
+            self.assertEqual(snap['flights'][0]['photo']['reg'],'B-1234')
+            self.assertIsNone(snap['flights'][0]['type'])
+            self.assertEqual(snap['flights'][0]['flight_number'],'UI123')
     def test_missing_actions_cache_recovers_signed_reference_photo_metadata(self):
         with tempfile.TemporaryDirectory() as tmp:
             old=snapshot([raw(aircraftNumber='B1234')]);new=snapshot([raw(aircraftNumber='B1234')])

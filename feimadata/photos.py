@@ -13,6 +13,7 @@ from .enrich import read_cache, write_cache
 from .normalize import event_time, registration, text
 
 CACHE_PATH = Path(__file__).resolve().parent / '.cache' / 'photos.json'
+SHARED_PHOTOS = Path(__file__).resolve().parents[1] / 'flightdata' / 'data' / 'photos.json'
 MAX_RESPONSE = 2*1024*1024
 
 
@@ -85,13 +86,24 @@ def fetch_photo(reg, opener=None):
         raise PhotoError('照片元数据读取失败；不影响航班数据') from None
 
 
-def attach_photos(snapshots, limit=60, now=None, path=None, fetcher=None, delay=0.35, previous=None):
+def attach_photos(snapshots, limit=60, now=None, path=None, fetcher=None, delay=0.35, previous=None, shared=None):
     if type(limit) is not int or not 0 <= limit <= 2000:
         raise PhotoError('照片查询上限须为 0–2000')
     now, path, fetcher = int(time.time()) if now is None else now, path or CACHE_PATH, fetcher or fetch_photo
     raw = read_cache(path, {})
     cache = {k:v for k,v in (raw.get('entries') or {}).items() if isinstance(v,dict)
         and type(v.get('checked_at')) is int and 0 <= now-v['checked_at'] <= 30*86400}
+    # Photos belong to a registration, not a flight-data provider. Reuse only
+    # verified PlaneSpotters metadata; never import FR24 flight/aircraft fields.
+    for reg,entry in read_cache(shared or SHARED_PHOTOS,{}).items():
+        if not isinstance(entry,dict) or registration(reg) != reg:
+            continue
+        photo,at = entry.get('photo') or {},entry.get('updated_at')
+        if (type(at) is int and 0 <= now-at < 30*86400 and photo.get('source')=='planespotters'
+                and safe_url(photo.get('src'),True) and safe_url(photo.get('link'))
+                and text(photo.get('photographer')) and at > (cache.get(reg) or {}).get('checked_at',0)):
+            cache[reg] = {'checked_at':at,'photo':dict(photo,reg=reg,
+                provider='PlaneSpotters.net · 同注册号资料照片（非本航班实拍）')}
     for snapshot in list(previous or [])+snapshots:
         for f in snapshot.get('flights',[])+snapshot.get('today',[]):
             reg,photo = registration(f.get('registration')),f.get('photo') or {}
