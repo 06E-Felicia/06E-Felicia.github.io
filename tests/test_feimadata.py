@@ -632,11 +632,11 @@ class DailyTests(unittest.TestCase):
             next_day=budget.DetailBudget(path,{},at('2026-10-21T06:00:00+08:00'))
             self.assertEqual(next_day.remaining(),100)
 
-    def test_workflow_runs_once_daily_and_never_exposes_key_in_source(self):
+    def test_workflow_manual_only_and_never_exposes_key_in_source(self):
         root=Path(__file__).resolve().parents[1]
         workflow=(root/'.github/workflows/feimadata.yml').read_text()
-        self.assertEqual(workflow.count("cron: '0 22 * * *'"),1)
-        self.assertEqual(workflow.count("cron: '0 6 * * *'"),1)
+        self.assertNotIn('cron:',workflow)
+        self.assertIn('  workflow_dispatch:',workflow)
         self.assertIn('secrets.VARIFLIGHT_MCP_KEY',workflow)
         self.assertIn('feimadata.schedule',workflow)
         self.assertEqual(enrich.DEFAULT_DETAIL_LIMIT,200)

@@ -466,7 +466,6 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     <a href="simulator.html">StormSim Astra</a>
     <a href="simulator-sol.html">StormSim Sol</a>
     <a href="Flightdat.html" aria-current="page">Flightdat 航班精选</a>
-    <a href="Feimadat.html">Feimadat 飞常准大屏</a>
   </nav>
 
   <section class="statusbar" aria-label="数据更新时间">
@@ -1032,6 +1031,18 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     return { cn: f.status_cn || f.status || "未知", kind: f.status_kind || "muted" };
   }
 
+  function arrivalLabel(f) {
+    // Board timestamps describe departure on outbound rows, not destination arrival.
+    const isArrival = f.board === "arrivals";
+    const actual = f.arrival_actual_ts || (isArrival ? f.actual_ts : null);
+    const estimated = f.arrival_estimated_ts || (isArrival ? f.estimated_ts : null);
+    const scheduled = f.arrival_scheduled_ts || (isArrival ? f.scheduled_ts : null);
+    const ts = actual || estimated || scheduled;
+    if (!ts) return "预计抵达待定";
+    const label = actual ? "实际抵达" : estimated ? "预计抵达" : "计划抵达";
+    return `${label} ${dayLabel(ts) ? dayLabel(ts) + " " : ""}${fmtTime(ts)}`;
+  }
+
   function rowHTML(f, i) {
     const isArr = f.board === "arrivals";
     const ep = f.endpoint || {};
@@ -1040,12 +1051,6 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     const origin = isArr ? { city: ep.city, iata: ep.iata } : home;
     const dest = isArr ? home : { city: ep.city, iata: ep.iata };
     const t = fmtTime(f.scheduled_ts);
-    const day = dayLabel(f.scheduled_ts);
-
-    let delta = "", deltaCls = "";
-    if (f.delay_min != null && f.delay_min > 0) { delta = `+${f.delay_min}m`; deltaCls = "late"; }
-    else if (f.delay_min != null && f.delay_min < -3) { delta = `${f.delay_min}m`; deltaCls = "early"; }
-    else if (f.estimated_ts && f.estimated_ts !== f.scheduled_ts) { delta = "预计 " + fmtTime(f.estimated_ts); }
 
     const fourLabel = { B747: "747", A340: "A340", A380: "A380", IL96: "IL96", AN124: "AN124" }[f.type_family];
     const tags = [];
@@ -1075,7 +1080,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     return `<article class="${cls.join(" ")}" tabindex="0" role="button" aria-haspopup="dialog" aria-label="查看 ${esc(f.flight_number)} 航班详情" data-flight-index="${detailIndex}" data-event-time="${flightEventTime(f)}" style="animation-delay:${Math.min(i, 24) * 10}ms">
       <div class="cell time">
         <div class="t">${esc(t)}</div>
-        <span class="d ${deltaCls}">${day ? `<span class="day">${esc(day)}</span> ` : ""}${esc(delta || "计划")}</span>
+        <span class="d" title="抵达时间 · 北京时间 UTC+8">${esc(arrivalLabel(f))}</span>
       </div>
       <div class="cell flight">
         <div class="f">${esc(f.flight_number)}</div>

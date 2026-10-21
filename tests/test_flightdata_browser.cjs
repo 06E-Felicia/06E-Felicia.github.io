@@ -154,9 +154,11 @@ const newPage=async context=>{const page=await context.newPage();await page.cloc
    status:'scheduled',status_cn:'计划',status_kind:'muted',last_seen_ts:now,from_history:true,...extra});
   const samples=[make('OLD-1210',-12720),make('EXPIRED',-3601),make('BOUNDARY',-3600),
    make('RECENT',-2820),make('LANDED',-1800,{status:'landed',status_cn:'已到达',status_kind:'ok'}),
-   make('FUTURE',1800),make('DELAYED',-12000,{estimated_ts:now+1200}),make('NOW',0),
-   make('DAY-END',Date.parse('2026-10-19T23:59:59+08:00')/1000-now),
-   make('LIVERY',2400,{is_special_livery:true,is_four_engine:true,livery:'特别彩绘 <测试> 多行涂装名称',is_foreign:false}),
+   make('FUTURE',1800,{board:'arrivals'}),make('DELAYED',-12000,{board:'arrivals',estimated_ts:now+1200,delay_min:220}),
+   make('NOW',0,{board:'departures',estimated_ts:now}),
+   make('DAY-END',Date.parse('2026-10-19T23:59:59+08:00')/1000-now,{board:'arrivals'}),
+   make('LIVERY',2400,{board:'departures',arrival_estimated_ts:Date.parse('2026-10-20T01:05:00+08:00')/1000,
+    is_special_livery:true,is_four_engine:true,livery:'特别彩绘 <测试> 多行涂装名称',is_foreign:false}),
    make('ONLY-BIZJET',3600,{is_bizjet:true,is_widebody:false}),make('TOMORROW',12*3600),
    make('NO-TIME',0,{scheduled_ts:null,estimated_ts:null})];
   const windowData={...original('SZX'),service_day:'2026-10-19',generated_at:now,today:samples,flights:samples};
@@ -168,6 +170,13 @@ const newPage=async context=>{const page=await context.newPage();await page.cloc
   await windowPage.waitForFunction(()=>document.querySelectorAll('#list .row').length===5);
   const names=()=>windowPage.locator('#list .flight .f').allTextContents();
   assert.deepEqual((await names()).sort(),['DAY-END','DELAYED','FUTURE','LIVERY','NOW']);
+  const arrivalText=number=>windowPage.locator('#list .row').filter({has:windowPage.locator('.flight .f',{hasText:number})}).locator('.time .d').innerText();
+  assert.equal(await arrivalText('DELAYED'),'预计抵达 16:02');
+  assert.equal(await arrivalText('FUTURE'),'计划抵达 16:12');
+  assert.equal(await arrivalText('NOW'),'预计抵达待定','never label outbound departure estimate as arrival');
+  assert.match(await arrivalText('LIVERY'),/^预计抵达 .*10-20.*01:05$/);
+  assert.doesNotMatch((await windowPage.locator('#list .time .d').allTextContents()).join(' '),/[+-]\d+m/);
+  assert.equal(await windowPage.locator('a[href="Feimadat.html"]').count(),0);
   assert.equal(await windowPage.locator('#s-total').innerText(),'5');
   assert.equal(await windowPage.locator('#s-widebody').innerText(),'5');
   assert.equal(await windowPage.locator('#s-four').innerText(),'1');

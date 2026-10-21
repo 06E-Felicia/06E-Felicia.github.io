@@ -2,10 +2,19 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
+<!-- FEIMADAT_SUSPENDED_START: preserve the implementation for future reopening. -->
+<meta name="robots" content="noindex, nofollow">
+<meta http-equiv="refresh" content="0;url=Flightdat.html">
+<style>html{display:none!important}</style>
+<script>
+document.documentElement.dataset.suspended = "true";
+window.location.replace(new URL("Flightdat.html", window.location.href).href);
+</script>
+<!-- FEIMADAT_SUSPENDED_END -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
 <title>Feimadat · 飞常准机场大屏 · 深中气象</title>
-<meta name="description" content="Feimadat 深圳宝安机场航班精选：飞常准真实快照、彩绘和宽体筛选、P网资料照片。北京时间每天06:00和14:00更新。">
+<meta name="description" content="Feimadat 暂停开放。">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
 <style>
 :root{
@@ -475,7 +484,6 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     <a href="simulator.html">StormSim Astra</a>
     <a href="simulator-sol.html">StormSim Sol</a>
     <a href="Flightdat.html">Flightdat 航班精选</a>
-    <a href="Feimadat.html" aria-current="page">Feimadat 飞常准大屏</a>
   </nav>
 
   <section class="statusbar" aria-label="数据更新时间">
@@ -586,6 +594,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
 <script>
 (() => {
   "use strict";
+  if (document.documentElement.dataset.suspended === "true") return;
 
   const DATA_BASE = "./feimadata/data/";
   const INDEX_URL = DATA_BASE + "index.json";

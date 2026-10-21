@@ -42,6 +42,9 @@ async function localPage(browser,base,options={}){
  }
  if(options.legacyIndex)await context.route('**/feimadata/data/index.json?*',route=>route.fulfill({json:{
   source:'variflight-mcp',default_airport:'HND',airports:[{iata:'HND',name:'东京羽田'},{iata:'SZX',name:'深圳宝安国际机场'}]}}));
+ // Exercise the preserved implementation offline only; production stays suspended.
+ await page.route('**/Feimadat.html',route=>route.fulfill({contentType:'text/html; charset=utf-8',
+  body:html.replace(/<!-- FEIMADAT_SUSPENDED_START[\s\S]*?<!-- FEIMADAT_SUSPENDED_END -->/,'')}));
  await page.goto(base+(options.prefix||'')+'/Feimadat.html');
  return {context,page,errors,requests};
 }
@@ -65,6 +68,21 @@ async function localPage(browser,base,options={}){
  try{
   browser=await chromium.launch({channel:'chrome',headless:true});
   const base='http://127.0.0.1:'+server.address().port;
+  const suspended=await browser.newContext();
+  const suspendedRequests=[];
+  await suspended.route('**/*',route=>{
+   const url=new URL(route.request().url());suspendedRequests.push(url.pathname);
+   return url.hostname==='127.0.0.1'?route.continue():route.abort();
+  });
+  const hiddenPage=await suspended.newPage();
+  for(const prefix of ['', '/project']){
+   await hiddenPage.goto(base+prefix+'/Feimadat.html');
+   await hiddenPage.waitForURL(base+prefix+'/Flightdat.html');
+   assert.equal(await hiddenPage.locator('a[href="Feimadat.html"]').count(),0);
+  }
+  assert.equal(suspendedRequests.some(p=>p.includes('/feimadata/data/')),false,
+   'hidden page must not load Feimadat snapshots');
+  await suspended.close();
   const pending=await localPage(browser,base),{page}=pending;
   await page.getByText('飞常准数据尚未接通',{exact:true}).waitFor();
   assert.equal(await page.locator('#airportSel option').count(),1);
