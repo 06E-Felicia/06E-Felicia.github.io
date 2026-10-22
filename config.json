@@ -1,17 +1,17 @@
 {
     "LIVE_DATA": {
-        "time": "2026-10-22 08:50",
-        "t": "26.1°C",
+        "time": "2026-10-22 10:36",
+        "t": "28°C",
         "th": "29.8°C",
         "tl": "23.8°C",
         "r_day": "0mm",
         "r_1h": "0mm",
-        "p": "1009.9hPa"
+        "p": "1009.4hPa"
     },
     "MANUAL_CONFIG": {
-        "low": "24°C",
-        "high": "32°C",
-        "humidity": "45%-75%",
+        "low": "27°C",
+        "high": "31°C",
+        "humidity": "45%-65%",
         "rainProb": "晴天间多云，空气干燥",
         "wind": "3级",
         "dir": "北风",
@@ -20,22 +20,11 @@
     },
     "ALERT_CONFIG": {
         "enabled": true,
-        "title": "深圳市森林火险黄色预警",
-        "image": "https://weather.sz.gov.cn/alarmIcon/senlinhuoxianhuangse.png",
-        "message": "【深圳市森林火险黄色预警信号】深圳市森林防灭火指挥部和深圳市气象台2026年10月07日10时联合发布全市陆地森林火险黄色预警信号，预计我市天气将持续干燥，森林火险气象等级较高，林内可燃物较易燃烧，森林火灾较易发生。有关主管部门加大巡山护林力度，严格管制野外火源。"
+        "title": "深圳市森林火险橙色预警",
+        "image": "https://weather.sz.gov.cn/alarmIcon/senlinhuoxianchengse.png",
+        "message": "【深圳市森林火险黄色预警信号升级为橙色】深圳市森林防灭火指挥部和深圳市气象台2026年10月22日09时30分将全市陆地森林火险黄色预警信号升级为橙色，预计我市天气将持续干燥，森林火险气象等级高，林内可燃物容易燃烧，森林火灾容易发生，火势蔓延速度快，有关主管部门加大巡山护林力度，严格管制野外火源。"
     },
     "FORECAST": [
-        {
-            "date": "10月22日",
-            "weekday": "周四",
-            "weather": "晴天间多云，空气干燥",
-            "low": "24°C",
-            "high": "32°C",
-            "humidity": "45%-75%",
-            "wind": "北风 3级",
-            "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-22 05:15:00"
-        },
         {
             "date": "10月23日",
             "weekday": "周五",
@@ -45,7 +34,7 @@
             "humidity": "40%-70%",
             "wind": "北风 3-4级",
             "icon": "assets/images/weather_icons/01.png",
-            "published_at": "2026-10-22 05:15:48"
+            "published_at": "2026-10-22 10:09:59"
         },
         {
             "date": "10月24日",
@@ -56,7 +45,7 @@
             "humidity": "40%-65%",
             "wind": "西北风 3-4级",
             "icon": "assets/images/weather_icons/01.png",
-            "published_at": "2026-10-22 05:15:48"
+            "published_at": "2026-10-22 10:09:59"
         },
         {
             "date": "10月25日",
@@ -67,7 +56,7 @@
             "humidity": "45%-70%",
             "wind": "北风 2-3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-22 05:15:48"
+            "published_at": "2026-10-22 10:09:59"
         },
         {
             "date": "10月26日",
@@ -78,7 +67,7 @@
             "humidity": "50%-80%",
             "wind": "东北风 2-3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-22 05:15:48"
+            "published_at": "2026-10-22 10:09:59"
         },
         {
             "date": "10月27日",
@@ -89,29 +78,40 @@
             "humidity": "50%-90%",
             "wind": "东北风 3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-22 05:15:48"
+            "published_at": "2026-10-22 10:09:59"
         },
         {
             "date": "10月28日",
             "weekday": "周三",
-            "weather": "多云间阴天",
+            "weather": "多云间阴天，局部偶有零星小雨",
             "low": "24°C",
             "high": "30°C",
             "humidity": "60%-85%",
-            "wind": "东北转东风 3-4级",
+            "wind": "东风 3-4级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-10-22 05:15:48"
+            "published_at": "2026-10-22 10:09:59"
+        },
+        {
+            "date": "10月29日",
+            "weekday": "周四",
+            "weather": "多云",
+            "low": "23°C",
+            "high": "29°C",
+            "humidity": "60%-85%",
+            "wind": "东风 3-4级",
+            "icon": "assets/images/weather_icons/02.png",
+            "published_at": "2026-10-22 10:09:59"
         }
     ],
     "WARNINGS": [
         {
-            "title": "深圳市森林火险黄色预警",
+            "title": "深圳市森林火险橙色预警",
             "type": "森林火险",
-            "color": "黄色",
-            "message": "【深圳市森林火险黄色预警信号】深圳市森林防灭火指挥部和深圳市气象台2026年10月07日10时联合发布全市陆地森林火险黄色预警信号，预计我市天气将持续干燥，森林火险气象等级较高，林内可燃物较易燃烧，森林火灾较易发生。有关主管部门加大巡山护林力度，严格管制野外火源。",
-            "published_at": "2026-10-07 10:00:00",
+            "color": "橙色",
+            "message": "【深圳市森林火险黄色预警信号升级为橙色】深圳市森林防灭火指挥部和深圳市气象台2026年10月22日09时30分将全市陆地森林火险黄色预警信号升级为橙色，预计我市天气将持续干燥，森林火险气象等级高，林内可燃物容易燃烧，森林火灾容易发生，火势蔓延速度快，有关主管部门加大巡山护林力度，严格管制野外火源。",
+            "published_at": "2026-10-22 09:30:00",
             "area": "全市陆地",
-            "icon": "https://weather.sz.gov.cn/alarmIcon/senlinhuoxianhuangse.png"
+            "icon": "https://weather.sz.gov.cn/alarmIcon/senlinhuoxianchengse.png"
         }
     ],
     "THUNDER_MONITOR_CONFIG": {
@@ -129,7 +129,7 @@
     "THUNDER_ALERT_CONFIG": {
         "enabled": false,
         "status": "source_error",
-        "generated_at": "2026-10-22T08:54:08+08:00",
+        "generated_at": "2026-10-22T10:39:04+08:00",
         "settings": {
             "default_mode": "auto",
             "speed_kmh": 50,
@@ -147,8 +147,8 @@
     },
     "META": {
         "source": "深圳市气象台",
-        "forecast_updated_at": "10月22日 05:15",
-        "updated_at": "2026-10-22 08:50",
-        "warnings_updated_at": "2026-10-07 10:00:00"
+        "forecast_updated_at": "10月22日 10:09",
+        "updated_at": "2026-10-22 10:36",
+        "warnings_updated_at": "2026-10-22 09:30:00"
     }
 }
