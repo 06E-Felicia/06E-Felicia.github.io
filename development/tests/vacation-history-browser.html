@@ -1,0 +1,64 @@
+<!doctype html><meta charset="utf-8"><title>Vacation full replay and StormSim interaction</title>
+<style>body{font:14px system-ui;color:#25374b;margin:16px}iframe{width:1200px;height:1100px;border:1px solid #ced5de}pre{white-space:pre-wrap}</style>
+<h1>完整回放与地图交互验证</h1><pre id="result">RUNNING</pre><iframe src="../../Vacation.html?test=acceptance-history-browser"></iframe>
+<script>
+(async()=>{
+ let extraStore=null;const el=document.querySelector('iframe'),out=document.querySelector('#result'),lines=[];const log=s=>{lines.push(s);out.textContent=lines.join('\n');};const assert=(ok,s)=>{if(!ok)throw Error(s);};
+ const wait=async(fn,limit=120000)=>{const until=performance.now()+limit;while(!fn()){out.dataset.maps=JSON.stringify(el.contentWindow.VacationSimulator?.getState().mapViews);if(performance.now()>until)throw Error('Timeout: '+JSON.stringify(el.contentWindow.VacationSimulator?.getState().mapViews));await new Promise(r=>setTimeout(r,40));}};
+ try{
+  await wait(()=>el.contentWindow.VacationSimulator?.getState().mapViews.length===2);let app=el.contentWindow.VacationSimulator,doc=el.contentDocument;
+  const stable=()=>app.getState().mapViews.every(v=>!v.zooming);
+  const synced=()=>{const v=app.getState().mapViews;if(v.length<2)return true;const L=el.contentWindow.L,p=v.map(a=>L.CRS.EPSG3857.latLngToPoint(L.latLng(a.center.lat,a.center.lon),a.zoom));return v.every(a=>a.zoom===v[0].zoom)&&p[0].distanceTo(p[1])<1.5;};
+  doc.querySelector('#basemap').value='none';doc.querySelector('#basemap').dispatchEvent(new Event('change'));
+  const expected={zoomSnap:.25,zoomDelta:.5,wheelPxPerZoomLevel:140,wheelDebounceTime:70,inertia:true,zoomAnimation:true};for(const v of app.getState().mapViews)assert(JSON.stringify(v.interaction)===JSON.stringify(expected),'StormSim interaction options');
+  log('RUN map interaction parameters match StormSim');doc.querySelector('#prd').click();await wait(()=>stable()&&app.getState().mapViews.every(v=>v.zoom===9)&&synced());log('RUN PRD animated view synchronized');
+  for(let i=0;i<3;i++){const z=app.getState().mapViews[0].zoom;doc.querySelector('#weather-map .leaflet-control-zoom-in').click();await wait(()=>stable()&&app.getState().mapViews[0].zoom===z+.5&&synced());}
+  const map=doc.querySelector('#weather-map'),r=map.getBoundingClientRect(),z=app.getState().mapViews[0].zoom;
+  map.dispatchEvent(new WheelEvent('wheel',{deltaY:140,deltaMode:0,bubbles:true,cancelable:true,clientX:r.left+r.width*.7,clientY:r.top+r.height*.5}));await wait(()=>stable()&&app.getState().mapViews[0].zoom<z&&synced());
+  log('RUN zoom buttons and wheel synchronized');doc.querySelector('#region').click();await wait(()=>stable()&&app.getState().mapViews.every(v=>v.zoom===v.minZoom)&&synced());assert(app.getState().mapViews.every(v=>v.simulationCovered),'Regional viewport covered by simulation');
+  doc.querySelector('#prd').click();await wait(()=>stable()&&app.getState().mapViews[0].zoom===9&&synced());
+  doc.querySelector('#weather-map .leaflet-control-zoom-in').click();doc.querySelector('[data-layout="1"]').click();doc.querySelector('[data-layout="2"]').click();await wait(()=>stable()&&synced());
+  log('PASS StormSim fractional wheel / button zoom, animation, regional bounds and synchronized maps; layout change during zoom');
+  assert(!doc.querySelector('#weather-region'),'Weather region is automatic');
+  for(const width of [480,1600]){
+   el.style.width=width+'px';await new Promise(r=>setTimeout(r,300));
+   for(const layout of [1,2]){
+    doc.querySelector('[data-layout="'+layout+'"]').click();doc.querySelector('#region').click();await wait(()=>stable()&&synced()&&app.getState().mapViews.every(v=>v.zoom===v.minZoom));
+    const active=doc.querySelector('#weather-map');active.focus();
+    for(const keyCode of [37,38,39,40]){
+     for(let n=0;n<6;n++){active.dispatchEvent(new el.contentWindow.KeyboardEvent('keydown',{keyCode,which:keyCode,shiftKey:true,bubbles:true}));await new Promise(r=>setTimeout(r,200));assert(app.getState().mapViews.every(v=>v.simulationCovered),'Every panned viewport edge has simulation data '+JSON.stringify({width,layout,keyCode,maps:app.getState().mapViews}));}
+    }
+   }
+  }
+  el.style.width='1200px';await new Promise(r=>setTimeout(r,300));doc.querySelector('[data-layout="2"]').click();await wait(()=>stable()&&synced());
+  log('PASS all four pan boundaries at narrow/wide sizes and single/dual layouts remain inside physical grid');
+  doc.querySelector('#speed').value='3600';
+  await app.start({hours:3,seed:104729,geography:'idealized',width:160000,height:160000,quality:'low'});
+  await wait(()=>app.getState().state==='complete'||app.getState().lastError);assert(!app.getState().lastError,app.getState().lastError);
+  await wait(()=>app.getState().historyEnd===10800);const end=app.getState();assert(end.historyStart===0&&end.historyFrames===19,'All 3 hours retained');
+  const slider=doc.querySelector('#timeline');slider.value=0;slider.dispatchEvent(new Event('input'));await wait(()=>app.getState().displayTime===0);assert(new Set([...doc.querySelectorAll('.map-time')].map(x=>x.textContent)).size===1,'Both maps show first frame');
+  slider.value=Math.floor(+slider.max/2);slider.dispatchEvent(new Event('input'));await wait(()=>app.getState().displayTime>3600&&app.getState().displayTime<7200);
+  const middle=app.getState().displayTime;doc.querySelector('#toggle-replay').click();await wait(()=>app.getState().displayTime>middle);doc.querySelector('#toggle-replay').click();assert(!app.getState().replayPlaying,'Replay pause');
+  slider.value=slider.max;slider.dispatchEvent(new Event('input'));await wait(()=>app.getState().displayTime===10800);assert(doc.querySelector('#history-status').textContent.includes('整轮'),'Complete-range status');
+  doc.querySelector('#toggle-replay').click();await wait(()=>app.getState().displayTime<3600);await wait(()=>!app.getState().replayPlaying&&app.getState().displayTime===10800);const coldLayer=doc.querySelector('select[aria-label="选择气象图 2"]');coldLayer.value='cold';coldLayer.dispatchEvent(new Event('change'));assert(app.getState().mapViews[1].key==='cold'&&app.getState().mapViews[1].rasterPixels>0,'Cold field replays');log('PASS actual Worker / 3 hours / first, middle and final seek / replay to end, pause, restart and cold layer');
+  doc.querySelector('#save').click();await wait(()=>doc.querySelector('#save-status').textContent==='进度已保存');
+  await new Promise(resolve=>{el.onload=resolve;el.contentWindow.location.reload();});await wait(()=>el.contentWindow.VacationSimulator&&!el.contentDocument.querySelector('#restore').hidden);app=el.contentWindow.VacationSimulator;doc=el.contentDocument;doc.querySelector('#basemap').value='none';doc.querySelector('#basemap').dispatchEvent(new Event('change'));doc.querySelector('#restore').click();
+  await wait(()=>app.getState().seqCount>=1&&app.getState().historyEnd===10800||app.getState().lastError);assert(!app.getState().lastError,app.getState().lastError);assert(app.getState().historyStart===0,'Full timeline survives native restore');
+  const restoredSlider=doc.querySelector('#timeline');restoredSlider.value=0;restoredSlider.dispatchEvent(new Event('input'));await wait(()=>app.getState().displayTime===0);
+  log('PASS refresh / physical checkpoint / complete history restoration back to first frame');
+  const Store=el.contentWindow.VacationStore,s=new Store(null,'vacation-complete-storage-browser');extraStore=s;s.limit=16384;await s.open('120-hours');
+  for(let i=0;i<=120;i++){const buffer=new ArrayBuffer(2048),wind=new ArrayBuffer(2048),cold=new ArrayBuffer(4096);new Uint32Array(buffer)[0]=i;new Float32Array(cold)[0]=i+.5;await s.put({seq:i,simTime:i*3600,buffer,windGrid:{buffer:wind},coldGrid:{buffer:cold}});}
+  assert(s.index.length===121&&s.index[0].simTime===0&&s.index.at(-1).simTime===432000,'120-hour timeline');assert(s.bytes<=s.limit&&!s.ram.has(0),'Decoded working set only');assert(new Uint32Array((await s.get(0)).buffer)[0]===0,'Oldest compressed disk frame');assert(new Float32Array((await s.get(60)).coldGrid.buffer)[0]===60.5,'Middle cold frame');
+  log('PASS actual IndexedDB / 120-hour timeline / oldest and middle fields recovered after RAM eviction');const transact=s.transaction.bind(s);s.transaction=(name,mode,fn)=>mode==='readwrite'?Promise.reject(Error('QuotaExceededError')):transact(name,mode,fn);const tail=new ArrayBuffer(32);new Uint32Array(tail)[0]=121;await s.put({seq:0,simTime:121*3600,buffer:tail});assert(s.backend==='cache','Actual Cache API fallback');s.ram.clear();s.bytes=0;assert(new Uint32Array((await s.get(0)).buffer)[0]===0,'Existing IDB prefix retained');assert(new Uint32Array((await s.get(121)).buffer)[0]===121,'Fallback tail retained');log('PASS actual Cache API fallback preserves IDB beginning and fallback ending');s.close();
+  doc.querySelector('#prd').click();await wait(()=>stable()&&synced());log('ALL PASS');document.title='PASS Vacation complete replay';
+ }catch(e){log('FAIL '+e.stack);document.title='FAIL Vacation complete replay';}
+ finally{
+  try{
+   extraStore?.close();await el.contentWindow.VacationSimulator?.disposeTestStorage();
+   await new Promise((resolve,reject)=>{const r=indexedDB.deleteDatabase('vacation-complete-storage-browser');r.onsuccess=resolve;r.onerror=()=>reject(r.error);r.onblocked=()=>reject(Error('测试数据库清理受阻'));});
+   if(window.caches)await caches.delete('vacation-complete-storage-browser-complete-replay-v2');
+   log('PASS temporary acceptance storage removed');
+  }catch(e){log('FAIL cleanup: '+e.message);document.title='FAIL Vacation cleanup';}
+ }
+})();
+</script>

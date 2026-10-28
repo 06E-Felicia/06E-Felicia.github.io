@@ -26,8 +26,8 @@ Feimadat 当前暂停开放：网站入口已隐藏，访问 `Feimadat.html` 自
 
 ## 配置与本地使用
 
-1. 双击 `配置飞常准.command`，隐藏输入 MCP Key。macOS 密钥在当前用户 `Library/Application Support/Feimadat/mcp-key`，目录700、文件600，不在项目或网页目录。
-2. 双击 `更新飞常准.command`，确认额度消耗后仅更新深圳；或运行 `python3 -B -m feimadata.collect --airports SZX`。
+1. 双击 `development/launchers/配置飞常准.command`，隐藏输入 MCP Key。macOS 密钥在当前用户 `Library/Application Support/Feimadat/mcp-key`，目录700、文件600，不在项目或网页目录。
+2. 双击 `development/launchers/更新飞常准.command`，确认额度消耗后仅更新深圳；或运行 `python3 -B -m feimadata.collect --airports SZX`。
 3. 页面当前暂停开放；如需恢复，先撤除 `Feimadat.html` 中标记的暂停区块，再恢复导航入口。恢复页面不会自动恢复 Actions 定时任务。
 
 GitHub 仓库 Secret 为 `VARIFLIGHT_MCP_KEY`。密钥只在 Header 发送到官方固定主机，不跟随重定向，不进入网页、URL、公开JSON、日志或聊天。公开快照发布前进行隐私检查，私有缓存不进入 Pages。
@@ -40,6 +40,6 @@ GitHub 仓库 Secret 为 `VARIFLIGHT_MCP_KEY`。密钥只在 Header 发送到官
 
 两页保留“显示之前时刻”与手动定位按钮。列表时间统一为北京时间，实际时间优先于预计时间；每日快照不能保证反映之后的临时换机，实际运行以机场、航司为准。
 
-离线回归：`python3 -B -m unittest discover -s tests -p 'test_feimadata.py' -v`；界面回归：`node tests/test_feimadat_browser.cjs` 与 `node tests/test_flightdata_browser.cjs`（需本机 Playwright/Chrome）。测试不调用收费接口。
+离线回归：`python3 -B -m unittest discover -s tests -p 'test_feimadata.py' -v`；界面回归：`node development/tests/test_feimadat_browser.cjs` 与 `node development/tests/test_flightdata_browser.cjs`（需本机 Playwright/Chrome）。测试不调用收费接口。
 
 官方文档：[机场大屏](https://cmcp.variflight.com/zh/tools/#getAirportFlightBoard)、[航班详情](https://cmcp.variflight.com/zh/tools/#getFlightStatus)。

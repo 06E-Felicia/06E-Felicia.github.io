@@ -52,14 +52,14 @@
 最终 Python 测试集 **160 项通过**（包括五项需要回环端口的预览测试）；受控物理案例不等同于 Astra 全域整轮天气验证。
 
 ```sh
-python -m unittest discover -s tests -p 'test_*.py'
-node tests/test_frame_storage.cjs
-node tests/test_safari_startup.cjs
-node tests/test_stormsim_editions.cjs
-node tests/test_simulation_raster_edges.cjs
-SIM_TEST_RUN=/path/to/completed/fixture TEST_BROWSER_CHANNEL=chrome node tests/test_simulation_v2_browser.cjs
-SIM_TEST_RUN=/path/to/completed/fixture TEST_BROWSER_CHANNEL=chrome node tests/test_simulation_zoom.cjs
-SOL_BENCH_SEED=20260423 SOL_BENCH_OUTPUT=/tmp/sol.json node tests/benchmark_stormsim_sol.cjs
+python -m unittest discover -s development/tests -p 'test_*.py'
+node development/tests/test_frame_storage.cjs
+node development/tests/test_safari_startup.cjs
+node development/tests/test_stormsim_editions.cjs
+node development/tests/test_simulation_raster_edges.cjs
+SIM_TEST_RUN=/path/to/completed/fixture TEST_BROWSER_CHANNEL=chrome node development/tests/test_simulation_v2_browser.cjs
+SIM_TEST_RUN=/path/to/completed/fixture TEST_BROWSER_CHANNEL=chrome node development/tests/test_simulation_zoom.cjs
+SOL_BENCH_SEED=20260423 SOL_BENCH_OUTPUT=/tmp/sol.json node development/tests/benchmark_stormsim_sol.cjs
 ```
 
 浏览器检查需本机 Playwright、Chrome 与 WebKit。完整 Python 测试包含本机回环预览服务，需要允许绑定本机端口。`.nojekyll` 已在根目录且被 Git 跟踪。新增 `simulation/precipitation.py`、两版 HTML、Python/前端脚本需一起上传，不能只更新页面文件。

@@ -31,7 +31,7 @@
 
 ## 授权登录会话（24 小时查看范围）
 
-Actions 不自动输入密码，也不读取普通 Chrome 的个人资料。需要账号已有相应查看权限，由本人在项目专用窗口登录：双击根目录 `配置FR24登录.command`，完成登录后按回车。程序重新访问机场看板，只有实际响应的 `hoursRange >= 24` 才保存会话；仅有 Cookie 不算验证通过。
+Actions 不自动输入密码，也不读取普通 Chrome 的个人资料。需要账号已有相应查看权限，由本人在项目专用窗口登录：双击根目录 `development/launchers/配置FR24登录.command`，完成登录后按回车。程序重新访问机场看板，只有实际响应的 `hoursRange >= 24` 才保存会话；仅有 Cookie 不算验证通过。
 
 导出文件在被 Git 忽略的 `flightdata/.auth/`，目录权限为 700、文件为 600。只保留 FR24 域的 Cookie / localStorage，排除其他网站和 Cloudflare 通行凭据。不要把该目录、文件内容或截图发到聊天、提交到仓库或作为附件上传。Base64 不是加密，文件相当于登录凭据，应妥善保管。
 
@@ -69,7 +69,7 @@ SZX 到达在点击和 Enter 两种操作下均发生交互超时。此现象只
 
 原本地启动器选择系统 Chrome，而此前整合的 CI 使用默认 Chromium headless shell。现 CI 明确安装并使用完整 Chrome，在 xvfb 窗口环境执行，不再伪装旧版 macOS Chrome/131 或修改浏览器特征。指定 Chrome 启动失败时报告实际错误，不在 CI 静默降级。此调整依据 [Playwright 浏览器说明](https://playwright.dev/python/docs/browsers)，分页响应处理依据 [Inertia 协议](https://inertiajs.com/the-protocol)。
 
-真实 Chrome 离线回归还覆盖其他机场“第一页 HTML → 第二页 Inertia JSON → 第三页 HTML”的完整流程，同时故意让初始数据岛保持不变，确认不会误读第一页。可运行 `python tests/test_flightdata_pagination.py -v`。该文件已加入 CI 的采集前检查，上传修复时必须一并上传。
+真实 Chrome 离线回归还覆盖其他机场“第一页 HTML → 第二页 Inertia JSON → 第三页 HTML”的完整流程，同时故意让初始数据岛保持不变，确认不会误读第一页。可运行 `python development/tests/test_flightdata_pagination.py -v`。该文件已加入 CI 的采集前检查，上传修复时必须一并上传。
 
 这些修复保证可用数据不会丢失、状态不会误报，**不会绕过 Cloudflare，也不保证 GitHub 托管网络可以访问全部看板**。若源站持续拒绝访问，应采用获得授权的数据接口或符合其规则的采集环境。
 

@@ -1,5 +1,3 @@
-const WARNING_CONFIG_URL = "config.json";
-
 function escapeHtml(value) {
     return String(value ?? "").replace(/[&<>'"]/g, char => ({
         "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;"
@@ -26,10 +24,8 @@ function renderWarnings(warnings) {
 
 async function initWarningsPage() {
     try {
-        const response = await fetch(WARNING_CONFIG_URL, { cache: "no-store" });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const config = await response.json();
-        renderWarnings(Array.isArray(config.WARNINGS) ? config.WARNINGS : []);
+        const config = await WeatherData.load(['WARNINGS']);
+        renderWarnings(config.WARNINGS);
         document.getElementById("warning-update").textContent = config.META?.updated_at
             ? `实况更新时间 ${config.META.updated_at} · 深圳市气象台`
             : "数据来源：深圳市气象台";

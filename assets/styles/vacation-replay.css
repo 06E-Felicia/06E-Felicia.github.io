@@ -1,0 +1,13 @@
+#replay-status,#replay-config{margin-top:12px;overflow-wrap:anywhere}
+.replay-picture{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel);margin-bottom:20px;min-height:80px}
+.replay-picture img{display:block;width:100%;height:auto}
+#replay-slider{width:100%;display:block;margin:18px 0 0;min-width:0}
+.replay-controls{flex-wrap:wrap}.replay-controls label{display:flex;align-items:center;gap:8px;margin-left:auto;font-size:12px;color:var(--muted)}
+.review-links,#replay-contacts,.replay-video{margin-bottom:20px}
+#replay-links{display:flex;gap:10px;flex-wrap:wrap}
+#replay-links a{border:1px solid var(--line);background:var(--panel-soft);border-radius:10px;padding:10px 14px;font-size:12px}
+.replay-video summary{cursor:pointer;color:var(--heading)}.replay-video video{display:block;width:100%;margin-top:18px;border-radius:10px}
+.contact-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:0}
+.contact-grid a{display:block;min-width:0}.contact-grid img{display:block;width:100%;height:auto;border-radius:9px;border:1px solid var(--line)}
+.contact-grid span{display:block;font-size:12px;padding-top:8px}
+@media(max-width:700px){.contact-grid{grid-template-columns:1fr}.replay-controls{gap:8px}.replay-controls button{min-width:0}.replay-controls label{margin:0}.replay-picture{border-radius:9px}}

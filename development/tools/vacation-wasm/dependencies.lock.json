@@ -1,0 +1,20 @@
+{
+  "wabt": {
+    "version": "1.0.39",
+    "url": "https://registry.npmjs.org/wabt/-/wabt-1.0.39.tgz",
+    "integrity": "sha512-ba+dRL/75VQQY7RkU/CgriGbkoWAfS8TDyUlJfJhJ8KhtXgMl5dhNvoPNUcQ9IWRhW8u41glMSuZeTvsYq2rRg==",
+    "license": "Apache-2.0",
+    "entry": "index.js",
+    "entrySha256": "cecf06ab5c65c3b7c05bafe601bbba61a45e4939889c5c51351e8817ac06f48d",
+    "packageJsonSha256": "501c80addc1171fe1d892a8b4ef3c23ea0c5659129b25e7f4268cbe7e9ede506"
+  },
+  "acorn": {
+    "version": "8.15.0",
+    "url": "https://registry.npmjs.org/acorn/-/acorn-8.15.0.tgz",
+    "integrity": "sha512-NZyJarBfL7nWwIq+FDL6Zp/yHEhePMNnnJ0y3qfieCrmNvYct8uvtiV41UvlSe6apAfk0fY1FbWx+NwfmpvtTg==",
+    "license": "MIT",
+    "entry": "dist/acorn.js",
+    "entrySha256": "fdb08546776ec6228b03e8d02b40d4ab3255bae5f401adba7ff5dad927ac5c9c",
+    "packageJsonSha256": "9e422c8225c9cc4c774e9a9392d0ecac7f766b46122ef2db99db0fc4bbedc247"
+  }
+}

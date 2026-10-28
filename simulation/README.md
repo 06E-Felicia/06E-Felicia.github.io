@@ -114,7 +114,7 @@ Sol 保留网格尺度的有限起生抬升补偿，并按新的输送适度校�
 
 日变化与海面削弱尚需进一步实况校准。日夜专项对照现在先实际积分背景到相应时刻，再注入相同的试验扰动，不能直接跳钟却保留同一份 08:00 廓线；不同背景时长也意味着该试验不是纯粹隔离所有天气尺度因素的实况归因。
 
-管理员可用 `python -m simulation.benchmark --hours 1 --grid-km 6 --profile` 定位耗时，加 `--compact-transport` 比较省时模式。浏览器固定种子的顺序计时为 `tests/benchmark_simulation_modes.cjs`；计时须避免并行运行其他重计算任务，不能将不同机器的秒数混为通用加速比。
+管理员可用 `python -m simulation.benchmark --hours 1 --grid-km 6 --profile` 定位耗时，加 `--compact-transport` 比较省时模式。浏览器固定种子的顺序计时为 `development/tests/benchmark_simulation_modes.cjs`；计时须避免并行运行其他重计算任务，不能将不同机器的秒数混为通用加速比。
 
 ### 静止锋、飑后层状区与雨强（3.4）
 
@@ -188,16 +188,16 @@ DEM 为 Mapzen/AWS Terrarium 瓦片采样，源瓦片 zoom 7，随仓库提供 4
 
 ## 本地复现（与 Actions 相同程序）
 
-只需预览网页时，macOS 双击根目录 `启动本地预览.command`，或在项目根目录执行 `python3 -m simulation.preview`。浏览器必须访问该命令输出的 `http://127.0.0.1:端口/simulator.html`，不要打开 `file://`。预览器仅依赖 Python 标准库，不需要下述科学计算环境；本地代码不缓存，避免混用旧 UI/Worker。Astra/Sol 页面均会对错误打开方式给出明确提示。
+只需预览网页时，macOS 双击根目录 `development/launchers/启动本地预览.command`，或在项目根目录执行 `python3 -m simulation.preview`。浏览器必须访问该命令输出的 `http://127.0.0.1:端口/simulator.html`，不要打开 `file://`。预览器仅依赖 Python 标准库，不需要下述科学计算环境；本地代码不缓存，避免混用旧 UI/Worker。Astra/Sol 页面均会对错误打开方式给出明确提示。
 
 以下命令才是可选的原生 Python 模型测试/计算：
 
 ```sh
 python3 -m venv .venv
 .venv/bin/pip install -r simulation/requirements.txt
-.venv/bin/python -m unittest discover -s tests -p 'test_physics.py' -v
-.venv/bin/python -m unittest discover -s tests -p 'test_coldpool.py' -v
-.venv/bin/python -m unittest discover -s tests -p 'test_stratiform.py' -v
+.venv/bin/python -m unittest discover -s development/tests -p 'test_physics.py' -v
+.venv/bin/python -m unittest discover -s development/tests -p 'test_coldpool.py' -v
+.venv/bin/python -m unittest discover -s development/tests -p 'test_stratiform.py' -v
 .venv/bin/python -m simulation.run --output assets/simulation --grid-km 8 --hours 12
 python3 -m http.server 8080 --bind 127.0.0.1
 ```
@@ -208,13 +208,13 @@ python3 -m http.server 8080 --bind 127.0.0.1
 
 CLI 工件的 `manifest.json` 指向 SHA-256 校验的 gzip 帧；本机 Worker 直接发送同一字段编码。字段为带 scale/offset 的小端 int16；32767 为缺测。前端逐帧校验并压缩存档，全部完成后从本轮存档解码播放；地图与观测使用同一时次，不读取后台旧实验工件。
 
-- `tests/test_physics.py`：CAPE 参考值、稳定层结、种子复现、持续随机性、移动边界输送误差、外部入流、边界层混合收支、高架来源层、云层引导风、水量账目、输出不改变模型状态。
-- `tests/test_coldpool.py`：静风密度流扩展、冷量守恒、干湿界面、静水地形平衡、山脊阻挡、冷池内部供给拒绝、净湿焓/稳定层回补、雨后地温记忆、环境切变/急流方向、压力功与 CIN、碰并水量子集。
-- `tests/test_stratiform.py`：冰面饱和参考、无水不造回波、环境/对流云冻结、凝华/升华收支、母单体消散后的后向流记忆、融化雨来源、蒸发子集、云水/水汽共享供给与全步状态。
-- `tests/test_simulation_data.cjs`：协议校验、路径安全、量化、网格边界及多普勒符号。
-- `tests/test_simulation_v2_browser.cjs`：准备中仅有初始化进度/估时，没有气象画面或回看控件；开始锁定、完成后自动首轮演变、首轮结束后回看、精简图层、同步地图、华南缩小极限、站点、移动端和损坏数据处理。
-- `tests/test_simulation_local_browser.cjs`：真实 WASM 内核两轮独立环境、完整计算后自动播放、播放速度切换、压缩回看、立即取消和旧线程隔离。
-- `tests/test_simulation_live_process.cjs`：真实 Worker 六小时完整计算、随后播放至终点、降水演变与观测点。
+- `development/tests/test_physics.py`：CAPE 参考值、稳定层结、种子复现、持续随机性、移动边界输送误差、外部入流、边界层混合收支、高架来源层、云层引导风、水量账目、输出不改变模型状态。
+- `development/tests/test_coldpool.py`：静风密度流扩展、冷量守恒、干湿界面、静水地形平衡、山脊阻挡、冷池内部供给拒绝、净湿焓/稳定层回补、雨后地温记忆、环境切变/急流方向、压力功与 CIN、碰并水量子集。
+- `development/tests/test_stratiform.py`：冰面饱和参考、无水不造回波、环境/对流云冻结、凝华/升华收支、母单体消散后的后向流记忆、融化雨来源、蒸发子集、云水/水汽共享供给与全步状态。
+- `development/tests/test_simulation_data.cjs`：协议校验、路径安全、量化、网格边界及多普勒符号。
+- `development/tests/test_simulation_v2_browser.cjs`：准备中仅有初始化进度/估时，没有气象画面或回看控件；开始锁定、完成后自动首轮演变、首轮结束后回看、精简图层、同步地图、华南缩小极限、站点、移动端和损坏数据处理。
+- `development/tests/test_simulation_local_browser.cjs`：真实 WASM 内核两轮独立环境、完整计算后自动播放、播放速度切换、压缩回看、立即取消和旧线程隔离。
+- `development/tests/test_simulation_live_process.cjs`：真实 Worker 六小时完整计算、随后播放至终点、降水演变与观测点。
 - `python -m simulation.validate --hours 24 --grid-km 6 --seed 20260421 --require-duration-hours 4 --quiet --output /tmp/process-check.json`：连续组件追踪与锋面、雨量、冷池、CAPE、数值水量收支；若持续线状系统未达到四小时则返回失败。
 - 加 `--random-environment` 使用与实时页面完全相同的参数抽样；`--snapshots` 另存逐六小时的计算场。可用 `simulation.plot_validation` 做科学 QA 图（额外需要 Matplotlib，网页不需要它）。
 - 旧 `simulator-model.js` 等 v1 文件不再被页面加载；旧单体动画测试不是 v2 验收依据。

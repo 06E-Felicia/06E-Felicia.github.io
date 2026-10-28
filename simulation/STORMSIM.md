@@ -36,7 +36,7 @@ Sol 已按最新要求重新开放：首页、预报页、预警页及模拟器�
 
 ## 本地启动与 Sol 重新开放
 
-- 本地不可从 `file://` 启动模拟。双击根目录 `启动本地预览.command`，或执行 `python3 -m simulation.preview`：自动检查运行时、科学包、站表和地形，只监听 `127.0.0.1`，空闲端口自动选择；重复启动可复用服务。页面不再将错误打开方式报告为笼统的模拟失败。
+- 本地不可从 `file://` 启动模拟。双击根目录 `development/launchers/启动本地预览.command`，或执行 `python3 -m simulation.preview`：自动检查运行时、科学包、站表和地形，只监听 `127.0.0.1`，空闲端口自动选择；重复启动可复用服务。页面不再将错误打开方式报告为笼统的模拟失败。
 - Sol 保留 14 层、双精度水物质、实际 CFL/内部物理步长、逐步随机演变、两类冰相、冷池高阶输送、真实供给水量扣除和阵风诊断；输出固定为每小时，省去未展示的 MLCAPE 输出。为给新版物理留计算余量，网格由旧版 24 km 调整为 28 km，不是以加快播放伪装提速。
 - 修正粗网格暖侧取样被舍入回自身的问题：采用实际相邻网格，依旧检查其冷池状态、地形高度差，并共同扣除真实供给水汽。该取样表达式在 4–12 km 数值不变，但新的出流/DEM 修正同时作用两版；原 3.9.2 的完整 Astra 过程记录只作为前阶段结果，不冒充新版重跑。
 - 两版共用改进的站点命中、重叠距离选择、保留 SVG 节点、触屏/键盘操作与阵风图层。旧版五分钟成绩不作为新版达标证明。
@@ -64,9 +64,9 @@ Sol 已按最新要求重新开放：首页、预报页、预警页及模拟器�
 机制参考（用于过程设计，不代表上述系数得到业务标定）：[层状区水物质过程](https://journals.ametsoc.org/view/journals/mwre/137/4/2008mwr2505.1.xml)、[冰粒子生长与沉降](https://journals.ametsoc.org/view/journals/mwre/146/3/mwr-d-17-0215.1.xml)、[冰相微物理对对流/层状降水分布的影响](https://journals.ametsoc.org/view/journals/mwre/137/3/2008mwr2556.1.xml)、[JMA 对流动量输送说明](https://www.jma.go.jp/jma/jma-eng/jma-center/nwp/outline2022-nwp/pdf/outline2022_03.pdf)。本模型仍是降阶机制模拟，不是完整三维非静力云模式或业务预报。
 
 ```sh
-python -m unittest discover -s tests -p 'test_astra_front_cloud.py' -v
-python -m unittest discover -s tests -p 'test_astra_rain_gust.py' -v
-node tests/test_astra_stations.cjs
+python -m unittest discover -s development/tests -p 'test_astra_front_cloud.py' -v
+python -m unittest discover -s development/tests -p 'test_astra_rain_gust.py' -v
+node development/tests/test_astra_stations.cjs
 ```
 
 ## 1.0 双版本历史设计与测试记录（以下不代表当前入口开放）
@@ -115,9 +115,9 @@ Astra 使用实际积分进度与计时估算总耗时：`elapsed × hours / sim
 另外在真实 WASM 页面连续完成固定转移种子后的两次一小时新运行，确认实际生成两个不同的密码学主种子与背景参数，不仅检查模拟 Worker 的消息协议。手机导航将两版入口收纳进既有 StormSim 下拉菜单，不额外挤占一整项导航位置。
 
 ```sh
-python -m unittest discover -s tests -p 'test_sol.py' -v
-node tests/test_stormsim_editions.cjs
-node tests/benchmark_stormsim_sol.cjs
+python -m unittest discover -s development/tests -p 'test_sol.py' -v
+node development/tests/test_stormsim_editions.cjs
+node development/tests/benchmark_stormsim_sol.cjs
 ```
 
 浏览器测试需要本地 Playwright 与 Chrome；基准测试自动启动临时静态服务器，使用真实 WASM、地形、物理积分、压缩和 IndexedDB 存储，不访问外部计算服务。`SOL_BENCH_SEED` 可指定测试种子，`SOL_BENCH_HOURS` 可指定过程长度。72 小时默认要求从点击开始到全部结果保存少于 300 秒；同时检查每帧水量残差、CFL、自动播放与结束后回看。

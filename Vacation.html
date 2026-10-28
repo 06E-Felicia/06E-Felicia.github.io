@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#353149">
+  <meta name="description" content="华南暖区降水模拟：观察西南季风与雷达回波的多日演变。">
+  <title>放假模拟器 · 深中气象</title><link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="assets/styles/simulator.css">
+  <link rel="stylesheet" href="assets/styles/simulation-v2.css?v=5.5.1">
+  <link rel="stylesheet" href="assets/styles/vacation.css?v=1.35.0-r1">
+</head>
+<body class="anime-lab vacation-lab">
+<nav class="lab-nav">
+  <a class="brand" href="Vacation.html"><span class="brand-mark" aria-hidden="true">✦</span><h1>放假模拟器</h1></a>
+  <div><a href="index.html">今日天气</a><a href="forecast.html">一周预报</a><a href="warnings.html">预警</a><a href="simulator.html">Astra</a><a href="simulator-sol.html">Sol</a><a href="Vacation.html" aria-current="page">放假模拟器</a></div>
+</nav>
+<main>
+  <section class="compute-card" aria-label="模拟控制">
+    <h2>模拟设置</h2>
+    <div class="compute-controls">
+      <label>画质<select id="quality"><option value="low">轻量 · 4 km 显示</option><option value="standard" selected>标准 · 2 km 显示</option><option value="high">精细 · 1 km 显示</option></select></label>
+      <label>时间流速<select id="speed"><option value="60">1 分钟 / 秒</option><option value="300">5 分钟 / 秒</option><option value="600" selected>10 分钟 / 秒</option><option value="1800">30 分钟 / 秒</option><option value="3600">1 小时 / 秒</option></select></label>
+      <button id="start" class="primary">✦ 开始模拟</button><button id="pause" disabled aria-label="暂停计算和播放">Ⅱ 暂停</button><button id="stop" disabled>结束本轮</button><button id="restore" hidden>恢复上次进度</button>
+    </div>
+    <div id="loading" class="initialization" hidden><div class="init-top"><span>环境初始化</span><span>载入中</span></div><progress aria-label="环境初始化进度"></progress><p id="loading-text">正在准备天气环境…</p></div>
+    <p id="status" role="status">每个物理步长为 10 分钟。每轮随机生成暖湿入流，查看地形触发、列车再生与冷池扩散的 3 天演变。</p>
+  </section>
+  <section class="live-clock-card" aria-label="模拟时钟，UTC+8"><div class="timeline-top">
+    <div class="clock-block"><strong id="clock">等待开始</strong><span id="day">北京时间 · UTC+8</span></div>
+    <div class="phase-block"><h2 id="live-pill">未开始</h2><p id="clock-progress"></p></div>
+  </div></section>
+  <section id="replay-bar" class="replay-bar" hidden>
+    <label for="timeline"><span id="timeline-title">回顾本轮</span><time id="timeline-end">尚未生成</time></label>
+    <div class="replay-controls"><button id="toggle-replay" disabled>播放回放</button><button id="live" hidden>返回最新</button><input id="timeline" type="range" min="0" max="0" step="1" value="0" disabled aria-label="回看已生成时段"></div>
+    <p id="history-status" class="fine-print">整轮已生成时段均可回放。</p>
+  </section>
+  <div class="workspace">
+    <section class="maps-section" aria-label="模拟地图">
+      <div class="map-toolbar"><div class="segmented" role="group" aria-label="地图布局"><button data-layout="1" aria-pressed="false">单图</button><button data-layout="2" aria-pressed="true">双图</button></div><div class="map-actions"><button id="region">模拟区域</button><button id="prd">珠江口</button><button id="add-on-map" aria-pressed="false">＋ 地图选点</button></div></div>
+      <div class="map-overlays"><label>底图 <select id="basemap"><option value="satellite">卫星影像</option><option value="street" selected>街道地图</option><option value="none">无在线底图</option></select></label><label><input id="show-stations" type="checkbox" checked>观测点</label><label>叠加透明度 <input id="opacity" type="range" min=".15" max="1" step=".05" value=".7"></label></div>
+      <div id="map-grid" class="map-grid layout-2"></div>
+      <p id="map-status" class="fine-print" role="status"></p>
+      <p id="welcome" class="fine-print">开始模拟后，雷达回波与冷池将在同一时刻同步显示。</p>
+    </section>
+    <aside class="station-panel">
+      <div class="section-title"><h2>观测点</h2><span id="point-kind">模拟观测</span></div>
+      <label class="sr-only" for="station-search">搜索观测点</label><input id="station-search" type="search" placeholder="站名 / 站号">
+      <label class="sr-only" for="station-select">观测点列表</label><select id="station-select" size="4"></select>
+      <div class="station-heading"><h3 id="point-name" aria-live="polite">深圳</h3><span id="point-id">59493</span><p id="point-coordinates">114.06°E · 22.55°N</p><time id="point-time"></time></div>
+      <div class="observations">
+        <div><span>雷达反射率</span><strong id="point-z">—</strong><small>dBZ</small></div>
+        <div><span>季风风速</span><strong id="point-wind">—</strong><small>m/s</small></div>
+        <div><span>风向（来向）</span><strong id="point-direction">—</strong><small>°</small></div>
+        <div><span>当前雨强</span><strong id="point-rain">—</strong><small>mm/h</small></div>
+        <div><span>累计雨量</span><strong id="point-total">—</strong><small>mm</small></div>
+        <div title="当前显示时刻前 24 小时累计；模拟不足 24 小时按已有时段计算"><span>24h 降水</span><strong id="point-rain24">—</strong><small>mm</small></div>
+  
+      </div>
+      <p class="fine-print">点击地图选择观测位置；读数与当前显示时刻同步。</p>
+      <div class="station-buttons"><button id="station-center">定位本站</button><button id="export" disabled>导出本轮记录</button><button id="save" disabled>保存进度</button><button id="about">关于模拟器</button></div>
+      <p id="save-status" class="fine-print" role="status"></p>
+    </aside>
+  </div>
+  <section class="profile-card process-summary" aria-label="过程概况">
+    <div class="section-title"><h2>过程概况</h2><a href="VacationReplay.html">已归档回放 ↗</a><button id="diagnostics-toggle" aria-expanded="false">运行详情</button></div>
+    <div class="process-metrics"><div><span>活跃单体</span><strong id="cell-count">—</strong></div><div><span>区域最大雨强</span><strong id="max-rain">—</strong></div><div><span>最大累计雨量</span><strong id="max-total">—</strong></div></div>
+    <section id="diagnostics" hidden><pre id="diagnostic-text">等待计算</pre></section>
+  </section>
+  <footer>仅供模拟 · 非实况 / 非业务预报 · 地形：<a href="assets/data/vacation-terrain-LICENSE.md" target="_blank" rel="noopener">Mapzen · USGS / NOAA</a></footer>
+</main>
+<dialog id="about-dialog" class="edition-dialog" aria-labelledby="about-title">
+  <span class="edition-mark" aria-hidden="true">✦</span><h2 id="about-title">放假模拟器</h2>
+  <p>西南季风、水汽、地形和冷池共同影响华南暖区降水。每轮的环境条件自动生成，完整过程覆盖 3 天。</p>
+  <p>地图可切换雷达回波、西南季风和冷池。冷池图显示蒸发冷却产生的温差，箭头表示相对季风的外流；观测点可读取同一时刻的风雨、冷池厚度与温差。</p>
+  <p>计算在本机运行，三档使用相同的模拟精度；公里数表示画面采样尺度。轻量档主要减少绘制和回放存储，1 km 显示不会增加真实细节。结果不代表真实天气或预报精度。</p>
+  <div class="edition-actions"><button id="close-about">返回模拟</button></div>
+</dialog>
+<script src="assets/vendor/leaflet/leaflet.js"></script><script src="assets/vendor/proj4/proj4.js"></script>
+<script src="assets/scripts/vacation-version.js?v=1.35.0-r1"></script><script src="assets/scripts/vacation-store.js?v=1.35.0-r1"></script><script src="assets/scripts/vacation-map-domain.js?v=1.35.0-r1"></script><script src="assets/scripts/vacation-random.js?v=1.35.0-r1"></script><script src="assets/scripts/vacation-rain24.js?v=1.35.0-r1"></script><script src="assets/scripts/vacation.js?v=1.35.0-r1"></script>
+</body></html>

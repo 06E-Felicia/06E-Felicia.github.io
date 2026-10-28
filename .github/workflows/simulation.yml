@@ -42,21 +42,21 @@ jobs:
       - run: pip install -r simulation/requirements.txt
       - name: 物理与再现性测试
         run: |
-          python -m unittest discover -s tests -p 'test_physics.py' -v
-          python -m unittest discover -s tests -p 'test_coldpool.py' -v
-          python -m unittest discover -s tests -p 'test_stratiform.py' -v
-          python -m unittest discover -s tests -p 'test_astra_front_cloud.py' -v
-          python -m unittest discover -s tests -p 'test_astra_rain_gust.py' -v
-          python -m unittest discover -s tests -p 'test_convective_ice.py' -v
-          python -m unittest discover -s tests -p 'test_coldpool_muscl.py' -v
-          python -m unittest discover -s tests -p 'test_sol.py' -v
-          python -m unittest discover -s tests -p 'test_preview.py' -v
-          python -m unittest discover -s tests -p 'test_open_boundaries.py' -v
-          python -m unittest discover -s tests -p 'test_surface_precipitation.py' -v
-          python -m unittest discover -s tests -p 'test_wind_wake.py' -v
-          python -m unittest discover -s tests -p 'test_synoptic_evolution.py' -v
-          python -m unittest discover -s tests -p 'test_energy_cloud_budget.py' -v
-          python -m unittest discover -s tests -p 'test_airmass_trigger.py' -v
+          python -m unittest discover -s development/tests -p 'test_physics.py' -v
+          python -m unittest discover -s development/tests -p 'test_coldpool.py' -v
+          python -m unittest discover -s development/tests -p 'test_stratiform.py' -v
+          python -m unittest discover -s development/tests -p 'test_astra_front_cloud.py' -v
+          python -m unittest discover -s development/tests -p 'test_astra_rain_gust.py' -v
+          python -m unittest discover -s development/tests -p 'test_convective_ice.py' -v
+          python -m unittest discover -s development/tests -p 'test_coldpool_muscl.py' -v
+          python -m unittest discover -s development/tests -p 'test_sol.py' -v
+          python -m unittest discover -s development/tests -p 'test_preview.py' -v
+          python -m unittest discover -s development/tests -p 'test_open_boundaries.py' -v
+          python -m unittest discover -s development/tests -p 'test_surface_precipitation.py' -v
+          python -m unittest discover -s development/tests -p 'test_wind_wake.py' -v
+          python -m unittest discover -s development/tests -p 'test_synoptic_evolution.py' -v
+          python -m unittest discover -s development/tests -p 'test_energy_cloud_budget.py' -v
+          python -m unittest discover -s development/tests -p 'test_airmass_trigger.py' -v
       - name: 后台逐步积分（不使用 WRF 或额外服务器）
         env:
           SIM_SEED: ${{ inputs.seed }}

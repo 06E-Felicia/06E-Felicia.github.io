@@ -69,11 +69,11 @@
 根目录 `.nojekyll` 已存在。新增 `simulation/synoptic.py` 和原有 `simulation/precipitation.py` 都必须上传，不能只换 HTML / core.py；Worker 的资源列表与本地预览完整性检查已加入新模块。无需 API key、WRF 或额外服务器。
 
 ```sh
-python -m unittest discover -s tests -p 'test_*.py'
+python -m unittest discover -s development/tests -p 'test_*.py'
 python -m simulation.check_delivery --edition astra --grid-km 12 --hours 72 --seed 20260421 --output /tmp/astra.json
 python -m simulation.plot_delivery /tmp/astra.json --output /tmp/astra.png
-node tests/test_astra_process_browser.cjs
-TEST_EDITION=astra node tests/test_safari_startup.cjs
+node development/tests/test_astra_process_browser.cjs
+TEST_EDITION=astra node development/tests/test_safari_startup.cjs
 ```
 
 自然整轮与受控机制试验必须分开标注；不以人工放置锋面的试验替代边界外自然进入的整轮过程。

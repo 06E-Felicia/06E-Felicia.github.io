@@ -54,9 +54,9 @@ jobs:
       - name: 验证第二页原生翻页链路（离线样例，不访问 FR24）
         if: steps.freshness.outputs.run == 'true'
         run: |
-          python tests/test_flightdata_session.py -v
-          python tests/test_flightdata_coverage.py -v
-          python tests/test_flightdata_pagination.py -v
+          python development/tests/test_flightdata_session.py -v
+          python development/tests/test_flightdata_coverage.py -v
+          python development/tests/test_flightdata_pagination.py -v
 
       - name: 抓取七机场航班快照
         if: steps.freshness.outputs.run == 'true'

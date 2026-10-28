@@ -815,7 +815,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     document.getElementById("sourceLink").href = "https://cmcp.variflight.com/zh/tools/#getAirportFlightBoard";
   }
 
-  async function fetchStatus() {
+  async function fetchStatus(refreshData = true) {
     try {
       const r = await fetch(STATUS_URL + "?v=" + Date.now(), { cache: "no-store" });
       if (!r.ok) throw new Error("HTTP " + r.status);
@@ -828,7 +828,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
       // Also transition a tab that was opened before its first successful capture.
       const changed = (ap.last_success_at && ap.last_success_at !== state.lastSuccessSeen)
         || (ap.last_enriched_at && ap.last_enriched_at !== state.lastEnrichmentSeen);
-      if (changed) await fetchData();
+      if (refreshData && changed) await fetchData();
       return true;
     } catch (e) {
       state.offline = true;
@@ -1365,7 +1365,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     render();
     el.list.innerHTML = SKELETON_HTML;
     updateBrand();
-    await fetchStatus();
+    await fetchStatus(false);
     await fetchData();
   });
 
@@ -1385,14 +1385,17 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     updateStatusUI();
     setInterval(tick, 1000);
     // 每 60 秒检查当前机场是否有新快照
-    setInterval(async () => {
-      const before = state.lastSuccessSeen;
-      await fetchStatus();
-      if (state.lastSuccessSeen && state.lastSuccessSeen !== before) await fetchData();
-    }, 60000);
+    setInterval(() => { if (!document.hidden) fetchStatus(); }, 60000);
     // 兜底：按配置间隔强制重读
     const hours = REFRESH_HOURS;
-    setInterval(() => { fetchStatus(); fetchData(); }, hours * 3600 * 1000);
+    setInterval(async () => {
+      if (document.hidden) return;
+      await fetchStatus(false);
+      await fetchData();
+    }, hours * 3600 * 1000);
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) fetchStatus();
+    });
   }
 
   boot();

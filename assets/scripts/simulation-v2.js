@@ -6,7 +6,7 @@
  if(mobile&&edition==='astra'){$('local-grid').value='12';$('compute-mode').value='compact';$('frame-interval').value='30';}
  const localFile=location.protocol==='file:';
  function openingError(){
-   if(localFile)return '不能直接双击 HTML 开始模拟。请双击项目中的「启动本地预览.command」，通过自动打开的 http://127.0.0.1 页面访问。';
+   if(localFile)return '不能直接双击 HTML 开始模拟。请双击项目中的「development/launchers/启动本地预览.command」，通过自动打开的 http://127.0.0.1 页面访问。';
    if(!window.isSecureContext)return '模拟需要安全环境。请使用 HTTPS，或通过本机 http://127.0.0.1 预览，不要使用局域网 HTTP 地址。';
    for(const [name,available]of [['WebAssembly',typeof WebAssembly==='object'],['Worker',typeof Worker==='function'],['本机存储',typeof indexedDB!=='undefined'||typeof caches!=='undefined'],['随机数',typeof crypto?.randomUUID==='function']])if(!available)return '当前浏览器不支持 '+name+'，请使用较新的 Chrome、Edge、Firefox 或 Safari。';
    return null;

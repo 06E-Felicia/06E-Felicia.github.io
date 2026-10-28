@@ -45,7 +45,7 @@
 - 真实 Chrome + Astra Worker + Pyodide：12 km / 3 h / 7 帧，约 81.93 秒，实际载入 `synoptic.py`，三维场、925/500/300 风、五分钟降水及阵风字段完整；水量残差约 4.89×10⁻¹⁰。开始锁定、完成后自动播放、首轮结束才开放回放均通过。整轮物理过程另用原生 Python 验证，不把这个短网页测试冒充浏览器 72 h 测试。
 - WebKit / iPhone 13 视口：真实 Astra 12 km 紧凑模式完成首帧持久保存并推进至 2.5%，无初始化错误，随后主动停止；这是 Safari 引擎检查，不等于实体 iPhone 完整 72 h 验证。
 - 无天气积分的页面回归覆盖两版入口、ETA 提示、取消/新种子、子目录、32 站、触屏与键盘选站、SVG 保持、拖图不误选、本地 HTTP 与 `file://` 指引、地图边缘及零雨量显示。
-- Sol 28 km 真实浏览器 72 h / 73 帧：功能、预算与回放通过，实测 **381.464 秒**，没有通过原先 300 秒性能断言。按最终要求不再压低精度，保留此结果，不沿用旧版五分钟成绩。`tests/benchmark_stormsim_sol.cjs` 仍保留原性能目标，运行它可能因超时目标返回非零，这不是隐瞒的功能错误。
+- Sol 28 km 真实浏览器 72 h / 73 帧：功能、预算与回放通过，实测 **381.464 秒**，没有通过原先 300 秒性能断言。按最终要求不再压低精度，保留此结果，不沿用旧版五分钟成绩。`development/tests/benchmark_stormsim_sol.cjs` 仍保留原性能目标，运行它可能因超时目标返回非零，这不是隐瞒的功能错误。
 
 ## 交付证据
 
@@ -74,4 +74,4 @@ python -m simulation.accept_delivery \
   --output /tmp/stormsim-final-acceptance.json
 ```
 
-本地双击根目录 `启动本地预览.command`，不要直接以 `file://` 打开。上传时保留根目录 `.nojekyll`、完整 `simulation/`、`assets/` 和两个模拟器 HTML，尤其不要漏掉新模块 `simulation/synoptic.py`。检查点 pickle 不随网站发布。
+本地双击根目录 `development/launchers/启动本地预览.command`，不要直接以 `file://` 打开。上传时保留根目录 `.nojekyll`、完整 `simulation/`、`assets/` 和两个模拟器 HTML，尤其不要漏掉新模块 `simulation/synoptic.py`。检查点 pickle 不随网站发布。

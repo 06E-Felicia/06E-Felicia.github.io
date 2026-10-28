@@ -40,9 +40,9 @@
 复现命令：
 
 ```sh
-python -m unittest discover -s tests -p 'test_physics.py'
-python -m unittest discover -s tests -p 'test_coldpool.py'
-python -m unittest discover -s tests -p 'test_stratiform.py'
+python -m unittest discover -s development/tests -p 'test_physics.py'
+python -m unittest discover -s development/tests -p 'test_coldpool.py'
+python -m unittest discover -s development/tests -p 'test_stratiform.py'
 python -m simulation.validate --hours 13 --grid-km 6 --seed 20260421 --snapshots --quiet --progress --output /tmp/process38.json
 python -m simulation.validate --hours 6 --grid-km 8 --seed 20260422 --random-environment --snapshots --quiet --progress --output /tmp/random38.json
 ```

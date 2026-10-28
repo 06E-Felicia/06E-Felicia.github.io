@@ -1,0 +1,7 @@
+{
+  "finite": "i32",
+  "validate": "i32",
+  "precip_collect": "i32",
+  "precip_account": "i32",
+  "cold_valid": "i32"
+}

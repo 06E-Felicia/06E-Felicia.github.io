@@ -84,12 +84,12 @@ fca57afae31343a03f3fa82a0da2a83f0727bc9b5004793982da67dd51ba2d21
 仍是降阶机制模型，不是完整三维非静力云模式。雨滴谱、前向后环流、冷池厚度、热力调整与 CAPE 上限均含简化闭合；账目一致不等于真实总能量守恒或预报能力。水域、山地、日际强度以及多种子长寿命门槛本轮未完整重新校准，不能宣称均已达标。
 
 ```sh
-python -m unittest discover -s tests -p 'test_physics.py'
+python -m unittest discover -s development/tests -p 'test_physics.py'
 python -m simulation.check_front --output /tmp/front-check.json
 python -m simulation.validate --hours 12 --grid-km 6 --seed 20260421 --require-duration-hours 4 --quiet --output /tmp/process-check.json
 python -m simulation.validate --hours 13 --grid-km 6 --seed 20260421 --require-duration-hours 4 --quiet --output /tmp/extended-process-check.json
-node tests/test_alerts.cjs
-node tests/test_simulation_data.cjs
+node development/tests/test_alerts.cjs
+node development/tests/test_simulation_data.cjs
 ```
 
 机制、资料与限制见 [说明](README.md)。本网站不可用于真实预警。

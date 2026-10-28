@@ -42,7 +42,7 @@ jobs:
 
       - name: 验证字段匹配、换机、日更与隐私逻辑（不调用接口）
         if: steps.daily.outputs.run == 'true'
-        run: python3 -B -m unittest discover -s tests -p 'test_feimadata.py' -v
+        run: python3 -B -m unittest discover -s development/tests -p 'test_feimadata.py' -v
 
       - name: 采集大屏并按航线补充机号与机型
         if: steps.daily.outputs.run == 'true'

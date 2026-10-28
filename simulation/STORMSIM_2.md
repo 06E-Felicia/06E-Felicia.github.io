@@ -48,4 +48,4 @@
 
 冷池恢复中夹卷与地表热通量的作用参考 [Cold Pools and Their Influence on the Tropical Marine Boundary Layer](https://journals.ametsoc.org/abstract/journals/atsc/74/4/jas-d-16-0264.1.xml)；对流触发需克服抑制、而非只有 CAPE，参考 [ECMWF 对流说明](https://confluence.ecmwf.int/spaces/FUG/pages/673550511/Section%2B2A.1.5.4%2BConvective%2Bcloud%2Bprocesses%2Band%2Bprecipitation)。这些来源提供机制背景，不为本项目数值系数或预报精度背书。
 
-本地使用 `启动本地预览.command` 或 `python3 -m simulation.preview`，不要双击 HTML 以 `file://` 打开。刷新网页并开始全新一轮才使用新内核；旧结果不会被追溯改写。上传完整项目，保留根目录 `.nojekyll`，尤其不要遗漏 `simulation/precipitation.py`、`simulation/synoptic.py` 和 `assets/scripts/simulation-data.js`。
+本地使用 `development/launchers/启动本地预览.command` 或 `python3 -m simulation.preview`，不要双击 HTML 以 `file://` 打开。刷新网页并开始全新一轮才使用新内核；旧结果不会被追溯改写。上传完整项目，保留根目录 `.nojekyll`，尤其不要遗漏 `simulation/precipitation.py`、`simulation/synoptic.py` 和 `assets/scripts/simulation-data.js`。

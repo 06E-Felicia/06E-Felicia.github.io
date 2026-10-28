@@ -79,9 +79,9 @@
 复核命令：
 
 ```sh
-python -m unittest discover -s tests -p 'test_*.py'
+python -m unittest discover -s development/tests -p 'test_*.py'
 python -m simulation.check_coldpool_wake --neutral-only --output /tmp/neutral.json
 python -m simulation.check_coldpool_wake --output /tmp/wake.json
 python -m simulation.check_wind_process --output /tmp/wind-seeds.json
-SOL_BENCH_SEED=20260423 SOL_BENCH_OUTPUT=/tmp/sol-final.json node tests/benchmark_stormsim_sol.cjs
+SOL_BENCH_SEED=20260423 SOL_BENCH_OUTPUT=/tmp/sol-final.json node development/tests/benchmark_stormsim_sol.cjs
 ```

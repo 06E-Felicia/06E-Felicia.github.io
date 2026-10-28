@@ -39,7 +39,7 @@ def load_key():
     except KeyErrorSafe:
         raise
     except FileNotFoundError:
-        raise KeyErrorSafe('尚未配置 MCP Key，请运行根目录的 配置飞常准.command') from None
+        raise KeyErrorSafe('尚未配置 MCP Key，请运行 development/launchers/配置飞常准.command') from None
     except Exception:
         raise KeyErrorSafe('本机 MCP Key 无法读取，请重新运行配置启动器') from None
 

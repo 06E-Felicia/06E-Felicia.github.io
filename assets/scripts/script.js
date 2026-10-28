@@ -107,17 +107,18 @@ function mergeConfig(fileConfig = {}) {
 }
 
 async function loadAppConfig() {
-    try {
-        const response = await fetch("config.json", { cache: "no-store" });
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-        const fileConfig = await response.json();
-        return mergeConfig(fileConfig);
-    } catch (err) {
-        console.error("读取 config.json 失败，已使用默认配置:", err);
-        return mergeConfig();
-    }
+    return mergeConfig(await WeatherData.load(['LIVE_DATA', 'MANUAL_CONFIG', 'ALERT_CONFIG']));
+}
+
+let hasLoadedConfig = false;
+
+function showConfigStatus(failed) {
+    const status = document.getElementById('weather-status');
+    if (!status) return;
+    status.hidden = !failed;
+    status.textContent = failed
+        ? (hasLoadedConfig ? '更新失败，当前显示上次成功读取的数据。' : '天气数据暂时无法读取。') + ' 请稍后重试或查看官方预警。'
+        : '';
 }
 
 function applyRuntimeConfig(appConfig) {
@@ -183,56 +184,6 @@ function fitDialogBubble() {
 }
 
 window.addEventListener('resize', fitDialogBubble);
-
-function initDropdownMenus() {
-    const items = [...document.querySelectorAll('.nav-bar .dropdown')];
-    function closeMenus(except = null) {
-        items.forEach(item => {
-            if (item === except) return;
-            item.classList.remove('is-open');
-            item.querySelector('.nav-item').setAttribute('aria-expanded', 'false');
-        });
-    }
-    items.forEach((item, index) => {
-        const trigger = item.querySelector('.nav-item'), menu = item.querySelector('.dropdown-menu');
-        menu.id ||= `nav-dropdown-${index}`;
-        trigger.setAttribute('aria-controls', menu.id);
-        trigger.setAttribute('aria-expanded', 'false');
-        function openMenu() {
-            closeMenus(item);
-            item.classList.add('is-open');
-            trigger.setAttribute('aria-expanded', 'true');
-        }
-        // No mouseleave handler: crossing the gap must not close the disclosure.
-        item.addEventListener('mouseenter', openMenu);
-        trigger.addEventListener('focus', openMenu);
-        trigger.addEventListener('click', event => { event.preventDefault(); openMenu(); });
-        trigger.addEventListener('keydown', event => {
-            if (event.key === ' ' || event.key === 'ArrowDown') {
-                event.preventDefault(); openMenu();
-                menu.querySelector('a')?.focus();
-            }
-        });
-        menu.addEventListener('click', event => { if (event.target.closest('a')) closeMenus(); });
-        item.addEventListener('focusout', event => {
-            if (!item.contains(event.relatedTarget)) closeMenus();
-        });
-    });
-    document.addEventListener('click', event => {
-        if (!event.target.closest('.nav-bar .dropdown')) closeMenus();
-    });
-    document.addEventListener('keydown', event => {
-        if (event.key !== 'Escape') return;
-        const opened = items.find(item => item.classList.contains('is-open'));
-        if (opened) {
-            // Focusing first avoids a focus handler reopening the dismissed menu.
-            opened.querySelector('.nav-item').focus();
-            closeMenus();
-        }
-    });
-}
-
-initDropdownMenus();
 
 function generateECUrl(offsetHours = 0) {
     // 1. 获取基础时间（减去偏移量）
@@ -331,7 +282,10 @@ function render() {
     if (MANUAL_CONFIG.bg) {
         document.body.style.backgroundImage = `url('${MANUAL_CONFIG.bg}')`;
     }
-    document.getElementById('ui-icon').src = MANUAL_CONFIG.icon || "";
+    const icon = document.getElementById('ui-icon');
+    icon.hidden = !MANUAL_CONFIG.icon;
+    if (MANUAL_CONFIG.icon) icon.src = MANUAL_CONFIG.icon;
+    else icon.removeAttribute('src');
     document.getElementById('ui-low').innerText = MANUAL_CONFIG.low;
     document.getElementById('ui-high').innerText = MANUAL_CONFIG.high;
     document.getElementById('ui-hum').innerText = MANUAL_CONFIG.humidity;
@@ -350,22 +304,25 @@ async function initPage() {
     // The announcement is independent of weather fetching. Updated snapshots
     // wait behind it; closing the card displays the latest valid alert queue.
     showUpdateAnnouncement();
-    const appConfig = await loadAppConfig();
-    applyRuntimeConfig(appConfig);
     render();
-    lastAlertSignature = alertSignature(appConfig);
+    await refreshPageConfig();
     checkAndShowAlert();
     // Re-read the static snapshot while a visitor keeps the page open.
-    setInterval(refreshPageConfig, 5 * 60 * 1000);
+    setInterval(() => {
+        if (!document.hidden) refreshPageConfig();
+    }, 5 * 60 * 1000);
     setInterval(() => {
         if (ThunderAlerts.expire()) showShenzhenAlert();
     }, 1000);
     setInterval(() => ThunderAlerts.refreshRadar(), 30 * 1000);
     // Timers may be throttled in background tabs; recheck immediately on return.
     document.addEventListener('visibilitychange', () => {
-        if (!document.hidden && ThunderAlerts.expire()) showShenzhenAlert();
+        if (document.hidden) return;
+        if (ThunderAlerts.expire()) showShenzhenAlert();
         ThunderAlerts.refreshRadar();
+        refreshPageConfig();
     });
+    window.addEventListener('online', refreshPageConfig);
 }
 
 function alertSignature(appConfig) {
@@ -379,12 +336,17 @@ async function refreshPageConfig() {
     try {
         const appConfig = await loadAppConfig();
         applyRuntimeConfig(appConfig);
+        hasLoadedConfig = true;
         render();
+        showConfigStatus(false);
         const signature = alertSignature(appConfig);
         if (signature !== lastAlertSignature) {
             lastAlertSignature = signature;
             checkAndShowAlert();
         }
+    } catch (error) {
+        console.error('读取天气快照失败，保留上次成功的数据:', error);
+        showConfigStatus(true);
     } finally {
         configRefreshing = false;
     }

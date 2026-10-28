@@ -4,7 +4,7 @@
 
 ## 本地打开方式
 
-不能从 `file://` 创建计算 Worker 并读取整套运行时。macOS 双击根目录 **`启动本地预览.command`**，或在项目目录执行 `python3 -m simulation.preview`。只用 Python 标准库，自动检查资源并打开 HTTP 页面；端口占用时自动避让，同项目可复用服务。页面会明确拦截错误打开方式，HTTP 下两版均载入 32 个站点。
+不能从 `file://` 创建计算 Worker 并读取整套运行时。macOS 双击根目录 **`development/launchers/启动本地预览.command`**，或在项目目录执行 `python3 -m simulation.preview`。只用 Python 标准库，自动检查资源并打开 HTTP 页面；端口占用时自动避让，同项目可复用服务。页面会明确拦截错误打开方式，HTTP 下两版均载入 32 个站点。
 
 ## 实际完整计算耗时
 
@@ -48,8 +48,8 @@
 
 ```sh
 python -m simulation.resolution_quality run --seed 20260423 --grid-km 28 --hours 72 --output /tmp/sol-quality-new
-python -m unittest discover -s tests -p test_open_boundaries.py
-node tests/benchmark_stormsim_sol.cjs
+python -m unittest discover -s development/tests -p test_open_boundaries.py
+node development/tests/benchmark_stormsim_sol.cjs
 ```
 
 输出目录须为新目录；浏览器测试需要 Playwright 与 Chrome。原生诊断需 NumPy/SciPy，绘制验收图额外需要 Matplotlib；访客网页不需要安装这些本机包。

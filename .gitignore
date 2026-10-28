@@ -15,3 +15,16 @@ local-test-results/
 /.venv-fr24/
 # Sanitized enrichment caches are local, not public Pages assets or credentials.
 /feimadata/.cache/
+
+# Full local AI replay artifacts are generated, not website source.
+/simulation/vacation-replays/
+
+# Local historical Vacation development evidence.
+/vacation-development-archive/
+/trash/
+
+# Local development evidence and private application state.
+/development/archive/
+/development/local/
+/guild1.db*
+/logs/

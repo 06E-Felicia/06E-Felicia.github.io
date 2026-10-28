@@ -28,4 +28,4 @@ Astra / Sol 共用内核 `4.13.0-head-pressure-contact`，页面与 Worker 缓�
 
 [逐时次、配置、源码与守恒核验](validation/stormsim-2.5-mature-head.json)。诊断直接读取实际活动回波的 8 邻域连通性，不膨胀连接、不补造回波；连通片段统计不等于永久风暴身份追踪，也不能用某一个最好的时次代替整段过程。
 
-根目录 `复现Astra测试.command` 可打开已完成的两轮 Astra，详见 [本机测试启动器](TEST_REPLAY.md)。公开网页仍每次初始化全新随机环境，不加载这些历史测试帧。
+根目录 `development/launchers/复现Astra测试.command` 可打开已完成的两轮 Astra，详见 [本机测试启动器](TEST_REPLAY.md)。公开网页仍每次初始化全新随机环境，不加载这些历史测试帧。

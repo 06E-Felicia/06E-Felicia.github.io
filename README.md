@@ -21,11 +21,11 @@ Astra 提供可选精细网格，Sol 使用 28 km 网格；两版均在访客浏
 python3 -m simulation.preview
 ```
 
-打开终端提示的本机网址，保持终端运行。macOS 也可双击 `启动本地预览.command`。不要通过 `file://` 直接打开模拟器。
+打开终端提示的本机网址，保持终端运行。macOS 也可双击 `development/launchers/启动本地预览.command`。不要通过 `file://` 直接打开模拟器。
 
 每次开始生成全新的种子和环境，初始化完成后自动展示过程，首轮结束后开放回看。
 
-本次已完成的 Astra 测试可双击根目录 `复现Astra测试.command` 直接回看，无需重新计算；说明见 [本机测试启动器](simulation/TEST_REPLAY.md)。
+本次已完成的 Astra 测试可双击 `development/launchers/复现Astra测试.command` 直接回看，无需重新计算；说明见 [本机测试启动器](simulation/TEST_REPLAY.md)。
 
 ## GitHub Pages 部署
 
@@ -40,8 +40,16 @@ python3 -m simulation.preview
 - `config.json`：天气快照、预警及雷暴估测设置。
 - `auto_update/`：官方天气数据抓取与更新。
 - `simulation/`：Astra / Sol 共用的物理内核、测试说明与历史核验。
-- `tests/`：物理、页面和浏览器回归测试。
+- `development/tests/`：物理、页面和浏览器回归测试。
+
+[第一轮 bug 修复说明](development/docs/OPTIMIZATION.md)：天气加载容错、跨页面菜单修复、航班请求去重及验证方法。
 
 [模拟器操作与技术说明](simulation/README.md) · [2.5 后侧输送与 Sol 实测](simulation/REAR_CIRCULATION_2_5.md) · [版本记录](simulation/STORMSIM.md)
 
 保留地图、地形及数据来源的署名与许可；模拟结果和上游雷暴估测不能用于防灾决策。
+
+## 放假模拟器与本地开发
+
+[放假模拟器](Vacation.html) · [模型说明](VACATION.md) · [开发工具说明](development/README.md)。
+
+本地启动器集中在 `development/launchers/`，脚本、测试和开发文档分别在其同级的 `scripts/`、`tests/`、`docs/`；网站运行资源保持在 `assets/`。

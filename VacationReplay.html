@@ -1,0 +1,20 @@
+<!doctype html><html lang="zh-CN"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>放假模拟器 · 完整回放</title><link rel="stylesheet" href="assets/styles/simulator.css"><link rel="stylesheet" href="assets/styles/simulation-v2.css?v=5.5.1"><link rel="stylesheet" href="assets/styles/vacation-replay.css?v=1">
+</head><body class="anime-lab">
+<nav class="lab-nav"><a class="brand" href="Vacation.html"><span class="brand-mark">✦</span><h1>放假模拟器 · 回放</h1></a><div><a href="Vacation.html">返回模拟器</a></div></nav>
+<main>
+<section class="compute-card"><h2>已完成过程 · 完整回放</h2><p id="replay-status" role="status">正在读取已归档过程…</p><p id="replay-config"></p><p>直接读取本地保存的图像和数值，不重新运行模拟。可逐帧查看，也可直接观看视频。</p></section>
+<section class="live-clock-card"><div class="timeline-top"><div class="clock-block"><strong id="replay-clock">等待归档</strong><span id="replay-frame"></span></div><div class="phase-block"><h2 id="replay-progress"></h2></div></div></section>
+<section class="replay-bar">
+<div class="replay-controls"><button id="replay-prev" disabled aria-label="上一帧">◀</button><button id="replay-play" class="primary" disabled>播放</button><button id="replay-next" disabled aria-label="下一帧">▶</button><label>帧间隔 <select id="replay-speed"><option value="125">0.125 秒</option><option value="250" selected>0.25 秒</option><option value="500">0.5 秒</option><option value="1000">1 秒</option></select></label></div>
+<input id="replay-slider" type="range" min="0" max="0" value="0" disabled aria-label="模拟回放时刻">
+</section>
+<section class="replay-picture"><img id="replay-image" width="1440" height="640" alt="已保存的雷达回波与西南季风场" hidden></section>
+<section class="profile-card review-links"><div class="section-title"><h2>AI 检查资料</h2></div><div id="replay-links"></div><p class="fine-print">逐帧原始数值附校验和。雨强表示该版本物理步内的平均值；当前版本物理步为 10 分钟。回波是时刻诊断。本轮为合成天气过程，未指定历史实况日期。</p></section>
+<details class="profile-card replay-video"><summary>观看完整视频（MP4）</summary><video id="replay-video" controls preload="metadata" aria-label="完整过程视频"></video></details>
+<section class="profile-card"><div class="section-title"><h2>等间隔雷达时序</h2></div><div id="replay-contacts" class="contact-grid"></div></section>
+<footer>放假模拟器 · 已完成过程归档 · 非实况 / 非业务预报</footer>
+</main>
+<script id="replay-manifest" src="simulation/vacation-replays/latest.js"></script><script src="assets/scripts/vacation-version.js?v=1.30.0-r1"></script><script src="assets/scripts/vacation-replay.js?v=1.30.0-r1"></script>
+</body></html>

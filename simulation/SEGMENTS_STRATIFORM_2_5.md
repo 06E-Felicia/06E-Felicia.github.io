@@ -38,6 +38,6 @@
 
 本轮排除了未稳定改善的尝试：缩窄起生带、进一步惩罚斜交切变、仅放宽旧云附近的后代资格、加强起生流或减小背景风转角。它们的对照结果不能冒充最终源码测试，也未并入。
 
-根目录 `复现Astra测试.command` 打开本轮已完成的两组原始 Astra 回放，不重新计算；详见 [启动器说明](TEST_REPLAY.md)。公开页面仍每次使用全新随机环境。
+根目录 `development/launchers/复现Astra测试.command` 打开本轮已完成的两组原始 Astra 回放，不重新计算；详见 [启动器说明](TEST_REPLAY.md)。公开页面仍每次使用全新随机环境。
 
 机制参考：[冷池与切变的前缘抬升](https://journals.ametsoc.org/view/journals/atsc/61/4/1520-0469_2004_061_0361_atfsls_2.0.co_2.xml)、[后侧层状降水](https://journals.ametsoc.org/view/journals/mwre/137/4/2008mwr2505.1.xml)、[冰相聚合的温度依赖](https://journals.ametsoc.org/view/journals/atsc/72/12/jas-d-14-0096.1.xml)。这些文献解释机制，不验证本项目全部经验系数或测试结果。

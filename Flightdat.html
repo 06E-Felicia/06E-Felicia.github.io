@@ -795,7 +795,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     document.getElementById("sourceLink").href = `https://www.flightradar24.com/data/airports/${state.airport.toLowerCase()}`;
   }
 
-  async function fetchStatus() {
+  async function fetchStatus(refreshData = true) {
     try {
       const r = await fetch(STATUS_URL + "?v=" + Date.now(), { cache: "no-store" });
       if (!r.ok) throw new Error("HTTP " + r.status);
@@ -803,9 +803,8 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
       state.offline = false;
       updateStatusUI();
       const ap = (state.status.airports || {})[state.airport] || {};
-      const changed = ap.last_success_at &&
-        state.lastSuccessSeen && ap.last_success_at !== state.lastSuccessSeen;
-      if (changed) await fetchData();
+      const changed = ap.last_success_at && ap.last_success_at !== state.lastSuccessSeen;
+      if (refreshData && changed) await fetchData();
       return true;
     } catch (e) {
       state.offline = true;
@@ -1265,9 +1264,10 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
 
   el.btnReload.addEventListener("click", async () => {
     el.btnReload.classList.add("spin");
+    el.btnReload.disabled = true;
     await fetchStatus(false);
     const loaded = await fetchData();
-    setTimeout(() => el.btnReload.classList.remove("spin"), 500);
+    setTimeout(() => { el.btnReload.classList.remove("spin"); el.btnReload.disabled = false; }, 500);
     if (loaded) toast("已重新读取已发布的快照（不会启动抓取）");
   });
 
@@ -1282,7 +1282,7 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     render();
     el.list.innerHTML = SKELETON_HTML;
     updateBrand();
-    await fetchStatus();
+    await fetchStatus(false);
     await fetchData();
   });
 
@@ -1302,14 +1302,17 @@ footer .mono{font-family:var(--mono);letter-spacing:.03em}
     updateStatusUI();
     setInterval(tick, 1000);
     // 每 60 秒检查当前机场是否有新快照
-    setInterval(async () => {
-      const before = state.lastSuccessSeen;
-      await fetchStatus();
-      if (state.lastSuccessSeen && state.lastSuccessSeen !== before) await fetchData();
-    }, 60000);
+    setInterval(() => { if (!document.hidden) fetchStatus(); }, 60000);
     // 兜底：按配置间隔强制重读
     const hours = REFRESH_HOURS;
-    setInterval(() => { fetchStatus(); fetchData(); }, hours * 3600 * 1000);
+    setInterval(async () => {
+      if (document.hidden) return;
+      await fetchStatus(false);
+      await fetchData();
+    }, hours * 3600 * 1000);
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) fetchStatus();
+    });
   }
 
   boot();

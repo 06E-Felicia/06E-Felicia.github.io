@@ -1,5 +1,3 @@
-const FORECAST_CONFIG_URL = "config.json";
-
 function escapeHtml(value) {
     return String(value ?? "").replace(/[&<>'"]/g, char => ({
         "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;"
@@ -23,10 +21,8 @@ function renderForecast(forecast) {
 
 async function initForecastPage() {
     try {
-        const response = await fetch(FORECAST_CONFIG_URL, { cache: "no-store" });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const config = await response.json();
-        renderForecast(Array.isArray(config.FORECAST) ? config.FORECAST : []);
+        const config = await WeatherData.load(['FORECAST']);
+        renderForecast(config.FORECAST);
         document.getElementById("forecast-update").textContent = config.META?.forecast_updated_at
             ? `更新于 ${config.META.forecast_updated_at} · 深圳市气象台`
             : "数据来源：深圳市气象台";

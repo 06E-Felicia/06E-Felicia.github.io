@@ -30,6 +30,6 @@ Astra / Sol 共用修复，内核 `4.12.0-coastal-inflow-moving-genesis`，页�
 
 “沿海”仅为验收取样区：DEM 二值海岸两侧 40 km 内、110–116°E 且不高于 23.5°N，未参与模式触发或雷达显示。对照包含两个修正的组合效果，不将它伪装成只改变单个系数的因果试验，也不保证所有季节和随机环境都有同样沿海雨量。未重跑默认 6 km / 72 h。
 
-[全时次与源码核验](validation/stormsim-2.5-coastal-release.json)。双击根目录 `复现Astra测试.command` 可直接查看本轮两轮 Astra，默认显示沿海活跃的第 8 / 7 小时；旧 4.11 归档已备份，见 [启动器说明](TEST_REPLAY.md)。
+[全时次与源码核验](validation/stormsim-2.5-coastal-release.json)。双击根目录 `development/launchers/复现Astra测试.command` 可直接查看本轮两轮 Astra，默认显示沿海活跃的第 8 / 7 小时；旧 4.11 归档已备份，见 [启动器说明](TEST_REPLAY.md)。
 
 复现计算：`python -m simulation.check_line_continuity --edition astra --seed 20261017 --hours 10 --sample-minutes 15 --output /tmp/coastal-release.json`。第二种子为 `20260421`，Sol 改为 `--edition sol`。

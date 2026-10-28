@@ -40,5 +40,5 @@ Sol 最终源码摘要：`714c558780972ee0130f5f066aad0df0542581b85269ffc76197df
 ```bash
 python -m unittest tests.test_sol tests.test_sol_trigger -q
 python -m simulation.check_sol_convection --seeds 20260421 20260423 20261017 --hours 12 --compare-baseline --output /tmp/sol-trigger-comparison.json
-node tests/test_stormsim_editions.cjs
+node development/tests/test_stormsim_editions.cjs
 ```

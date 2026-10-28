@@ -1,0 +1,46 @@
+/* Vacation shares StormSim's complete presentation; only page-specific rules live here. */
+.vacation-lab .compute-controls label {flex: 1 1 170px;}
+#status {margin-top: 12px; overflow-wrap: anywhere;}
+#clock-progress {margin-top: 5px; color: var(--muted); font-size: 11px;}
+#live-pill.running {color: var(--accent);}
+#timeline {width: 100%; margin: 0; height: 6px;}
+#history-status {margin-top: 10px;}
+.vacation-map {position: relative;}
+.vacation-raster {position: absolute; pointer-events: none !important;}
+.vacation-map .leaflet-overlay-pane > canvas {width: auto; height: auto;}
+.vacation-map.picking, .vacation-map.picking .leaflet-interactive {cursor: crosshair;}
+.vacation-lab .map-card header select {min-width: 120px;}
+.vacation-lab .map-card .legend {height: 46px;}
+.legend-colors {display: flex; height: 6px; border-radius: 3px; overflow: hidden; flex: none;}
+.legend-colors span {flex: 1;}
+.legend-labels {display: flex; justify-content: space-between; font-size: 10px; font-variant-numeric: tabular-nums;}
+.vacation-lab #point-name {color: var(--heading); font-size: 25px;}
+#point-id {color: var(--warm);}
+#point-z {font-size: 19px;}
+#point-wind {color: var(--blue);}
+.vacation-lab .observations > div {min-width: 0;}
+.process-summary {margin-top: 20px;}
+.process-summary .section-title button {font-size: 12px; padding: 7px 10px;}
+.process-metrics {display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px;}
+.process-metrics > div {display: grid; gap: 8px; padding: 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel-soft);}
+.process-metrics span {color: var(--muted); font-size: 12px;}
+.process-metrics strong {color: var(--heading); font-size: 24px; font-weight: 600; font-variant-numeric: tabular-nums;}
+#cell-count {margin: 0;}
+#diagnostics {margin-top: 18px; border-top: 1px solid var(--line); padding-top: 14px;}
+#diagnostic-text {white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; color: var(--muted); font-size: 12px; line-height: 1.7;}
+.vacation-lab footer {flex-wrap: wrap;}
+@media (max-width: 850px) {
+  .vacation-lab .compute-controls label {flex: 1 1 150px;}
+  .vacation-lab .station-buttons {grid-template-columns: repeat(4, minmax(0, 1fr));}
+  .vacation-lab .observations > div:last-child {grid-column: auto;}
+  .vacation-lab .observations {grid-template-columns: repeat(3, minmax(0, 1fr));}
+}
+@media (max-width: 520px) {
+  .vacation-lab .compute-controls label {flex: 1 1 calc(50% - 10px);}
+  .vacation-lab .compute-controls label:last-of-type {flex-basis: 100%;}
+  .vacation-lab .map-toolbar {flex-wrap: wrap;}
+  .vacation-lab .observations, .vacation-lab .station-buttons {grid-template-columns: repeat(2, minmax(0, 1fr));}
+  .process-metrics {grid-template-columns: 1fr; gap: 9px;}
+  .process-metrics > div {display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px;}
+  .process-metrics strong {font-size: 21px;}
+}
