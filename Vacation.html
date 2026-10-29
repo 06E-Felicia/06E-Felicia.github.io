@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css">
   <link rel="stylesheet" href="assets/styles/simulator.css">
   <link rel="stylesheet" href="assets/styles/simulation-v2.css?v=5.5.1">
-  <link rel="stylesheet" href="assets/styles/vacation.css?v=1.36.0-r1">
+  <link rel="stylesheet" href="assets/styles/vacation.css?v=1.37.0-r1">
 </head>
 <body class="anime-lab vacation-lab">
 <nav class="lab-nav">
@@ -30,6 +30,17 @@
     <div class="clock-block"><strong id="clock">等待开始</strong><span id="day">北京时间 · UTC+8</span></div>
     <div class="phase-block"><h2 id="live-pill">未开始</h2><p id="clock-progress"></p></div>
   </div></section>
+  <section class="rain-warning-card" aria-label="深圳模拟暴雨预警">
+    <div class="section-title"><h2>深圳模拟暴雨预警</h2><strong id="rain-warning-level" data-level="0" role="status">等待开始</strong></div>
+    <p id="rain-warning-detail">检测深圳市域各区全部雨量格点。三天分别结算，每天 07:30 前达到模拟红暴即成功。</p>
+    <div id="mission-days" class="mission-days"></div>
+    <details><summary>分区雨量与判定规则</summary>
+      <div id="rain-warning-districts" class="warning-districts"></div>
+      <p class="fine-print">模拟采用深圳暴雨预警的实测阈值分支：黄暴参考 1 小时 30 mm / 6 小时 50 mm；橙暴 1 小时 40 mm / 3 小时 50 mm；红暴 1 小时 70 mm / 3 小时 100 mm，均需降雨持续。以最近 20 分钟雨量趋势近似持续性，各区至少 1/4 面积达标才发布该区预警。格点面积替代指标站占比，不是业务预报或真实预警。</p>
+      <p class="fine-print">范围：深圳本土九区，含龙岗区内大鹏半岛；不含深汕合作区及管辖海域。边界近似采样，结果不依赖画面清晰度。第 1 天从前一日 20:00 开始，后两天从各自 00:00 起判定，07:30 结算；白天继续更新预警。</p>
+      <p class="fine-print"><a href="https://www.sz.gov.cn/attachment/1/1389/1389484/9453858.pdf" target="_blank" rel="noopener">深圳市预警信号发布规定</a> · <a href="https://amr.sz.gov.cn/attachment/1/1234/1234420/10369447.pdf" target="_blank" rel="noopener">DB4403/T 298—2022</a></p>
+    </details>
+  </section>
   <section id="replay-bar" class="replay-bar" hidden>
     <label for="timeline"><span id="timeline-title">回顾本轮</span><time id="timeline-end">尚未生成</time></label>
     <div class="replay-controls"><button id="toggle-replay" disabled>播放回放</button><button id="live" hidden>返回最新</button><input id="timeline" type="range" min="0" max="0" step="1" value="0" disabled aria-label="回看已生成时段"></div>
@@ -69,6 +80,9 @@
   </section>
   <footer>仅供模拟 · 非实况 / 非业务预报 · 地形：<a href="assets/data/vacation-terrain-LICENSE.md" target="_blank" rel="noopener">Mapzen · USGS / NOAA</a></footer>
 </main>
+<dialog id="mission-dialog" class="edition-dialog" aria-labelledby="mission-title">
+  <h2 id="mission-title">Mission Complete</h2><p id="mission-message"></p><div class="edition-actions"><button id="mission-close">继续模拟</button></div>
+</dialog>
 <dialog id="about-dialog" class="edition-dialog" aria-labelledby="about-title">
   <span class="edition-mark" aria-hidden="true">✦</span><h2 id="about-title">放假模拟器</h2>
   <p>西南季风、水汽、地形和冷池共同影响华南暖区降水。每轮的环境条件自动生成，完整过程覆盖 3 天。</p>
@@ -77,5 +91,5 @@
   <div class="edition-actions"><button id="close-about">返回模拟</button></div>
 </dialog>
 <script src="assets/vendor/leaflet/leaflet.js"></script><script src="assets/vendor/proj4/proj4.js"></script>
-<script src="assets/scripts/vacation-version.js?v=1.36.0-r1"></script><script src="assets/scripts/vacation-resource.js?v=1.36.0-r1"></script><script src="assets/scripts/vacation-store.js?v=1.36.0-r1"></script><script src="assets/scripts/vacation-map-domain.js?v=1.36.0-r1"></script><script src="assets/scripts/vacation-random.js?v=1.36.0-r1"></script><script src="assets/scripts/vacation-rain24.js?v=1.36.0-r1"></script><script src="assets/scripts/vacation.js?v=1.36.0-r1"></script>
+<script src="assets/scripts/vacation-version.js?v=1.37.0-r1"></script><script src="assets/scripts/vacation-resource.js?v=1.37.0-r1"></script><script src="assets/scripts/vacation-store.js?v=1.37.0-r1"></script><script src="assets/scripts/vacation-map-domain.js?v=1.37.0-r1"></script><script src="assets/scripts/vacation-random.js?v=1.37.0-r1"></script><script src="assets/scripts/vacation-rain24.js?v=1.37.0-r1"></script><script src="assets/scripts/vacation.js?v=1.37.0-r1"></script>
 </body></html>

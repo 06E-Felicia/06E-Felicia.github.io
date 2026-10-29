@@ -1,18 +1,25 @@
 {
-  "model": "vacation-1.36.0",
+  "model": "vacation-1.37.0",
   "date": "2026-10-29",
-  "scope": "terrain samples, resource integrity/timeouts, browser first frame",
+  "scope": "targeted mechanism and detector fixtures plus browser startup/dialogs",
   "checks": {
-    "foothillTargets": true,
-    "northWesternExclusion": true,
-    "longmenExclusion": true,
-    "gzipBytes": 11528583,
-    "rawBytes": 26515200,
-    "SHA256Matches": true,
-    "bodyTimeout": true,
-    "firstFrameStored": true,
-    "loadingHidden": true,
-    "homepageEntry": true
+    "coastalDirectionSeeds": [
+      17,
+      131
+    ],
+    "westernSourceMaintenance": true,
+    "northernPRDExcluded": true,
+    "uniqueShenzhenRainCells": 2304,
+    "approximateAreaKm2": 2134.625,
+    "districts": 9,
+    "dailyOutcomes": [
+      "complete",
+      "failed",
+      "complete"
+    ],
+    "deadlineAndResume": true,
+    "browserFirstFrame": true,
+    "resultDialogs": true
   },
-  "fullThreeDayRun": false
+  "fullMeteorologicalRun": false
 }
