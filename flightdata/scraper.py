@@ -412,10 +412,42 @@ def _is_challenge_title(title: str) -> bool:
 
 class SourceAccessError(RuntimeError):
     """Explicit source access refusal: report it instead of repeated challenges."""
-    def __init__(self, message, *, status=None, retry_after=0):
+    def __init__(self, message, *, status=None, retry_after=0, diagnostics=None):
         super().__init__(message)
         self.status = status
         self.retry_after = retry_after
+        self.diagnostics = dict(diagnostics or {})
+
+
+def access_response_diagnostics(response):
+    """Allowlisted transport facts only; no body, URLs, auth or cookie values."""
+    headers = response.headers if isinstance(response.headers, dict) else {}
+    request = getattr(response, 'request', None)
+    request_headers = getattr(request, 'headers', {})
+    if not isinstance(request_headers, dict):
+        request_headers = {}
+    resource = getattr(request, 'resource_type', None)
+    if resource not in ('document', 'xhr', 'fetch'):
+        resource = None
+    mime = str(headers.get('content-type', '')).split(';')[0].strip().lower()
+    if not re.fullmatch(r'[a-z0-9.+-]+/[a-z0-9.+-]+', mime):
+        mime = None
+    challenged = headers.get('cf-mitigated') == 'challenge'
+    if challenged:
+        kind = 'cloudflare_challenge'
+    elif response.status == 429:
+        kind = 'rate_limited'
+    elif response.status == 401:
+        kind = 'authentication_required'
+    elif mime == 'application/json':
+        kind = 'forbidden_json_response'
+    else:
+        kind = 'unclassified_access_refusal'
+    return {'kind': kind, 'request_type': resource,
+            'inertia_request': request_headers.get('x-inertia') == 'true',
+            'cloudflare_challenge': challenged,
+            'cloudflare_server': str(headers.get('server', '')).lower() == 'cloudflare',
+            'content_type': mime}
 
 
 def access_error(response, message):
@@ -430,13 +462,15 @@ def access_error(response, message):
                 retry_after = math.ceil(parsedate_to_datetime(value).timestamp()-time.time())
             except (ValueError, TypeError, OverflowError):
                 pass
+    diagnostics = access_response_diagnostics(response)
+    LOG.warning('访问拒绝响应摘要：%s', json.dumps(diagnostics, ensure_ascii=False))
     return SourceAccessError(message, status=response.status,
-                             retry_after=min(86400, max(0, retry_after)))
+                             retry_after=min(86400, max(0, retry_after)), diagnostics=diagnostics)
 
 
 def refusal_info(refusal):
     return {'access_denied': True, 'http_status': refusal.status,
-            'retry_after': refusal.retry_after}
+            'retry_after': refusal.retry_after, 'access_diagnostics': refusal.diagnostics}
 
 
 def skipped_boards(refusal):
@@ -1555,6 +1589,7 @@ def run(headless: bool = True, debug: bool = False) -> int:
         "access_denied": refusal is not None,
         "access_status": refusal.status if refusal is not None else None,
         "access_error": str(refusal)[:1200] if refusal is not None else None,
+        "access_diagnostics": refusal.diagnostics if refusal is not None else None,
     }
     write_json(STATUS_PATH, status)
 

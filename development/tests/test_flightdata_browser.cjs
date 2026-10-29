@@ -30,6 +30,10 @@ const newPage=async context=>{const page=await context.newPage();await page.cloc
   const file=path.resolve(root,'.'+name);
   if(!file.startsWith(root+path.sep)||name.split('/').some(p=>p.startsWith('.'))||!fs.existsSync(file)||!fs.statSync(file).isFile()){res.writeHead(404);res.end();return;}
   res.setHeader('Content-Type',file.endsWith('.html')?'text/html; charset=utf-8':file.endsWith('.json')?'application/json':file.endsWith('.css')?'text/css':file.endsWith('.js')?'application/javascript':'application/octet-stream');
+  // Exercise the preserved app offline; maintenance has a separate regression.
+  if(file.endsWith(path.sep+'Flightdat.html')){
+   res.end(fs.readFileSync(file,'utf8').replace('data-flightdat-maintenance="true"','data-flightdat-maintenance="false"'));return;
+  }
   fs.createReadStream(file).pipe(res);
  });
  await new Promise(r=>server.listen(0,'127.0.0.1',r));let browser;

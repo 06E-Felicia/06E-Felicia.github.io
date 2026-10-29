@@ -107,6 +107,28 @@ class AccessTests(unittest.TestCase):
             response.headers['retry-after'] = bad
             self.assertEqual(m.access_error(response, 'HTTP 429').retry_after, 0)
 
+    def test_response_classification_never_exports_headers_or_bodies(self):
+        m=collector()
+        request=SimpleNamespace(resource_type='fetch',headers={'x-inertia':'true',
+             'cookie':'PRIVATE_COOKIE','authorization':'PRIVATE_AUTH','x-custom':'PRIVATE_CUSTOM'})
+        response=SimpleNamespace(status=403,request=request,headers={'cf-mitigated':'challenge',
+             'server':'cloudflare','content-type':'text/html; charset=UTF-8',
+             'set-cookie':'PRIVATE_SET_COOKIE','x-custom':'PRIVATE_SERVER_VALUE'})
+        diagnostics=m.access_response_diagnostics(response)
+        self.assertEqual(diagnostics['kind'],'cloudflare_challenge')
+        self.assertEqual(diagnostics['request_type'],'fetch')
+        self.assertTrue(diagnostics['inertia_request'])
+        self.assertNotIn('PRIVATE_',json.dumps(diagnostics))
+        response.headers={'server':'cloudflare','content-type':'application/json'}
+        self.assertEqual(m.access_response_diagnostics(response)['kind'],'forbidden_json_response')
+        response.status=401
+        self.assertEqual(m.access_response_diagnostics(response)['kind'],'authentication_required')
+        response.status=429
+        self.assertEqual(m.access_response_diagnostics(response)['kind'],'rate_limited')
+        response.status=403;response.headers={'server':'cloudflare'}
+        self.assertEqual(m.access_response_diagnostics(response)['kind'],'unclassified_access_refusal',
+                         'Cloudflare server alone does not prove a challenge')
+
     @unittest.skipUnless(importlib.util.find_spec('playwright'), 'Playwright required for timeout type')
     def test_document_fallback_only_for_interaction_timeout_never_refusal(self):
         from playwright.sync_api import TimeoutError as BrowserTimeout

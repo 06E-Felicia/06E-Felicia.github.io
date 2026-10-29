@@ -1,5 +1,7 @@
 # Flightdat 航班精选
 
+当前状态：维护中。页面以大字显示维护提示，暂停加载航班快照及浏览器自动刷新；旧列表、代码和数据保留。`.github/workflows/flightdata.yml` 已删除全部 `schedule` 和 `push` 触发，只保留管理员手动运行；以下采集说明供恢复维护后参考。恢复页面需将 `Flightdat.html` 根元素的 `data-flightdat-maintenance` 改为 `false`，恢复自动采集需另行配置工作流触发器。
+
 主站页面为根目录 `Flightdat.html`，首页菜单已添加入口。由用户提供的 `爬FR24` 整合而来，支持深圳、北京首都、上海浦东、广州、香港、成都双流（CTU / ZUUU）、东京羽田（HND / RJTT）七机场，到达 / 出发、搜索、排序、当日历史、机型照片与署名，以及宽体 / 彩绘 / 外航 / 四发 / 货机筛选。新增机场的真实快照由后续采集任务生成，不补造数据；首次采集前显示“航班资料正在准备”。机场代码依据 [FR24 中国机场目录](https://www.flightradar24.com/data/airports/china)和 [FR24 羽田机场资料](https://www.flightradar24.com/data/airports/hnd)。
 
 宽体展示同时修改前端筛选与采集器保留规则，宽体但没有彩绘、外航、货机等其他标记的航班不会再被过滤。“特殊机型”指四发或货机，不与宽体分类混淆；页面已移除公务机统计、筛选与标记，旧快照的相关字段仅为兼容保留。分类可交叉，但“精选航班”总数逐条去重计算，不累加各分类。
@@ -68,6 +70,12 @@ Secret 只传给采集步骤，在内存中还原到临时浏览器上下文；�
 深圳到达也优先使用官网原生 `Later flights` 交互，兼容 Inertia JSON 和整页 HTML。该方向在页面内异步激活现有链接，由官网处理点击和 Inertia 请求，避免键盘聚焦长列表底部时卡住；其他机场仍使用 Enter。此前深圳固定另开标签页；2026-10-28 起第一张分页文档持续返回403，不能把这条路径当作必然可用。只有深圳交互超时且目标请求尚未发出时，才沿已观察到的官网链接在同一上下文读取备用文档；收到403、请求在途或已收到响应后均禁止重发。不会猜测额外 API、更换身份或复制验证通行凭据。
 
 不设置访问拒绝后的跨任务冷却。旧状态中的 `retry_not_before` 不再影响调度或直接运行；下次保存状态时移除旧冷却字段。每轮遇到明确拒绝仍立即停止剩余请求、保存真实错误和已取得数据。定时任务继续按正常十分钟间隔检查，手动运行及采集代码更新可以立即验收。
+
+### 2026-10-29 进一步诊断
+
+本机使用现有授权会话和完整 Chrome，第一页正常取得100条、24小时范围，`outsideAllowance=false`、`withinMaxAllowance=true`。前端 Vue 已挂载，第二页请求类型是 `xhr`，由官网发送 `X-Inertia: true`，但返回403且明确包含 `cf-mitigated: challenge`。增加20秒正常初始化等待、确认官网检测脚本加载成功后仍得到相同结果。因此此次拒绝来自 Cloudflare 挑战，不能只归因于 GitHub 出口 IP、未完成前端加载、纯HTML翻页或第一页权限不足；具体触发信号需源站安全事件确认。
+
+后台 `access_diagnostics` 仅保存请求类型、Inertia布尔标识、Cloudflare挑战标识、服务器标识和 MIME 类型。不会保存完整响应头、响应正文、Cookie、Authorization、URL或账号信息；`server=cloudflare` 单独出现不被当作挑战证据。识别依据：[Cloudflare 官方响应检测说明](https://developers.cloudflare.com/cloudflare-challenges/challenge-types/challenge-pages/detect-response/)。目前没有验证成功的绕行方案，诊断增强不代表源站已放行。
 
 原本地启动器选择系统 Chrome，而此前整合的 CI 使用默认 Chromium headless shell。现 CI 明确安装并使用完整 Chrome，在 xvfb 窗口环境执行，不再伪装旧版 macOS Chrome/131 或修改浏览器特征。指定 Chrome 启动失败时报告实际错误，不在 CI 静默降级。此调整依据 [Playwright 浏览器说明](https://playwright.dev/python/docs/browsers)，分页响应处理依据 [Inertia 协议](https://inertiajs.com/the-protocol)。
 
