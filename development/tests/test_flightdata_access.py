@@ -139,7 +139,7 @@ class AccessTests(unittest.TestCase):
                     handlers['request'](request)
                     if got_response:handlers['response'](response)
                     raise BrowserTimeout('site handler timed out')
-                page.locator.return_value.first.press.side_effect=press
+                page.evaluate.side_effect=press
                 with patch.object(m,'fetch_next_document') as document:
                     with self.assertRaises(m.SourceAccessError if got_response else RuntimeError):
                         m.fetch_next_board(page,'arrivals',{'iata':'SZX'},{'pagination_delay_ms':0},False,

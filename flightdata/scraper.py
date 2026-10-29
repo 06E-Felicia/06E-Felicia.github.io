@@ -699,7 +699,7 @@ def fetch_next_native(page, board, airport, cfg, debug, previous):
 
     # Space normal page interactions; do not hammer the server with reloads.
     page.wait_for_timeout(max(0, min(15000, int(cfg.get("pagination_delay_ms", 2500)))))
-    LOG.info("[%s %s p%s] 键盘激活官网分页链接 %s", airport["iata"], board, next_page, href)
+    LOG.info("[%s %s p%s] 激活官网原生分页链接 %s", airport["iata"], board, next_page, href)
     observed, requested = [], []
     def remember(response):
         if is_target(response):
@@ -719,9 +719,21 @@ def fetch_next_native(page, board, airport, cfg, debug, previous):
             # stability waits. Response waiting belongs to expect_response,
             # not to the interaction's separate 12-second timeout.
             try:
-                page.locator(f"a[href={json.dumps(href)}]:visible").first.press(
-                    "Enter", timeout=12000, no_wait_after=True
-                )
+                if airport['iata'].upper() == 'SZX' and board == 'arrivals':
+                    # The long SZX board can hang while Playwright focuses
+                    # its footer link. Queue the existing anchor's own click
+                    # handler and return before it starts navigation/hydration.
+                    # The site still creates the request and its Inertia headers.
+                    page.evaluate('''href => {
+                        const link = [...document.querySelectorAll('a[href]')].find(
+                            a => a.getAttribute('href') === href && a.getClientRects().length);
+                        if (!link) throw new Error('官网分页链接已变化');
+                        setTimeout(() => link.click(), 0);
+                    }''', href)
+                else:
+                    page.locator(f"a[href={json.dumps(href)}]:visible").first.press(
+                        "Enter", timeout=12000, no_wait_after=True
+                    )
             except BrowserTimeout:
                 if not observed:
                     raise
