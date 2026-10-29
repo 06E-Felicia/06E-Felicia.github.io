@@ -1,8 +1,8 @@
 {
-  "model": "vacation-1.39.0",
-  "resource": "1.39.0-r1",
-  "date": "2026-10-29",
-  "scope": "targeted coastal deceleration/steering, neighbor-warning and game fixtures; short browser interaction checks",
+  "model": "vacation-1.40.0",
+  "resource": "1.40.0-r1",
+  "date": "2026-10-30",
+  "scope": "windward/lee DEM probes, bounded sway, cold-front gate fixtures, short weather runs and browser initialization/save/restore",
   "checks": {
     "streetStations": 74,
     "oneHourDowngradeHold": true,
@@ -50,11 +50,31 @@
     "lateRedWindow": "(07:30,16:30]",
     "lateRedPreservesScore": true,
     "repentAboveObservationSearch": true,
-    "browserEarlyRedSettlementAndRestore": true,
     "browserSeeds": [
-      17,
-      131
-    ]
+      17
+    ],
+    "leeRejected": [
+      "Enping",
+      "Pingshan"
+    ],
+    "southerlyExposedCoast": true,
+    "warmOffshoreColdHeadGate": true,
+    "dryOrColdInteriorExcluded": true,
+    "coldLiftEnergyBound": true,
+    "rootSwayRadiusM": 5000,
+    "rootStepLimitM": 1000,
+    "cellSwayResponseLimitM": 2500,
+    "browserVersion": "vacation-1.40.0"
   },
-  "fullMeteorologicalRun": false
+  "fullMeteorologicalRun": false,
+  "shortWeatherRun": {
+    "hours": 4,
+    "seed": 131,
+    "exitOffsetM": 25000,
+    "births": 31,
+    "coldFrontBirths": 1,
+    "relativeWaterResidual": 4.972407218065107e-13,
+    "peakSlidingHourMm": 100,
+    "maxColdKm2": 49525
+  }
 }
