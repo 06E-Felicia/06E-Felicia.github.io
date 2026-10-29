@@ -10,3 +10,18 @@ assert.deepEqual(out.v.days.map(d=>d.result.points),[0,0,0]);assert(out.v.days.e
 const g=new Game();for(let t=0;t<=14400;t+=600){g.update(t,{level:0});if(g.pending)g.choose(1,g.pending.stage,g.pending.stage==='first'?'skip':'awake');}g.repent(1,14400);assert.throws(()=>g.repent(1,14400),/不能/);assert.equal(new Game(g.checkpoint()).days[0].repentAt,14400);
 assert.throws(()=>g.choose(2,'first','write'),/失效/);
 console.log('PASS: decision fences, three midnight choices, early write skips second, 1000/667/time decay, captions, independent days, 3000 total and restore.');
+function firstDay({choice='skip',second='sleep',redAt,end=73800,events=false}){
+ const m=new Game();let early=null;
+ for(let t=0;t<=end;t+=600){const red=t===redAt;m.update(t,{level:red?3:0,...events?{events:red?[{t,level:3}]:[]}: {}});if(m.pending)m.choose(1,m.pending.stage,m.pending.stage==='first'?choice:second);if(t===redAt)early=structuredClone(m.days[0]);}
+ return {m,early};
+}
+for(const redAt of [14400,18000,41400]){
+ const {m,early}=firstDay({redAt});assert.equal(early.result.at,redAt);assert.equal(early.result.points,1000);assert.equal(m.days[0].lateRedAt,null);assert.throws(()=>m.repent(1,redAt),/不能/);
+}
+for(const second of ['makeup','awake']){const {early}=firstDay({redAt:18000,second});assert.equal(early.result.points,second==='makeup'?0:1000);}
+assert.equal(firstDay({choice:'write',redAt:18000}).early.result.points,0);
+for(const redAt of [42000,73800]){const {m}=firstDay({redAt,events:true});assert.equal(m.days[0].lateRedAt,redAt);assert.equal(m.days[0].result.points,0);assert.equal(m.days[0].result.at,41400);assert.deepEqual(new Game(m.checkpoint()).view(),m.view());}
+assert.equal(firstDay({redAt:74400,end:74400}).m.days[0].lateRedAt,null,'16:40 is outside afternoon window');
+assert.equal(firstDay({choice:'write',redAt:42000}).m.days[0].lateRedAt,null);
+assert.equal(firstDay({second:'makeup',redAt:42000}).m.days[0].lateRedAt,null);
+console.log('PASS: early red settlement including midnight and 07:30; (07:30,16:30] consolation only for zero-score skipped homework; persisted event.');

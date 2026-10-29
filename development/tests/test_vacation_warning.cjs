@@ -42,3 +42,13 @@ for(let t=0;t<=8400;t+=600){
 }
 const stationData=require('../../assets/data/vacation-warning-stations.json');assert.equal(stationData.stations.length,74);assert(stationData.stations.every(s=>!s.name.includes('代表站')));
 console.log('PASS: one-hour downgrade hold, threshold recovery resets timer, hold checkpoint restore, street display names.');
+// Collinear point topology is an exact four-street chain for this fixture.
+const chain=Array.from({length:4},(_,i)=>({id:'chain'+i,name:'街道'+i,index:i,lon:114+i*.02,lat:22.6}));
+const linked=new Detector(chain),chainRain=new Float64Array(4);linked.update(0,chainRain);chainRain[0]=40;
+let w=linked.update(600,chainRain);assert.deepEqual(w.stations.map(s=>s.level),[2,1,0,0]);
+chainRain[0]=70;w=linked.update(1200,chainRain);assert.deepEqual(w.stations.map(s=>s.level),[3,2,1,0]);
+assert.deepEqual(w.stations.map(s=>s.observedLevel),[3,0,0,0],'neighbors receive warning, never invented rainfall');
+const linkedRestore=new Detector(chain,linked.checkpoint());
+for(let t=1800;t<=6000;t+=600){w=linked.update(t,chainRain);assert.deepEqual(linkedRestore.update(t,chainRain),w);if(t<6000)assert.deepEqual(w.stations.map(s=>s.level),[3,2,1,0]);}
+assert.deepEqual(w.stations.map(s=>s.level),[0,0,0,0]);
+console.log('PASS: orange one-hop / red two-hop propagation, no third ring, independent hold and restored topology.');

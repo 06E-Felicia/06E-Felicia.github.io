@@ -1,8 +1,8 @@
 {
-  "model": "vacation-1.38.0",
-  "resource": "1.38.0-r2",
+  "model": "vacation-1.39.0",
+  "resource": "1.39.0-r1",
   "date": "2026-10-29",
-  "scope": "targeted warning/scoring/rain fixtures and a short real-Worker browser interaction run",
+  "scope": "targeted coastal deceleration/steering, neighbor-warning and game fixtures; short browser interaction checks",
   "checks": {
     "streetStations": 74,
     "oneHourDowngradeHold": true,
@@ -33,7 +33,28 @@
       "00:00"
     ],
     "browserRepentAndSaveRestore": true,
-    "browserErrors": []
+    "browserErrors": [],
+    "easternExitRandomSeeds": [
+      17,
+      131
+    ],
+    "inlandToCoastalShift": true,
+    "terrainSteeringReduced": true,
+    "orangeNeighborYellow": true,
+    "redTwoRings": [
+      "orange",
+      "yellow"
+    ],
+    "noThirdRing": true,
+    "earlyRedSettlement": true,
+    "lateRedWindow": "(07:30,16:30]",
+    "lateRedPreservesScore": true,
+    "repentAboveObservationSearch": true,
+    "browserEarlyRedSettlementAndRestore": true,
+    "browserSeeds": [
+      17,
+      131
+    ]
   },
   "fullMeteorologicalRun": false
 }

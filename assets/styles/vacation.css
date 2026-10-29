@@ -55,3 +55,9 @@
 .warning-districts [data-level="1"]{border-left:4px solid #d4a91a;padding-left:8px}
 .warning-districts [data-level="2"]{border-left:4px solid #eb8232;padding-left:8px}
 .warning-districts [data-level="3"]{border-left:4px solid #d54b66;padding-left:8px}
+
+/* Keep the active homework action above observation search and clear of the pet. */
+.repent-panel{position:sticky;top:16px;z-index:650;margin:0 0 20px;padding:16px;border:2px solid #8763ba;border-radius:16px;background:#f0e7ff;box-shadow:0 6px 18px #7350a32b}
+.repent-panel strong{display:block;margin-bottom:10px;color:#62428d}
+.repent-panel #repent{display:block;width:100%;min-height:54px;font-size:18px;font-weight:700;background:#7652ad;color:white}
+.repent-panel[hidden],.repent-panel #repent[hidden]{display:none}

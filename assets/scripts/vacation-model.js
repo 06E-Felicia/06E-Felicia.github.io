@@ -899,7 +899,7 @@
   };
   Model.prototype._terrainSteer=function(k,u,v){
     if(!this._ridge)return [u,v];const r=this._ridge,speed=Math.hypot(u,v);if(speed<1e-9)return [u,v];
-    const sign=u*r.x[k]+v*r.y[k]<0?-1:1,w=r.strength[k]*(this.config.monsoon925?clip(2.5*(this._terrainAnchors?.factor[k]??0)):1),x=(1-w)*u/speed+w*sign*r.x[k],y=(1-w)*v/speed+w*sign*r.y[k],length=Math.hypot(x,y);
+    const sign=u*r.x[k]+v*r.y[k]<0?-1:1,w=.25*r.strength[k]*(this.config.monsoon925?clip(2.5*(this._terrainAnchors?.factor[k]??0)):1),x=(1-w)*u/speed+w*sign*r.x[k],y=(1-w)*v/speed+w*sign*r.y[k],length=Math.hypot(x,y);
     return [speed*x/length,speed*y/length]; // redirect; do not slow cells to fake training
   };
   Model.prototype._applyDiurnalBoundaryLayer=function(k){
@@ -924,7 +924,7 @@
     if(this.config.geography!=='real'||!this.config.organizedWarmSector)return true;
     const lon=this._approxLongitude(x),lat=(this.terrain?.meta.center[1]??22.5)+(y-this.config.height/2)/111195;
     const longmen=((lon-114.25)/.40)**2+((lat-23.78)/.32)**2<1;
-    const northernDelta=lon>=112.95&&lon<=114.9&&lat>=22.83;
+    const northernDelta=lon>=112.95&&lon<=114.65&&lat>=22.83;
     return !(northernDelta||longmen||(lon>=108.5&&lon<=112&&lat<20.35)||(lon>=110.35&&lon<=112&&lat<21.65));
   };
   // Smooth humidity response for NEW parcels only. No clock threshold: real
@@ -976,7 +976,11 @@
       // the drawn exit and favored estuaries instead of the actual mountain row.
       along=d;
     }
-    const shift=this._directionalJetShift(bg);return {along,cross:-(dx-shift.x)*e.y+(dy-shift.y)*e.x};
+    // Shift the seeded WSW eastern deceleration distribution shoreward,
+    // not the cells themselves. Wind, moisture and lifting use the SAME exit.
+    // Signed/random daily offsets retain offshore, inland and southward tracks.
+    const east=this.terrain&&this.config.organizedWarmSector?clip((this._approxLongitude(x)-114.65)/.5)*clip((48-frame.angle*180/Math.PI)/15):0;
+    const exit=frame.exit*(1-.35*east),shift=this._directionalJetShift(bg);return {along,exit,cross:-(dx-shift.x)*e.y+(dy-shift.y)*e.x};
   };
   // An upstream active root intercepts the same low-level feed corridor.
   // Other coastal lanes remain free; existing travelling cells keep their physics.
@@ -1154,14 +1158,15 @@
   Model.prototype._jetExitAccess=function(x,y,bg){
     if(!this.config.jetExitControl)return {factor:1,ascent:0,alignment:1};
     if(!this.coastalGeometry)return {factor:0,ascent:0,alignment:1};
-    const c=this.coastalGeometry,p=this.config.coastalWindParameters,frame=this._jetFrame(bg),coord=this._jetCoordinates(x,y,bg),l=coord.along-frame.exit,cross=coord.cross;
+    const c=this.coastalGeometry,p=this.config.coastalWindParameters,frame=this._jetFrame(bg),coord=this._jetCoordinates(x,y,bg),l=coord.along-coord.exit,cross=coord.cross;
+    const eastWeight=this.terrain&&this.config.organizedWarmSector?clip((this._approxLongitude(x)-114.65)/.5)*clip((48-frame.angle*180/Math.PI)/15):0,exitSupport=1-eastWeight*(1-Math.exp(-.5*(l/(1.25*p.exitLength))**2));
     const across=Math.exp(-.5*(cross/p.sigmaJet)**2)*this._jetCoastWindow(x),along=clip(1-(l/(2*p.exitLength))**2)**2;
     const distance=this.terrain?this.forcing.sample(this.terrain.fields.signedDistance,x,y):y-c.crossing.y;
     const land=this.terrain?this.forcing.sample(this.terrain.fields.land,x,y):distance>=0?1:0,anchor=this._terrainAnchor(x,y);
     const mainland=!this._coastalMainland||this._coastalMainland[this.forcing.index(x,y)]===1;
     const own=this.forcing.index(x,y),subgrid=this._subgridTerrain,island=own>=0&&subgrid&&subgrid.peaks[own]>=150&&subgrid.land[own]>=.08&&Math.abs(distance)<40000;
     const slopeChannel=this._westernSlopeChannel(x,y,bg);
-    const prdLon=this._approxLongitude(x),prd=prdLon>=112.7&&prdLon<=114.9;
+    const prdLon=this._approxLongitude(x),prd=prdLon>=112.7&&prdLon<=114.65;
     const lat=(this.terrain?.meta.center[1]??22.5)+(y-this.config.height/2)/111195;
     const coastCap=prd?clip((22.83-lat)/.19)*clip((45000-distance)/25000):1;
     const terrainSite=coastCap*(this.config.terrainBoundTrigger?((mainland&&land>=.45)||island?Math.max(anchor.factor*slopeChannel.coastalWeight,slopeChannel.factor):0):(distance>=0?1:0)),seaSite=land<.5&&!island&&distance<=0?1:0;
@@ -1175,21 +1180,21 @@
     // Actual residual inflow decides whether a mountain front is reachable.
     // A nearby offshore exit does not switch off every coastal hill by label;
     // a distant offshore exit still cuts the jet off before it reaches land.
-    const hillEligible=terrainSite>0&&remainingJet>.28&&distance<=frame.exit+2*p.exitLength;
+    const hillEligible=terrainSite>0&&remainingJet>.28&&distance<=coord.exit+2*p.exitLength;
     const slopeGate=hillEligible?slopeChannel.factor*remainingJet:0;
     const hillAscent=hillEligible?1800*(contrast+1.5)*remainingJet*Math.max(0,Math.max(brake,down)-up)/15000:0;
     const slopeAscent=slopeGate*Math.min(.3,(speeds?.jet??13)*Math.max(0,slopeChannel.reliefM||0)/15000);
     // Front-side hills can lift a southerly inflow before the sampled broad exit.
     // Require local relief and a reachable jet; never extend this inland.
-    const coastalPrd=prd&&lat<22.72&&distance<30000;
+    const coastalPrd=(prd&&lat<22.72||prdLon>=114.9&&prdLon<=116.6&&Math.abs(l)<p.exitLength)&&distance<30000;
     const hillGate=hillEligible?Math.max(hillFront,coastalPrd?.55:0)*terrainSite*remainingJet:0;
     const prdLift=coastalPrd&&hillEligible ? .13*terrainSite*remainingJet*clip(anchor.reliefM/160):0;
-    return {factor:clip(Math.max(along*(1-brake)*site,hillGate)+.6*slopeGate)*across*this._coastalDirectionAccess(x,bg),siteFactor:Math.max(site,hillEligible?terrainSite:0),directionAccess:this._coastalDirectionAccess(x,bg),terrainAnchor:anchor,slopeChannel,hillBrake:brake,hillFront,ascent:(Math.max(1800*gradient,hillAscent,prdLift)+.6*slopeAscent)*across,alignment,placement:frame.placement,sampledExitM:frame.sampledExit,exitM:frame.exit,distanceFromExitM:l,crossAxisM:cross};
+    return {factor:clip(Math.max(along*(1-brake)*site,hillGate)+.6*slopeGate)*across*exitSupport*this._coastalDirectionAccess(x,bg),siteFactor:Math.max(site,hillEligible?terrainSite:0),directionAccess:this._coastalDirectionAccess(x,bg),terrainAnchor:anchor,slopeChannel,hillBrake:brake,hillFront,ascent:(Math.max(1800*gradient,hillAscent,prdLift)+.6*slopeAscent)*across,alignment,placement:frame.placement,sampledExitM:frame.sampledExit,exitM:coord.exit,distanceFromExitM:l,crossAxisM:cross};
   };
   Model.prototype._inflowFocus=function(x,y,bg){
     const c=this.coastalGeometry;
     if(c){const frame=this._jetFrame(bg),coord=this._jetCoordinates(x,y,bg),p=coord.cross;
-      const l=coord.along,end=frame.exit,termination=1-bg.exitEnvelope*.5*(1+Math.tanh((l-end)/this.config.coastalWindParameters.exitLength));
+      const l=coord.along,end=coord.exit,termination=1-bg.exitEnvelope*.5*(1+Math.tanh((l-end)/this.config.coastalWindParameters.exitLength));
       return clip((Math.exp(-.5*(p/this.config.coastalWindParameters.sigmaJet)**2)*termination*(1-.35*this._hillBrake(x,y,bg))-.12)/.68);}
     if(bg.axis){const a=bg.axis,dx=x-this.config.width/2-a.x,dy=y-this.config.height/2-a.y,p=-a.ey*dx+a.ex*dy;
       return clip((Math.exp(-.5*(p/a.width)**2)-.2)/.65);}
@@ -1547,7 +1552,7 @@
   // Fixed scalar layout: raw U/V, background U/V, jet U/V, breeze U/V, mesoscale U/V, G,E,l,p,S,rough.
   Model.prototype._finiteWindSample=function(x,y,bg,rough,d,nx,ny,delta,out){
     if(this.config.monsoon925)rough=1;
-    const c=this.coastalGeometry,p=this.config.coastalWindParameters,frame=this._jetFrame(bg),e=frame.e,t=c.tangent,n=c.normal,coord=this._jetCoordinates(x,y,bg,d,nx,ny),l=coord.along,perp=coord.cross,exit=frame.exit,G=Math.exp(-perp*perp/(2*p.sigmaJet**2)),E=1-bg.exitEnvelope*.5*(1+Math.tanh((l-exit)/p.exitLength)),S=bg.V/this.preset.baseV,normalLength=Math.hypot(nx,ny),breeze=(this.config.monsoon925||c.options.disableSeaBreeze)?0:(p.breezeDay*bg.D-p.breezeNight*bg.N)*Math.exp(-d*d/(2*40000**2));
+    const c=this.coastalGeometry,p=this.config.coastalWindParameters,frame=this._jetFrame(bg),e=frame.e,t=c.tangent,n=c.normal,coord=this._jetCoordinates(x,y,bg,d,nx,ny),l=coord.along,perp=coord.cross,exit=coord.exit,G=Math.exp(-perp*perp/(2*p.sigmaJet**2)),E=1-bg.exitEnvelope*.5*(1+Math.tanh((l-exit)/p.exitLength)),S=bg.V/this.preset.baseV,normalLength=Math.hypot(nx,ny),breeze=(this.config.monsoon925||c.options.disableSeaBreeze)?0:(p.breezeDay*bg.D-p.breezeNight*bg.N)*Math.exp(-d*d/(2*40000**2));
     if(this.config.boundedMonsoon){
       const speeds=this._monsoonSpeeds(bg),brake=this._hillBrake(x,y,bg),core=clip((G-.15)/.55)*E*(1-brake),base=speeds.background===0?0:Math.max(10,speeds.background-1.5*brake),extra=(speeds.jet-speeds.background)*core;
       out[2]=base*e.x;out[3]=base*e.y;out[4]=extra*e.x;out[5]=extra*e.y;out[6]=out[7]=0;
