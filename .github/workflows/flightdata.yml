@@ -1,6 +1,14 @@
 name: 更新航班数据
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/flightdata.yml'
+      - 'flightdata/scraper.py'
+      - 'flightdata/schedule.py'
+      - 'flightdata/fr24_session.py'
+      - 'flightdata/config.json'
   schedule:
     # More wake-up opportunities; the freshness gate limits actual collection
     # to once per 10 minutes. GitHub cron is still best-effort, not an SLA.
@@ -57,6 +65,8 @@ jobs:
           python development/tests/test_flightdata_session.py -v
           python development/tests/test_flightdata_coverage.py -v
           python development/tests/test_flightdata_pagination.py -v
+          python development/tests/test_flightdata_schedule.py -v
+          python development/tests/test_flightdata_access.py -v
 
       - name: 抓取七机场航班快照
         if: steps.freshness.outputs.run == 'true'
@@ -79,8 +89,13 @@ jobs:
           data = json.loads(p.read_text()) if p.exists() else {}
           auth = ('已验证 24 小时查看范围' if data.get('authenticated_24h') else '会话未通过 24 小时验证') if data.get('session_requested') else '匿名采集（未配置会话）'
           lines = ['## Flightdat 采集结果', '', f'会话：{auth}。不记录账号、Cookie 或令牌。', '', '保存任务仅负责提交；数据完整性见下表。源站耗尽不等于已核验次日边界。', '', '| 机场 | 结果 | 分页覆盖 | 具体原因 |', '| --- | --- | --- | --- |']
+          complete = data.get('complete_airports', 0)
+          lines[5:5] = [f'完整更新 {complete}/{data.get("total_airports", 0)} 个机场；取得部分或完整数据 {data.get("successes", 0)} 个。', '']
+          if data.get('access_denied'):
+              lines[5:5] = [f'源站拒绝后已停止本轮后续请求；最早重试时间（北京时间）：{data.get("retry_not_before_iso", "待定")}。', '']
           for code, state in data.get('airports', {}).items():
-              result = '失败，保留旧快照' if not state.get('ok') else ('部分更新，保留可用数据' if state.get('partial') else ('当前窗口已更新，全天未开放' if state.get('source_window_limited') else '成功'))
+              stopped = any(b.get('skipped') for b in state.get('boards', {}).values())
+              result = ('已停止，保留旧快照' if stopped else '失败，保留旧快照') if not state.get('ok') else ('部分更新，保留可用数据' if state.get('partial') else ('当前窗口已更新，全天未开放' if state.get('source_window_limited') else '成功'))
               errors = state.get('errors') or {}
               notes = [b.get('coverage_note') for b in state.get('boards', {}).values() if b.get('coverage_note')]
               detail = state.get('error') or '；'.join(f'{k}: {v}' for k, v in errors.items()) or '；'.join(dict.fromkeys(notes)) or '—'
@@ -150,10 +165,16 @@ jobs:
             exit 0
           fi
           git commit -m "Update Flightdat snapshots $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-          git push origin HEAD:"$GITHUB_REF_NAME"
+          for attempt in 1 2 3; do
+            if git push origin HEAD:"$GITHUB_REF_NAME"; then exit 0; fi
+            git fetch origin "$GITHUB_REF_NAME"
+            git rebase "origin/$GITHUB_REF_NAME" || exit 1
+          done
+          echo '::error::状态和冷却记录未能提交，请检查保存任务'
+          exit 1
 
-      - name: 汇报上游抓取全部失败（数据保存已完成）
+      - name: 汇报上游采集不完整或失败（数据及冷却记录已保存）
         if: needs.collect.outputs.scrape_outcome == 'failure'
         run: |
-          echo "::error::数据保存已完成，但本轮上游采集全部失败；旧快照未覆盖，具体异常见 collect 摘要与 flightdata/docs/data/status.json"
+          echo "::error::数据及冷却记录已保存，但本轮采集不完整或失败；已保留可用数据，具体异常见 collect 摘要与 flightdata/docs/data/status.json"
           exit 1

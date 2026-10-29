@@ -30,15 +30,16 @@ class NativePaginationTests(unittest.TestCase):
         with sync_playwright() as pw:
             browser = pw.chromium.launch(channel='chrome', headless=True)
             try:
-                for mode in ['normal', 'footer-overlay', 'denied']:
-                    with self.subTest(mode=mode):
+                for iata,mode in [(iata,mode) for iata in ['PEK','SZX'] for mode in ['normal','footer-overlay','denied']]:
+                    with self.subTest(iata=iata,mode=mode):
                         context = browser.new_context()
                         requested = []
+                        base=BASE.replace('/pek/',f'/{iata.lower()}/')
 
                         def respond(route):
                             request = route.request
                             parsed = urlsplit(request.url)
-                            if parsed.hostname != 'www.flightradar24.com' or parsed.path != urlsplit(BASE).path:
+                            if parsed.hostname != 'www.flightradar24.com' or parsed.path != urlsplit(base).path:
                                 route.abort()
                                 return
                             number = int(parse_qs(parsed.query).get('page', ['1'])[0])
@@ -47,11 +48,13 @@ class NativePaginationTests(unittest.TestCase):
                                 if mode=='denied' or request.headers.get('x-inertia') != 'true':
                                     route.fulfill(status=403, content_type='text/html', body='<title>Just a moment...</title>')
                                 else:
-                                    route.fulfill(content_type='application/json', body=json.dumps(payload(2)))
+                                    next_data=payload(2);next_data['props']['airport']['iata']=iata
+                                    route.fulfill(content_type='application/json', body=json.dumps(next_data))
                                 return
                             data = payload(number, final=number == 3)
+                            data['props']['airport']['iata']=iata
                             app = '<div id="app" data-page="'+html.escape(json.dumps(data), quote=True)+'"></div>'
-                            link = '' if number == 3 else '<a id="later" href="'+BASE+'?date=123&amp;page=2">Later flights</a>'
+                            link = '' if number == 3 else '<a id="later" href="'+base+'?date=123&amp;page=2">Later flights</a>'
                             script = '''<script>
                             const link=document.querySelector('#later');
                             if(link) link.onclick=async function(e){
@@ -76,7 +79,7 @@ class NativePaginationTests(unittest.TestCase):
                         context.route('**/*', respond)
                         page = context.new_page()
                         cfg = {'max_retries': 1, 'pages_per_board': 3, 'pagination_delay_ms': 0}
-                        pages = collector.fetch_board_pages(page, 'arrivals', {'iata': 'PEK'}, cfg, False)
+                        pages = collector.fetch_board_pages(page, 'arrivals', {'iata': iata}, cfg, False)
                         if mode=='denied':
                             self.assertEqual(len(pages), 1)
                             self.assertIn('HTTP 403', pages.warning)

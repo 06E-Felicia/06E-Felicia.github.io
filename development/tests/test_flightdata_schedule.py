@@ -16,7 +16,7 @@ class ScheduleTests(unittest.TestCase):
         self.assertTrue(schedule.decision(state,now,'workflow_dispatch')[0])
         self.assertTrue(schedule.decision({},now,'schedule')[0])
         state['ok']=False
-        self.assertTrue(schedule.decision(state,now,'schedule')[0])
+        self.assertFalse(schedule.decision(state,now,'schedule')[0])
 
     def test_new_cn_day_overrides_freshness_and_bad_clocks_are_not_stuck(self):
         now=schedule.datetime.fromisoformat('2026-10-20T00:05:00+08:00').timestamp()
@@ -35,6 +35,31 @@ class ScheduleTests(unittest.TestCase):
         self.assertTrue(schedule.decision(state,now,'schedule')[0])
         state['schedule_checked_at']=now-500
         self.assertFalse(schedule.decision(state,now,'schedule')[0])
+
+    def test_access_cooldown_survives_midnight_manual_runs_and_partial_data(self):
+        now=schedule.datetime.fromisoformat('2026-10-29T23:55:00+08:00').timestamp()
+        state={'updated_by':'github-actions','ok':False,'partial':True,
+               'schedule_checked_at':now-3600,'retry_not_before':now+1800}
+        for event in ['schedule','workflow_dispatch']:
+            self.assertFalse(schedule.decision(state,now+600,event)[0])
+            self.assertTrue(schedule.decision(state,now+1800,event)[0])
+        for corrupt in ['bad','NaN',now+100000,0]:
+            state['retry_not_before']=corrupt
+            self.assertTrue(schedule.decision(state,now,'schedule')[0])
+
+    def test_backoff_increases_persists_and_resets_after_recovery(self):
+        from types import SimpleNamespace
+        refusal=SimpleNamespace(status=403,retry_after=0)
+        state={};now=1792400000
+        for count,delay in enumerate([1800,3600,7200,14400,21600,21600],1):
+            state=schedule.access_backoff(state,now,refusal)
+            self.assertTrue(state['access_denied'])
+            self.assertEqual(state['consecutive_access_denials'],count)
+            self.assertEqual(state['retry_not_before'],now+delay)
+        self.assertEqual(schedule.access_backoff({},now,SimpleNamespace(status=429,retry_after=20000))['retry_not_before'],now+20000)
+        cleared=schedule.access_backoff(state,now)
+        self.assertFalse(cleared['access_denied']);self.assertIsNone(cleared['retry_not_before'])
+        self.assertEqual(schedule.access_backoff(cleared,now,refusal)['consecutive_access_denials'],1)
 
 
 if __name__=='__main__':unittest.main()

@@ -126,22 +126,23 @@ class FlightdataIntegrationTests(unittest.TestCase):
         with patch.object(m,'fetch_board',side_effect=[first,blocked]) as fetch, \
                 patch.object(m,'fetch_next_board',side_effect=blocked) as next_board:
             flights,_=m.collect_airport(MagicMock(),cfg,ap,{},{},False)
-        self.assertEqual(fetch.call_count,2);next_board.assert_called_once()
+        self.assertEqual(fetch.call_count,1);next_board.assert_called_once()
         self.assertEqual([f['id'] for f in flights],['offline-arrival'])
         self.assertTrue(flights.boards['arrivals']['ok'])
         self.assertTrue(flights.boards['arrivals']['partial'])
         self.assertFalse(flights.boards['departures']['ok'])
+        self.assertTrue(flights.boards['departures']['skipped'])
         self.assertIn('第 2 页',flights.errors['arrivals'])
         self.assertIn('Just a moment',flights.errors['departures'])
 
     def test_failed_arrivals_does_not_skip_departures(self):
         m=self.collector();cfg=m.load_config();ap=cfg['airports'][0]
         first={'props':{'flights':[self.raw_flight(m)],'meta':{}}}
-        with patch.object(m,'fetch_board',side_effect=[m.SourceAccessError('HTTP 403'),first]):
+        with patch.object(m,'fetch_board',side_effect=[RuntimeError('temporary connection error'),first]):
             flights,_=m.collect_airport(MagicMock(),cfg,ap,{},{},False)
         self.assertEqual(len(flights),1)
         self.assertEqual(flights[0]['board'],'departures')
-        self.assertIn('HTTP 403',flights.errors['arrivals'])
+        self.assertIn('connection error',flights.errors['arrivals'])
         self.assertTrue(flights.boards['departures']['ok'])
 
     def pagination_fixture(self,m):
@@ -243,9 +244,10 @@ class FlightdataIntegrationTests(unittest.TestCase):
                     patch.dict(m.os.environ,{'FLIGHTDATA_CHECKED_AT':str(int(m.time.time())-90)}), \
                     patch.object(m,'attach_photos'):
                 m.write_json(root/'cache'/f"history_{ap['iata'].lower()}.json",{'flights':{'old-departure':old_departure}})
-                self.assertEqual(m.run(),0)
+                self.assertEqual(m.run(),1)
             status=json.loads((root/'public/status.json').read_text())
-            self.assertTrue(status['ok']);self.assertTrue(status['partial'])
+            self.assertFalse(status['ok']);self.assertTrue(status['partial'])
+            self.assertEqual(status['complete_airports'],0)
             self.assertEqual(status['successes'],1)
             self.assertGreaterEqual(status['collection_started_at']-status['schedule_checked_at'],90)
             self.assertAlmostEqual(status['refresh_hours']*60,10)
@@ -361,7 +363,7 @@ class FlightdataIntegrationTests(unittest.TestCase):
         self.assertIn('git add flightdata/docs/data flightdata/data',flights)
         for workflow in [flights,weather]:
             self.assertIn('group: weather-update-${{ github.ref }}',workflow)
-        self.assertIn("workflows: ['更新航班数据']",weather)
+        self.assertRegex(weather,r"workflows:\s*\[[^\]\n]*'更新航班数据'")
         self.assertIn('head_repository.full_name == github.repository',weather)
         self.assertIn("conclusion == 'failure'",weather)
         self.assertIn("path: '.'",weather)

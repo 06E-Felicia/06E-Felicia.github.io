@@ -50,6 +50,7 @@ import time
 import urllib.error
 import urllib.request
 from datetime import datetime, timedelta, timezone
+from email.utils import parsedate_to_datetime
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
@@ -59,6 +60,9 @@ BASE_DIR = Path(__file__).resolve().parent
 _session_spec = importlib.util.spec_from_file_location('flightdat_private_session', BASE_DIR/'fr24_session.py')
 session = importlib.util.module_from_spec(_session_spec)
 _session_spec.loader.exec_module(session)
+_schedule_spec = importlib.util.spec_from_file_location('flightdat_schedule_policy', BASE_DIR/'schedule.py')
+schedule = importlib.util.module_from_spec(_schedule_spec)
+_schedule_spec.loader.exec_module(schedule)
 DOCS_DIR = BASE_DIR / "docs"
 DATA_DIR = BASE_DIR / "data"
 SITE_DATA_DIR = DOCS_DIR / "data"
@@ -411,6 +415,37 @@ def _is_challenge_title(title: str) -> bool:
 
 class SourceAccessError(RuntimeError):
     """Explicit source access refusal: report it instead of repeated challenges."""
+    def __init__(self, message, *, status=None, retry_after=0):
+        super().__init__(message)
+        self.status = status
+        self.retry_after = retry_after
+
+
+def access_error(response, message):
+    """Persist only the HTTP status and bounded Retry-After, never headers/tokens."""
+    value = response.headers.get('retry-after')
+    retry_after = 0
+    if isinstance(value, str):
+        try:
+            retry_after = int(value)
+        except ValueError:
+            try:
+                retry_after = math.ceil(parsedate_to_datetime(value).timestamp()-time.time())
+            except (ValueError, TypeError, OverflowError):
+                pass
+    return SourceAccessError(message, status=response.status,
+                             retry_after=min(86400, max(0, retry_after)))
+
+
+def refusal_info(refusal):
+    return {'access_denied': True, 'http_status': refusal.status,
+            'retry_after': refusal.retry_after}
+
+
+def skipped_boards(refusal):
+    reason = f'本轮已遇到源站访问拒绝，停止后续请求：{refusal}'
+    return {b: {'ok': False, 'skipped': True, 'error': reason,
+                'completion_reason': 'access_circuit_open', **refusal_info(refusal)} for b in BOARDS}
 
 
 class AirportFlights(list):
@@ -419,6 +454,7 @@ class AirportFlights(list):
         super().__init__(items)
         self.errors = dict(errors or {})
         self.boards = dict(boards or {})
+        self.access_refusal = None
 
 
 class BoardPages(list):
@@ -427,6 +463,7 @@ class BoardPages(list):
         super().__init__(items)
         self.warning = None
         self.coverage = {}
+        self.access_refusal = None
 
 
 class _DataIslandParser(HTMLParser):
@@ -465,7 +502,7 @@ def _validate_board(data, airport):
 def _response_board(response, airport):
     """Read the actual response before frontend hydration can stall a tab."""
     if response.status in (401, 403, 429):
-        raise SourceAccessError(f"源站拒绝访问 HTTP {response.status}；不重试访问验证")
+        raise access_error(response, f"源站拒绝访问 HTTP {response.status}；不重试访问验证")
     if response.status >= 400:
         raise RuntimeError(f"源站返回 HTTP {response.status}")
     body = response.text()
@@ -539,7 +576,7 @@ def fetch_board(
             status = response.status if response is not None else None
             if status in (401, 403, 429):
                 _debug_screenshot(page, airport, f"{board}-{attempt}", debug)
-                raise SourceAccessError(f"源站拒绝访问 HTTP {status}（标题：{_title_safe(page) or '空'}）；停止重试，请核对源站访问权限或限流")
+                raise access_error(response, f"源站拒绝访问 HTTP {status}（标题：{_title_safe(page) or '空'}）；停止本轮采集并冷却")
             if status is not None and status >= 400:
                 raise RuntimeError(f"源站返回 HTTP {status}：{url}")
             page.wait_for_timeout(random.randint(900, 2200))
@@ -608,13 +645,25 @@ def _launch_browser(pw, headless: bool, proxy: str | None, channel: str | None):
 
 
 def fetch_next_board(page, board, airport, cfg, debug, previous):
+    from playwright.sync_api import TimeoutError as BrowserTimeout
+    try:
+        return fetch_next_native(page, board, airport, cfg, debug, previous)
+    except BrowserTimeout:
+        if airport['iata'].upper() != 'SZX' or board != 'arrivals':
+            raise
+        # A renderer timeout is not an access denial. Never enter this path
+        # after an observed HTTP refusal or repeat a completed request.
+        LOG.warning('[SZX arrivals] 官网交互超时且未收到分页响应，读取已观察到的官网文档链接')
+        return fetch_next_document(page, board, airport, cfg, debug, previous)
+
+
+def fetch_next_native(page, board, airport, cfg, debug, previous):
     """Follow the real Later flights link in the current browser session.
 
     Let the site's own client set its navigation headers. Never synthesize
     an API, copy credentials, or replay a blocked request through another host.
     """
-    if airport["iata"].upper() == "SZX" and board == "arrivals":
-        return fetch_next_document(page, board, airport, cfg, debug, previous)
+    from playwright.sync_api import TimeoutError as BrowserTimeout
     meta = previous["props"].get("meta") or {}
     next_page = str(meta.get("nextPage") or "")
     expected_path = f"/data/airports/{airport['iata'].lower()}/{board}"
@@ -651,6 +700,17 @@ def fetch_next_board(page, board, airport, cfg, debug, previous):
     # Space normal page interactions; do not hammer the server with reloads.
     page.wait_for_timeout(max(0, min(15000, int(cfg.get("pagination_delay_ms", 2500)))))
     LOG.info("[%s %s p%s] 键盘激活官网分页链接 %s", airport["iata"], board, next_page, href)
+    observed, requested = [], []
+    def remember(response):
+        if is_target(response):
+            observed.append(response)
+    def remember_request(request):
+        candidate = urlsplit(request.url)
+        if (candidate.scheme == target_url.scheme and candidate.netloc == target_url.netloc
+                and candidate.path == target_url.path and parse_qs(candidate.query) == target_query):
+            requested.append(request)
+    page.on('response', remember)
+    page.on('request', remember_request)
     try:
         with page.expect_response(is_target, timeout=45000) as captured:
             # A long arrivals board can reflow while scrolling or have a
@@ -658,14 +718,20 @@ def fetch_next_board(page, board, airport, cfg, debug, previous):
             # anchor/website handler without pointer hit-testing and scroll
             # stability waits. Response waiting belongs to expect_response,
             # not to the interaction's separate 12-second timeout.
-            page.locator(f"a[href={json.dumps(href)}]:visible").first.press(
-                "Enter", timeout=12000, no_wait_after=True
-            )
+            try:
+                page.locator(f"a[href={json.dumps(href)}]:visible").first.press(
+                    "Enter", timeout=12000, no_wait_after=True
+                )
+            except BrowserTimeout:
+                if not observed:
+                    raise
+                # The site can hang after sending its response. Process it
+                # once instead of issuing a second document request.
         response = captured.value
         LOG.info("[%s %s p%s] 分页响应 HTTP %s（%s）", airport["iata"], board,
                  next_page, response.status, response.request.resource_type)
         if response.status in (401, 403, 429):
-            raise SourceAccessError(f"官网第 {next_page} 页返回 HTTP {response.status}；源站拒绝当前会话访问")
+            raise access_error(response, f"官网第 {next_page} 页返回 HTTP {response.status}；源站拒绝当前会话访问")
         if response.status >= 400:
             raise RuntimeError(f"官网第 {next_page} 页返回 HTTP {response.status}")
         body = response.text()
@@ -690,9 +756,23 @@ def fetch_next_board(page, board, airport, cfg, debug, previous):
             raise RuntimeError(f"第 {next_page} 页返回了与前页相同的航班；不计为翻页成功")
         LOG.info("[%s %s p%s] 官网分页成功：%d 条", airport["iata"], board, next_page, len(current))
         return data
+    except BrowserTimeout:
+        # Even if an interaction times out, a captured denial must open the
+        # circuit rather than turn into a document-navigation fallback.
+        if observed:
+            response = observed[-1]
+            if response.status in (401, 403, 429):
+                raise access_error(response, f'官网分页返回 HTTP {response.status}；停止本轮采集') from None
+            raise RuntimeError('官网已返回分页响应但读取超时；不重复请求该页') from None
+        if requested:
+            raise RuntimeError('官网分页请求已发出但等待响应超时；不重复请求该页') from None
+        raise
     except Exception:
         _debug_screenshot(page, airport, f"{board}-page-{next_page}", debug)
         raise
+    finally:
+        page.remove_listener('response', remember)
+        page.remove_listener('request', remember_request)
 
 
 def fetch_next_document(page, board, airport, cfg, debug, previous):
@@ -881,6 +961,9 @@ def fetch_board_pages(
         except Exception as exc:  # noqa: BLE001
             pages.warning = f"第 {len(pages)+1} 页未更新：{str(exc)[:1000]}"
             pages.coverage["completion_reason"] = "page_failed"
+            if isinstance(exc, SourceAccessError):
+                pages.access_refusal = exc
+                pages.coverage.update(refusal_info(exc))
             break
     LOG.info("[%s %s] 停止分页：%s；整页跨日确认=%s；%s", airport["iata"], board,
              pages.coverage["completion_reason"], pages.coverage["boundary_confirmed"], pages.warning or "已读完目标或源站可用数据")
@@ -901,16 +984,22 @@ def collect_airport(
     today_end = day_window(now_ts())[2]
 
     for board in BOARDS:
+        if flights.access_refusal is not None:
+            flights.boards[board] = skipped_boards(flights.access_refusal)[board]
+            flights.errors[board] = flights.boards[board]['error']
+            continue
         try:
             pages = fetch_board_pages(page, board, airport, cfg, debug, today_end=today_end,
                                       initial_board=(prefetched_boards or {}).get(board))
         except Exception as exc:  # noqa: BLE001
-            # Arrivals and departures are independent. Do not throw away a
-            # valid arrivals board when departures fails, or skip departures
-            # just because arrivals was unavailable.
+            # Ordinary network/parse failures are independent by direction;
+            # an explicit access refusal opens the shared circuit instead.
             flights.errors[board] = str(exc)[:1200]
             flights.boards[board] = {"ok": False, "error": str(exc)[:1200]}
-            LOG.error("[%s %s] 看板失败，继续检查另一方向：%s", airport["iata"], board, exc)
+            if isinstance(exc, SourceAccessError):
+                flights.access_refusal = exc
+                flights.boards[board].update(refusal_info(exc))
+            LOG.error("[%s %s] 看板失败：%s", airport["iata"], board, exc)
             continue
         before_count = len(flights)
         LOG.info("[%s %s] 共抓取 %d 页", airport["iata"], board, len(pages))
@@ -930,6 +1019,8 @@ def collect_airport(
         if warning:
             flights.errors[board] = warning
             flights.boards[board]["error"] = warning
+        if getattr(pages, 'access_refusal', None) is not None:
+            flights.access_refusal = pages.access_refusal
 
     deduped: dict[tuple, dict] = {}
     for f in flights:
@@ -997,8 +1088,15 @@ def collect_all(
                 initial = fetch_board(page,'arrivals',airports[0],cfg,False)
                 session.assert_24h(initial)
                 LOG.info('已在当前运行环境验证 FR24 的 24 小时查看范围（未记录账号或凭据）')
+            access_refusal = None
             for index, airport in enumerate(airports):
                 iata = airport["iata"]
+                if access_refusal is not None:
+                    boards = skipped_boards(access_refusal)
+                    skipped = AirportFlights(errors={b: v['error'] for b, v in boards.items()}, boards=boards)
+                    skipped.access_refusal = access_refusal
+                    results[iata] = (skipped, None)
+                    continue
                 LOG.info("===== 开始 %s %s =====", iata, airport.get("name", ""))
                 try:
                     results[iata] = collect_airport(
@@ -1007,7 +1105,11 @@ def collect_all(
                     )
                 except Exception as exc:  # noqa: BLE001
                     LOG.error("[%s] 采集失败：%s", iata, exc)
-                    results[iata] = (AirportFlights(errors={"browser": str(exc)[:1200]}), None)
+                    failed = AirportFlights(errors={"browser": str(exc)[:1200]})
+                    if isinstance(exc, SourceAccessError):
+                        failed.access_refusal = exc
+                    results[iata] = (failed, None)
+                access_refusal = results[iata][0].access_refusal
         finally:
             ctx.close()
             browser.close()
@@ -1303,6 +1405,10 @@ def run(headless: bool = True, debug: bool = False) -> int:
     airports = get_airports(cfg)
     started = time.time()
     prev_status = read_json(STATUS_PATH, {}) or {}
+    remaining = schedule.cooldown_remaining(prev_status, started)
+    if remaining:
+        LOG.warning('源站拒绝后的冷却期尚余 %d 秒，本次不创建浏览器或发送请求', remaining)
+        return 0
     prev_airports = prev_status.get("airports") or {}
     for airport in airports:
         rollover_airport(airport, int(started))
@@ -1315,7 +1421,13 @@ def run(headless: bool = True, debug: bool = False) -> int:
         # Browser/dependency startup failures must also persist a truthful
         # current status rather than leave yesterday's green status in place.
         LOG.error("浏览器启动或采集环境异常：%s", exc)
-        collected = {a["iata"]: (AirportFlights(errors={"browser": str(exc)[:1200]}), None) for a in airports}
+        collected = {}
+        for a in airports:
+            failed = AirportFlights(errors={"browser": str(exc)[:1200]})
+            if isinstance(exc, SourceAccessError):
+                failed.access_refusal = exc
+                failed.boards = skipped_boards(exc)
+            collected[a['iata']] = (failed, None)
 
     # 所有机场的展示航班合并后「一次性」补图：全局共用一份预算，避免逐机场重复消耗
     all_flights: list[dict[str, Any]] = []
@@ -1392,6 +1504,10 @@ def run(headless: bool = True, debug: bool = False) -> int:
             }
 
     now = now_ts()
+    refusal = next((f.access_refusal for f, _ in collected.values()
+                    if getattr(f, 'access_refusal', None) is not None), None)
+    complete_airports = sum(bool(r.get('ok') and not r.get('partial')) for r in results.values())
+    healthy = complete_airports == len(airports) and refusal is None
     index_airports = [results[a["iata"]] for a in airports if a["iata"] in results]
     index = {
         "generated_at": now,
@@ -1414,9 +1530,10 @@ def run(headless: bool = True, debug: bool = False) -> int:
     status = {
         "collection_started_at": int(started),
         "schedule_checked_at": checked_at,
-        "ok": successes > 0,
+        "ok": healthy,
         "partial": successes < len(airports) or any(r.get("partial") for r in results.values()),
         "successes": successes,
+        "complete_airports": complete_airports,
         "total_airports": len(airports),
         "updated_at": now,
         "updated_at_iso": ts_iso(now),
@@ -1430,12 +1547,15 @@ def run(headless: bool = True, debug: bool = False) -> int:
         "repo_url": f"https://github.com/{repo}" if repo else prev_status.get("repo_url"),
         "run_url": f"https://github.com/{repo}/actions/runs/{run_id}" if repo and run_id else None,
         "updated_by": "github-actions" if os.environ.get("GITHUB_ACTIONS") else "local",
+        **schedule.access_backoff(prev_status, now, refusal),
     }
     write_json(STATUS_PATH, status)
 
-    LOG.info("全部完成：%d/%d 个机场成功，总用时 %.1fs",
-             successes, len(airports), time.time() - started)
-    return 0 if successes > 0 else 1
+    LOG.info("全部完成：%d/%d 个机场取得数据，%d 个完整更新，总用时 %.1fs",
+             successes, len(airports), complete_airports, time.time() - started)
+    if refusal is not None:
+        LOG.warning('源站访问拒绝，自动冷却至 %s', status['retry_not_before_iso'])
+    return 0 if healthy else 1
 
 
 def main(argv: list[str] | None = None) -> int:
