@@ -1,9 +1,9 @@
-# Vacation 1.35 当前状态（2026-10-28）
+# Vacation 1.36 validation (2026-10-29)
 
-本轮按用户纠正，将阳春—恩平的补充触发条件改为山脉东侧迎风坡与类山谷地形汇聚共同作用，不要求完整封闭山谷。使用真实 DEM 的西侧山体相对高度、东西地形差及横向山体；增强距离海岸约 30–100 km 的山脉东侧区域，降低西广东近岸低地起爆权重。仍受随机急流减速区、湿度和暖湿输送控制；远海减速区不因此强制触发阳春。
+Initiation now favors the eastern mountain flanks southwest of Yangchun station and northeast of Yangjiang station. Western sources farther north and new or persistent-source initiation near Longmen are excluded. Existing echoes and cold pools continue to move normally.
 
-真实 DEM 的固定种子短样点检查通过：阳春起爆通达系数从 0.545 增至 0.626，恩平从 0.371 增至 0.644，局地抬升同步增强；阳西与近岸样点不获得新的偏内陆坡地增益。系数不是实际天气触发概率，不代表完整过程雨量或维持时间验收。
+Lossless gzip reduces the terrain download from 26,515,200 to 11,528,583 bytes. The decompressed SHA-256 matches the original. Resource reads now include response-body deadlines, progress, and explicit storage/download/first-frame stages. The homepage links to Vacation and relevant pushes trigger the existing Pages workflow.
 
-本地工具已统一放入 `development/`，启动器、导入路径、工作流测试路径同步更新。JavaScript/Python 语法、相对模块导入、启动器语法检查通过；天气页面 3 项 Node 检查，以及雷暴、监测后台、航班会话/覆盖/翻页、飞常准的短离线测试通过。航班 3 个依赖 Playwright 的用例因当前 Python 环境缺少依赖跳过。
+Passed: real-DEM target and exclusion samples; compressed terrain integrity; HTTP/size errors and stalled-body timeout; runtime/generator syntax; local HTTP Chrome first-frame initialization with real Worker, stored replay frame, hidden loading overlay, and no page errors; homepage navigation link.
 
-保留上一版湿度平滑起爆、海南/雷州东侧新生限制与扩大冷池交换机制。本轮没有进行完整三天模拟、截图或录像，没有生成大型调试产物。
+No full three-day run or screenshots were produced. Isolated browser test storage was cleaned. The old online version initialized in our spot check; its misleading loading label and unbounded downloads were confirmed, but the user's exact network failure was not reproduced.

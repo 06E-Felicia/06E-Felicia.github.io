@@ -13508,5 +13508,11 @@
         1
       ]
     ]
+  },
+  "compressedBinary": {
+    "file": "vacation-terrain.bin.gz",
+    "codec": "gzip",
+    "bytes": 11528583,
+    "sha256": "864b2dfbbc6242464f1679d09567adbe31ba0c0fc1981a99ae8321a0faaf9c2b"
   }
 }

@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import concurrent.futures
 import hashlib
+import gzip
 import io
 import json
 import math
@@ -261,6 +262,8 @@ def build(args):
                                "count": count, "length": count, "units": units.get(name, "1")}
                 handle.write(values.tobytes(order="C"))
                 position += count * 4
+    packed = gzip.compress(output.read_bytes(), compresslevel=9, mtime=0)
+    output.with_suffix(".bin.gz").write_bytes(packed)
     corners = []
     projection = Proj(AEQD)
     for x, y in [(X0, Y0), (-X0, Y0), (-X0, -Y0), (X0, -Y0)]:
@@ -280,6 +283,7 @@ def build(args):
         "dtype": "Float32", "endian": "little", "layout": "row-major; rows south to north; x east, y north",
         "binary": "vacation-terrain.bin", "binaryBytes": position,
         "binarySha256": hashlib.sha256(output.read_bytes()).hexdigest(),
+        "compressedBinary": {"file": output.name + ".gz", "codec": "gzip", "bytes": len(packed), "sha256": hashlib.sha256(packed).hexdigest()},
         "projection": AEQD, "center": [112, 22.5], "nx": NX, "ny": NY,
         "dx": DX, "dy": DX, "origin": [X0, Y0], "cellCentered": True,
         "fields": main_fields,

@@ -1,26 +1,18 @@
 {
-  "model": "vacation-1.35.0",
-  "date": "2026-10-28",
-  "scope": "real-DEM point access, syntax/import and relocated offline regression checks only",
-  "changes": [
-    "eastern windward slope plus channel terrain in Yangchun-Enping",
-    "reduce western near-shore initiation weight",
-    "developer launchers, scripts, tests and docs centralized"
-  ],
+  "model": "vacation-1.36.0",
+  "date": "2026-10-29",
+  "scope": "terrain samples, resource integrity/timeouts, browser first frame",
   "checks": {
-    "yangchunAccess": [
-      0.5452297693134497,
-      0.6262183551911559
-    ],
-    "enpingAccess": [
-      0.3708165577849962,
-      0.6441332162893516
-    ],
-    "nearshoreNewBoost": 0,
-    "farOffshoreExcludesInland": true,
-    "nodeSuitesPassed": 3,
-    "pythonSuitesPassed": 6,
-    "pythonCasesSkipped": 3
+    "foothillTargets": true,
+    "northWesternExclusion": true,
+    "longmenExclusion": true,
+    "gzipBytes": 11528583,
+    "rawBytes": 26515200,
+    "SHA256Matches": true,
+    "bodyTimeout": true,
+    "firstFrameStored": true,
+    "loadingHidden": true,
+    "homepageEntry": true
   },
-  "fullRun": false
+  "fullThreeDayRun": false
 }

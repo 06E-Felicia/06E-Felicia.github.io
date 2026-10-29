@@ -1,14 +1,26 @@
 'use strict';
 importScripts('vacation-version.js?v='+encodeURIComponent(new URL(self.location.href).searchParams.get('v')||''));
-importScripts(...['vacation-wasm-meta.js','vacation-wasm.js','vacation-cold-layer.js','vacation-coast.js','vacation-model.js','vacation-scenario.js'].map(name=>name+'?v='+VacationVersion.RESOURCE_VERSION));
+importScripts(...['vacation-resource.js','vacation-wasm-meta.js','vacation-wasm.js','vacation-cold-layer.js','vacation-coast.js','vacation-model.js','vacation-scenario.js'].map(name=>name+'?v='+VacationVersion.RESOURCE_VERSION));
 const C=VacationCore, SCHEMA=1,taskChannel=new MessageChannel();taskChannel.port1.onmessage=()=>tick();
 let runId=null,model=null,state='initializing',timer=null,iterator=null,phase='step',seq=0,nextOutput=0,displayTime=0,free=[],unack=new Set(),commands=[],wantPause=false,wantSave=false,lastStats=0,stepStarted=0,stepTimes=[],snapshotTimes=[],phaseStarted=0,scheduledAt=0;
 const timing={maxGeneratorNextMs:0,stepComputeMs:0,snapshotComputeMs:0,queueWaitMs:0,queueSamples:0,checkpointMs:0,lastStepComputeMs:0};
 const send=(type,payload={},transfer=[])=>postMessage(Object.assign({type,runId,schemaVersion:SCHEMA},payload),transfer);
 async function loadTerrain(){
-  const response=await fetch('../data/vacation-terrain.json',{cache:'no-cache'});if(!response.ok)throw Error('无法载入地形说明');const meta=await response.json();
-  const binary=await fetch('../data/'+meta.binary+'?sha256='+encodeURIComponent(meta.binarySha256));if(!binary.ok)throw Error('无法载入真实地形');const buffer=await binary.arrayBuffer();if(buffer.byteLength!==meta.binaryBytes)throw Error('地形资源长度不匹配');
+  const meta=await VacationResource.json('../data/vacation-terrain.json?v='+VacationVersion.RESOURCE_VERSION,{cache:'no-cache'});
+  let buffer,lastProgress=0;
+  const progress=(loaded,total)=>{if(performance.now()-lastProgress<200&&loaded!==total)return;lastProgress=performance.now();send('STATUS',{message:'正在下载华南地形：'+(loaded/1048576).toFixed(1)+(total?' / '+(total/1048576).toFixed(1):'')+' MB'});};
+  if(meta.compressedBinary&&typeof DecompressionStream==='function'){
+    try{
+      const c=meta.compressedBinary,packed=await VacationResource.bytes('../data/'+c.file+'?sha256='+c.sha256,{expectedBytes:c.bytes,onProgress:progress});
+      if(packed.byteLength!==c.bytes)throw Error('压缩地形长度不匹配');
+      send('STATUS',{message:'正在解压并校验地形…'});
+      buffer=await new Response(new Blob([packed]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
+    }catch(error){send('STATUS',{message:'压缩地形载入失败，正在重试原始地形…'});}
+  }
+  if(!buffer)buffer=await VacationResource.bytes('../data/'+meta.binary+'?sha256='+meta.binarySha256,{expectedBytes:meta.binaryBytes,onProgress:progress});
+  if(buffer.byteLength!==meta.binaryBytes)throw Error('地形资源长度不匹配');
   if(crypto.subtle){const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',buffer)),v=>v.toString(16).padStart(2,'0')).join('');if(digest!==meta.binarySha256)throw Error('地形资源校验失败');}
+  send('STATUS',{message:'地形已就绪，正在建立环境与风场…'});
   const read=fields=>Object.fromEntries(Object.entries(fields).map(([key,spec])=>[key,new Float32Array(buffer,spec.offsetBytes,spec.count)]));return {meta,fields:read(meta.fields),extended:read(meta.extendedFields)};
 }
 function schedule(){if(timer===null){timer=1;scheduledAt=performance.now();taskChannel.port2.postMessage(0);}}

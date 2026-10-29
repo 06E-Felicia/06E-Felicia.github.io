@@ -1,6 +1,15 @@
 name: 自动更新天气数据
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'Vacation.html'
+      - 'index.html'
+      - 'assets/scripts/vacation*.js'
+      - 'assets/data/vacation-*'
+      - 'assets/styles/vacation*.css'
+      - 'assets/wasm/**'
   # GITHUB_TOKEN 提交不触发 push 工作流；航班更新结束后使用原有全站发布链路。
   workflow_run:
     workflows: ['更新航班数据', '每日更新飞常准航班']
