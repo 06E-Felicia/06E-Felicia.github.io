@@ -50,7 +50,7 @@ class AccessTests(unittest.TestCase):
             self.assertTrue(all(b['skipped'] for b in flights.boards.values()))
         browser.close.assert_called_once()
 
-    def test_partial_refusal_persists_failed_status_backoff_and_keeps_data(self):
+    def test_partial_refusal_keeps_data_and_does_not_block_the_next_run(self):
         m = collector(); cfg = m.load_config(); cfg['airports'] = cfg['airports'][:1]
         airport = cfg['airports'][0]
         flight = m.build_flight({'id': 'available', 'flightNumber': 'CZ1234',
@@ -73,19 +73,16 @@ class AccessTests(unittest.TestCase):
                 self.assertEqual(status['successes'], 1)
                 self.assertEqual(status['complete_airports'], 0)
                 self.assertTrue(status['access_denied'])
-                self.assertEqual(status['retry_not_before']-status['updated_at'], 1800)
+                self.assertNotIn('retry_not_before',status)
                 self.assertEqual(json.loads((root/'public/szx.json').read_text())['flights'][0]['id'], 'available')
-                # Direct CLI runs must respect the same persisted cooldown.
-                before = m.STATUS_PATH.read_bytes()
-                self.assertEqual(m.run(), 0)
-                self.assertEqual(collect.call_count, 1)
-                self.assertEqual(m.STATUS_PATH.read_bytes(), before)
-                status['retry_not_before'] = 0
+                # Legacy future cooldowns must not block direct CLI runs.
+                status['retry_not_before'] = m.now_ts()+21600
                 m.write_json(m.STATUS_PATH, status)
                 self.assertEqual(m.run(), 1)
-                self.assertEqual(json.loads(m.STATUS_PATH.read_text())['consecutive_access_denials'], 2)
+                self.assertEqual(collect.call_count, 2)
+                self.assertNotIn('retry_not_before',json.loads(m.STATUS_PATH.read_text()))
 
-    def test_preflight_refusal_also_persists_cooldown(self):
+    def test_preflight_refusal_records_error_without_cooldown(self):
         m = collector(); cfg = m.load_config(); cfg['airports'] = cfg['airports'][:1]
         with tempfile.TemporaryDirectory(prefix='flightdat-preflight-') as tmp:
             root = Path(tmp)
@@ -97,7 +94,7 @@ class AccessTests(unittest.TestCase):
                 status = json.loads(m.STATUS_PATH.read_text())
                 self.assertEqual(status['successes'], 0)
                 self.assertEqual(status['access_status'], 429)
-                self.assertEqual(status['retry_not_before']-status['updated_at'], 4000)
+                self.assertNotIn('retry_not_before',status)
 
     def test_retry_after_and_credential_free_error_metadata(self):
         m = collector()

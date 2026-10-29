@@ -60,9 +60,6 @@ BASE_DIR = Path(__file__).resolve().parent
 _session_spec = importlib.util.spec_from_file_location('flightdat_private_session', BASE_DIR/'fr24_session.py')
 session = importlib.util.module_from_spec(_session_spec)
 _session_spec.loader.exec_module(session)
-_schedule_spec = importlib.util.spec_from_file_location('flightdat_schedule_policy', BASE_DIR/'schedule.py')
-schedule = importlib.util.module_from_spec(_schedule_spec)
-_schedule_spec.loader.exec_module(schedule)
 DOCS_DIR = BASE_DIR / "docs"
 DATA_DIR = BASE_DIR / "data"
 SITE_DATA_DIR = DOCS_DIR / "data"
@@ -576,7 +573,7 @@ def fetch_board(
             status = response.status if response is not None else None
             if status in (401, 403, 429):
                 _debug_screenshot(page, airport, f"{board}-{attempt}", debug)
-                raise access_error(response, f"源站拒绝访问 HTTP {status}（标题：{_title_safe(page) or '空'}）；停止本轮采集并冷却")
+                raise access_error(response, f"源站拒绝访问 HTTP {status}（标题：{_title_safe(page) or '空'}）；停止本轮采集")
             if status is not None and status >= 400:
                 raise RuntimeError(f"源站返回 HTTP {status}：{url}")
             page.wait_for_timeout(random.randint(900, 2200))
@@ -1417,10 +1414,6 @@ def run(headless: bool = True, debug: bool = False) -> int:
     airports = get_airports(cfg)
     started = time.time()
     prev_status = read_json(STATUS_PATH, {}) or {}
-    remaining = schedule.cooldown_remaining(prev_status, started)
-    if remaining:
-        LOG.warning('源站拒绝后的冷却期尚余 %d 秒，本次不创建浏览器或发送请求', remaining)
-        return 0
     prev_airports = prev_status.get("airports") or {}
     for airport in airports:
         rollover_airport(airport, int(started))
@@ -1559,14 +1552,14 @@ def run(headless: bool = True, debug: bool = False) -> int:
         "repo_url": f"https://github.com/{repo}" if repo else prev_status.get("repo_url"),
         "run_url": f"https://github.com/{repo}/actions/runs/{run_id}" if repo and run_id else None,
         "updated_by": "github-actions" if os.environ.get("GITHUB_ACTIONS") else "local",
-        **schedule.access_backoff(prev_status, now, refusal),
+        "access_denied": refusal is not None,
+        "access_status": refusal.status if refusal is not None else None,
+        "access_error": str(refusal)[:1200] if refusal is not None else None,
     }
     write_json(STATUS_PATH, status)
 
     LOG.info("全部完成：%d/%d 个机场取得数据，%d 个完整更新，总用时 %.1fs",
              successes, len(airports), complete_airports, time.time() - started)
-    if refusal is not None:
-        LOG.warning('源站访问拒绝，自动冷却至 %s', status['retry_not_before_iso'])
     return 0 if healthy else 1
 
 

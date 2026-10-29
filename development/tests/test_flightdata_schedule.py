@@ -36,30 +36,24 @@ class ScheduleTests(unittest.TestCase):
         state['schedule_checked_at']=now-500
         self.assertFalse(schedule.decision(state,now,'schedule')[0])
 
-    def test_access_cooldown_survives_midnight_manual_runs_and_partial_data(self):
+    def test_legacy_access_cooldown_does_not_block_any_later_run(self):
         now=schedule.datetime.fromisoformat('2026-10-29T23:55:00+08:00').timestamp()
         state={'updated_by':'github-actions','ok':False,'partial':True,
                'schedule_checked_at':now-3600,'retry_not_before':now+1800}
-        for event in ['schedule','workflow_dispatch']:
-            self.assertFalse(schedule.decision(state,now+600,event)[0])
+        for event in ['schedule','workflow_dispatch','push']:
+            self.assertTrue(schedule.decision(state,now+600,event)[0])
             self.assertTrue(schedule.decision(state,now+1800,event)[0])
         for corrupt in ['bad','NaN',now+100000,0]:
             state['retry_not_before']=corrupt
             self.assertTrue(schedule.decision(state,now,'schedule')[0])
 
-    def test_backoff_increases_persists_and_resets_after_recovery(self):
-        from types import SimpleNamespace
-        refusal=SimpleNamespace(status=403,retry_after=0)
-        state={};now=1792400000
-        for count,delay in enumerate([1800,3600,7200,14400,21600,21600],1):
-            state=schedule.access_backoff(state,now,refusal)
-            self.assertTrue(state['access_denied'])
-            self.assertEqual(state['consecutive_access_denials'],count)
-            self.assertEqual(state['retry_not_before'],now+delay)
-        self.assertEqual(schedule.access_backoff({},now,SimpleNamespace(status=429,retry_after=20000))['retry_not_before'],now+20000)
-        cleared=schedule.access_backoff(state,now)
-        self.assertFalse(cleared['access_denied']);self.assertIsNone(cleared['retry_not_before'])
-        self.assertEqual(schedule.access_backoff(cleared,now,refusal)['consecutive_access_denials'],1)
+    def test_push_and_manual_validation_ignore_normal_freshness(self):
+        now=1792400000
+        state={'updated_by':'github-actions','schedule_checked_at':now-20,
+               'access_denied':True,'retry_not_before':now+21600}
+        self.assertFalse(schedule.decision(state,now,'schedule')[0])
+        for event in ['push','workflow_dispatch']:
+            self.assertTrue(schedule.decision(state,now,event)[0])
 
 
 if __name__=='__main__':unittest.main()

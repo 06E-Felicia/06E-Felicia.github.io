@@ -92,7 +92,7 @@ jobs:
           complete = data.get('complete_airports', 0)
           lines[5:5] = [f'完整更新 {complete}/{data.get("total_airports", 0)} 个机场；取得部分或完整数据 {data.get("successes", 0)} 个。', '']
           if data.get('access_denied'):
-              lines[5:5] = [f'源站拒绝后已停止本轮后续请求；最早重试时间（北京时间）：{data.get("retry_not_before_iso", "待定")}。', '']
+              lines[5:5] = ['源站拒绝后已停止本轮后续请求；后续任务不设置额外冷却。', '']
           for code, state in data.get('airports', {}).items():
               stopped = any(b.get('skipped') for b in state.get('boards', {}).values())
               result = ('已停止，保留旧快照' if stopped else '失败，保留旧快照') if not state.get('ok') else ('部分更新，保留可用数据' if state.get('partial') else ('当前窗口已更新，全天未开放' if state.get('source_window_limited') else '成功'))
@@ -170,11 +170,11 @@ jobs:
             git fetch origin "$GITHUB_REF_NAME"
             git rebase "origin/$GITHUB_REF_NAME" || exit 1
           done
-          echo '::error::状态和冷却记录未能提交，请检查保存任务'
+          echo '::error::状态记录未能提交，请检查保存任务'
           exit 1
 
-      - name: 汇报上游采集不完整或失败（数据及冷却记录已保存）
+      - name: 汇报上游采集不完整或失败（数据及状态已保存）
         if: needs.collect.outputs.scrape_outcome == 'failure'
         run: |
-          echo "::error::数据及冷却记录已保存，但本轮采集不完整或失败；已保留可用数据，具体异常见 collect 摘要与 flightdata/docs/data/status.json"
+          echo "::error::数据及状态已保存，但本轮采集不完整或失败；已保留可用数据，具体异常见 collect 摘要与 flightdata/docs/data/status.json"
           exit 1
