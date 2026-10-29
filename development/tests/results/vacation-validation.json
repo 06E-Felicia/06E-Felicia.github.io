@@ -1,25 +1,39 @@
 {
-  "model": "vacation-1.37.0",
+  "model": "vacation-1.38.0",
+  "resource": "1.38.0-r2",
   "date": "2026-10-29",
-  "scope": "targeted mechanism and detector fixtures plus browser startup/dialogs",
+  "scope": "targeted warning/scoring/rain fixtures and a short real-Worker browser interaction run",
   "checks": {
-    "coastalDirectionSeeds": [
-      17,
-      131
-    ],
-    "westernSourceMaintenance": true,
-    "northernPRDExcluded": true,
-    "uniqueShenzhenRainCells": 2304,
-    "approximateAreaKm2": 2134.625,
-    "districts": 9,
-    "dailyOutcomes": [
-      "complete",
-      "failed",
-      "complete"
-    ],
-    "deadlineAndResume": true,
+    "streetStations": 74,
+    "oneHourDowngradeHold": true,
+    "requalificationResetsHold": true,
+    "downgradeTimerRestore": true,
+    "streetDisplayNames": true,
+    "daily1000Total3000": true,
+    "midnightThreeChoices": true,
+    "repent667TimeDecay": true,
+    "coreRainLimitAndWaterLedger": true,
     "browserFirstFrame": true,
-    "resultDialogs": true
+    "leftLayerOrder": [
+      "radar",
+      "monsoon",
+      "rain1",
+      "rain24",
+      "total"
+    ],
+    "rightLayerOrder": [
+      "radar",
+      "warning",
+      "rain1",
+      "rain24",
+      "total"
+    ],
+    "decisionFences": [
+      "21:00",
+      "00:00"
+    ],
+    "browserRepentAndSaveRestore": true,
+    "browserErrors": []
   },
   "fullMeteorologicalRun": false
 }

@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css">
   <link rel="stylesheet" href="assets/styles/simulator.css">
   <link rel="stylesheet" href="assets/styles/simulation-v2.css?v=5.5.1">
-  <link rel="stylesheet" href="assets/styles/vacation.css?v=1.37.0-r1">
+  <link rel="stylesheet" href="assets/styles/vacation.css?v=1.38.0-r2">
 </head>
 <body class="anime-lab vacation-lab">
 <nav class="lab-nav">
@@ -32,12 +32,16 @@
   </div></section>
   <section class="rain-warning-card" aria-label="深圳模拟暴雨预警">
     <div class="section-title"><h2>深圳模拟暴雨预警</h2><strong id="rain-warning-level" data-level="0" role="status">等待开始</strong></div>
-    <p id="rain-warning-detail">检测深圳市域各区全部雨量格点。三天分别结算，每天 07:30 前达到模拟红暴即成功。</p>
+    <p id="rain-warning-detail">深圳 74 街道，每街道一个模拟代表站。预警随模拟雨量更新。</p>
+    <div class="section-title"><h3>三日作业挑战</h3><strong id="game-score">0 / 3000 分</strong></div>
+    <p id="game-status">今晚 21:00，决定写不写作业。</p>
     <div id="mission-days" class="mission-days"></div>
-    <details><summary>分区雨量与判定规则</summary>
+    <details><summary>代表站雨量、预警记录与玩法</summary>
       <div id="rain-warning-districts" class="warning-districts"></div>
-      <p class="fine-print">模拟采用深圳暴雨预警的实测阈值分支：黄暴参考 1 小时 30 mm / 6 小时 50 mm；橙暴 1 小时 40 mm / 3 小时 50 mm；红暴 1 小时 70 mm / 3 小时 100 mm，均需降雨持续。以最近 20 分钟雨量趋势近似持续性，各区至少 1/4 面积达标才发布该区预警。格点面积替代指标站占比，不是业务预报或真实预警。</p>
-      <p class="fine-print">范围：深圳本土九区，含龙岗区内大鹏半岛；不含深汕合作区及管辖海域。边界近似采样，结果不依赖画面清晰度。第 1 天从前一日 20:00 开始，后两天从各自 00:00 起判定，07:30 结算；白天继续更新预警。</p>
+      <h3>预警发布记录</h3><div id="rain-warning-events" class="warning-events">暂无记录</div>
+      <p class="fine-print">各街道独立判定：黄暴参考 1 小时 30 mm / 6 小时 50 mm；橙暴 1 小时 40 mm / 3 小时 50 mm；红暴 1 小时 70 mm / 3 小时 100 mm。采用滑动雨量，且最近 20 分钟仍有降雨；从首次不达标起保留原级别至少 1 小时；连续 1 小时不达标才降级，期间重新达标则重新计时。任一街道代表站发布红暴即满足游戏停课条件，不再要求全区面积达标。累计雨量不等于滑动 3 小时雨量。</p>
+      <p class="fine-print">每天满分 1000，三天总分 3000。21:00 选择写作业后跳过第二次决策；不写则在 00:00 选择补作业、睡觉或熬夜。00:00—07:30 任一街道发布红暴即满足游戏停课条件。写作业且不停课，或不写且停课，计为猜对。第一次写作业或坚持不写，猜对得 1000 分；00:00 补作业猜对得 667 分；熬夜后补作业按 667 ×（1－已熬夜分钟数÷450）取整计分。补作业后遇红暴或不写却不停课均为 0 分。</p>
+      <p class="fine-print">街道版经用户确认采用<a href="https://weather.sz.gov.cn/qixiangfuwu/qixiangjiance/zidongzhanchaxun/" target="_blank" rel="noopener">深圳市气象局公开的 74 个街道代表格点</a>设为模拟代表站，不是真实自动站站址。采样所在原生 1 km 雨量格点；不含深汕。右图用街道点位颜色表示该街道预警，不绘制未经核实的街道边界。仅供游戏。</p>
       <p class="fine-print"><a href="https://www.sz.gov.cn/attachment/1/1389/1389484/9453858.pdf" target="_blank" rel="noopener">深圳市预警信号发布规定</a> · <a href="https://amr.sz.gov.cn/attachment/1/1234/1234420/10369447.pdf" target="_blank" rel="noopener">DB4403/T 298—2022</a></p>
     </details>
   </section>
@@ -69,7 +73,7 @@
   
       </div>
       <p class="fine-print">点击地图选择观测位置；读数与当前显示时刻同步。</p>
-      <div class="station-buttons"><button id="station-center">定位本站</button><button id="export" disabled>导出本轮记录</button><button id="save" disabled>保存进度</button><button id="about">关于模拟器</button></div>
+      <div class="station-buttons"><button id="station-center">定位本站</button><button id="export" disabled>导出本轮记录</button><button id="repent" class="primary" hidden>回头是岸</button><button id="save" disabled>保存进度</button><button id="about">关于模拟器</button></div>
       <p id="save-status" class="fine-print" role="status"></p>
     </aside>
   </div>
@@ -80,8 +84,13 @@
   </section>
   <footer>仅供模拟 · 非实况 / 非业务预报 · 地形：<a href="assets/data/vacation-terrain-LICENSE.md" target="_blank" rel="noopener">Mapzen · USGS / NOAA</a></footer>
 </main>
+<dialog id="decision-dialog" class="edition-dialog" aria-labelledby="decision-title">
+  <h2 id="decision-title">今晚写作业吗？</h2>
+  <div class="edition-actions"><button id="decision-write">写作业</button><button id="decision-skip" class="primary">不写作业</button><button id="decision-awake" hidden>熬夜</button></div>
+
+</dialog>
 <dialog id="mission-dialog" class="edition-dialog" aria-labelledby="mission-title">
-  <h2 id="mission-title">Mission Complete</h2><p id="mission-message"></p><div class="edition-actions"><button id="mission-close">继续模拟</button></div>
+  <h2 id="mission-title">今日得分</h2><p id="mission-message"></p><div class="edition-actions"><button id="mission-close">继续模拟</button></div>
 </dialog>
 <dialog id="about-dialog" class="edition-dialog" aria-labelledby="about-title">
   <span class="edition-mark" aria-hidden="true">✦</span><h2 id="about-title">放假模拟器</h2>
@@ -91,5 +100,5 @@
   <div class="edition-actions"><button id="close-about">返回模拟</button></div>
 </dialog>
 <script src="assets/vendor/leaflet/leaflet.js"></script><script src="assets/vendor/proj4/proj4.js"></script>
-<script src="assets/scripts/vacation-version.js?v=1.37.0-r1"></script><script src="assets/scripts/vacation-resource.js?v=1.37.0-r1"></script><script src="assets/scripts/vacation-store.js?v=1.37.0-r1"></script><script src="assets/scripts/vacation-map-domain.js?v=1.37.0-r1"></script><script src="assets/scripts/vacation-random.js?v=1.37.0-r1"></script><script src="assets/scripts/vacation-rain24.js?v=1.37.0-r1"></script><script src="assets/scripts/vacation.js?v=1.37.0-r1"></script>
+<script src="assets/scripts/vacation-version.js?v=1.38.0-r2"></script><script src="assets/scripts/vacation-resource.js?v=1.38.0-r2"></script><script src="assets/scripts/vacation-store.js?v=1.38.0-r2"></script><script src="assets/scripts/vacation-map-domain.js?v=1.38.0-r2"></script><script src="assets/scripts/vacation-random.js?v=1.38.0-r2"></script><script src="assets/scripts/vacation-rain24.js?v=1.38.0-r2"></script><script src="assets/scripts/vacation.js?v=1.38.0-r2"></script>
 </body></html>

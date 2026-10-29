@@ -3,8 +3,8 @@
   const $=id=>document.getElementById(id),SCHEMA=1,V=VacationVersion;
   const testRun=new URLSearchParams(location.search).get('test');
   const STORAGE_NAME=testRun?.startsWith('acceptance')?'vacation-simulator-'+testRun:'vacation-simulator';
-  let REGION=null;
-  const LAYERS={rain24:{name:'24 小时滑动降水',labels:['0','10','25','50','100','250','500 mm']},radar:{name:'雷达回波',labels:['5','15','25','35','45','55','65 dBZ']},monsoon:{name:'西南季风',labels:['0','5','10','15','20','25','30 m/s']},cold:{name:'冷池温差与相对外流',labels:['0','0.5','1','1.5','2','2.5 K']},terrain:{name:'迎风坡有效抬升',labels:['0','100','200','300','400','500','600 m']},trigger:{name:'环境起生条件',labels:['0','20','40','60','80','100 %']}};
+  let REGION=null;const SHENZHEN=L.latLngBounds([[22.24,113.5],[23.05,114.95]]);let streetStations=[];
+  const LAYERS={rain1:{name:'1 小时滑动降水',labels:['0','10','25','50','75','100 mm']},total:{name:'累计降水',labels:['0','10','25','50','100','250','500 mm']},warning:{name:'街道预警（点位）',labels:['无预警','黄色','橙色','红色']},rain24:{name:'24 小时滑动降水',labels:['0','10','25','50','100','250','500 mm']},radar:{name:'雷达回波',labels:['5','15','25','35','45','55','65 dBZ']},monsoon:{name:'西南季风',labels:['0','5','10','15','20','25','30 m/s']},cold:{name:'冷池温差与相对外流',labels:['0','0.5','1','1.5','2','2.5 K']},terrain:{name:'迎风坡有效抬升',labels:['0','100','200','300','400','500','600 m']},trigger:{name:'环境起生条件',labels:['0','20','40','60','80','100 %']}};
   const radarPalette=[[40,77,160],[39,175,223],[48,186,110],[231,220,67],[243,120,41],[206,49,85],[211,149,238]];
   const windPalette=[[34,53,91],[52,106,160],[66,174,168],[157,204,123],[240,185,92],[223,100,100]];
   const coldPalette=[[220,243,249],[126,206,227],[56,151,211],[58,90,188],[92,51,145]],coldCache=new WeakMap();
@@ -13,9 +13,9 @@
   function interpolate(palette,f){const x=Math.max(0,Math.min(1,f))*(palette.length-1),i=Math.min(palette.length-2,Math.floor(x)),a=x-i;return palette[i].map((v,k)=>Math.round(v+(palette[i+1][k]-v)*a));}
   const radarColor=value=>interpolate(radarPalette,(value-5)/60),windColor=value=>interpolate(windPalette,value/30);
   let meta=null,projection=null,coastlines=[],views=[],syncing=false,picking=false;
-  const rain24Cache=new WeakMap(),rain24Pending=new WeakMap(),rainBreaks=[0,10,25,50,100,250,500],rainPalette=[[232,245,250],[126,211,186],[60,173,111],[239,211,80],[240,132,50],[197,57,99],[127,62,162]];
+  const rain24Cache=new WeakMap(),rain24Pending=new WeakMap(),rain1Cache=new WeakMap(),rain1Pending=new WeakMap(),rainBreaks=[0,10,25,50,100,250,500],rainPalette=[[232,245,250],[126,211,186],[60,173,111],[239,211,80],[240,132,50],[197,57,99],[127,62,162]];
   const rain24Color=value=>{let i=0;while(i<rainBreaks.length-2&&value>rainBreaks[i+1])i++;return interpolate(rainPalette,(i+Math.min(1,(value-rainBreaks[i])/(rainBreaks[i+1]-rainBreaks[i])))/(rainBreaks.length-1));};
-  const choices=['radar','monsoon'],windCache=new WeakMap();
+  const choices=['radar','rain1'],windCache=new WeakMap();
   const majorCities={'59287':'广州','59493':'深圳','59488':'珠海','59316':'汕头','59288':'佛山','59082':'韶关','59658':'湛江','59659':'茂名','59278':'肇庆','59298':'惠州','59117':'梅州','59501':'汕尾','59293':'河源','59663':'阳江','59280':'清远','59289':'东莞','59485':'中山','59312':'潮州','59315':'揭阳','59471':'云浮','59476':'江门','59431':'南宁','59046':'柳州','57957':'桂林','59265':'梧州','59644':'北海','59635':'防城港','59632':'钦州','59211':'百色','59065':'贺州','59023':'河池','59242':'来宾'};
   const radarColors=Array.from({length:255},(_,i)=>radarColor(i*.5-10)),windColors=Array.from({length:301},(_,i)=>windColor(i/10));
   let worker=null,runId=null,store=null,frame=null,latest=null,config=null,state='idle',isPaused=false,replaying=false,replayPlaying=false,paintTask=null;
@@ -44,11 +44,13 @@
   function decodeCold(entry){if(!entry?.coldGrid)return null;if(!coldCache.has(entry)){const g=entry.coldGrid,n=g.nx*g.ny;coldCache.set(entry,{depth:new Float32Array(g.buffer,0,n),deficit:new Float32Array(g.buffer,n*4,n),u:new Float32Array(g.buffer,n*8,n),v:new Float32Array(g.buffer,n*12,n)});}return coldCache.get(entry);}
   function decodeTrigger(entry){if(!entry?.triggerGrid)return null;if(!triggerCache.has(entry)){const g=entry.triggerGrid,n=g.nx*g.ny;triggerCache.set(entry,{elevation:new Float32Array(g.buffer,0,n),lift:new Float32Array(g.buffer,n*4,n),gate:new Float32Array(g.buffer,n*8,n)});}return triggerCache.get(entry);}
   function ensureRain24(entry){
-    if(!entry||!store||rain24Cache.has(entry)||rain24Pending.has(entry))return;
-    const owned=store,task=VacationRain24.calculate(entry,owned.index.slice(),seq=>owned.get(seq),decode).then(values=>{
-      rain24Cache.set(entry,values);if(frame===entry&&store===owned){for(const view of views)if(view.key==='rain24')view.draw();updatePoint();}
-    }).catch(error=>{if(frame===entry&&store===owned){$('point-rain24').textContent='—';$('map-status').textContent=error.message;}}).finally(()=>rain24Pending.delete(entry));
-    rain24Pending.set(entry,task);
+    for(const [key,seconds,cache,pending]of [['rain24',86400,rain24Cache,rain24Pending],['rain1',3600,rain1Cache,rain1Pending]]){
+      if(!entry||!store||cache.has(entry)||pending.has(entry))continue;
+      const owned=store,task=VacationRain24.calculate(entry,owned.index.slice(),seq=>owned.get(seq),decode,seconds).then(values=>{
+        cache.set(entry,values);if(frame===entry&&store===owned){for(const view of views)if(view.key===key)view.draw();updatePoint();}
+      }).catch(error=>{if(frame===entry&&store===owned)$('map-status').textContent=error.message;}).finally(()=>pending.delete(entry));
+      pending.set(entry,task);
+    }
   }
   function coldAt(entry,lon,lat){const g=entry?.coldGrid,c=decodeCold(entry);if(!g||!c||!projection)return null;const p=projection.forward([lon,lat]),x=p[0]+g.width/2,y=p[1]+g.height/2;if(x<0||y<0||x>=g.width||y>=g.height)return null;const k=Math.floor(y/g.dx)*g.nx+Math.floor(x/g.dx);return {depth:c.depth[k],deficit:c.deficit[k],u:c.u[k],v:c.v[k]};}
   function windAt(entry,lon,lat){const g=entry?.windGrid,wind=decodeWind(entry);if(!g||!wind||!projection)return null;const xy=projection.forward([lon,lat]),x=xy[0]+g.width/2,y=xy[1]+g.height/2;if(x<0||y<0||x>=g.width||y>=g.height)return null;const k=Math.floor(y/g.dx)*g.nx+Math.floor(x/g.dx);return {u:wind.u[k],v:wind.v[k]};}
@@ -58,15 +60,16 @@
     initGL(){const gl=this.gl,shader=(type,src)=>{const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw Error('地图着色器不可用');return s;};this.program=gl.createProgram();gl.attachShader(this.program,shader(gl.VERTEX_SHADER,'attribute vec2 p;attribute vec2 uv;varying vec2 v;void main(){v=uv;gl_Position=vec4(p,0.,1.);}'));gl.attachShader(this.program,shader(gl.FRAGMENT_SHADER,'precision mediump float;uniform sampler2D image;uniform float opacity;varying vec2 v;void main(){vec4 c=texture2D(image,v);gl_FragColor=vec4(c.rgb,c.a*opacity);}'));gl.linkProgram(this.program);gl.useProgram(this.program);this.buffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,this.buffer);for(const [name,offset]of [['p',0],['uv',8]]){const loc=gl.getAttribLocation(this.program,name);gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,16,offset);}this.texture=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,this.texture);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.NEAREST);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.NEAREST);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.uniform1i(gl.getUniformLocation(this.program,'image'),0);gl.disable(gl.BLEND);},
     clear(){this.grid=null;this.source=null;this.pixels=null;if(this.gl){this.gl.clearColor(0,0,0,0);this.gl.clear(this.gl.COLOR_BUFFER_BIT);}else this.context.clearRect(0,0,this.canvas.width,this.canvas.height);},
     update(entry){
-      if(!entry||!projection)return;
-      const rain24=this.view.key==='rain24',rolling=rain24?rain24Cache.get(entry):null,monsoon=this.view.key==='monsoon',cold=this.view.key==='cold',terrain=this.view.key==='terrain',trigger=this.view.key==='trigger',lifting=terrain||trigger?decodeTrigger(entry):null,wind=monsoon?decodeWind(entry):null,cooling=cold?decodeCold(entry):null;
+      if(!entry||!projection)return;if(this.view.key==='warning'){this.clear();return;}
+      const rain24=['rain24','rain1'].includes(this.view.key),rolling=rain24?(this.view.key==='rain1'?rain1Cache:rain24Cache).get(entry):null,total=this.view.key==='total',monsoon=this.view.key==='monsoon',cold=this.view.key==='cold',terrain=this.view.key==='terrain',trigger=this.view.key==='trigger',lifting=terrain||trigger?decodeTrigger(entry):null,wind=monsoon?decodeWind(entry):null,cooling=cold?decodeCold(entry):null;
       if(rain24&&!rolling||monsoon&&!wind||cold&&!cooling||(terrain||trigger)&&!lifting){this.clear();return;}
       this.grid=monsoon?entry.windGrid:cold?entry.coldGrid:terrain||trigger?entry.triggerGrid:entry.grid;
       const n=this.grid.nx*this.grid.ny,fields=rain24||monsoon||cold||terrain||trigger?null:decode(entry);
       this.pixels=new Uint8Array(n*4);
       for(let i=0;i<n;i++){
         let color,alpha=235;
-        if(rain24){if(rolling[i]<.1)continue;color=rain24Color(rolling[i]);}
+        if(rain24){if(rolling[i]<.1)continue;color=this.view.key==='rain1'?interpolate(rainPalette,Math.min(1,rolling[i]/100)):rain24Color(rolling[i]);}
+        else if(total){const value=fields.total[i]*.01;if(value<.1)continue;color=rain24Color(value);}
         else if(monsoon){const speed=Math.hypot(wind.u[i],wind.v[i]);if(!Number.isFinite(speed))continue;color=windColors[Math.min(300,Math.round(speed*10))];alpha=210;}
         else if(terrain||trigger){const value=terrain?lifting.lift[i]:lifting.gate[i];if(value<(terrain?5:.005))continue;color=liftColor(value,terrain?600:1);alpha=235;}
         else if(cold){if(cooling.depth[i]<5||cooling.deficit[i]<.05)continue;color=coldColor(cooling.deficit[i]);alpha=Math.round(235*Math.min(1,cooling.depth[i]/40));}
@@ -99,18 +102,18 @@
   });
   class MapView {
     constructor(card,key,index,center,zoom){
-      this.card=card;this.key=key;this.element=card.querySelector('.weather-map');
+      this.card=card;this.key=key;this.index=index;this.bounds=index===1?SHENZHEN:REGION;this.element=card.querySelector('.weather-map');
       this.element.id=index===0?'weather-map':'weather-map-'+index;
       this.element.setAttribute('role','region');
-      this.map=new SmoothMap(this.element,{preferCanvas:false,renderer:L.svg({padding:.35}),zoomControl:true,zoomAnimation:true,markerZoomAnimation:true,zoomAnimationThreshold:10,minZoom:5,maxZoom:14,maxBounds:REGION,maxBoundsViscosity:1,zoomSnap:.25,zoomDelta:.5,wheelPxPerZoomLevel:140,wheelDebounceTime:70,inertia:true}).setView(REGION.getCenter(),6);
+      this.map=new SmoothMap(this.element,{preferCanvas:false,renderer:L.svg({padding:.35}),zoomControl:true,zoomAnimation:true,markerZoomAnimation:true,zoomAnimationThreshold:10,minZoom:5,maxZoom:14,maxBounds:this.bounds,maxBoundsViscosity:1,zoomSnap:.25,zoomDelta:.5,wheelPxPerZoomLevel:140,wheelDebounceTime:70,inertia:true}).setView(this.bounds.getCenter(),6);
       L.control.scale({imperial:false,maxWidth:90}).addTo(this.map);
       this.map.createPane('vacationRadar');this.map.getPane('vacationRadar').style.zIndex='450';this.map.getPane('vacationRadar').style.pointerEvents='none';
       this.map.createPane('vacationVectors');this.map.getPane('vacationVectors').style.zIndex='460';this.map.getPane('vacationVectors').style.pointerEvents='none';
       this.vectors=L.polyline([],{pane:'vacationVectors',color:'#445c7b',weight:1.3,opacity:.85,interactive:false}).addTo(this.map);
-      this.markers=L.layerGroup().addTo(this.map);
+      this.markers=L.layerGroup().addTo(this.map);this.warnings=L.layerGroup().addTo(this.map);
       this.coast=L.polyline(coastlines,{color:'#8e9b9d',weight:1,opacity:.65,interactive:false}).addTo(this.map);
       this.raster=new Raster(this).addTo(this.map);this.setBase();
-      this.limitView(true);if(center){this.map.setView(center,zoom,{animate:false});this.constrainView();}
+      this.limitView(true);if(center&&index===0){this.map.setView(center,zoom,{animate:false});this.constrainView();}
       this.map.on('zoomstart',()=>{this.zooming=true;});
       this.map.on('zoomend',()=>{this.zooming=false;this.constrainView();});
       this.map.on('zoomanim',e=>{if(!this.disposed&&!this.following&&!syncing)this.syncView(e.center,e.zoom);});
@@ -132,27 +135,27 @@
       this.base=L.tileLayer(url,{...options,zIndex:2,attribution:satellite?'Tiles © Esri — Esri, Maxar, Earthstar Geographics':'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(this.map);
       const active=this.base;this.base.on('tileerror',()=>{if(this.base===active)$('map-status').textContent='在线底图暂时无法加载，可切换底图；模拟风场与回波仍可显示。';});
     }
-    syncView(center=this.map.getCenter(),zoom=this.map.getZoom()){if(this.disposed||syncing)return;syncing=true;try{for(const view of views)if(view!==this&&!view.disposed)view.followView(center,zoom);}finally{syncing=false;}}
+    syncView(){ /* Regional weather and Shenzhen inspection have independent viewports. */ }
     followView(center,zoom){if(this.following||this.zooming){this.pendingView={center,zoom};return;}if(this.map.getZoom()!==zoom){this.following=true;this.map.setView(center,zoom,{animate:true});return;}const delta=this.map.project(center,zoom).subtract(this.map.project(this.map.getCenter(),zoom));if(Math.abs(delta.x)>.5||Math.abs(delta.y)>.5)this.map.panBy(delta,{animate:false});}
     queueVectors(){cancelAnimationFrame(this.vectorRAF);this.vectorRAF=requestAnimationFrame(()=>{if(!this.disposed&&!this.zooming&&!this.following)this.drawVectors();});}
-    constrainView(){this.map.panInsideBounds(REGION,{animate:false});this.map.dragging.enable();}
+    constrainView(){this.map.panInsideBounds(this.bounds,{animate:false});this.map.dragging.enable();}
     limitView(reset=false){
       // The viewport must fit inside the data, even in a wide or tall window.
       // Ceil to the existing StormSim quarter-zoom grid, never expand bounds.
-      const m=this.map,size=m.getSize(),span=m.project(REGION.getSouthEast(),0).subtract(m.project(REGION.getNorthWest(),0));
+      const m=this.map,size=m.getSize(),span=m.project(this.bounds.getSouthEast(),0).subtract(m.project(this.bounds.getNorthWest(),0));
       const min=Math.ceil(Math.log2(Math.max(size.x/Math.abs(span.x),size.y/Math.abs(span.y)))/.25)*.25;
       m.setMaxZoom(Math.max(14,min));
       // setMinZoom auto-animates if the current zoom is smaller. Complete this
       // resize synchronously so a queued initial zoom cannot swallow user input.
       if(m.getZoom()<min)m.setView(m.getCenter(),min,{animate:false});
       m.setMinZoom(min);
-      if(reset)m.setView(REGION.getCenter(),min,{animate:false});
+      if(reset)m.setView(this.bounds.getCenter(),min,{animate:false});
       this.constrainView();
     }
     nearestStation(e){if(!$('show-stations').checked)return null;const touch=matchMedia('(pointer: coarse)').matches||e.originalEvent?.pointerType==='touch',pixel=e.containerPoint||this.map.latLngToContainerPoint(e.latlng);let radius=touch?22:14,nearest=null;for(const s of stations){const d=pixel.distanceTo(this.map.latLngToContainerPoint([s.lat,s.lon]));if(d<radius){radius=d;nearest=s;}}return nearest;}
     updateMarkers(){
-      this.markers.clearLayers();if(!$('show-stations').checked)return;
-      for(const station of [...stations,...(point.id==='custom'?[point]:[])]){
+      this.markers.clearLayers();if(!$('show-stations').checked||this.key==='warning')return;
+      for(const station of [...(this.index===1?streetStations:stations),...(point.id==='custom'?[point]:[])]){
         const selected=station.id===point.id;
         L.circleMarker([station.lat,station.lon],{radius:selected?6:3.5,color:'#fff',weight:selected?2:1,fillColor:selected?'#aa527e':'#7863b6',fillOpacity:.95,bubblingMouseEvents:false})
           .bindTooltip(document.createTextNode(station.name)).on('click',()=>{if(picking){selectPoint({...station,id:'custom',name:'自选观测点'});setPicking(false);}else selectPoint(station);}).addTo(this.markers);
@@ -160,11 +163,18 @@
     }
     legend(){
       const spec=LAYERS[this.key];this.element.setAttribute('aria-label',spec.name+'地图');
-      const colors=Array.from({length:13},(_,i)=>this.key==='rain24'?interpolate(rainPalette,i/12):this.key==='radar'?radarColor(5+i*5):this.key==='cold'?coldColor(i*2.5/12):this.key==='terrain'||this.key==='trigger'?liftColor(i/12,1):windColor(i*2.5));
+      const colors=Array.from({length:13},(_,i)=>['rain24','rain1','total'].includes(this.key)?interpolate(rainPalette,i/12):this.key==='warning'?[[220,226,232],[245,210,40],[244,139,38],[211,42,65]][Math.min(3,Math.floor(i/3.25))]:this.key==='radar'?radarColor(5+i*5):this.key==='cold'?coldColor(i*2.5/12):this.key==='terrain'||this.key==='trigger'?liftColor(i/12,1):windColor(i*2.5));
       this.card.querySelector('.legend-colors').replaceChildren(...colors.map(color=>{const e=document.createElement('span');e.style.background='rgb('+color.join(',')+')';return e;}));
       this.card.querySelector('.legend-labels').replaceChildren(...spec.labels.map(label=>{const e=document.createElement('span');e.textContent=label;return e;}));
     }
-    draw(){this.raster.update(frame);this.drawVectors();this.card.querySelector('.map-time').textContent=frame?day(frame.simTime)+' '+clock(frame.simTime):'等待开始';}
+    draw(){this.raster.update(frame);this.drawWarnings();this.drawVectors();this.card.querySelector('.map-time').textContent=frame?day(frame.simTime)+' '+clock(frame.simTime):'等待开始';}
+    drawWarnings(){
+      this.warnings.clearLayers();if(this.key!=='warning')return;
+      const data=frame?.rainWarning?.stations||streetStations;
+      for(const station of data){const label=document.createElement('span');label.textContent=station.district+' '+station.street+' · '+warningLabels[station.level||0]+(station.r1===undefined?'':' · 1h '+station.r1.toFixed(1)+' / 3h '+station.r3.toFixed(1)+' mm');
+        L.circleMarker([station.lat,station.lon],{radius:7,color:'#fff',weight:1.5,fillColor:['#a5b3bf','#f5d228','#f48b26','#d32a41'][station.level||0],fillOpacity:.9}).bindTooltip(label).on('click',()=>selectPoint(station)).addTo(this.warnings);
+      }
+    }
     drawVectors(){
       const lines=[];
       if((this.key==='monsoon'&&frame?.windGrid||this.key==='cold'&&frame?.coldGrid)&&projection){
@@ -177,7 +187,7 @@
       }
       this.vectors.setLatLngs(lines);
     }
-    clear(){this.raster.clear();this.vectors.setLatLngs([]);this.card.querySelector('.map-time').textContent='等待开始';}
+    clear(){this.warnings.clearLayers();this.raster.clear();this.vectors.setLatLngs([]);this.card.querySelector('.map-time').textContent='等待开始';}
     destroy(){this.disposed=true;this.pendingView=null;this.resize.disconnect();cancelAnimationFrame(this.syncRAF);cancelAnimationFrame(this.vectorRAF);this.map.stop();if(this.zooming)this.map.once('zoomend',()=>this.map.remove());else this.map.remove();}
   }
   function maps(count){
@@ -187,9 +197,10 @@
     for(let i=0;i<count;i++){
       const card=document.createElement('article');card.className='map-card';
       card.innerHTML='<header><select aria-label="选择气象图 '+(i+1)+'"></select><time class="map-time"></time></header><div class="weather-map vacation-map"></div><div class="legend"><div class="legend-colors"></div><div class="legend-labels"></div></div>';
-      const select=card.querySelector('select');for(const [key,spec]of Object.entries(LAYERS)){const option=document.createElement('option');option.value=key;option.textContent=spec.name;select.append(option);}select.value=choices[i];
+      const layerOrder=i===1?['radar','warning','rain1','rain24','total']:['radar','monsoon','rain1','rain24','total'];
+      const select=card.querySelector('select');for(const key of layerOrder){const spec=LAYERS[key];const option=document.createElement('option');option.value=key;option.textContent=spec.name;select.append(option);}select.value=choices[i];
       $('map-grid').append(card);const view=new MapView(card,choices[i],i,center,zoom);views.push(view);view.draw();
-      select.onchange=()=>{choices[i]=view.key=select.value;view.legend();view.draw();};
+      select.onchange=()=>{choices[i]=view.key=select.value;view.legend();view.updateMarkers();view.draw();};
     }
     setPicking(picking);
   }
@@ -216,25 +227,51 @@
   }
   function updateTimeProgress(){if(config)$('clock-progress').textContent='10 分钟/步 · 已计算 '+(coreTime/3600).toFixed(2)+' / '+config.hours+' 小时 · 可回放至 '+(latestTime/3600).toFixed(2)+' 小时 · 当前画面 '+((frame?.simTime||0)/3600).toFixed(2)+' 小时';}
   const missionNotified=new Set(),missionQueue=[];
+  let liveGame=null,choicePending=false;
+  const warningLabels=['无预警','暴雨黄色预警','暴雨橙色预警','暴雨红色预警'];
+  const choiceLabel=v=>({write:'写作业',skip:'不写作业',makeup:'补作业',sleep:'睡觉',awake:'熬夜'}[v]||'待选择');
   function nextMission(){
-    if($('mission-dialog').open||!missionQueue.length)return;
-    const result=missionQueue.shift();$('mission-dialog').dataset.outcome=result.outcome;
-    $('mission-title').textContent=result.outcome==='complete'?'Mission Complete':'Mission Failed';
-    $('mission-message').textContent='第 '+result.day+' 天 · '+(result.outcome==='complete'?'已在 '+clock(result.at)+' 达到深圳分区模拟红色暴雨预警。':'截至 07:30 尚未达到深圳分区模拟红色暴雨预警。')+' 天气模拟将继续。';
+    if($('mission-dialog').open||$('decision-dialog').open||!missionQueue.length)return;
+    const r=missionQueue.shift();$('mission-dialog').dataset.outcome=r.outcome||'complete';
+    $('mission-title').textContent=r.final?'三日挑战结束':r.caption||'今日得分';
+    $('mission-message').textContent=r.final?'累计 '+r.total+' / 3000 分。':'第 '+r.day+' 天 · '+r.points+' / 1000 分 · '+(r.red?'红暴停课':'未发布红暴');
     $('mission-dialog').showModal();
   }
-  function updateRainWarning(entry,notify=true){
-    const w=entry?.rainWarning,labels=['无暴雨预警','黄色暴雨预警','橙色暴雨预警','红色暴雨预警'];
-    $('rain-warning-level').dataset.level=w?.level||0;$('rain-warning-level').textContent=w?labels[w.level]:'等待开始';
-    $('rain-warning-detail').textContent=w?'当前显示时刻 · '+day(w.t)+' '+clock(w.t)+'｜覆盖 '+w.gridCount+' 个雨量格点（约 '+Math.round(w.areaKm2)+' km²）｜全域最大小时雨量 '+w.max1h.toFixed(1)+' mm，3 小时 '+w.max3h.toFixed(1)+' mm':'检测深圳各区全部雨量格点；每天 07:30 前达成模拟红暴即可完成当天任务。';
-    $('mission-days').replaceChildren(...[0,1,2].map(i=>{const r=w?.results[i],el=document.createElement('div');el.className='mission-day';el.dataset.outcome=r?.outcome||'pending';const title=document.createElement('span'),value=document.createElement('strong');title.textContent='第 '+(i+1)+' 天 · 07:30';value.textContent=r?(r.outcome==='complete'?'Mission Complete':'Mission Failed'):'等待结算';el.append(title,value);return el;}));
-    $('rain-warning-districts').replaceChildren(...(w?.areas||[]).map(a=>{const el=document.createElement('p');el.textContent=a.name+' · '+labels[a.level]+' · 最大小时 / 3 小时 '+a.max1h.toFixed(1)+' / '+a.max3h.toFixed(1)+' mm';return el;}));
-    if(notify&&!replaying)for(const result of w?.results||[]){if(!result)continue;const key=result.day+':'+result.outcome;if(!missionNotified.has(key)){missionNotified.add(key);missionQueue.push(result);}}
+  function updateRainWarning(w){
+    $('rain-warning-level').dataset.level=w?.level||0;$('rain-warning-level').textContent=w?warningLabels[w.level]:'等待开始';
+    $('rain-warning-detail').textContent=w?'当前显示时刻 · '+day(w.t)+' '+clock(w.t)+'｜'+w.stationCount+' 个街道模拟代表站｜最大小时雨量 '+w.max1h.toFixed(1)+' mm，3 小时 '+w.max3h.toFixed(1)+' mm':'深圳 74 街道，每街道一个模拟代表站。';
+    $('rain-warning-districts').replaceChildren(...(w?.stations||[]).map(a=>{const el=document.createElement('p');el.dataset.level=a.level;el.textContent=a.district+' · '+a.street+' · '+warningLabels[a.level]+' · 1h / 3h / 6h '+a.r1.toFixed(1)+' / '+a.r3.toFixed(1)+' / '+a.r6.toFixed(1)+' mm';return el;}));
+    const events=(w?.events||[]).slice().reverse();$('rain-warning-events').replaceChildren(...events.map(e=>{const el=document.createElement('p');el.textContent=day(e.t)+' '+clock(e.t)+' · '+e.district+' '+e.name+' · '+(e.level?warningLabels[e.level]:'解除预警');return el;}));
+    if(!events.length)$('rain-warning-events').textContent='暂无记录';
+  }
+  function updateGame(g,notify=true){
+    if(!replaying&&g){if(!liveGame||g.t>liveGame.t)liveGame=g;else if(g.t===liveGame.t)g=liveGame;}
+    $('game-score').textContent=(g?.total||0)+' / 3000 分';
+    $('game-status').textContent=g?.pending?'第 '+g.pending.day+' 天的'+(g.pending.stage==='first'?'前一晚 21:00 首次决策':'00:00 第二次决策')+'：等待你的选择。':g?.finished?'三天结束，累计 '+g.total+' 分。':g?.allSettled?'三天成绩已结算，天气仍将运行到本轮结束。':'21:00 首次选择，00:00 可再次决定，每天 07:30 结算。';
+    $('mission-days').replaceChildren(...[0,1,2].map(i=>{const d=g?.days[i],r=d?.result,el=document.createElement('div');el.className='mission-day';el.dataset.outcome=r?.outcome||'pending';const title=document.createElement('span'),value=document.createElement('strong'),choice=document.createElement('small');title.textContent='第 '+(i+1)+' 天 · 07:30';value.textContent=r?r.points+' / 1000 分':'— / 1000 分';choice.textContent=d?.first?('21:00 '+choiceLabel(d.first)+(d.second?' → 00:00 '+choiceLabel(d.second):d.first==='write'?'（已锁定）':'')):'尚未选择';el.append(title,value,choice);return el;}));
+    if(notify&&!replaying&&g){
+      for(const d of g.days){const r=d.result,key='day:'+d.day;if(r&&!missionNotified.has(key)){missionNotified.add(key);missionQueue.push(r);}}
+      if(g.finished&&!missionNotified.has('final')){missionNotified.add('final');missionQueue.push({final:true,total:g.total});}
+      if(g.pending&&worker&&!choicePending){
+        $('decision-title').textContent='第 '+g.pending.day+' 天 · '+(g.pending.stage==='first'?'前一晚 21:00':'00:00');
+        const first=g.pending.stage==='first';$('decision-write').textContent=first?'写作业':'补作业';$('decision-skip').textContent=first?'不写作业':'睡觉';$('decision-awake').hidden=first;
+        if(!$('decision-dialog').open)$('decision-dialog').showModal();
+      }
+    }
+    const awake=g?.days.find(d=>d.second==='awake'&&d.repentAt===null&&!d.result);$('repent').hidden=!awake||replaying||!worker;$('repent').disabled=choicePending;
     nextMission();
   }
+  function submitChoice(choice){
+    if(choicePending||!liveGame?.pending||replaying||!worker)return;
+    choicePending=true;$('decision-write').disabled=$('decision-skip').disabled=$('decision-awake').disabled=true;
+    sendCommand('CHOOSE',{...liveGame.pending,choice});
+  }
+  $('decision-write').onclick=()=>submitChoice(liveGame?.pending?.stage==='first'?'write':'makeup');$('decision-skip').onclick=()=>submitChoice(liveGame?.pending?.stage==='first'?'skip':'sleep');$('decision-awake').onclick=()=>submitChoice('awake');
+  $('repent').onclick=()=>{const d=liveGame?.days.find(d=>d.second==='awake'&&d.repentAt===null&&!d.result);if(!d||replaying||choicePending||!worker)return;choicePending=true;$('repent').disabled=true;sendCommand('REPENT',{day:d.day,at:frame.simTime});};
+  $('decision-dialog').addEventListener('cancel',e=>e.preventDefault());
   $('mission-close').onclick=()=>$('mission-dialog').close();$('mission-dialog').addEventListener('close',nextMission);
   function show(entry){const renderBegin=performance.now();
-    if(!entry)return;frame=entry;updateRainWarning(entry);ensureRain24(entry);for(const view of views)view.draw();updatePoint();
+    if(!entry)return;frame=entry;updateRainWarning(entry.rainWarning);updateGame(entry.game);ensureRain24(entry);for(const view of views)view.draw();updatePoint();
     $('clock').textContent=clock(entry.simTime);$('day').textContent=day(entry.simTime)+' · 北京时间';
     updateTimeProgress();
     $('cell-count').textContent=entry.metrics.cells;$('max-rain').textContent=entry.metrics.maxRate.toFixed(1)+' mm/h';$('max-total').textContent=entry.metrics.maxTotal.toFixed(1)+' mm';
@@ -252,15 +289,26 @@
     if($('diagnostics').hidden)return;const a=frame?.metrics||{};
     $('diagnostic-text').textContent=JSON.stringify({model:V.MODEL_VERSION,backend:liveStats.backend,seed:config?.seed,coreTime,confirmedCoreTime,replayAvailableUntil:latestTime,displayTime:frame?.simTime,displayPlayhead:displayTime,actualCoreState,lastRequestedControl,lastReceivedControl,lastAppliedControl,firstFrameMs,worker:liveStats,pageTiming:{renderMs,cacheWriteMs},replay:{frames:store?.index.length||0,RAM_MiB:(store?.bytes||0)/1048576,pendingWrites:store?.pending||0},water:{relativeResidual:a.relativeResidual,activityResidual:a.activityResidual},births:frame?.stats?.births,coldPoolBirths:frame?.stats?.coldBirths,lastError},null,2);
   }
-  async function start(override={},checkpoint=null,history=null){await initialized;if(state==='initializing')return;if(worker&&state!=='complete')return;worker?.terminate();store?.close();runId=crypto.randomUUID();missionQueue.length=0;missionNotified.clear();for(const r of checkpoint?.rainWarning?.results||[])if(r)missionNotified.add(r.day+':'+r.outcome);$('mission-dialog').close();updateRainWarning(null,false);frame=latest=null;for(const view of views)view.clear();updatePoint();$('replay-bar').hidden=true;seqCount=0;displayTime=latestTime=coreTime=checkpoint?.t||0;lastError=null;isPaused=false;replaying=false;replayPlaying=false;paintTask=null;seekRevision++;pending.clear();runLog=[];confirmedCoreTime=coreTime;lastRequestedControl=lastReceivedControl=lastAppliedControl=null;actualCoreState='initializing';liveStats={state:actualCoreState,simTime:coreTime};firstFrameMs=null;startWall=performance.now();config=checkpoint?.config||{preset:'monsoon',quality:$('quality').value,geography:'real',...override};if(!checkpoint&&config.seed===undefined&&config.windTurnStart===undefined){let storage=null;try{storage=localStorage;}catch{}config.windTurnStart=VacationRandom.nextWindStart(storage,()=>crypto.getRandomValues(new Uint32Array(1))[0]&1);if(!config.weatherRegion||config.weatherRegion==='auto')config.weatherRegion=VacationRandom.nextJetRegion(storage,()=>crypto.getRandomValues(new Uint32Array(1))[0]/4294967296);}
+  async function start(override={},checkpoint=null,history=null){await initialized;if(state==='initializing')return;if(worker&&state!=='complete')return;worker?.terminate();store?.close();runId=crypto.randomUUID();missionQueue.length=0;missionNotified.clear();liveGame=null;choicePending=false;for(const d of checkpoint?.game?.days||[])if(d.result)missionNotified.add('day:'+d.day);$('decision-dialog').close();$('decision-write').disabled=$('decision-skip').disabled=$('decision-awake').disabled=false;$('mission-dialog').close();updateRainWarning(null);updateGame(null,false);frame=latest=null;for(const view of views)view.clear();updatePoint();$('replay-bar').hidden=true;seqCount=0;displayTime=latestTime=coreTime=checkpoint?.t||0;lastError=null;isPaused=false;replaying=false;replayPlaying=false;paintTask=null;seekRevision++;pending.clear();runLog=[];confirmedCoreTime=coreTime;lastRequestedControl=lastReceivedControl=lastAppliedControl=null;actualCoreState='initializing';liveStats={state:actualCoreState,simTime:coreTime};firstFrameMs=null;startWall=performance.now();config=checkpoint?.config||{preset:'monsoon',quality:$('quality').value,geography:'real',...override};if(!checkpoint&&config.seed===undefined&&config.windTurnStart===undefined){let storage=null;try{storage=localStorage;}catch{}config.windTurnStart=VacationRandom.nextWindStart(storage,()=>crypto.getRandomValues(new Uint32Array(1))[0]&1);if(!config.weatherRegion||config.weatherRegion==='auto')config.weatherRegion=VacationRandom.nextJetRegion(storage,()=>crypto.getRandomValues(new Uint32Array(1))[0]/4294967296);}
     $('restore').hidden=true;$('loading').hidden=false;$('loading-text').textContent='正在准备本机回放存储…';$('welcome').hidden=true;setState('initializing');store=new VacationStore(()=>setStatus('正在切换本机备用存储，继续保存整轮回放。'),STORAGE_NAME);const initializingRun=runId,initializingStore=store;await initializingStore.open(initializingRun,{resume:history});if(initializingRun!==runId){initializingStore.close();return;}const owned=new Worker('assets/scripts/vacation-worker.js?v='+V.RESOURCE_VERSION);worker=owned;setState('initializing');owned.onerror=e=>fail(e.message);owned.onmessage=async({data})=>{if(worker!==owned||data.runId!==runId)return;try{if(data.type==='STATUS'){$('loading-text').textContent=data.message;setStatus(data.message);}else if(data.type==='READY'){if(data.version!==V.MODEL_VERSION)throw Error('页面与计算内核版本不一致，请刷新页面');config=data.config;liveStats={...liveStats,backend:data.backend};coreTime=data.simTime;confirmedCoreTime=coreTime;actualCoreState='running';$('loading-text').textContent='地形已就绪，正在生成首帧…';setStatus('环境已就绪，正在推进第一个天气状态…');setState('running');sendCommand('SAVE');}else if(data.type==='SNAPSHOT'){
           const original=data.buffer;coreTime=Math.max(coreTime,data.simTime);seqCount++;const cacheBegin=performance.now(),entry=await store.put(data);cacheWriteMs=performance.now()-cacheBegin;if(worker!==owned||data.runId!==runId)return;latestTime=Math.max(latestTime,entry.simTime);latest=entry;if(firstFrameMs===null){firstFrameMs=performance.now()-startWall;displayTime=entry.simTime;show(entry);setStatus('天气正在演变。你可以随时暂停或回看。');}else if(!replaying&&!isPaused&&displayTime>=entry.simTime)show(entry);post('RECYCLE',{seq:data.seq,buffer:original},[original]);updateHistory();updateTimeProgress();
+        }else if(data.type==='GAME_STATE'||data.type==='CHOICE_REJECTED'){
+          choicePending=false;$('decision-write').disabled=$('decision-skip').disabled=$('decision-awake').disabled=false;
+          if(data.type==='GAME_STATE'){
+            $('decision-dialog').close();
+            if(latest?.simTime===data.game.t){latest.game=structuredClone(data.game);await store.put(latest);}
+            if(data.action==='REPENT'&&frame?.simTime<data.game.t){
+              const shown=structuredClone(liveGame||frame.game);shown.days[data.day-1].repentAt=data.at;liveGame=shown;
+            }else liveGame=data.game;
+            if(frame?.simTime===liveGame.t)frame.game=structuredClone(liveGame);
+          }else{setStatus(data.message);if(data.game?.t<=frame?.simTime)liveGame=data.game;}
+          if(!replaying)updateGame(liveGame);
         }else if(data.type==='STATS'){const pausedFence=lastAppliedControl?.command==='PAUSE';if(!pausedFence)coreTime=Math.max(coreTime,data.simTime);actualCoreState=actualCoreState==='complete'?'complete':pausedFence?'paused':data.state;liveStats={...data,state:actualCoreState,simTime:coreTime};updateTimeProgress();updateDiagnostics();}else if(data.type==='COMMAND_RECEIVED'){lastReceivedControl={...data,receivedAtPage:performance.now()};runLog.push(lastReceivedControl);updateDiagnostics();}else if(data.type==='COMMAND_ACK'){const begin=pending.get(data.commandId);pending.delete(data.commandId);runLog.push({...data,latencyMs:begin?performance.now()-begin:null});const effective=data.actualEffectiveTime??data.t_core;if(Number.isFinite(effective)){coreTime=Math.max(coreTime,effective);confirmedCoreTime=Math.max(confirmedCoreTime,effective);}if(data.command==='PAUSE'||data.command==='RESUME'){if(!lastAppliedControl||data.commandId>=lastAppliedControl.commandId){lastAppliedControl={...data};actualCoreState=data.workerState||(data.command==='PAUSE'?'paused':'running');if(!lastRequestedControl||data.commandId>=lastRequestedControl.commandId)isPaused=data.command==='PAUSE';liveStats={...liveStats,state:actualCoreState,simTime:coreTime};setState(actualCoreState==='complete'?'complete':actualCoreState);}}updateTimeProgress();updateDiagnostics();}else if(data.type==='CHECKPOINT'){const ok=await store.saveCheckpoint(data.checkpoint);$('save-status').textContent=ok?'进度已保存':'无法持久保存';if(ok){restorable=data.checkpoint;restorableHistory={runId:store.runId,version:data.checkpoint.version,simTime:data.checkpoint.t,index:store.index.filter(e=>e.simTime<=data.checkpoint.t).map(e=>({...e}))};}}else if(data.type==='COMPLETE'){coreTime=Math.max(coreTime,data.simTime);confirmedCoreTime=coreTime;actualCoreState='complete';liveStats={...liveStats,state:'complete',simTime:coreTime};updateTimeProgress();setState('complete');setStatus('本轮计算已完成，画面会继续播放至终点。');}else if(data.type==='ERROR'){runLog.push({type:'ERROR',simTime:data.simTime,stack:data.stack});fail(data.message)};}catch(e){fail(e.message);}};
     owned.postMessage({type:'INIT',runId,schemaVersion:SCHEMA,expectedVersion:V.MODEL_VERSION,config,checkpoint});
   }
   function fail(message){actualCoreState='error';liveStats={...liveStats,state:'error'};lastError=message;worker?.terminate();worker=null;$('loading').hidden=true;if(!frame)$('welcome').hidden=false;setState('error');setStatus('模拟已停止：'+message+'。已生成时段仍可回看。');updateTimeProgress();updateHistory();updateDiagnostics();}
   function pause(){if(!worker)return;replayPlaying=false;seekRevision++;isPaused=!isPaused;if(isPaused)sendCommand('PAUSE');else{if(replaying){replaying=false;displayTime=latestTime;show(latest);}sendCommand('RESUME');lastTick=performance.now();}setState(state);}
-  function stop(){if(!worker&&state!=='initializing')return;const old=worker;worker=null;runId=null;old?.terminate();pending.clear();replayPlaying=false;seekRevision++;isPaused=true;actualCoreState='stopped';liveStats={...liveStats,state:'stopped',simTime:coreTime};$('loading').hidden=true;setState('stopped');setStatus('本轮已结束，已生成的天气可以继续回看。');updateTimeProgress();updateDiagnostics();}
+  function stop(){$('decision-dialog').close();choicePending=false;if(!worker&&state!=='initializing')return;const old=worker;worker=null;runId=null;old?.terminate();pending.clear();replayPlaying=false;seekRevision++;isPaused=true;actualCoreState='stopped';liveStats={...liveStats,state:'stopped',simTime:coreTime};$('loading').hidden=true;setState('stopped');setStatus('本轮已结束，已生成的天气可以继续回看。');updateTimeProgress();updateDiagnostics();}
   function entryAt(time){const entries=store?.index||[];let lo=0,hi=entries.length-1,best=null;while(lo<=hi){const mid=(lo+hi)>>1;if(entries[mid].simTime<=time+.001){best=entries[mid];lo=mid+1;}else hi=mid-1;}return best;}
   async function tick(now){
     requestAnimationFrame(tick);const dt=Math.min(.25,(now-lastTick)/1000);lastTick=now;
@@ -305,7 +353,7 @@
   $('diagnostics-toggle').onclick=()=>{$('diagnostics').hidden=!$('diagnostics').hidden;$('diagnostics-toggle').setAttribute('aria-expanded',String(!$('diagnostics').hidden));updateDiagnostics();};
   $('about').onclick=()=>$('about-dialog').showModal();$('close-about').onclick=()=>$('about-dialog').close();$('about-dialog').onclick=e=>{if(e.target===$('about-dialog'))$('about-dialog').close();};
   $('export').onclick=()=>{
-    const record={model:V.MODEL_VERSION,numericalBackend:liveStats.backend,config,generatedUntil:coreTime,coreComputedUntil:coreTime,coreConfirmedUntil:confirmedCoreTime,replayAvailableUntil:latestTime,actualCoreState,timeSemantics:{coreComputedUntil:'most recently observed complete core step; PAUSE ACK supplies its exact stopping endpoint',coreConfirmedUntil:'latest command/complete-confirmed core step',replayAvailableUntil:'last stored snapshot endpoint',displayedAt:'currently displayed snapshot time',generatedUntil:'alias of coreComputedUntil'},displayedAt:frame?.simTime,operations:runLog,metrics:frame?.metrics,stats:frame?.stats,selectedPoint:point,terrain:meta?.binarySha256,rainWarning:frame?.rainWarning,metricsAtSnapshot:frame?.simTime,performance:{firstFrameMs,worker:liveStats},limitations:'降阶机制实验，非实况、非业务预报。'};
+    const record={model:V.MODEL_VERSION,numericalBackend:liveStats.backend,config,generatedUntil:coreTime,coreComputedUntil:coreTime,coreConfirmedUntil:confirmedCoreTime,replayAvailableUntil:latestTime,actualCoreState,timeSemantics:{coreComputedUntil:'most recently observed complete core step; PAUSE ACK supplies its exact stopping endpoint',coreConfirmedUntil:'latest command/complete-confirmed core step',replayAvailableUntil:'last stored snapshot endpoint',displayedAt:'currently displayed snapshot time',generatedUntil:'alias of coreComputedUntil'},displayedAt:frame?.simTime,operations:runLog,metrics:frame?.metrics,stats:frame?.stats,selectedPoint:point,terrain:meta?.binarySha256,rainWarning:frame?.rainWarning,game:liveGame||frame?.game,metricsAtSnapshot:frame?.simTime,performance:{firstFrameMs,worker:liveStats},limitations:'降阶机制实验，非实况、非业务预报。'};
     const url=URL.createObjectURL(new Blob([JSON.stringify(record,null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download='vacation-'+config.seed+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
   };
   document.addEventListener('visibilitychange',()=>{if(document.hidden&&worker&&!isPaused&&state!=='complete'){isPaused=true;sendCommand('PAUSE');setState(state);}});
@@ -318,9 +366,10 @@
       const bounds=VacationMapDomain.bounds(meta,projection);REGION=L.latLngBounds([bounds.south,bounds.west],[bounds.north,bounds.east]);maps(2);
       const results=await Promise.allSettled([
         VacationResource.json('assets/data/vacation-coastlines.json?v='+V.RESOURCE_VERSION).then(data=>{coastlines=data.coordinates.map(line=>line.map(xy=>{const p=projection.inverse(xy);return [p[1],p[0]];}));for(const view of views)view.coast.setLatLngs(coastlines);}),
+        VacationResource.json('assets/data/vacation-warning-stations.json?v='+V.RESOURCE_VERSION).then(data=>{streetStations=data.stations;for(const view of views){view.updateMarkers();view.draw();}}),
         VacationResource.json('assets/data/simulator-stations.json').then(data=>{stations=VacationMapDomain.stations(data,meta,projection,majorCities);point=stations.find(s=>s.id==='59493')||point;stationOptions();for(const view of views)view.updateMarkers();updatePoint();})
       ]);
-      if(results[1].status==='rejected')$('point-kind').textContent='参考点';
+      if(results[2].status==='rejected')$('point-kind').textContent='参考点';
       const initial=new VacationStore(null,STORAGE_NAME);await initial.open('inspection');const saved=await initial.latestCheckpointRecord();restorable=saved?.checkpoint||null;restorableHistory=saved?.replay?.simTime===restorable?.t&&saved?.replay?.version===V.MODEL_VERSION?saved.replay:null;
       const resume=V.checkpointPreflight(restorable);$('restore').hidden=!resume.eligible;if(!resume.eligible){if(restorable)setStatus(resume.reason==='version'?'上次进度属于旧版本，已保留；可以开始新过程。':'上次进度的元数据不完整，无法恢复；可以开始新过程。');restorable=null;}initial.close();
     }catch(e){setStatus('地图资源暂不可用：'+e.message);}
@@ -332,6 +381,6 @@
     await new Promise((resolve,reject)=>{const r=indexedDB.deleteDatabase(STORAGE_NAME);r.onsuccess=resolve;r.onerror=()=>reject(r.error);r.onblocked=()=>reject(Error('测试存储仍被占用'));});
     if(window.caches)await caches.delete(STORAGE_NAME+'-complete-replay-v2');
   }
-  window.VacationSimulator={start,pause,stop,...(testRun?.startsWith('acceptance')?{disposeTestStorage}:{}),getState:()=>({modelVersion:V.MODEL_VERSION,rainWarning:frame?.rainWarning,numericalBackend:liveStats.backend,state,isPaused,replaying,replayPlaying,runId,config,seqCount,displayTime:frame?.simTime||0,latestTime,coreTime,confirmedCoreTime,actualCoreState,lastRequestedControl,lastReceivedControl,lastAppliedControl,firstFrameMs,lastError,errorDetails:runLog.filter(e=>e.type==='ERROR').at(-1),metrics:frame?.metrics,stats:frame?.stats,worker:liveStats,pageTiming:{renderMs,cacheWriteMs},historyFrames:store?.index.length||0,historyStart:store?.index[0]?.simTime??null,historyEnd:store?.index.at(-1)?.simTime??null,archiveBackend:store?.backend,archiveBytes:store?.diskBytes||0,ramBytes:store?.bytes||0,pendingCommands:pending.size,commandLatencies:runLog.filter(e=>e.type==='COMMAND_ACK').map(e=>({command:e.command,latencyMs:e.latencyMs,receivedAtWorker:e.receivedAtWorker,appliedAtWorker:e.appliedAtWorker,workerBoundaryWaitMs:e.workerBoundaryWaitMs})).slice(-80),triggerGrid:frame?.triggerGrid?{nx:frame.triggerGrid.nx,ny:frame.triggerGrid.ny,bytes:frame.triggerGrid.buffer.byteLength}:null,windGrid:frame?.windGrid?{nx:frame.windGrid.nx,ny:frame.windGrid.ny,bytes:frame.windGrid.buffer.byteLength}:null,mapViews:views.map(v=>({key:v.key,bounds:{west:v.map.getBounds().getWest(),east:v.map.getBounds().getEast(),south:v.map.getBounds().getSouth(),north:v.map.getBounds().getNorth()},simulationCovered:!!projection&&VacationMapDomain.covered({west:v.map.getBounds().getWest(),east:v.map.getBounds().getEast(),south:v.map.getBounds().getSouth(),north:v.map.getBounds().getNorth()},meta,projection),center:{lat:v.map.getCenter().lat,lon:v.map.getCenter().lng},zoom:v.map.getZoom(),minZoom:v.map.getMinZoom(),maxZoom:v.map.getMaxZoom(),zooming:!!v.zooming,dragging:v.map.dragging.enabled(),interaction:{zoomSnap:v.map.options.zoomSnap,zoomDelta:v.map.options.zoomDelta,wheelPxPerZoomLevel:v.map.options.wheelPxPerZoomLevel,wheelDebounceTime:v.map.options.wheelDebounceTime,inertia:v.map.options.inertia,zoomAnimation:v.map.options.zoomAnimation},rasterPixels:v.raster.pixels?.length||0,vectorPaths:v.vectors.getLatLngs().length,webgl:v.raster.gl?{error:v.raster.gl.getError()}:null}))}),decode};
-  updateRainWarning(null,false);initialized=initialize();requestAnimationFrame(tick);
+  window.VacationSimulator={start,pause,stop,...(testRun?.startsWith('acceptance')?{disposeTestStorage}:{}),getState:()=>({modelVersion:V.MODEL_VERSION,game:liveGame||frame?.game,choicePending,rainWarning:frame?.rainWarning,numericalBackend:liveStats.backend,state,isPaused,replaying,replayPlaying,runId,config,seqCount,displayTime:frame?.simTime||0,latestTime,coreTime,confirmedCoreTime,actualCoreState,lastRequestedControl,lastReceivedControl,lastAppliedControl,firstFrameMs,lastError,errorDetails:runLog.filter(e=>e.type==='ERROR').at(-1),metrics:frame?.metrics,stats:frame?.stats,worker:liveStats,pageTiming:{renderMs,cacheWriteMs},historyFrames:store?.index.length||0,historyStart:store?.index[0]?.simTime??null,historyEnd:store?.index.at(-1)?.simTime??null,archiveBackend:store?.backend,archiveBytes:store?.diskBytes||0,ramBytes:store?.bytes||0,pendingCommands:pending.size,commandLatencies:runLog.filter(e=>e.type==='COMMAND_ACK').map(e=>({command:e.command,latencyMs:e.latencyMs,receivedAtWorker:e.receivedAtWorker,appliedAtWorker:e.appliedAtWorker,workerBoundaryWaitMs:e.workerBoundaryWaitMs})).slice(-80),triggerGrid:frame?.triggerGrid?{nx:frame.triggerGrid.nx,ny:frame.triggerGrid.ny,bytes:frame.triggerGrid.buffer.byteLength}:null,windGrid:frame?.windGrid?{nx:frame.windGrid.nx,ny:frame.windGrid.ny,bytes:frame.windGrid.buffer.byteLength}:null,mapViews:views.map(v=>({key:v.key,bounds:{west:v.map.getBounds().getWest(),east:v.map.getBounds().getEast(),south:v.map.getBounds().getSouth(),north:v.map.getBounds().getNorth()},simulationCovered:!!projection&&VacationMapDomain.covered({west:v.map.getBounds().getWest(),east:v.map.getBounds().getEast(),south:v.map.getBounds().getSouth(),north:v.map.getBounds().getNorth()},meta,projection),center:{lat:v.map.getCenter().lat,lon:v.map.getCenter().lng},zoom:v.map.getZoom(),minZoom:v.map.getMinZoom(),maxZoom:v.map.getMaxZoom(),zooming:!!v.zooming,dragging:v.map.dragging.enabled(),interaction:{zoomSnap:v.map.options.zoomSnap,zoomDelta:v.map.options.zoomDelta,wheelPxPerZoomLevel:v.map.options.wheelPxPerZoomLevel,wheelDebounceTime:v.map.options.wheelDebounceTime,inertia:v.map.options.inertia,zoomAnimation:v.map.options.zoomAnimation},rasterPixels:v.raster.pixels?.length||0,vectorPaths:v.vectors.getLatLngs().length,webgl:v.raster.gl?{error:v.raster.gl.getError()}:null}))}),decode};
+  updateRainWarning(null);updateGame(null,false);initialized=initialize();requestAnimationFrame(tick);
 })();

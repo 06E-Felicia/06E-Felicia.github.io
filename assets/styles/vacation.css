@@ -46,3 +46,12 @@
 }
 
 .rain-warning-card{background:var(--card-bg,#fff);border:1px solid #ded6ee;border-radius:20px;padding:20px 24px;margin:20px 0;color:#554768}.rain-warning-card .section-title{display:flex;justify-content:space-between;gap:12px;align-items:center}.rain-warning-card p{line-height:1.6}#rain-warning-level{padding:8px 14px;border-radius:12px;background:#eeeaf6;color:#534768}#rain-warning-level[data-level="1"]{background:#fff1ad;color:#665000}#rain-warning-level[data-level="2"]{background:#ffe0b3;color:#8c4400}#rain-warning-level[data-level="3"]{background:#ffe1e7;color:#a4193c}.mission-days{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:14px 0}.mission-day{padding:12px;background:#f6f3fc;border-radius:12px}.mission-day strong{display:block;margin-top:6px}.mission-day[data-outcome="complete"]{background:#e0f6ed;color:#226a4c}.mission-day[data-outcome="failed"]{background:#fce8ed;color:#8f3550}.warning-districts{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin:12px 0}.warning-districts p{margin:0;padding:8px;border-radius:8px;background:#f7f4fb;font-size:13px}#mission-title{font-size:30px}#mission-dialog[data-outcome="complete"] h2{color:#237451}#mission-dialog[data-outcome="failed"] h2{color:#9f3554}@media(max-width:640px){.rain-warning-card{padding:16px}.rain-warning-card .section-title{align-items:flex-start;flex-direction:column}.mission-days{gap:6px}.mission-day{padding:8px;font-size:13px}}
+/* Homework decisions and per-station warning history. */
+.mission-day small{display:block;line-height:1.6;margin-top:6px;color:var(--muted,#79708d)}
+.warning-events{max-height:220px;overflow:auto;font-size:.86rem;line-height:1.6}
+#game-score{font-size:1.25rem;color:#735eae;white-space:nowrap}
+#decision-dialog .edition-actions{display:flex;gap:12px;flex-wrap:wrap}
+#decision-dialog .edition-actions button{flex:1;min-width:120px}
+.warning-districts [data-level="1"]{border-left:4px solid #d4a91a;padding-left:8px}
+.warning-districts [data-level="2"]{border-left:4px solid #eb8232;padding-left:8px}
+.warning-districts [data-level="3"]{border-left:4px solid #d54b66;padding-left:8px}

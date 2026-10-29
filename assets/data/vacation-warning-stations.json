@@ -1,0 +1,680 @@
+{
+  "schema": 2,
+  "scope": "深圳74街道，每街道一个模拟代表站；不含深汕合作区",
+  "coordinateNote": "采用深圳市气象局自动站查询页公开的街道代表格点坐标，经用户确认用于模拟代表站，不代表真实自动气象站站址。",
+  "sources": [
+    {
+      "title": "深圳市气象局自动站查询（街道点位）",
+      "url": "https://weather.sz.gov.cn/qixiangfuwu/qixiangjiance/zidongzhanchaxun/",
+      "retrieved": "2026-10-29"
+    }
+  ],
+  "stations": [
+    {
+      "id": "G67143943",
+      "district": "福田区",
+      "street": "福田街道",
+      "name": "福田街道",
+      "lon": 114.0649911,
+      "lat": 22.53067658,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67143854",
+      "district": "福田区",
+      "street": "南园街道",
+      "name": "南园街道",
+      "lon": 114.0886766,
+      "lat": 22.53790557,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67142027",
+      "district": "福田区",
+      "street": "园岭街道",
+      "name": "园岭街道",
+      "lon": 114.091448,
+      "lat": 22.5593813,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67143880",
+      "district": "福田区",
+      "street": "沙头街道",
+      "name": "沙头街道",
+      "lon": 114.0226924,
+      "lat": 22.52923368,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G50696490",
+      "district": "福田区",
+      "street": "香蜜湖街道",
+      "name": "香蜜湖街道",
+      "lon": 114.0125475,
+      "lat": 22.54769524,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67141989",
+      "district": "福田区",
+      "street": "梅林街道",
+      "name": "梅林街道",
+      "lon": 114.032844,
+      "lat": 22.57352911,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67143948",
+      "district": "福田区",
+      "street": "莲花街道",
+      "name": "莲花街道",
+      "lon": 114.0476895,
+      "lat": 22.55410572,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67143910",
+      "district": "福田区",
+      "street": "华富街道",
+      "name": "华富街道",
+      "lon": 114.0724748,
+      "lat": 22.55862695,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67142024",
+      "district": "福田区",
+      "street": "华强北街道",
+      "name": "华强北街道",
+      "lon": 114.0872174,
+      "lat": 22.54806669,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67078468",
+      "district": "福田区",
+      "street": "福保街道",
+      "name": "福保街道",
+      "lon": 114.0485193,
+      "lat": 22.51447644,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67141865",
+      "district": "罗湖区",
+      "street": "桂园街道",
+      "name": "桂园街道",
+      "lon": 114.1042559,
+      "lat": 22.54801456,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67078505",
+      "district": "罗湖区",
+      "street": "黄贝街道",
+      "name": "黄贝街道",
+      "lon": 114.1404462,
+      "lat": 22.55617987,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67142050",
+      "district": "罗湖区",
+      "street": "东门街道",
+      "name": "东门街道",
+      "lon": 114.116922,
+      "lat": 22.55238512,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67142025",
+      "district": "罗湖区",
+      "street": "翠竹街道",
+      "name": "翠竹街道",
+      "lon": 114.1259837,
+      "lat": 22.5671876,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67078446",
+      "district": "罗湖区",
+      "street": "南湖街道",
+      "name": "南湖街道",
+      "lon": 114.1156371,
+      "lat": 22.53955163,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67078438",
+      "district": "罗湖区",
+      "street": "笋岗街道",
+      "name": "笋岗街道",
+      "lon": 114.1095138,
+      "lat": 22.56671743,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67078596",
+      "district": "罗湖区",
+      "street": "东湖街道",
+      "name": "东湖街道",
+      "lon": 114.1733288,
+      "lat": 22.59205917,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67078595",
+      "district": "罗湖区",
+      "street": "莲塘街道",
+      "name": "莲塘街道",
+      "lon": 114.1773285,
+      "lat": 22.56849088,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67141870",
+      "district": "罗湖区",
+      "street": "清水河街道",
+      "name": "清水河街道",
+      "lon": 114.0867171,
+      "lat": 22.58519996,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67142855",
+      "district": "罗湖区",
+      "street": "东晓街道",
+      "name": "东晓街道",
+      "lon": 114.1203308,
+      "lat": 22.58435499,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67141931",
+      "district": "南山区",
+      "street": "南头街道",
+      "name": "南头街道",
+      "lon": 113.9121802,
+      "lat": 22.54811351,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67141961",
+      "district": "南山区",
+      "street": "南山街道",
+      "name": "南山街道",
+      "lon": 113.8907599,
+      "lat": 22.51072189,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67141988",
+      "district": "南山区",
+      "street": "沙河街道",
+      "name": "沙河街道",
+      "lon": 113.9721708,
+      "lat": 22.53967908,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67142887",
+      "district": "南山区",
+      "street": "蛇口街道",
+      "name": "蛇口街道",
+      "lon": 113.934308,
+      "lat": 22.49439477,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67142054",
+      "district": "南山区",
+      "street": "招商街道",
+      "name": "招商街道",
+      "lon": 113.9001647,
+      "lat": 22.48314486,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67143785",
+      "district": "南山区",
+      "street": "粤海街道",
+      "name": "粤海街道",
+      "lon": 113.9385854,
+      "lat": 22.53136431,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67141992",
+      "district": "南山区",
+      "street": "桃源街道",
+      "name": "桃源街道",
+      "lon": 113.9847208,
+      "lat": 22.58806931,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67143915",
+      "district": "南山区",
+      "street": "西丽街道",
+      "name": "西丽街道",
+      "lon": 113.9477767,
+      "lat": 22.60956312,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67141899",
+      "district": "盐田区",
+      "street": "沙头角街道",
+      "name": "沙头角街道",
+      "lon": 114.2138302,
+      "lat": 22.56460867,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67142026",
+      "district": "盐田区",
+      "street": "海山街道",
+      "name": "海山街道",
+      "lon": 114.234047,
+      "lat": 22.566162,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67143849",
+      "district": "盐田区",
+      "street": "盐田街道",
+      "name": "盐田街道",
+      "lon": 114.261162,
+      "lat": 22.60357492,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67078442",
+      "district": "盐田区",
+      "street": "梅沙街道",
+      "name": "梅沙街道",
+      "lon": 114.3120821,
+      "lat": 22.61158474,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67141894",
+      "district": "宝安区",
+      "street": "新安街道",
+      "name": "新安街道",
+      "lon": 113.8952008,
+      "lat": 22.57248499,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67143043",
+      "district": "宝安区",
+      "street": "西乡街道",
+      "name": "西乡街道",
+      "lon": 113.8718584,
+      "lat": 22.59832658,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67142023",
+      "district": "宝安区",
+      "street": "航城街道",
+      "name": "航城街道",
+      "lon": 113.8487005,
+      "lat": 22.64327649,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67078531",
+      "district": "宝安区",
+      "street": "福永街道",
+      "name": "福永街道",
+      "lon": 113.8218407,
+      "lat": 22.66579312,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67143853",
+      "district": "宝安区",
+      "street": "福海街道",
+      "name": "福海街道",
+      "lon": 113.7878622,
+      "lat": 22.68899985,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67143972",
+      "district": "宝安区",
+      "street": "沙井街道",
+      "name": "沙井街道",
+      "lon": 113.7898898,
+      "lat": 22.73660492,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67141963",
+      "district": "宝安区",
+      "street": "新桥街道",
+      "name": "新桥街道",
+      "lon": 113.8435146,
+      "lat": 22.72235023,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67141956",
+      "district": "宝安区",
+      "street": "松岗街道",
+      "name": "松岗街道",
+      "lon": 113.8377031,
+      "lat": 22.76585457,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67143976",
+      "district": "宝安区",
+      "street": "燕罗街道",
+      "name": "燕罗街道",
+      "lon": 113.8613676,
+      "lat": 22.81859463,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G50696462",
+      "district": "宝安区",
+      "street": "石岩街道",
+      "name": "石岩街道",
+      "lon": 113.9257982,
+      "lat": 22.67620202,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67141991",
+      "district": "龙岗区",
+      "street": "龙岗街道",
+      "name": "龙岗街道",
+      "lon": 114.234456,
+      "lat": 22.761387,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67142018",
+      "district": "龙岗区",
+      "street": "龙城街道",
+      "name": "龙城街道",
+      "lon": 114.2226785,
+      "lat": 22.70950265,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67141965",
+      "district": "龙岗区",
+      "street": "平湖街道",
+      "name": "平湖街道",
+      "lon": 114.1275208,
+      "lat": 22.68416356,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67078567",
+      "district": "龙岗区",
+      "street": "布吉街道",
+      "name": "布吉街道",
+      "lon": 114.1183687,
+      "lat": 22.60701114,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67143879",
+      "district": "龙岗区",
+      "street": "坂田街道",
+      "name": "坂田街道",
+      "lon": 114.0677844,
+      "lat": 22.63743324,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67141964",
+      "district": "龙岗区",
+      "street": "南湾街道",
+      "name": "南湾街道",
+      "lon": 114.1396055,
+      "lat": 22.63197583,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67141987",
+      "district": "龙岗区",
+      "street": "横岗街道",
+      "name": "横岗街道",
+      "lon": 114.1873268,
+      "lat": 22.64183164,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67141960",
+      "district": "龙岗区",
+      "street": "园山街道",
+      "name": "园山街道",
+      "lon": 114.2280853,
+      "lat": 22.64496084,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67143825",
+      "district": "龙岗区",
+      "street": "吉华街道",
+      "name": "吉华街道",
+      "lon": 114.099147,
+      "lat": 22.634612,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67141809",
+      "district": "龙岗区",
+      "street": "宝龙街道",
+      "name": "宝龙街道",
+      "lon": 114.293742,
+      "lat": 22.71175201,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67141903",
+      "district": "龙岗区",
+      "street": "坪地街道",
+      "name": "坪地街道",
+      "lon": 114.3046941,
+      "lat": 22.77930253,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67078535",
+      "district": "龙华区",
+      "street": "龙华街道",
+      "name": "龙华街道",
+      "lon": 114.032536,
+      "lat": 22.66265721,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67141957",
+      "district": "龙华区",
+      "street": "大浪街道",
+      "name": "大浪街道",
+      "lon": 113.989027,
+      "lat": 22.6749916,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67141959",
+      "district": "龙华区",
+      "street": "民治街道",
+      "name": "民治街道",
+      "lon": 114.0292989,
+      "lat": 22.6155737,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67141928",
+      "district": "龙华区",
+      "street": "观湖街道",
+      "name": "观湖街道",
+      "lon": 114.0678849,
+      "lat": 22.69655169,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67143818",
+      "district": "龙华区",
+      "street": "观澜街道",
+      "name": "观澜街道",
+      "lon": 114.058799,
+      "lat": 22.73839811,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67143974",
+      "district": "龙华区",
+      "street": "福城街道",
+      "name": "福城街道",
+      "lon": 114.0154124,
+      "lat": 22.72118649,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67141902",
+      "district": "坪山区",
+      "street": "坪山街道",
+      "name": "坪山街道",
+      "lon": 114.332889,
+      "lat": 22.69743973,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67141901",
+      "district": "坪山区",
+      "street": "坑梓街道",
+      "name": "坑梓街道",
+      "lon": 114.3908184,
+      "lat": 22.75009256,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67143013",
+      "district": "坪山区",
+      "street": "龙田街道",
+      "name": "龙田街道",
+      "lon": 114.3603807,
+      "lat": 22.73107626,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67143817",
+      "district": "坪山区",
+      "street": "石井街道",
+      "name": "石井街道",
+      "lon": 114.4009432,
+      "lat": 22.68198112,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67143856",
+      "district": "坪山区",
+      "street": "马峦街道",
+      "name": "马峦街道",
+      "lon": 114.344547,
+      "lat": 22.657391,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67143881",
+      "district": "坪山区",
+      "street": "碧岭街道",
+      "name": "碧岭街道",
+      "lon": 114.2954281,
+      "lat": 22.66150675,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67141871",
+      "district": "光明区",
+      "street": "光明街道",
+      "name": "光明街道",
+      "lon": 113.961574,
+      "lat": 22.75221361,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67141872",
+      "district": "光明区",
+      "street": "公明街道",
+      "name": "公明街道",
+      "lon": 113.9003696,
+      "lat": 22.80660542,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67143787",
+      "district": "光明区",
+      "street": "新湖街道",
+      "name": "新湖街道",
+      "lon": 113.9496105,
+      "lat": 22.79395546,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67143792",
+      "district": "光明区",
+      "street": "凤凰街道",
+      "name": "凤凰街道",
+      "lon": 113.9308285,
+      "lat": 22.73661824,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67078470",
+      "district": "光明区",
+      "street": "玉塘街道",
+      "name": "玉塘街道",
+      "lon": 113.8967076,
+      "lat": 22.71752989,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67078502",
+      "district": "光明区",
+      "street": "马田街道",
+      "name": "马田街道",
+      "lon": 113.8817965,
+      "lat": 22.76980065,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67078563",
+      "district": "大鹏新区",
+      "street": "大鹏街道",
+      "name": "大鹏街道",
+      "lon": 114.5028699,
+      "lat": 22.60092101,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67078564",
+      "district": "大鹏新区",
+      "street": "葵涌街道",
+      "name": "葵涌街道",
+      "lon": 114.4482447,
+      "lat": 22.63660309,
+      "kind": "simulated-street-station"
+    },
+    {
+      "id": "G67141990",
+      "district": "大鹏新区",
+      "street": "南澳街道",
+      "name": "南澳街道",
+      "lon": 114.5381137,
+      "lat": 22.5136507,
+      "kind": "simulated-street-station"
+    }
+  ]
+}

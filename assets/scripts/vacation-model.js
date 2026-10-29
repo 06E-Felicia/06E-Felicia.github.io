@@ -924,7 +924,8 @@
     if(this.config.geography!=='real'||!this.config.organizedWarmSector)return true;
     const lon=this._approxLongitude(x),lat=(this.terrain?.meta.center[1]??22.5)+(y-this.config.height/2)/111195;
     const longmen=((lon-114.25)/.40)**2+((lat-23.78)/.32)**2<1;
-    return !(longmen||(lon>=108.5&&lon<=112&&lat<20.35)||(lon>=110.35&&lon<=112&&lat<21.65));
+    const northernDelta=lon>=112.95&&lon<=114.9&&lat>=22.83;
+    return !(northernDelta||longmen||(lon>=108.5&&lon<=112&&lat<20.35)||(lon>=110.35&&lon<=112&&lat<21.65));
   };
   // Smooth humidity response for NEW parcels only. No clock threshold: real
   // moisture transport, night-time inflow humidification and daytime drying
@@ -957,7 +958,8 @@
     if(!this.terrain||!this.config.organizedWarmSector)return {x:0,y:0};
     const angle=bg.windAngle??this._monsoonAngle(this.t),sw=clip((angle*180/Math.PI-28)/25),s=sw*sw*(3-2*sw);
     const jitter=(random(hash(this.config.seed,'directional-jet-target'))()-.5)*.6;
-    const lon=(111.75+jitter)*s+(114.25+jitter)*(1-s),lat=21.85*s+22.45*(1-s);
+    const south=clip((angle*180/Math.PI-55)/20),ss=south*south*(3-2*south);
+    const lon=((111.75+jitter)*s+(114.25+jitter)*(1-s))*(1-ss)+(113.65+jitter)*ss,lat=(21.85*s+22.45*(1-s))*(1-ss)+22.2*ss;
     const x=this.config.width/2+(lon-this.terrain.meta.center[0])*111195*Math.cos(this.terrain.meta.center[1]*Math.PI/180),y=this.config.height/2+(lat-this.terrain.meta.center[1])*111195;
     return {x:x-this.coastalGeometry.crossing.x,y:y-this.coastalGeometry.crossing.y};
   };
@@ -1161,7 +1163,7 @@
     const slopeChannel=this._westernSlopeChannel(x,y,bg);
     const prdLon=this._approxLongitude(x),prd=prdLon>=112.7&&prdLon<=114.9;
     const lat=(this.terrain?.meta.center[1]??22.5)+(y-this.config.height/2)/111195;
-    const coastCap=prd?clip((22.95-lat)/.25)*clip((60000-distance)/30000):1;
+    const coastCap=prd?clip((22.83-lat)/.19)*clip((45000-distance)/25000):1;
     const terrainSite=coastCap*(this.config.terrainBoundTrigger?((mainland&&land>=.45)||island?Math.max(anchor.factor*slopeChannel.coastalWeight,slopeChannel.factor):0):(distance>=0?1:0)),seaSite=land<.5&&!island&&distance<=0?1:0;
     const site=frame.placement==='offshore'?seaSite:terrainSite,remainingJet=1-bg.exitEnvelope*.5*(1+Math.tanh(l/p.exitLength));
     const k=this.env.index(x,y),r=this._ridge,speed=Math.hypot(frame.e.x,frame.e.y),parallel=k>=0&&r?Math.abs((r.x[k]*frame.e.x+r.y[k]*frame.e.y)/speed):1;
@@ -1177,8 +1179,11 @@
     const slopeGate=hillEligible?slopeChannel.factor*remainingJet:0;
     const hillAscent=hillEligible?1800*(contrast+1.5)*remainingJet*Math.max(0,Math.max(brake,down)-up)/15000:0;
     const slopeAscent=slopeGate*Math.min(.3,(speeds?.jet??13)*Math.max(0,slopeChannel.reliefM||0)/15000);
-    const hillGate=hillEligible?hillFront*terrainSite*remainingJet:0;
-    const prdLift=prd&&hillEligible ? .07*terrainSite*remainingJet*clip(anchor.reliefM/200):0;
+    // Front-side hills can lift a southerly inflow before the sampled broad exit.
+    // Require local relief and a reachable jet; never extend this inland.
+    const coastalPrd=prd&&lat<22.72&&distance<30000;
+    const hillGate=hillEligible?Math.max(hillFront,coastalPrd?.55:0)*terrainSite*remainingJet:0;
+    const prdLift=coastalPrd&&hillEligible ? .13*terrainSite*remainingJet*clip(anchor.reliefM/160):0;
     return {factor:clip(Math.max(along*(1-brake)*site,hillGate)+.6*slopeGate)*across*this._coastalDirectionAccess(x,bg),siteFactor:Math.max(site,hillEligible?terrainSite:0),directionAccess:this._coastalDirectionAccess(x,bg),terrainAnchor:anchor,slopeChannel,hillBrake:brake,hillFront,ascent:(Math.max(1800*gradient,hillAscent,prdLift)+.6*slopeAscent)*across,alignment,placement:frame.placement,sampledExitM:frame.sampledExit,exitM:frame.exit,distanceFromExitM:l,crossAxisM:cross};
   };
   Model.prototype._inflowFocus=function(x,y,bg){
@@ -1398,7 +1403,24 @@
     }
     }
     yield 'rain_ledger';
+    this._limitCoreRain();
     let rainCount=0;for(const i of this.activeRain){this.rainTotal[i]+=this.rainStep[i];this.stats.maxRain=Math.max(this.stats.maxRain,this.rainStep[i]*3600/DT);if(++rainCount%2048===0)yield;}
+  };
+  // Bound combined surface core rain without deleting water or clipping only
+  // the display. Excess core fallout stays in the lower precipitation reservoir
+  // and may advect, evaporate or fall in a later ten-minute step (JS and WASM).
+  Model.prototype._limitCoreRain=function(){
+    if(!this.config.organizedWarmSector)return;
+    const cap=100*DT/3600,rg=this.rain,pg=this.precip;let returned=0;
+    for(const i of this.activeRain){
+      const core=this.convectiveStep[i],other=Math.max(0,this.rainStep[i]-core),excess=Math.max(0,core-Math.max(0,cap-other));
+      if(!excess)continue;
+      const x=(i%rg.nx+.5)*rg.dx,y=(Math.floor(i/rg.nx)+.5)*rg.dx,k=pg.index(x,y),mass=excess*rg.area;
+      if(k<0)continue;this.precipWater.lower_core[k]+=mass/pg.area;this.rainStep[i]-=excess;this.convectiveStep[i]-=excess;returned+=mass;
+    }
+    if(!returned)return;
+    this.stats.ground-=returned;this.stats.sources.coreGround-=returned;this.ledger.core.out-=returned;this.ledger.core.flows['ground:out']=(this.ledger.core.flows['ground:out']||0)-returned;
+    this.stats.coreFalloutDeferred=(this.stats.coreFalloutDeferred||0)+returned;
   };
   // One canonical reservoir order for initialization, total inventory and water().
   Model.prototype.water=function(){return sum(Object.values(this.waterInventories()));};
