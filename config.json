@@ -1,12 +1,12 @@
 {
     "LIVE_DATA": {
-        "time": "2026-10-30 15:26",
-        "t": "29.7°C",
-        "th": "30.3°C",
-        "tl": "22.7°C",
+        "time": "2026-10-30 22:40",
+        "t": "25.1°C",
+        "th": "26.2°C",
+        "tl": "24.8°C",
         "r_day": "0mm",
         "r_1h": "0mm",
-        "p": "1009.5hPa"
+        "p": "1011.5hPa"
     },
     "MANUAL_CONFIG": {
         "low": "23°C",
@@ -129,7 +129,7 @@
     "THUNDER_ALERT_CONFIG": {
         "enabled": false,
         "status": "source_error",
-        "generated_at": "2026-10-30T15:31:24+08:00",
+        "generated_at": "2026-10-30T22:42:54+08:00",
         "settings": {
             "default_mode": "auto",
             "speed_kmh": 50,
@@ -148,7 +148,7 @@
     "META": {
         "source": "深圳市气象台",
         "forecast_updated_at": "10月30日 15:13",
-        "updated_at": "2026-10-30 15:26",
+        "updated_at": "2026-10-30 22:40",
         "warnings_updated_at": "2026-10-22 09:30:00"
     }
 }
