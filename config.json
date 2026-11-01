@@ -1,18 +1,18 @@
 {
     "LIVE_DATA": {
-        "time": "2026-11-01 09:40",
-        "t": "28.5°C",
-        "th": "28.4°C",
+        "time": "2026-11-01 11:08",
+        "t": "29.5°C",
+        "th": "29.6°C",
         "tl": "23.6°C",
         "r_day": "0mm",
         "r_1h": "0mm",
-        "p": "1012hPa"
+        "p": "1010.9hPa"
     },
     "MANUAL_CONFIG": {
         "low": "24°C",
         "high": "30°C",
         "humidity": "55%-90%",
-        "rainProb": "多云",
+        "rainProb": "晴天间多云",
         "wind": "3级",
         "dir": "东风",
         "icon": "assets/images/weather_icons/02.png",
@@ -26,17 +26,6 @@
     },
     "FORECAST": [
         {
-            "date": "11月1日",
-            "weekday": "周日",
-            "weather": "多云",
-            "low": "24°C",
-            "high": "30°C",
-            "humidity": "55%-90%",
-            "wind": "东风 3级",
-            "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-11-01 06:04:00"
-        },
-        {
             "date": "11月2日",
             "weekday": "周一",
             "weather": "多云，局部有零星小雨",
@@ -45,29 +34,29 @@
             "humidity": "55%-90%",
             "wind": "东风 2-3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-11-01 06:04:06"
+            "published_at": "2026-11-01 10:01:58"
         },
         {
             "date": "11月3日",
             "weekday": "周二",
-            "weather": "多云",
+            "weather": "多云，有零星小雨",
             "low": "24°C",
             "high": "30°C",
             "humidity": "60%-90%",
             "wind": "东风 3-4级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-11-01 06:04:06"
+            "published_at": "2026-11-01 10:01:58"
         },
         {
             "date": "11月4日",
             "weekday": "周三",
-            "weather": "多云间阴天",
+            "weather": "多云，有零星小雨",
             "low": "24°C",
             "high": "30°C",
             "humidity": "65%-90%",
             "wind": "东风 3-4级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-11-01 06:04:06"
+            "published_at": "2026-11-01 10:01:58"
         },
         {
             "date": "11月5日",
@@ -78,7 +67,7 @@
             "humidity": "70%-90%",
             "wind": "东风 2-3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-11-01 06:04:07"
+            "published_at": "2026-11-01 10:01:58"
         },
         {
             "date": "11月6日",
@@ -89,7 +78,7 @@
             "humidity": "70%-90%",
             "wind": "东风 2-3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-11-01 06:04:07"
+            "published_at": "2026-11-01 10:01:58"
         },
         {
             "date": "11月7日",
@@ -100,7 +89,18 @@
             "humidity": "65%-90%",
             "wind": "东风 3-4级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-11-01 06:04:07"
+            "published_at": "2026-11-01 10:01:58"
+        },
+        {
+            "date": "11月8日",
+            "weekday": "周日",
+            "weather": "多云",
+            "low": "23°C",
+            "high": "29°C",
+            "humidity": "60%-90%",
+            "wind": "东风 3-4级",
+            "icon": "assets/images/weather_icons/02.png",
+            "published_at": "2026-11-01 10:01:58"
         }
     ],
     "WARNINGS": [
@@ -129,7 +129,7 @@
     "THUNDER_ALERT_CONFIG": {
         "enabled": false,
         "status": "source_error",
-        "generated_at": "2026-11-01T09:43:39+08:00",
+        "generated_at": "2026-11-01T11:11:21+08:00",
         "settings": {
             "default_mode": "auto",
             "speed_kmh": 50,
@@ -147,8 +147,8 @@
     },
     "META": {
         "source": "深圳市气象台",
-        "forecast_updated_at": "11月1日 06:04",
-        "updated_at": "2026-11-01 09:40",
+        "forecast_updated_at": "11月1日 10:01",
+        "updated_at": "2026-11-01 11:08",
         "warnings_updated_at": "2026-10-22 09:30:00"
     }
 }
