@@ -326,7 +326,7 @@
     }
     _ensurePulse(c){
       if(this.config.cellLifecycle==='legacy')return;
-      if(!c.pulse){const rng=random(hash(this.config.seed,'cell-pulse-1.7',c.id)),Hc=4500+2000*rng(),Nend=c.triggerSourceId&&this.config.jetExitControl?(this.config.longTrainingPulse?6.8+3.4*rng():5+2*rng()):3+1.2*rng();c.pulse={Hc,Nend,Ngrow:.35,Ndecay:(c.triggerSourceId&&this.config.longTrainingPulse ? .72 : .60)*Nend,N:0,L:0,wturn:3,parameterization:'seeded finite engineering convection pulse'};}
+      if(!c.pulse){const rng=random(hash(this.config.seed,'cell-pulse-1.7',c.id)),Hc=4500+2000*rng(),Nend=c.triggerSourceId&&this.config.jetExitControl?(this.config.longTrainingPulse?6+3*rng():5+2*rng()):3+1.2*rng();c.pulse={Hc,Nend,Ngrow:.35,Ndecay:(c.triggerSourceId&&this.config.longTrainingPulse ? .72 : .60)*Nend,N:0,L:0,wturn:3,parameterization:'seeded finite engineering convection pulse'};}
       c.physicalUpdraftArea??=c.updraftArea??Math.PI*1000**2;c.pulseEnvelope??=c.pulse.L;c.effectiveUpdraftArea??=c.physicalUpdraftArea*c.pulseEnvelope;c.updraftAirMassFlux??=0;
     }
     _advancePulse(c,thermal,dt=DT){
@@ -462,7 +462,7 @@
         const relaySource=advancingFront?this._southernRelaySource(e.x,e.y,bg):null;
         const sourceBlocked=!e.triggerSource&&!e.layer&&this.config.persistentInitiation&&this.triggerSources.some(s=>(s.x-e.x)**2+(s.y-e.y)**2<(relaySource?4000:8000)**2),ix=Math.floor(e.x/bin),iy=Math.floor(e.y/bin);let blocked=sourceBlocked;for(let yy=iy-1;yy<=iy+1&&!blocked;yy++)for(let xx=ix-1;xx<=ix+1&&!blocked;xx++)for(const c of recent.get(xx+','+yy)||[])if((c.x-e.x)**2+(c.y-e.y)**2<bin*bin){blocked=true;break;}
         if(blocked&&!e.triggerSource){this.stats.spacingRejected++;diagnostic.byLayer[e.layer?'mid':'low'].spacingRejected++;if(this._organizationContains(e.x,e.y))diagnostic.local.byLayer[e.layer?'mid':'low'].spacingRejected++;this._recordFrontCandidate(e.x,e.y,e.channel,'spacingRejected',1);if(e.inBand)this._recordFrontCandidate(e.x,e.y,e.channel,'inBandSpacingRejected',1);continue;}
-        const rng=random(hash(this.config.seed,'cell',e.id)),c={id:e.id,born:e.born??(this.t+DT*random(hash(this.config.seed,'birth-time',e.id))()),age:0,x:e.x,y:e.y,T:9360,major:1800,minor:1200,updraftArea:Math.PI*1000**2,starvedSeconds:0,supplyRatio:0,a:0,M:0,convectivePhaseEnergyJ:0,layer:e.layer,source:e.gate.source,parent:e.gate.parent,channel:e.channel,segmentKey:e.segmentKey,physicalFaceId:e.physicalFaceId,angle:Math.atan2(...this.steer().slice().reverse()),phase:rng()*Math.PI*2};
+        const rng=random(hash(this.config.seed,'cell',e.id)),c={id:e.id,born:e.born??(this.t+DT*random(hash(this.config.seed,'birth-time',e.id))()),age:0,x:e.x,y:e.y,T:this.config.organizedWarmSector?8400:9360,major:1800,minor:1200,updraftArea:Math.PI*1000**2,starvedSeconds:0,supplyRatio:0,a:0,M:0,convectivePhaseEnergyJ:0,layer:e.layer,source:e.gate.source,parent:e.gate.parent,channel:e.channel,segmentKey:e.segmentKey,physicalFaceId:e.physicalFaceId,angle:Math.atan2(...this.steer().slice().reverse()),phase:rng()*Math.PI*2};
         if(this.config.monsoon925){const k=this.env.index(c.x,c.y);c.vx=this.fields.um[k];c.vy=this.fields.vm[k];c.angle=Math.atan2(c.vy,c.vx);}
         if(!e.layer&&this.config.persistentInitiation){
           const source=e.triggerSource||{id:'root:'+c.id,x:c.x,y:c.y,anchorX:c.x,anchorY:c.y,anchorAngle:bg.windAngle??this._monsoonAngle(this.t),activated:c.born,lastBirth:c.born};
@@ -1089,7 +1089,7 @@
     const source=this.triggerSources.find(s=>s.id===cell.triggerSourceId);
     if(!source)return local;
     const k=this.env.index(source.x,source.y),u=this.fields.um[k],v=this.fields.vm[k],speed=Math.hypot(u,v),dx=cell.x-source.x,dy=cell.y-source.y,distance=Math.hypot(dx,dy),along=(dx*u+dy*v)/Math.max(1,speed),cross=Math.abs(dx*v-dy*u)/Math.max(1,speed);
-    if(along<0||distance>108000||cross>25000+.1*along)return local;
+    if(along<0||distance>96000||cross>25000+.1*along)return local;
     const feed=this._trainingFeed(source.x,source.y);if(!feed.accessible)return local;
     // Same source, same finite water budget. A detached core cannot find a new
     // interior donor or cross a deep blocking pool to prolong its life.
@@ -1203,6 +1203,22 @@
   // Southward backbuilding is new lifting at the warm edge, not southward
   // advection of existing echoes. Meridional trains stop at their last hill;
   // zonal trains may use the marine cold-front/jet convergence instead.
+  Model.prototype._remainingMonsoonFraction=function(bg,along,length){
+    const loss=bg.exitEnvelope*.5*(1+Math.tanh(along/length));
+    if(!this.config.boundedMonsoon)return 1-loss;
+    const speeds=this._monsoonSpeeds(bg);if(speeds.jet<=0)return 0;
+    // Deceleration removes the jet excess, not the 10-13 m/s background
+    // monsoon that still feeds reachable mountain slopes.
+    return 1-loss*(1-speeds.background/speeds.jet);
+  };
+  Model.prototype._marineInitiationAccess=function(x,y,bg){
+    if(!this.terrain||!this.config.organizedWarmSector)return 1;
+    const g=this.forcing,f=this.terrain.fields,land=g.sample(f.land,x,y),height=g.sample(f.z,x,y);
+    // Keep resolved coastal/island slopes. A distant neighboring peak is not
+    // permission to establish an offshore root under meridional inflow.
+    if(land>=.45||height>=25)return 1;
+    return clip((60-(bg.windAngle??this._monsoonAngle(this.t))*180/Math.PI)/20);
+  };
   Model.prototype._frontDevelopmentAccess=function(x,y,bg){
     if(!this.terrain||!this.config.organizedWarmSector)return 1;
     const angle=bg.windAngle??this._monsoonAngle(this.t),zonal=clip((60-angle*180/Math.PI)/20);
@@ -1211,7 +1227,7 @@
     const land=this.forcing.sample(this.terrain.fields.land,x,y);
     // On land a genuine lee slope remains excluded even for zonal flow.
     const terrainSide=land>=.5?exposure.factor:1;
-    return Math.max(mountain,zonal*terrainSide);
+    return Math.min(Math.max(mountain,zonal*terrainSide),this._marineInitiationAccess(x,y,bg));
   };
   Model.prototype._southernRelaySource=function(x,y,bg){
     if(!this.config.organizedWarmSector)return null;
@@ -1258,7 +1274,7 @@
     const lat=(this.terrain?.meta.center[1]??22.5)+(y-this.config.height/2)/111195;
     const coastCap=prd?clip((22.83-lat)/.19)*clip((45000-distance)/25000):1;
     const terrainSite=exposure.factor*coastCap*(this.config.terrainBoundTrigger?((mainland&&land>=.45)||island?Math.max(anchor.factor*slopeChannel.coastalWeight,slopeChannel.factor):0):(distance>=0?1:0)),seaSite=land<.5&&!island&&distance<=0?1:0;
-    const site=frame.placement==='offshore'?seaSite:terrainSite,remainingJet=1-bg.exitEnvelope*.5*(1+Math.tanh(l/p.exitLength));
+    const site=frame.placement==='offshore'?seaSite:terrainSite,remainingJet=this._remainingMonsoonFraction(bg,l,p.exitLength);
     const k=this.env.index(x,y),r=this._ridge,speed=Math.hypot(frame.e.x,frame.e.y),parallel=k>=0&&r?Math.abs((r.x[k]*frame.e.x+r.y[k]*frame.e.y)/speed):1;
     const longitude=this._approxLongitude(x),deltaNeutral=longitude>=112.7&&longitude<=114.35;
     const alignment=deltaNeutral?1:k>=0&&r?1-r.strength[k]*(1-parallel*parallel):1;
@@ -1268,7 +1284,9 @@
     // Actual residual inflow decides whether a mountain front is reachable.
     // A nearby offshore exit does not switch off every coastal hill by label;
     // a distant offshore exit still cuts the jet off before it reaches land.
-    const hillEligible=terrainSite>0&&remainingJet>.28&&distance<=coord.exit+2*p.exitLength;
+    const jetExcess=1-bg.exitEnvelope*.5*(1+Math.tanh(l/p.exitLength));
+    const westernFoot=prdLon>=111.4&&prdLon<112.65&&exposure.riseM>25&&distance<=coord.exit+p.exitLength;
+    const hillEligible=terrainSite>0&&remainingJet>.28&&(jetExcess>.28||westernFoot)&&distance<=coord.exit+2*p.exitLength;
     const slopeGate=hillEligible?slopeChannel.factor*exposure.factor*remainingJet:0;
     const hillAscent=hillEligible?1800*(contrast+1.5)*remainingJet*Math.max(0,Math.max(brake,down)-up)/15000:0;
     const slopeAscent=slopeGate*Math.min(.3,(speeds?.jet??13)*Math.max(0,slopeChannel.reliefM||0)/15000);
@@ -1276,13 +1294,14 @@
     // Require local relief and a reachable jet; never extend this inland.
     const coastalPrd=(prd&&lat<22.72||prdLon>=114.9&&prdLon<=116.6&&Math.abs(l)<p.exitLength)&&distance<30000;
     const hillGate=hillEligible?Math.max(hillFront,coastalPrd ? .55 : 0)*terrainSite*remainingJet:0;
+    const westernWindwardLift=prdLon>=111.4&&prdLon<112.65&&hillEligible?Math.min(.4,(speeds?.jet??13)*exposure.riseM/7500)*terrainSite*remainingJet:0;
     const prdLift=coastalPrd&&hillEligible ? Math.max(.13*clip(anchor.reliefM/160),Math.min(.28,(speeds?.jet??13)*exposure.riseM/12000))*terrainSite*remainingJet:0;
-    return {factor:clip(Math.max(along*(1-brake)*site,hillGate)+.6*slopeGate)*across*exitSupport*this._coastalDirectionAccess(x,bg),siteFactor:Math.max(site,hillEligible?terrainSite:0),directionAccess:this._coastalDirectionAccess(x,bg),terrainAnchor:anchor,windwardExposure:exposure,slopeChannel,hillBrake:brake,hillFront,ascent:(Math.max(1800*gradient,hillAscent,prdLift)+.6*slopeAscent)*across,alignment,placement:frame.placement,sampledExitM:frame.sampledExit,exitM:coord.exit,distanceFromExitM:l,crossAxisM:cross};
+    return {factor:clip(Math.max(along*(1-brake)*site,hillGate)+.6*slopeGate)*across*exitSupport*this._coastalDirectionAccess(x,bg)*this._marineInitiationAccess(x,y,bg),siteFactor:Math.max(site,hillEligible?terrainSite:0),directionAccess:this._coastalDirectionAccess(x,bg),terrainAnchor:anchor,windwardExposure:exposure,slopeChannel,hillBrake:brake,hillFront,ascent:(Math.max(1800*gradient,hillAscent,prdLift,westernWindwardLift)+.6*slopeAscent)*across,alignment,placement:frame.placement,sampledExitM:frame.sampledExit,exitM:coord.exit,distanceFromExitM:l,crossAxisM:cross};
   };
   Model.prototype._inflowFocus=function(x,y,bg){
     const c=this.coastalGeometry;
     if(c){const frame=this._jetFrame(bg),coord=this._jetCoordinates(x,y,bg),p=coord.cross;
-      const l=coord.along,end=coord.exit,termination=1-bg.exitEnvelope*.5*(1+Math.tanh((l-end)/this.config.coastalWindParameters.exitLength));
+      const l=coord.along,end=coord.exit,termination=this._remainingMonsoonFraction(bg,l-end,this.config.coastalWindParameters.exitLength);
       return clip((Math.exp(-.5*(p/this.config.coastalWindParameters.sigmaJet)**2)*termination*(1-.35*this._hillBrake(x,y,bg))-.12)/.68);}
     if(bg.axis){const a=bg.axis,dx=x-this.config.width/2-a.x,dy=y-this.config.height/2-a.y,p=-a.ey*dx+a.ex*dy;
       return clip((Math.exp(-.5*(p/a.width)**2)-.2)/.65);}

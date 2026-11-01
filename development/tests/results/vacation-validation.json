@@ -1,69 +1,47 @@
 {
-  "model": "vacation-1.41.0",
-  "resource": "1.41.0-r1",
+  "model": "vacation-1.42.0",
+  "resource": "1.42.0-r1",
   "date": "2026-11-01",
-  "scope": "Windward/crest/lee geometry, directional southern relay, six-hour compact weather runs and Chrome/Worker smoke checks",
+  "scope": "Southerly marine bypass, western windward supply, shorter finite train pulse; targeted tests and four-hour compact run",
   "checks": {
-    "syntheticWindwardAccepted": true,
-    "syntheticCrestAndLeeRejected": true,
-    "realEnpingPingshanLeeRejected": true,
-    "exposedHongKongZhuhaiAccepted": true,
-    "westernSlopeChannelPreserved": true,
-    "randomInlandCoastalOffshoreExitPreserved": true,
-    "meridionalOffshoreFrontRejected": true,
-    "zonalOffshoreFrontAccepted": true,
-    "southwardNewRootWithin6km": true,
-    "newRootSpacing4km": true,
-    "dryColdInteriorExcluded": true,
-    "coldHeadEnergyBound": true,
-    "boundedSway": true,
-    "coreRainLimitAndWaterLedger": true
+    "ordinaryOffshoreSoutherlyBlocked": true,
+    "coldFrontOffshoreSoutherlyBlocked": true,
+    "persistentOffshoreSoutherlyBlocked": true,
+    "westerlyOffshoreStillEligible": true,
+    "actualCoastalIslandSlopesPreserved": true,
+    "westernSoutherlyWindwardMaintenance": true,
+    "backgroundMonsoonSurvivesJetDeceleration": true,
+    "distantOffshoreExitStillExcludesInland": true,
+    "easternExitLocationResponsePreserved": true,
+    "windwardAndLeeRegression": true,
+    "boundedSwayAndSouthernRelaySpacing": true,
+    "core100mmhAndWaterLedger": true,
+    "finitePulseTurnovers": [
+      6,
+      9
+    ],
+    "maximumCellAgeSeconds": 8400,
+    "sourceSupplyDistanceM": 96000
+  },
+  "shortWeatherRun": {
+    "seed": 17,
+    "windTurnStart": "south",
+    "hours": 4,
+    "exitOffsetM": 35000,
+    "births": 54,
+    "persistentBirths": 47,
+    "coldFrontBirths": 2,
+    "marineBirths": 0,
+    "westernBirths": 17,
+    "marineCriterion": "southerly birth angle >= 60 degrees, local land fraction < 0.45 and DEM height < 25 m",
+    "relativeWaterResidual": 3.6507313896405745e-13,
+    "peakSlidingHourMm": 100,
+    "maxColdKm2": 48412.5
   },
   "fullMeteorologicalRun": false,
-  "shortWeatherRuns": [
-    {
-      "seed": 131,
-      "hours": 6,
-      "exitOffsetM": 25000,
-      "births": 71,
-      "persistentBirths": 67,
-      "coldFrontBirths": 1,
-      "southwardRelayBirths": 0,
-      "relativeWaterResidual": 5.261114345605233e-13,
-      "peakSlidingHourMm": 100,
-      "maxColdKm2": 82762.5
-    },
-    {
-      "seed": 17,
-      "windTurnStart": "west",
-      "hours": 6,
-      "exitOffsetM": 10000,
-      "births": 150,
-      "persistentBirths": 139,
-      "coldFrontBirths": 3,
-      "southwardRelayBirths": 0,
-      "relativeWaterResidual": 1.7919080532681174e-13,
-      "peakSlidingHourMm": 94.5280909897475,
-      "maxColdKm2": 152456.25
-    }
-  ],
+  "newBrowserRun": false,
   "limitations": [
-    "Six-hour samples do not establish the complete three-day propagation path. Southward relay is verified by a controlled warm-front birth test; neither short weather sample recorded a linked southward relay."
-  ],
-  "browser": {
-    "pass": true,
-    "model": "vacation-1.41.0",
-    "seed": 131,
-    "stations": 74,
-    "decisionFences": [
-      "21:00",
-      "00:00"
-    ],
-    "earlySettlement": true,
-    "saveRestore": true,
-    "fiveLayers": true,
-    "errors": [],
-    "waitBudgetMs": 180000,
-    "note": "Two prior 60-second midnight-decision waits timed out; the final run completed with a larger wait budget."
-  }
+    "Four-hour sample does not establish all random seeds or the complete three-day weather evolution.",
+    "Shorter pulse/lifetime/supply parameters are tested; no claim of measured full-run train-length reduction."
+  ]
 }
