@@ -3,7 +3,10 @@
 const assert=require('node:assert/strict'),C=require('../../assets/scripts/vacation-model.js'),{terrain}=require('../scripts/record_vacation_replay.cjs'),proj4=require('../../assets/vendor/proj4/proj4.js');
 C.prepareBackendSync();const data=terrain(),project=proj4('EPSG:4326',data.meta.projection),xy=(lon,lat)=>{const p=project.forward([lon,lat]);return[p[0]+640000,p[1]+400000]};
 const m=new C.Model({preset:'monsoon',geography:'real',seed:17},data),bg={...m.background(),windAngle:25*Math.PI/180};
-function sample(exit){m.coastalGeometry.options.exitOffset=exit;m.coastalGeometry.exitOffset=exit;m.coastalGeometry.sampledExitOffset=exit;m._jetFrameCache=null;return {coast:m._jetExitAccess(...xy(116.29,23.03),bg),inland:m._jetExitAccess(...xy(115.3,23.05),bg)};}
+function sample(exit){m.coastalGeometry.options.exitOffset=exit;m.coastalGeometry.exitOffset=exit;m.coastalGeometry.sampledExitOffset=exit;m._jetFrameCache=null;return {coast:m._jetExitAccess(...xy(116.29,23.03),bg),inland:m._jetExitAccess(...xy(115.05,23.10),bg)};}
+// The old inland probe (115.30, 23.05) is downhill of the range for WSW flow.
+// Keep the movable exit test on the actual windward inland face.
+assert.equal(m._windwardExposure(...xy(115.3,23.05),bg).factor,0);
 const interior=sample(60000),coastal=sample(10000),offshore=sample(-40000);
 assert(interior.inland.factor>interior.coast.factor*4,'inland deceleration can initiate inland first');
 assert(coastal.coast.factor>coastal.inland.factor*4,'shoreward deceleration moves the preferred zone to coast');

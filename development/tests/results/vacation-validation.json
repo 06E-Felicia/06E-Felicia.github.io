@@ -1,80 +1,69 @@
 {
-  "model": "vacation-1.40.0",
-  "resource": "1.40.0-r1",
-  "date": "2026-10-30",
-  "scope": "windward/lee DEM probes, bounded sway, cold-front gate fixtures, short weather runs and browser initialization/save/restore",
+  "model": "vacation-1.41.0",
+  "resource": "1.41.0-r1",
+  "date": "2026-11-01",
+  "scope": "Windward/crest/lee geometry, directional southern relay, six-hour compact weather runs and Chrome/Worker smoke checks",
   "checks": {
-    "streetStations": 74,
-    "oneHourDowngradeHold": true,
-    "requalificationResetsHold": true,
-    "downgradeTimerRestore": true,
-    "streetDisplayNames": true,
-    "daily1000Total3000": true,
-    "midnightThreeChoices": true,
-    "repent667TimeDecay": true,
-    "coreRainLimitAndWaterLedger": true,
-    "browserFirstFrame": true,
-    "leftLayerOrder": [
-      "radar",
-      "monsoon",
-      "rain1",
-      "rain24",
-      "total"
-    ],
-    "rightLayerOrder": [
-      "radar",
-      "warning",
-      "rain1",
-      "rain24",
-      "total"
-    ],
+    "syntheticWindwardAccepted": true,
+    "syntheticCrestAndLeeRejected": true,
+    "realEnpingPingshanLeeRejected": true,
+    "exposedHongKongZhuhaiAccepted": true,
+    "westernSlopeChannelPreserved": true,
+    "randomInlandCoastalOffshoreExitPreserved": true,
+    "meridionalOffshoreFrontRejected": true,
+    "zonalOffshoreFrontAccepted": true,
+    "southwardNewRootWithin6km": true,
+    "newRootSpacing4km": true,
+    "dryColdInteriorExcluded": true,
+    "coldHeadEnergyBound": true,
+    "boundedSway": true,
+    "coreRainLimitAndWaterLedger": true
+  },
+  "fullMeteorologicalRun": false,
+  "shortWeatherRuns": [
+    {
+      "seed": 131,
+      "hours": 6,
+      "exitOffsetM": 25000,
+      "births": 71,
+      "persistentBirths": 67,
+      "coldFrontBirths": 1,
+      "southwardRelayBirths": 0,
+      "relativeWaterResidual": 5.261114345605233e-13,
+      "peakSlidingHourMm": 100,
+      "maxColdKm2": 82762.5
+    },
+    {
+      "seed": 17,
+      "windTurnStart": "west",
+      "hours": 6,
+      "exitOffsetM": 10000,
+      "births": 150,
+      "persistentBirths": 139,
+      "coldFrontBirths": 3,
+      "southwardRelayBirths": 0,
+      "relativeWaterResidual": 1.7919080532681174e-13,
+      "peakSlidingHourMm": 94.5280909897475,
+      "maxColdKm2": 152456.25
+    }
+  ],
+  "limitations": [
+    "Six-hour samples do not establish the complete three-day propagation path. Southward relay is verified by a controlled warm-front birth test; neither short weather sample recorded a linked southward relay."
+  ],
+  "browser": {
+    "pass": true,
+    "model": "vacation-1.41.0",
+    "seed": 131,
+    "stations": 74,
     "decisionFences": [
       "21:00",
       "00:00"
     ],
-    "browserRepentAndSaveRestore": true,
-    "browserErrors": [],
-    "easternExitRandomSeeds": [
-      17,
-      131
-    ],
-    "inlandToCoastalShift": true,
-    "terrainSteeringReduced": true,
-    "orangeNeighborYellow": true,
-    "redTwoRings": [
-      "orange",
-      "yellow"
-    ],
-    "noThirdRing": true,
-    "earlyRedSettlement": true,
-    "lateRedWindow": "(07:30,16:30]",
-    "lateRedPreservesScore": true,
-    "repentAboveObservationSearch": true,
-    "browserSeeds": [
-      17
-    ],
-    "leeRejected": [
-      "Enping",
-      "Pingshan"
-    ],
-    "southerlyExposedCoast": true,
-    "warmOffshoreColdHeadGate": true,
-    "dryOrColdInteriorExcluded": true,
-    "coldLiftEnergyBound": true,
-    "rootSwayRadiusM": 5000,
-    "rootStepLimitM": 1000,
-    "cellSwayResponseLimitM": 2500,
-    "browserVersion": "vacation-1.40.0"
-  },
-  "fullMeteorologicalRun": false,
-  "shortWeatherRun": {
-    "hours": 4,
-    "seed": 131,
-    "exitOffsetM": 25000,
-    "births": 31,
-    "coldFrontBirths": 1,
-    "relativeWaterResidual": 4.972407218065107e-13,
-    "peakSlidingHourMm": 100,
-    "maxColdKm2": 49525
+    "earlySettlement": true,
+    "saveRestore": true,
+    "fiveLayers": true,
+    "errors": [],
+    "waitBudgetMs": 180000,
+    "note": "Two prior 60-second midnight-decision waits timed out; the final run completed with a larger wait budget."
   }
 }

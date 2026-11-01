@@ -12,6 +12,11 @@ m.fields.rhL.fill(.98);m.fields.rhM.fill(.9);m.fields.el.fill(.9);m.fields.xiL.f
 const b={x,y:y+1000,nx:0,ny:-1,id:1,faceId:'test',feeds:{low:feed},inlets:{low:{x,y:y-5000}},relativeWinds:{low:{normalInflow:10}},rejections:{},paths:{low:[]},head:{Hhead:300,Qhead:900},geometricNormal:{x:0,y:-1},velocity:{x:0,y:-2}};
 const coastBg={...bg,windAngle:25*Math.PI/180};assert.equal(m._jetExitAccess(x,y,coastBg).factor,0);
 let gate=m._boundaryEventGate(b,x,y,coastBg);assert(gate.F>0,JSON.stringify(gate));assert(gate.evidence.focusedLift.coldFrontSite>0);assert(gate.evidence.lift.Hlift*.08<=gate.evidence.lift.energyLimit+1e-9);
+assert.equal(m._boundaryEventGate(b,x,y,bg).F,0,'meridional train stops where no further mountain lifting exists');
+const northRoot={id:'north',x,y:y+6000};m.triggerSources=[northRoot];
+assert.equal(m._southernRelaySource(x,y,bg),northRoot,'southward extension works even parallel to a north/south train');
+assert.equal(m._southernRelaySource(x,y+9000,bg),null,'northern flank gets no southward relay preference');
+assert.equal(m._southernRelaySource(x+60000,y,bg),null,'no remote source linkage');m.triggerSources=[];
 m.config.disableCold=true;assert.equal(m._boundaryEventGate(b,x,y,coastBg).F,0);m.config.disableCold=false;
 m.fields.rhL.fill(.6);assert.equal(m._boundaryEventGate(b,x,y,coastBg).F,0);m.fields.rhL.fill(.98);
 m.h[candidate]=300;m.q[candidate]=900;assert.equal(m._boundaryEventGate(b,x,y,coastBg).F,0,'cold interior is never a new surface source');m.h[candidate]=m.q[candidate]=0;
@@ -22,4 +27,20 @@ for(let j=0;j<30;j++){const a=m._cellSway(c,12,0,600);assert(Math.hypot(...a)<1.
 m._coldCarrierAt=()=>({relativeX:0,relativeY:-8});for(let j=0;j<30;j++)m._cellSway(c,12,0,600);assert(c.swayOffsetM<-1000);
 const clone=structuredClone(c);assert.deepEqual(m._cellSway(clone,12,0,600),m._cellSway(c,12,0,600));
 const originalGate=m._persistentSourceGate;m._persistentSourceGate=()=>({F:1});const root={x,y,anchorX:x,anchorY:y,anchorAngle:0};for(let i=0;i<30;i++){const a={x:root.x,y:root.y};m._shiftTrainingSource(root,bg);assert(Math.hypot(root.x-a.x,root.y-a.y)<=1000.001);assert(Math.hypot(root.x-x,root.y-y)<=5000.001);}m._persistentSourceGate=()=>({F:0});const old={...root};m._shiftTrainingSource(root,{...bg,windAngle:0});assert.deepEqual(root,old);m._persistentSourceGate=originalGate;m._coldCarrierAt=orig;
+const hill=Object.create(C.Model.prototype);hill.config={organizedWarmSector:true};hill.t=0;
+hill.env={nx:40,dx:5000,index:(x,y)=>Math.floor(y/5000)*40+Math.floor(x/5000)};
+hill.terrain={fields:{z:[]}};hill.forcing={sample:(_,x,y)=>Math.max(0,400-Math.abs(y-50625)*.04)};
+const south={windAngle:Math.PI/2};
+assert(hill._windwardExposure(50625,45625,south).factor>.5,'rising southern face remains eligible');
+assert.equal(hill._windwardExposure(50625,50625,south).factor,0,'crest cannot substitute for a windward slope');
+assert.equal(hill._windwardExposure(50625,55625,south).factor,0,'descending northern face rejected');
+// Exercise the real birth/spacing loop: a verified warm front 6 km south
+// must establish one new root, rather than being vetoed by the old 8 km rule.
+m.config.lambda0=0;m.background=()=>coastBg;m._shiftTrainingSource=()=>{};
+m._persistentSourceGate=()=>({F:1});m.triggerSources=[{...northRoot,lastBirth:0,activated:0}];
+m._boundaryPosition=()=>({x,y});m.frontSegments=[{key:'south-relay',eligibleMu:20,boundary:b}];
+for(const unused of m.initiate()){}
+assert.equal(m.stats.southwardRelayBirths,1,'one new root survives source and cell spacing');
+assert.equal(m.triggerSources.length,2);assert.equal(m.triggerSources[1].relayFrom,'north');
+assert(m.triggerSources[1].y<m.triggerSources[0].y);assert.equal(m.cells.length,1);
 console.log(JSON.stringify({pass:true,leeRejected:['Pingshan','Enping'],southerlyCoast:true,offshoreColdFrontGate:gate.F,dryAndColdInteriorRejected:true,lateralLimitsM:{cell:2500,root:5000,step:1000}}));
