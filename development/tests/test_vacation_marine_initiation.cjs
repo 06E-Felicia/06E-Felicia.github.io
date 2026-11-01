@@ -15,5 +15,5 @@ const speeds=m._monsoonSpeeds(south);assert(Math.abs(m._remainingMonsoonFraction
 const hills=new C.Model({preset:'monsoon',geography:'real',seed:17,coastalForcing:{exitOffset:35000}},data);hills.t=14400;hills.fields.rhL.fill(.98);hills.fields.el.fill(.9);hills.fields.xiL.fill(800);hills.fields.inflowFocus.fill(1);
 const bg={...hills.background(),windAngle:72*Math.PI/180},rows=[];
 for(const p of [[111.75,22.06],[112.10,22.03],[112.20,22.10]]){const q=xy(...p),a=hills._jetExitAccess(...q,bg);assert(a.factor>.15&&a.ascent>.1,'actual western windward foothill retains lifting');assert(hills._persistentSourceGate({id:'hill',x:q[0],y:q[1],activated:0,lastBirth:0},bg).F>0);rows.push({p,factor:a.factor,ascent:a.ascent});}
-const cell={id:'shorter',triggerSourceId:'root'};hills._ensurePulse(cell);assert(cell.pulse.Nend>=6&&cell.pulse.Nend<=9,'shorter finite pulse range');
-console.log(JSON.stringify({pass:true,ordinaryAndPersistentMarineSouthBlocked:true,zonalMarineAllowed:true,westernSoutherlySlopes:rows,pulseRange:[6,9]}));
+const cell={id:'shorter',triggerSourceId:'root'};hills._ensurePulse(cell);assert(cell.pulse.Nend>=5.4&&cell.pulse.Nend<=8.1,'shorter finite pulse range');
+console.log(JSON.stringify({pass:true,ordinaryAndPersistentMarineSouthBlocked:true,zonalMarineAllowed:true,westernSoutherlySlopes:rows,pulseRange:[5.4,8.1]}));

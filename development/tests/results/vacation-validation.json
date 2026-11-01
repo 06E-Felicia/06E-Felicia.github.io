@@ -1,47 +1,50 @@
 {
-  "model": "vacation-1.42.0",
-  "resource": "1.42.0-r1",
+  "model": "vacation-1.43.0",
+  "resource": "1.43.0-r1",
   "date": "2026-11-01",
-  "scope": "Southerly marine bypass, western windward supply, shorter finite train pulse; targeted tests and four-hour compact run",
+  "scope": "Source-proximal growth, distance/cross-range supply limits, coastal source placement, README rewrite; targeted tests and four-hour summary",
   "checks": {
-    "ordinaryOffshoreSoutherlyBlocked": true,
-    "coldFrontOffshoreSoutherlyBlocked": true,
-    "persistentOffshoreSoutherlyBlocked": true,
-    "westerlyOffshoreStillEligible": true,
-    "actualCoastalIslandSlopesPreserved": true,
-    "westernSoutherlyWindwardMaintenance": true,
-    "backgroundMonsoonSurvivesJetDeceleration": true,
-    "distantOffshoreExitStillExcludesInland": true,
-    "easternExitLocationResponsePreserved": true,
-    "windwardAndLeeRegression": true,
-    "boundedSwayAndSouthernRelaySpacing": true,
-    "core100mmhAndWaterLedger": true,
-    "finitePulseTurnovers": [
-      6,
-      9
-    ],
-    "maximumCellAgeSeconds": 8400,
-    "sourceSupplyDistanceM": 96000
+    "northernEnpingZhuhaiSourcesExcluded": true,
+    "ZhuhaiCoastalSlopePreserved": true,
+    "crossRangeNewAndPersistentSourcesSuppressed": true,
+    "southerlyShanweiSuppressed": true,
+    "distanceAndTerrainApplyToLocalAndSharedFeed": true,
+    "marineSoutherlyExclusionPreserved": true,
+    "westernSlopeAndEasternExitRegression": true,
+    "coreRainCapAndWaterLedger": true,
+    "readmeLocalLinks": true,
+    "controlledSupplyFactors": {
+      "within8km": 1,
+      "at50km": 0.2465969639416065,
+      "at50kmAfterCrossRangeBarrier": 0.012329848197080336,
+      "at84km": 0
+    }
   },
   "shortWeatherRun": {
     "seed": 17,
     "windTurnStart": "south",
     "hours": 4,
     "exitOffsetM": 35000,
-    "births": 54,
-    "persistentBirths": 47,
-    "coldFrontBirths": 2,
-    "marineBirths": 0,
-    "westernBirths": 17,
-    "marineCriterion": "southerly birth angle >= 60 degrees, local land fraction < 0.45 and DEM height < 25 m",
-    "relativeWaterResidual": 3.6507313896405745e-13,
-    "peakSlidingHourMm": 100,
-    "maxColdKm2": 48412.5
+    "births": 39,
+    "persistentBirths": 34,
+    "closedSources": 0,
+    "relativeWaterResidual": 3.691295071747692e-13,
+    "peakSlidingHourMm": 79.47357166913321,
+    "maxCellCondensationKgPerSecondByOriginDistance": {
+      "under15km": 12748940.103626588,
+      "15to35km": 3806589.4946528394,
+      "over35km": 498248.86718259694
+    },
+    "cellSamplesByDistance": [
+      68,
+      79,
+      51
+    ]
   },
   "fullMeteorologicalRun": false,
   "newBrowserRun": false,
   "limitations": [
-    "Four-hour sample does not establish all random seeds or the complete three-day weather evolution.",
-    "Shorter pulse/lifetime/supply parameters are tested; no claim of measured full-run train-length reduction."
+    "Condensation-rate diagnostics are not a direct proof that radar maxima lie at every lifting point.",
+    "The four-hour sample does not validate every seed or the full three-day propagation sequence."
   ]
 }

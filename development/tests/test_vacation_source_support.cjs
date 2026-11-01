@@ -1,0 +1,20 @@
+'use strict';
+const assert=require('node:assert/strict'),C=require('../../assets/scripts/vacation-model.js'),{terrain}=require('../scripts/record_vacation_replay.cjs'),proj4=require('../../assets/vendor/proj4/proj4.js');
+C.prepareBackendSync();const data=terrain(),pr=proj4('EPSG:4326',data.meta.projection),xy=(lon,lat)=>{const p=pr.forward([lon,lat]);return[p[0]+640000,p[1]+400000]},m=new C.Model({preset:'monsoon',geography:'real',seed:17,coastalForcing:{exitOffset:45000}},data);
+const bg={...m.background(),windAngle:72*Math.PI/180};
+for(const p of [[112.30,22.24],[113.4,22.57]])assert.equal(m._jetExitAccess(...xy(...p),bg).factor,0,'northern Enping/Zhuhai root excluded');
+assert(m._jetExitAccess(...xy(113.57,22.27),bg).factor>0,'eastern Zhuhai coastal slope preserved');
+const q=xy(112.2,22.1),k=m.env.index(...q),ridgeAngle=Math.atan2(m._ridge.y[k],m._ridge.x[k]);
+assert(m._terrainTrainingAlignment(...q,{...bg,windAngle:ridgeAngle})>.95);
+assert.equal(m._terrainTrainingAlignment(...q,{...bg,windAngle:ridgeAngle+Math.PI/2}),0,'cross-range coherent mountain suppresses training');
+const hu=xy(115.2,22.8);assert(m._jetExitAccess(...hu,bg).factor<.03,'southerly Shanwei trigger suppressed');
+m.fields.rhL.fill(.99);m.fields.el.fill(.95);m.fields.xiL.fill(900);m.fields.inflowFocus.fill(1);
+assert.equal(m._persistentSourceGate({id:'range',x:q[0],y:q[1],activated:0,lastBirth:0},{...bg,windAngle:ridgeAngle+Math.PI/2}).F,0,'existing source cannot bypass cross-range suppression');
+// Controlled distance/terrain comparisons isolate supply from moisture changes.
+const f=Object.create(C.Model.prototype);f.config={organizedWarmSector:true};f.triggerSources=[];f.terrain=null;
+const c={triggerSourceId:'root',originX:10000,originY:10000,x:18000,y:10000,layer:0};
+const near=f._trainingSupport(c),far=f._trainingSupport({...c,x:60000});assert(near>far*3);assert.equal(f._trainingSupport({...c,x:94000}),0);
+f.terrain={fields:{z:[]}};f.forcing={sample:(_,x)=>x>=20000&&x<=40000?650:0};f.background=()=>({});f._terrainTrainingAlignment=x=>x>=20000&&x<=40000?0:1;
+const blocked=f._trainingSupport({...c,x:60000});assert(blocked<far*.1,'cross-range mountain blocks downstream support');
+f._terrainTrainingAlignment=()=>1;assert.equal(f._trainingSupport({...c,x:60000}),far,'parallel range does not impose that barrier');
+console.log(JSON.stringify({pass:true,nearSupport:near,downstreamSupport:far,crossRangeSupport:blocked,northernSourcesRejected:true,crossRangeBirthAndMaintenanceRejected:true}));
