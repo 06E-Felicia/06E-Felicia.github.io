@@ -326,7 +326,7 @@
     }
     _ensurePulse(c){
       if(this.config.cellLifecycle==='legacy')return;
-      if(!c.pulse){const rng=random(hash(this.config.seed,'cell-pulse-1.7',c.id)),Hc=4500+2000*rng(),Nend=c.triggerSourceId&&this.config.jetExitControl?(this.config.longTrainingPulse?5.4+2.7*rng():5+2*rng()):3+1.2*rng();c.pulse={Hc,Nend,Ngrow:c.triggerSourceId&&this.config.organizedWarmSector?.18:.35,Ndecay:(c.triggerSourceId&&this.config.longTrainingPulse ? .55 : .60)*Nend,N:0,L:0,wturn:3,parameterization:'seeded finite engineering convection pulse'};}
+      if(!c.pulse){const rng=random(hash(this.config.seed,'cell-pulse-1.7',c.id)),Hc=4500+2000*rng(),Nend=c.triggerSourceId&&this.config.jetExitControl?(this.config.longTrainingPulse?6.2+3*rng():5+2*rng()):3+1.2*rng();c.pulse={Hc,Nend,Ngrow:c.triggerSourceId&&this.config.organizedWarmSector?.18:.35,Ndecay:(c.triggerSourceId&&this.config.longTrainingPulse ? .55 : .60)*Nend,N:0,L:0,wturn:3,parameterization:'seeded finite engineering convection pulse'};}
       c.physicalUpdraftArea??=c.updraftArea??Math.PI*1000**2;c.pulseEnvelope??=c.pulse.L;c.effectiveUpdraftArea??=c.physicalUpdraftArea*c.pulseEnvelope;c.updraftAirMassFlux??=0;
     }
     _advancePulse(c,thermal,dt=DT){
@@ -463,7 +463,7 @@
         const relaySource=advancingFront?this._southernRelaySource(e.x,e.y,bg):null;
         const sourceBlocked=!e.triggerSource&&!e.layer&&this.config.persistentInitiation&&this.triggerSources.some(s=>(s.x-e.x)**2+(s.y-e.y)**2<(relaySource?4000:8000)**2),ix=Math.floor(e.x/bin),iy=Math.floor(e.y/bin);let blocked=sourceBlocked;for(let yy=iy-1;yy<=iy+1&&!blocked;yy++)for(let xx=ix-1;xx<=ix+1&&!blocked;xx++)for(const c of recent.get(xx+','+yy)||[])if((c.x-e.x)**2+(c.y-e.y)**2<bin*bin){blocked=true;break;}
         if(blocked&&!e.triggerSource){this.stats.spacingRejected++;diagnostic.byLayer[e.layer?'mid':'low'].spacingRejected++;if(this._organizationContains(e.x,e.y))diagnostic.local.byLayer[e.layer?'mid':'low'].spacingRejected++;this._recordFrontCandidate(e.x,e.y,e.channel,'spacingRejected',1);if(e.inBand)this._recordFrontCandidate(e.x,e.y,e.channel,'inBandSpacingRejected',1);continue;}
-        const rng=random(hash(this.config.seed,'cell',e.id)),c={id:e.id,born:e.born??(this.t+DT*random(hash(this.config.seed,'birth-time',e.id))()),age:0,x:e.x,y:e.y,originX:e.x,originY:e.y,T:this.config.organizedWarmSector?7200:9360,major:1800,minor:1200,updraftArea:Math.PI*1000**2,starvedSeconds:0,supplyRatio:0,a:0,M:0,convectivePhaseEnergyJ:0,layer:e.layer,source:e.gate.source,parent:e.gate.parent,channel:e.channel,segmentKey:e.segmentKey,physicalFaceId:e.physicalFaceId,angle:Math.atan2(...this.steer().slice().reverse()),phase:rng()*Math.PI*2};
+        const rng=random(hash(this.config.seed,'cell',e.id)),c={id:e.id,born:e.born??(this.t+DT*random(hash(this.config.seed,'birth-time',e.id))()),age:0,x:e.x,y:e.y,originX:e.x,originY:e.y,T:this.config.organizedWarmSector?8400:9360,major:1800,minor:1200,updraftArea:Math.PI*1000**2,starvedSeconds:0,supplyRatio:0,a:0,M:0,convectivePhaseEnergyJ:0,layer:e.layer,source:e.gate.source,parent:e.gate.parent,channel:e.channel,segmentKey:e.segmentKey,physicalFaceId:e.physicalFaceId,angle:Math.atan2(...this.steer().slice().reverse()),phase:rng()*Math.PI*2};
         if(this.config.monsoon925){const k=this.env.index(c.x,c.y);c.vx=this.fields.um[k];c.vy=this.fields.vm[k];c.angle=Math.atan2(c.vy,c.vx);}
         if(!e.layer&&this.config.persistentInitiation){
           const source=e.triggerSource||{id:'root:'+c.id,x:c.x,y:c.y,anchorX:c.x,anchorY:c.y,anchorAngle:bg.windAngle??this._monsoonAngle(this.t),activated:c.born,lastBirth:c.born};
@@ -1114,7 +1114,7 @@
     if(!this.config.organizedWarmSector||!cell.triggerSourceId||cell.layer)return 1;
     const source=this.triggerSources.find(s=>s.id===cell.triggerSourceId);
     const ox=cell.originX??source?.x??cell.x,oy=cell.originY??source?.y??cell.y,dx=cell.x-ox,dy=cell.y-oy,distance=Math.hypot(dx,dy);
-    const travel=Math.exp(-Math.max(0,distance-8000)/30000)*clip((84000-distance)/14000);
+    const travel=Math.exp(-Math.max(0,distance-8000)/38000)*clip((100000-distance)/16000);
     if(!this.terrain)return travel;
     const g=this.forcing,z=this.terrain.fields.z,base=g.sample(z,ox,oy),bg=this.background();let barrier=0;
     for(let d=2500;d<=distance;d+=2500){const x=ox+dx*d/distance,y=oy+dy*d/distance;
@@ -1147,7 +1147,7 @@
     const source=this.triggerSources.find(s=>s.id===cell.triggerSourceId);
     if(!source)return local;
     const k=this.env.index(source.x,source.y),u=this.fields.um[k],v=this.fields.vm[k],speed=Math.hypot(u,v),dx=cell.x-source.x,dy=cell.y-source.y,distance=Math.hypot(dx,dy),along=(dx*u+dy*v)/Math.max(1,speed),cross=Math.abs(dx*v-dy*u)/Math.max(1,speed);
-    if(along<0||distance>84000||cross>25000+.1*along)return local;
+    if(along<0||distance>100000||cross>25000+.1*along)return local;
     const feed=this._trainingFeed(source.x,source.y);if(!feed.accessible)return local;
     // Same source, same finite water budget. A detached core cannot find a new
     // interior donor or cross a deep blocking pool to prolong its life.
@@ -1167,6 +1167,7 @@
       // A previously lifted plume does not have to overcome the complete new-
       // parcel LFC every ten minutes. Maintenance still needs connected moisture,
       // a live exit/hill region and resolved convergence; no unlimited memory.
+      if(this._marineJetAccess(source.x,source.y,bg)<.03)return {...ordinary,F:0,rejection:'outsideMarineJet'};
       if(jet.trainingAlignment<.12)return {...ordinary,F:0,rejection:'crossRangeWind'};
       if(ordinary.source==='coldPool'&&ordinary.F>0)return ordinary;
       const lifting=jet.ascent>.008||f.wConvergence[k]>.025||f.wTerrain[k]>.025;
@@ -1278,6 +1279,14 @@
     if(land>=.45||height>=25)return 1;
     return clip((60-(bg.windAngle??this._monsoonAngle(this.t))*180/Math.PI)/20);
   };
+  Model.prototype._marineJetAccess=function(x,y,bg){
+    if(!this.terrain||!this.config.organizedWarmSector)return 1;
+    const land=this.forcing.sample(this.terrain.fields.land,x,y),height=this.forcing.sample(this.terrain.fields.z,x,y);
+    if(land>=.45||height>=25)return 1;
+    const coord=this._jetCoordinates(x,y,bg),p=this.config.coastalWindParameters;
+    // A cold front may provide extra lift, never an independent offshore jet.
+    return clip(1-((coord.along-coord.exit)/(2*p.exitLength))**2)**2*Math.exp(-.5*(coord.cross/p.sigmaJet)**2)*this._jetCoastWindow(x);
+  };
   Model.prototype._frontDevelopmentAccess=function(x,y,bg){
     if(!this.terrain||!this.config.organizedWarmSector)return 1;
     const angle=bg.windAngle??this._monsoonAngle(this.t),zonal=clip((60-angle*180/Math.PI)/20);
@@ -1286,7 +1295,7 @@
     const land=this.forcing.sample(this.terrain.fields.land,x,y);
     // On land a genuine lee slope remains excluded even for zonal flow.
     const terrainSide=land>=.5?exposure.factor:1;
-    return Math.min(Math.max(mountain,zonal*terrainSide),this._marineInitiationAccess(x,y,bg))*(land>=.45?this._terrainTrainingAlignment(x,y,bg)*this._coastalFoothillAccess(x,y):1);
+    return Math.min(Math.max(mountain,zonal*terrainSide),this._marineInitiationAccess(x,y,bg))*this._marineJetAccess(x,y,bg)*(land>=.45?this._terrainTrainingAlignment(x,y,bg)*this._coastalFoothillAccess(x,y):1);
   };
   Model.prototype._southernRelaySource=function(x,y,bg){
     if(!this.config.organizedWarmSector)return null;
@@ -1455,14 +1464,16 @@
   // physical step. Advective export, evaporation and fallout retain their ledgers.
   Model.prototype._spreadStratiform=function*(){
     if(!this.config.stratiformOutflow)return;
-    const g=this.precip,K=45000,steps=Math.ceil(DT*K/(.24*g.dx*g.dx)),a=DT*K/(steps*g.dx*g.dx),delta=this.buffer('stratiformMix',g.n);
+    const g=this.precip,K=45000,bg=this.background(),exchange=this.buffer('stratiformExchange',g.n);
+    for(let k=0;k<g.n;k++){const x=(k%g.nx+.5)*g.dx,y=(Math.floor(k/g.nx)+.5)*g.dx,ci=this.cold.index(x,y);exchange[k]=.12+.88*(ci>=0?this._coldMaturity(ci):0);}
+    const angle=bg.windAngle??this._monsoonAngle(this.t),alongX=.35+.65*Math.cos(angle)**2,alongY=.35+.65*Math.sin(angle)**2,steps=Math.ceil(DT*K/(.24*g.dx*g.dx)),a=DT*K/(steps*g.dx*g.dx),delta=this.buffer('stratiformMix',g.n);
     for(const water of [this.precipWater.qa,this.precipWater.upper_detrained]){
       if(!water.some(v=>v>0))continue;
       for(let step=0;step<steps;step++){
         delta.fill(0);
         for(let k=0;k<g.n;k++){
-          if(k%g.nx<g.nx-1){const flux=a*(water[k]-water[k+1]);delta[k]-=flux;delta[k+1]+=flux;}
-          if(k+g.nx<g.n){const flux=a*(water[k]-water[k+g.nx]);delta[k]-=flux;delta[k+g.nx]+=flux;}
+          if(k%g.nx<g.nx-1){const flux=a*alongX*.5*(exchange[k]+exchange[k+1])*(water[k]-water[k+1]);delta[k]-=flux;delta[k+1]+=flux;}
+          if(k+g.nx<g.n){const flux=a*alongY*.5*(exchange[k]+exchange[k+g.nx])*(water[k]-water[k+g.nx]);delta[k]-=flux;delta[k+g.nx]+=flux;}
         }
         for(let k=0;k<g.n;k++)water[k]+=delta[k];yield;
       }
@@ -1487,7 +1498,7 @@
         const phase=(c.phase||0)+j*2.1,along=(j-(count-1)/2)*c.major*.6,across=c.minor*(broad?Math.sin(phase+c.age/900)*.25+(j%2?1:-1)*.18:Math.sin(phase+c.age/900)*(c.triggerSourceId&&this.config.connectedTrainingFeed ? .10 : .35)),x=sourceX+Math.cos(c.angle)*along-Math.sin(c.angle)*across,y=sourceY+Math.sin(c.angle)*along+Math.cos(c.angle)*across,width=Math.max(800,Math.min(c.minor,Math.sqrt((c.updraftArea||Math.PI*1000**2)/(Math.PI*aspect)))*Math.sqrt(weight));
         c.subcores.push({x:x+c.x-sourceX,y:y+c.y-sourceY,width,minor:width*aspect,weight});yield*this.depositPrecip(coreSource,x,y,width*(1+.3*clip((c.shear||0)/15)),width*aspect,c.angle,core*weight,'core');
       }
-      yield*this.depositPrecip(P.qa,sourceX-(c.vx||0)*300,sourceY-(c.vy||0)*300,Math.max(c.major*1.8,this.config.stratiformOutflow?28000:3000),Math.max(c.minor*1.5,this.config.stratiformOutflow?28000:2000),c.angle,detach,'detrained');yield;
+      yield*this.depositPrecip(P.qa,sourceX-(c.vx||0)*300,sourceY-(c.vy||0)*300,Math.max(c.major*1.25,3000),Math.max(c.minor*1.15,2000),c.angle,detach,'detrained');yield;
     }
     yield 'qa_import';
     // Legacy Qa import: positive limited slopes preserve each environment-cell mean exactly.
@@ -1698,7 +1709,7 @@
   };
   Model.prototype.detrainCell=function*(c){
     const mass=c.M;if(mass<=0)return;this.stats.sources.detrained+=mass;this.recordWater('core','out','detrainment',mass);this.recordWater('detrained','in','detrainment',mass);
-    yield*this.depositPrecip(this.precipWater.qa,c.x,c.y,Math.max(c.major,this.config.stratiformOutflow?28000:2000),Math.max(c.minor,this.config.stratiformOutflow?28000:1500),c.angle,mass,'detrained');c.M=0;c.a=0;c.lifecycle='dead';
+    yield*this.depositPrecip(this.precipWater.qa,c.x,c.y,Math.max(c.major*1.25,2000),Math.max(c.minor*1.15,1500),c.angle,mass,'detrained');c.M=0;c.a=0;c.lifecycle='dead';
   };
   Model.prototype.sourceAudit=function(){
     const inventory=this.waterInventories(),result={};let initial=0,incoming=0,outgoing=0,final=0;

@@ -1,7 +1,7 @@
 /* Lightweight shared runtime contract for the page, Worker and production model. */
 (function(root){
  'use strict';
- const MODEL_VERSION='vacation-1.44.0',RESOURCE_VERSION='1.44.0-r1',NUMERIC_ABI=12203;
+ const MODEL_VERSION='vacation-1.45.0',RESOURCE_VERSION='1.45.0-r1',NUMERIC_ABI=12203;
  function checkpointPreflight(c){
   if(!c)return {eligible:false,reason:'missing'};
   if(c.version!==MODEL_VERSION)return {eligible:false,reason:'version'};

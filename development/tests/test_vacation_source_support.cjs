@@ -13,7 +13,7 @@ assert.equal(m._persistentSourceGate({id:'range',x:q[0],y:q[1],activated:0,lastB
 // Controlled distance/terrain comparisons isolate supply from moisture changes.
 const f=Object.create(C.Model.prototype);f.config={organizedWarmSector:true};f.triggerSources=[];f.terrain=null;
 const c={triggerSourceId:'root',originX:10000,originY:10000,x:18000,y:10000,layer:0};
-const near=f._trainingSupport(c),far=f._trainingSupport({...c,x:60000});assert(near>far*3);assert.equal(f._trainingSupport({...c,x:94000}),0);
+const near=f._trainingSupport(c),far=f._trainingSupport({...c,x:60000});assert(near>far*2.5);assert.equal(f._trainingSupport({...c,x:110000}),0);
 f.terrain={fields:{z:[]}};f.forcing={sample:(_,x)=>x>=20000&&x<=40000?650:0};f.background=()=>({});f._terrainTrainingAlignment=x=>x>=20000&&x<=40000?0:1;
 const blocked=f._trainingSupport({...c,x:60000});assert(blocked<far*.1,'cross-range mountain blocks downstream support');
 f._terrainTrainingAlignment=()=>1;assert.equal(f._trainingSupport({...c,x:60000}),far,'parallel range does not impose that barrier');

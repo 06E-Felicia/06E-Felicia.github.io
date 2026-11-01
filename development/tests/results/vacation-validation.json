@@ -1,159 +1,173 @@
 {
-  "model": "vacation-1.44.0",
-  "resource": "1.44.0-r1",
+  "model": "vacation-1.45.0",
+  "resource": "1.45.0-r1",
   "date": "2026-11-01",
   "checks": {
-    "targetedRegressionSuitesPassed": 9,
-    "rainPolesSeeds": [
-      17,
-      131,
-      920
-    ],
-    "coldVolumeHeatMomentumConserved": true,
-    "nonnegativeColdFields": true,
-    "coreRainCapMmH": 100,
-    "windwardAndMarineRestrictionsPreserved": true
+    "regressionSuitesPassed": 10,
+    "remoteMarineColdFrontRejected": true,
+    "marineJetArrivalAllowsTrigger": true,
+    "southerlySeaExclusionPreserved": true,
+    "newCloudFootprintTestM": {
+      "major": 6250,
+      "minor": 4600
+    },
+    "youngStratiformSpreadMoment": 2.187,
+    "matureStratiformSpreadMoment": 18.224199353344495,
+    "condensateConservation": true,
+    "coreRainCapMmH": 100
   },
-  "finalWeatherRun": {
-    "scenario": "final version controlled 232 degrees",
+  "weatherRun": {
+    "scenario": "controlled 232 degrees",
     "seed": 131,
     "hours": 6,
     "regional": {
       "west": {
-        "births": 35,
+        "births": 31,
         "maxSourceHours": 2.3333333333333335
       },
       "delta": {
-        "births": 137,
+        "births": 128,
         "maxSourceHours": 4.666666666666667
       },
       "east": {
-        "births": 38,
+        "births": 30,
         "maxSourceHours": 4.5
       }
     },
     "stats": {
-      "eastwardRelayBirths": 1,
-      "southwardRelayBirths": 2,
+      "eastwardRelayBirths": 0,
+      "southwardRelayBirths": 1,
       "sourceClosureReasons": {
-        "maintenanceEnvironment": 23
+        "maintenanceEnvironment": 5
       },
       "upstreamBlockedBirths": 1,
       "persistentBirths": 176,
-      "closedTriggerSources": 23,
-      "births": 210,
-      "coldBirths": 26,
-      "deaths": 129,
+      "closedTriggerSources": 5,
+      "births": 189,
+      "coldBirths": 5,
+      "deaths": 109,
       "deathReasons": {
-        "thermal_or_updraft_support_lost": 62,
-        "pulse_completed": 51,
-        "maximum_age_protection": 16
+        "thermal_or_updraft_support_lost": 58,
+        "pulse_completed": 41,
+        "maximum_age_protection": 10
       }
     },
-    "peakHourMm": 100.00000000000001,
-    "maxSourceSwayM": 3761.040599714748,
-    "maxColdKm2": 147162.5,
-    "earlyColdKm2": 8706.25,
-    "relativeResidual": 5.885212662186279e-13
-  },
-  "southerlySeedComparisonBeforeColdMaturationChange": [
-    {
-      "seed": 17,
-      "hours": 4,
-      "regional": {
-        "west": {
-          "births": 18,
-          "maxSourceHours": 2.3333333333333335
-        },
-        "delta": {
-          "births": 17,
-          "maxSourceHours": 1.3333333333333333
-        },
-        "east": {
-          "births": 0,
-          "maxSourceHours": 0
-        }
+    "peakHourMm": 99.64702716615184,
+    "maxRedBandKm": 61.083237998247924,
+    "maxEastRedBandKm": 34.01785965700717,
+    "maxActiveTravelKm": 64.79597579971589,
+    "firstRain": {
+      "t": 4800,
+      "localHour": 21.333333333333332,
+      "peakDbz": 55.469754020056506,
+      "echo5Km2": 712,
+      "echo20Km2": 456,
+      "stratiform5Km2": 592,
+      "stratiform20Km2": 324,
+      "rainRate": 25.703614281484743,
+      "hourMm": 4.2839357135807905,
+      "coldKm2": 287.5,
+      "connectedCold": {
+        "pixels": 46,
+        "lengthKm": 21.010585970015686,
+        "widthKm": 17.789857579750986,
+        "areaKm2": 287.5
       },
-      "peakHourMm": 100.00000000000001,
-      "maxSourceSwayM": 3337.617315280194,
-      "relativeResidual": 3.6623128850497106e-13,
-      "roots": [
-        {
-          "x": 668107.3248963803,
-          "y": 350863.4808054194,
-          "count": 15
-        },
-        {
-          "x": 779443.7826266512,
-          "y": 381157.6903956011,
-          "count": 9
-        },
-        {
-          "x": 903607.1172927957,
-          "y": 402305.99658188154,
-          "count": 8
-        },
-        {
-          "x": 540064.1845189966,
-          "y": 313053.07421833277,
-          "count": 2
-        }
-      ]
+      "regionColdKm2": null,
+      "births": 1,
+      "coldBirths": 0,
+      "cells": 1,
+      "activeSources": 1,
+      "persistentBirths": 0,
+      "triggerFraction": 0.0022216796875,
+      "inflowLandRH": 0.8466936172122758,
+      "redBand": {
+        "pixels": 14,
+        "lengthKm": 10.15353749728675,
+        "widthKm": 7.622529449021368
+      },
+      "eastRedBand": {
+        "pixels": 0,
+        "lengthKm": 0,
+        "widthKm": 0
+      }
     },
-    {
-      "seed": 131,
-      "hours": 4,
-      "regional": {
-        "west": {
-          "births": 19,
-          "maxSourceHours": 2.1666666666666665
-        },
-        "delta": {
-          "births": 15,
-          "maxSourceHours": 1.1666666666666667
-        },
-        "east": {
-          "births": 0,
-          "maxSourceHours": 0
-        }
+    "atTwoHours": {
+      "t": 7200,
+      "localHour": 22,
+      "peakDbz": 62.89002404039347,
+      "echo5Km2": 8696,
+      "echo20Km2": 6276,
+      "stratiform5Km2": 8428,
+      "stratiform20Km2": 5916,
+      "rainRate": 100.00000000000001,
+      "hourMm": 50.849949398128416,
+      "coldKm2": 7831.25,
+      "connectedCold": {
+        "pixels": 554,
+        "lengthKm": 72.2955667569038,
+        "widthKm": 62.22323989559307,
+        "areaKm2": 3462.5
       },
-      "peakHourMm": 100.00000000000003,
-      "maxSourceSwayM": 3102.793662806717,
-      "relativeResidual": 4.878381425520975e-13,
-      "roots": [
-        {
-          "x": 650768.5196809471,
-          "y": 351085.9058359637,
-          "count": 14
-        },
-        {
-          "x": 732559.5242968261,
-          "y": 364020.72053065186,
-          "count": 8
-        },
-        {
-          "x": 736243.3827894407,
-          "y": 335922.1403643319,
-          "count": 7
-        },
-        {
-          "x": 576513.3966179565,
-          "y": 317890.84936026484,
-          "count": 3
-        }
-      ]
-    }
-  ],
-  "coldComparison": {
-    "sameSeedDirectionAndExit": true,
-    "beforeEarlyColdKm2": 12125,
-    "afterEarlyColdKm2": 8706.25,
-    "beforeSixHourColdKm2": 179387.5,
-    "afterSixHourColdKm2": 147162.5
+      "regionColdKm2": null,
+      "births": 15,
+      "coldBirths": 0,
+      "cells": 15,
+      "activeSources": 5,
+      "persistentBirths": 10,
+      "triggerFraction": 0.0026123046875,
+      "inflowLandRH": 0.8467811799371296,
+      "redBand": {
+        "pixels": 96,
+        "lengthKm": 39.1746547177794,
+        "widthKm": 12.817058293496562
+      },
+      "eastRedBand": {
+        "pixels": 74,
+        "lengthKm": 30.134884454605203,
+        "widthKm": 12.909935535228872
+      }
+    },
+    "atSixHours": {
+      "t": 21600,
+      "localHour": 2,
+      "peakDbz": 61.15506415350109,
+      "echo5Km2": 63216,
+      "echo20Km2": 38820,
+      "stratiform5Km2": 63152,
+      "stratiform20Km2": 38708,
+      "rainRate": 100.00000000000001,
+      "hourMm": 95.08712234968687,
+      "coldKm2": 141837.5,
+      "connectedCold": {
+        "pixels": 22694,
+        "lengthKm": 730.2663094141018,
+        "widthKm": 260.58053248211985,
+        "areaKm2": 141837.5
+      },
+      "regionColdKm2": null,
+      "births": 189,
+      "coldBirths": 5,
+      "cells": 80,
+      "activeSources": 8,
+      "persistentBirths": 176,
+      "triggerFraction": 0.002685546875,
+      "inflowLandRH": 0.8520478018153375,
+      "redBand": {
+        "pixels": 76,
+        "lengthKm": 52.22435446392426,
+        "widthKm": 8.404808636384432
+      },
+      "eastRedBand": {
+        "pixels": 36,
+        "lengthKm": 20.924717198763364,
+        "widthKm": 9.074896198517965
+      }
+    },
+    "relativeResidual": 5.455258493411712e-13
   },
   "limitations": [
-    "Six-hour controlled-direction run, not a full three-day ensemble or visual acceptance.",
-    "Eastern and southern relay counts are nearby physical-front hand-offs, not proof of a province-wide propagation sequence.",
-    "Southern seed comparison predates only the final cold maturation adjustment."
+    "Controlled 232-degree six-hour run only; no full three-day ensemble or browser screenshot acceptance.",
+    "100 km is the maximum source-feed distance, not a promised radar train length."
   ]
 }

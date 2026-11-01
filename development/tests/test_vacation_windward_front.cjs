@@ -11,6 +11,8 @@ const [x,y]=xy(114.5,22),feed=m.env.index(x,y-5000),candidate=m.cold.index(x,y);
 m.fields.rhL.fill(.98);m.fields.rhM.fill(.9);m.fields.el.fill(.9);m.fields.xiL.fill(100);m.fields.inflowFocus.fill(1);
 const b={x,y:y+1000,nx:0,ny:-1,id:1,faceId:'test',feeds:{low:feed},inlets:{low:{x,y:y-5000}},relativeWinds:{low:{normalInflow:10}},rejections:{},paths:{low:[]},head:{Hhead:300,Qhead:900},geometricNormal:{x:0,y:-1},velocity:{x:0,y:-2}};
 const coastBg={...bg,windAngle:25*Math.PI/180};assert.equal(m._jetExitAccess(x,y,coastBg).factor,0);
+assert.equal(m._boundaryEventGate(b,x,y,coastBg).F,0,'a remote inland jet cannot ignite offshore just because a cold head exists');
+const exit=m.forcing.sample(m.terrain.fields.signedDistance,x,y);m.coastalGeometry.options.exitOffset=exit;m.coastalGeometry.exitOffset=exit;m.coastalGeometry.sampledExitOffset=exit;m._jetFrameCache=null;
 let gate=m._boundaryEventGate(b,x,y,coastBg);assert(gate.F>0,JSON.stringify(gate));assert(gate.evidence.focusedLift.coldFrontSite>0);assert(gate.evidence.lift.Hlift*.08<=gate.evidence.lift.energyLimit+1e-9);
 assert.equal(m._boundaryEventGate(b,x,y,bg).F,0,'meridional train stops where no further mountain lifting exists');
 const northRoot={id:'north',x,y:y+6000};m.triggerSources=[northRoot];
