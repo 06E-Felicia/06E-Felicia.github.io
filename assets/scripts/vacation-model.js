@@ -432,7 +432,8 @@
       if(this.config.organizedWarmSector&&this.config.jetExitControl&&lambda>0){
         const g=this.env;
         for(let j=0;j<g.ny;j++){for(let i=0;i<g.nx;i++){
-          let x=(i+.5)*g.dx,y=(j+.5)*g.dx,belt=this._jetExitAccess(x,y,bg);
+          const position=random(hash(this.config.seed,'exit-belt-position',i,j));
+          let x=(i+.1+.8*position())*g.dx,y=(j+.1+.8*position())*g.dx,belt=this._jetExitAccess(x,y,bg);
           // A five-kilometre cell can straddle a crest and its windward foot.
           // Sample the incoming side too, instead of losing that whole cell.
           if(this.terrain&&this._terrainAnchor(x,y).factor>0){
@@ -440,7 +441,7 @@
             if(slope.factor*slope.ascent>belt.factor*belt.ascent){x=px;y=py;belt=slope;}
           }
           if(belt.factor<=0||belt.ascent<=.02)continue;
-          const rng=random(hash(this.config.seed,'exit-belt',step,i,j)),gate=this.gate(x,y,0,bg,flux),probability=-Math.expm1(-3*lambda*g.area/1e6*DT);
+          const rng=random(hash(this.config.seed,'exit-belt',step,i,j)),gate=this.gate(x,y,0,bg,flux),probability=-Math.expm1(-3*lambda*g.area/1e6*DT*this._rainPolePreference(x,y));
           if(rng()<probability)propose(x,y,0,gate,rng(),rng(),'belt:'+step+':'+i+':'+j,'areaLow');
         }if(j%12===11)yield;}
       }
@@ -466,7 +467,7 @@
         if(this.config.monsoon925){const k=this.env.index(c.x,c.y);c.vx=this.fields.um[k];c.vy=this.fields.vm[k];c.angle=Math.atan2(c.vy,c.vx);}
         if(!e.layer&&this.config.persistentInitiation){
           const source=e.triggerSource||{id:'root:'+c.id,x:c.x,y:c.y,anchorX:c.x,anchorY:c.y,anchorAngle:bg.windAngle??this._monsoonAngle(this.t),activated:c.born,lastBirth:c.born};
-          if(!e.triggerSource){if(relaySource){source.relayFrom=relaySource.id;this.stats.southwardRelayBirths=(this.stats.southwardRelayBirths||0)+1;}this.triggerSources.push(source);}else this.stats.persistentBirths=(this.stats.persistentBirths||0)+1;
+          if(!e.triggerSource){if(relaySource){source.relayFrom=relaySource.id;const relayKey=source.y<relaySource.y-1500?'southwardRelayBirths':'eastwardRelayBirths';this.stats[relayKey]=(this.stats[relayKey]||0)+1;}this.triggerSources.push(source);}else this.stats.persistentBirths=(this.stats.persistentBirths||0)+1;
           source.lastBirth=c.born;c.triggerSourceId=source.id;
           if(this.config.organizedWarmSector)c.updraftArea=Math.PI*(3500+2000*clip(e.gate.power/40))**2;
         }
@@ -646,9 +647,9 @@
     this.stats.coldVolumeLoss+=result.volumeOut-result.roundoffH;this.stats.coldHeatLoss+=result.heatOut-result.roundoffQ;this.stats.coldSubsteps+=result.substeps;this.stats.coldRejected+=result.rejected;this.stats.coldWaveMaxCFL=Math.max(this.stats.coldWaveMaxCFL||0,result.maxCFL);
     if(result.empty)return;
     const mixing=mix&&this.config.coldMixing!==false,hm=mixing?Math.exp(-DT/this.config.coldVolumeMixingSeconds):1,qm=mixing?Math.exp(-DT*(1/this.config.coldVolumeMixingSeconds+1/this.config.coldThermalMixingSeconds)):1,damping=this.config.coldDampingSeconds>0?Math.exp(-DT/this.config.coldDampingSeconds):1;
-    for(let i=0;i<g.n;i++){const oldH=this.h[i],oldQ=this.q[i];let h=oldH*hm,q=oldQ*qm;if(mixing&&h>1200){const drained=h-(h-1200)*(1-Math.exp(-DT/600));q*=drained/h;h=drained;}const ratio=oldQ>0?q/oldQ:1,px=this.Px[i],py=this.Py[i];this.Px[i]*=ratio;this.Py[i]*=ratio;b.decayRemoval.x+=(px-this.Px[i])*g.area;b.decayRemoval.y+=(py-this.Py[i])*g.area;const x=this.Px[i],y=this.Py[i];
-      if(this.config.coldMomentumCoupling==='surface_drag'&&damping<1){const ci=i%g.nx,cj=Math.floor(i/g.nx),A=q/THETA,u=.5*(this.cu[cj*(g.nx+1)+ci]+this.cu[cj*(g.nx+1)+ci+1]),v=.5*(this.cv[cj*g.nx+ci]+this.cv[(cj+1)*g.nx+ci]);this.Px[i]=(x+A*u)*damping-A*u;this.Py[i]=(y+A*v)*damping-A*v;}
-      else{this.Px[i]*=damping;this.Py[i]*=damping;}b.dampingRemoval.x+=(x-this.Px[i])*g.area;b.dampingRemoval.y+=(y-this.Py[i])*g.area;this.h[i]=h;this.q[i]=q;this.stats.coldVolumeLoss+=(oldH-h)*g.area;this.stats.coldHeatLoss+=(oldQ-q)*g.area;if(i%4096===4095)yield;}
+    for(let i=0;i<g.n;i++){const oldH=this.h[i],oldQ=this.q[i];let h=oldH*hm,q=oldQ*qm;if(mixing&&h>1200){const drained=h-(h-1200)*(1-Math.exp(-DT/600));q*=drained/h;h=drained;}const ratio=oldQ>0?q/oldQ:1,px=this.Px[i],py=this.Py[i];this.Px[i]*=ratio;this.Py[i]*=ratio;b.decayRemoval.x+=(px-this.Px[i])*g.area;b.decayRemoval.y+=(py-this.Py[i])*g.area;const x=this.Px[i],y=this.Py[i],localDamping=this.config.organizedWarmSector&&this.config.coldDampingSeconds>0?Math.exp(-DT/(900+(this.config.coldDampingSeconds-900)*this._coldMaturity(i))):damping;
+      if(this.config.coldMomentumCoupling==='surface_drag'&&localDamping<1){const ci=i%g.nx,cj=Math.floor(i/g.nx),A=q/THETA,u=.5*(this.cu[cj*(g.nx+1)+ci]+this.cu[cj*(g.nx+1)+ci+1]),v=.5*(this.cv[cj*g.nx+ci]+this.cv[(cj+1)*g.nx+ci]);this.Px[i]=(x+A*u)*localDamping-A*u;this.Py[i]=(y+A*v)*localDamping-A*v;}
+      else{this.Px[i]*=localDamping;this.Py[i]*=localDamping;}b.dampingRemoval.x+=(x-this.Px[i])*g.area;b.dampingRemoval.y+=(y-this.Py[i])*g.area;this.h[i]=h;this.q[i]=q;this.stats.coldVolumeLoss+=(oldH-h)*g.area;this.stats.coldHeatLoss+=(oldQ-q)*g.area;if(i%4096===4095)yield;}
     if(mixing)yield*this._spreadColdLayer();
     const round=this._coldSolverFor().clean(this._coldState(),b);this.stats.coldVolumeLoss-=round.h;this.stats.coldHeatLoss-=round.q;
   };
@@ -656,14 +657,27 @@
   // volume, heat deficit and momentum together; no cold air is created. Terrain
   // reduces cross-ridge exchange. Explicit positivity substeps retain a 600 s
   // physical step, and the existing open-boundary solver handles export.
+  Model.prototype._coldMaturity=function(k){
+    const g=this.cold,x=(k%g.nx+.5)*g.dx,y=(Math.floor(k/g.nx)+.5)*g.dx;
+    // Accumulated local rainfall and layer depth measure sustained production;
+    // no domain-wide timer makes every new pool mature at once.
+    return Math.max(clip(this.rain.sample(this.rainTotal,x,y)/60)*clip(this.h[k]/300),clip(this.h[k]/800));
+  };
+  Model.prototype._coldExchangeFactor=function(k,j,bg){
+    const terrain=Math.exp(-Math.abs(this.cz[k]-this.cz[j])/Math.max(60,(this.h[k]+this.h[j])*.5));
+    if(!this.config.organizedWarmSector)return terrain;
+    const donor=this.q[k]>=this.q[j]?k:j,sign=donor===k?1:-1,angle=bg.windAngle??this._monsoonAngle(this.t),component=(j-k===1?Math.cos(angle):Math.sin(angle))*sign;
+    const maturity=.12+.88*this._coldMaturity(donor),direction=(.3+.7*component*component)*(.75+.25*component);
+    return terrain*maturity*direction;
+  };
   Model.prototype._spreadColdLayer=function*(){
     const K=this.config.coldHorizontalMixing;if(!K)return;
-    const g=this.cold,steps=Math.ceil(DT*K/(.2*g.dx*g.dx)),a=DT*K/(steps*g.dx*g.dx),fields=[this.h,this.q,this.Px,this.Py],delta=fields.map((_,i)=>this.buffer('coldSpread'+i,g.n));
+    const bg=this.background(),g=this.cold,steps=Math.ceil(DT*K/(.2*g.dx*g.dx)),a=DT*K/(steps*g.dx*g.dx),fields=[this.h,this.q,this.Px,this.Py],delta=fields.map((_,i)=>this.buffer('coldSpread'+i,g.n));
     for(let step=0;step<steps;step++){
       for(const d of delta)d.fill(0);
       for(let k=0;k<g.n;k++)for(const j of [k%g.nx+1<g.nx?k+1:-1,k+g.nx<g.n?k+g.nx:-1]){
         if(j<0||this.h[k]+this.h[j]===0)continue;
-        const conductance=Math.exp(-Math.abs(this.cz[k]-this.cz[j])/Math.max(60,(this.h[k]+this.h[j])*.5));
+        const conductance=this._coldExchangeFactor(k,j,bg);
         for(let n=0;n<fields.length;n++){const flux=a*conductance*(fields[n][k]-fields[n][j]);delta[n][k]-=flux;delta[n][j]+=flux;}
       }
       for(let n=0;n<fields.length;n++)for(let k=0;k<g.n;k++)fields[n][k]+=delta[n][k];yield;
@@ -752,7 +766,7 @@
     const result={F:0,source:'coldPool',power:Kenv,coldPower:Kcp,parent:b.id,CIN,Qlocal,rh,energy,surfaceAccess:access,evidence:{position:{x,y},surfaceAccess:access,accessMode:this.config.surfaceAccessMode,boundaryId:b.id,physicalFaceId:b.faceId,geometricNormal:b.geometricNormal,smoothedNormal:b.smoothedNormal||{x:b.nx,y:b.ny},boundaryVelocity:b.velocity,carrierVelocity:b.carrierVelocity,phase:b.phase,head:b.head,lift,relativeWind:relative??null,warmInlet:inlet?{...inlet,surfaceAccess:inletAccess}:null,warmPath:b.paths.low,inside:b.inside,outside:b.outside,Kenv,Kcp,CIN,Qlocal,coldDominant:Kcp>Kenv,triggerLayer:'low',channel:'boundaryLow'}};
     const reject=reason=>({...result,rejection:reason,evidence:{...result.evidence,F:0,rejection:reason}});
     if(k<0)return reject('outside');if(!this._birthRegionAllowed(x,y))return reject('excludedSouthernRegion');if(!access.warmAccessible)return reject('fineCold');
-    const dx=x-b.x,dy=y-b.y,d=dx*b.nx+dy*b.ny,tangent=Math.abs(-dx*b.ny+dy*b.nx);if(d<0||d>4000||tangent>this.cold.dx*.8)return reject('warmSideGeometry');
+    const dx=x-b.x,dy=y-b.y,n=b.geometricNormal||{x:b.nx,y:b.ny},d=dx*n.x+dy*n.y,tangent=Math.abs(-dx*n.y+dy*n.x);if(d<0||d>4000||tangent>this.cold.dx*.8)return reject('warmSideGeometry');
     if(this.config.disableCold)return reject('coldDisabled');if(!hasInlet||!relative)return reject(b.rejections.low||'noWarmSample');if(!inletAccess.warmAccessible)return reject('inletCold');
     if(relative.normalInflow<2)return reject('relativeNormal');if(rh<.75)return reject('humidity');if(energy<.25)return reject('energy');
     const focused=this.config.initiationModel==='focused_lift'?this._liftAccess(k,x,y,0,bg,lift.Hlift,inlet):null;
@@ -760,7 +774,8 @@
     // A mechanically lifted front uses the actual warm inlet's humidity;
     // do not apply the squared spontaneous-birth moisture penalty a second time.
     const frontWetness=this.config.organizedWarmSector?Math.sqrt(this._newInitiationMoisture(inlet.x,inlet.y)):this._newInitiationMoisture(x,y);
-    const F=clip((rh-.65)/.25)*clip((energy-.15)/.65)*clip((Kenv+Kcp-CIN)/15)*(focused?.factor??1)*frontWetness,reason=F>0?null:focused?.factor===0?focused.reason:Kenv+Kcp<=CIN?'inhibition':'zeroGate';return {...result,F,rejection:reason,evidence:{...result.evidence,F,rejection:reason}};
+    const resolvedPower=Math.max(Kenv,.08*Math.max(0,(focused?.parcelDisplacementM??0)-lift.Hlift));
+    const F=clip((rh-.65)/.25)*clip((energy-.15)/.65)*clip((resolvedPower+Kcp-CIN)/15)*(focused?.factor??1)*frontWetness,reason=F>0?null:focused?.factor===0?focused.reason:resolvedPower+Kcp<=CIN?'inhibition':'zeroGate';return {...result,power:resolvedPower,F,rejection:reason,evidence:{...result.evidence,Kenv:resolvedPower,F,rejection:reason}};
   };
   Model.prototype._observeFront=function*(b,readable){
     const n=b.geometricNormal,vertical=n.x!==0,constant=vertical?b.x:b.y,start=(vertical?b.y:b.x)-b.lengthM/2,sign=vertical?n.x:n.y,axis=vertical?'v':'h';b.faceId=[axis,constant,start,b.lengthM,sign].join(':');
@@ -769,7 +784,7 @@
     for(let offset=0;offset<b.lengthM;offset+=2500){
       const length=Math.min(2500,b.lengthM-offset),along=start+offset,key=[axis,constant,along,length,sign].join(':');if(this._frontSegmentKeys.has(key))throw Error('重复公共前缘段 '+key);this._frontSegmentKeys.add(key);
       const segment={key,boundary:b,lengthM:length,x0:vertical?constant:along,y0:vertical?along:constant,x1:vertical?constant:along+length,y1:vertical?along+length:constant},x=(segment.x0+segment.x1)/2,y=(segment.y0+segment.y1)/2,rx=this.env.sample(this.fields.u,x,y)-b.velocity.x,ry=this.env.sample(this.fields.v,x,y)-b.velocity.y,Urel=Math.max(0,-rx*n.x-ry*n.y),heff=Math.min(this.config.frontClosure==='head_work'?b.head.Hhead:b.fluxInside.h,1200),Phi=Urel*heff*length,rawMu=this.config.boundaryFluxEfficiency*Phi*DT/(Math.PI*1000**2*200),lowReason=Urel<2?'geometricRelativeNormal':b.feeds.low===undefined?(b.rejections.low||'noWarmSample'):null,eligible=!lowReason&&!this.config.disableCold;
-      const relay=this.config.organizedWarmSector&&n.y<-.25&&this._southernRelaySource(x,y,this._frontBackground),relaySampling=relay?3:1;
+      const relay=this.config.organizedWarmSector&&(n.y<-.25||n.x>.25)&&this._southernRelaySource(x,y,this._frontBackground),relaySampling=relay?3:1;
       Object.assign(segment,{Urel,heff,Phi,rawMu,relaySampling,eligibleMu:eligible?rawMu*relaySampling:0});this.frontSegments.push(segment);this.frontDiagnostics.canonicalSegmentCount++;
       const bg=this._frontBackground,samples=[];for(const at of [.25,.75])for(const distance of [500,1500]){const px=segment.x0+(segment.x1-segment.x0)*at+n.x*distance,py=segment.y0+(segment.y1-segment.y0)*at+n.y*distance,gate=this._boundaryEventGate(b,px,py,bg);samples.push({x:px,y:py,gate});}
       for(const [target,fraction]of this._frontTargets(segment)){
@@ -970,12 +985,20 @@
     }else if(this.config.varyMonsoonDirection&&c.kind!=='straight-coast-prototype'&&this.config.coastalForcing?.exitOffset===undefined)exit=this._terrainJetExit(c.crossing,e,t).distance;
     return this._jetFrameCache={owner:c,angle,at,e,exit,sampledExit:sampled,placement:sampled<0?'offshore':'inland'};
   };
+  // Two broad climatological preferences, not fixed storm coordinates. The
+  // DEM, moving jet exit and moisture gate still decide whether any birth occurs.
+  Model.prototype._rainPolePreference=function(x,y){
+    if(!this.terrain||!this.config.organizedWarmSector)return 1;
+    const r=random(hash(this.config.seed,'rain-pole-location')),lon=this._approxLongitude(x),lat=this.terrain.meta.center[1]+(y-this.config.height/2)/111195;
+    const pole=(cx,cy,lx,ly)=>{const a=cx+(r()-.5)*.18,b=cy+(r()-.5)*.10;return Math.exp(-.5*(((lon-a)*102700/lx)**2+((lat-b)*111195/ly)**2));};
+    return .65+1.05*Math.max(pole(111.85,22.06,75000,35000),pole(115.45,22.86,110000,40000));
+  };
   Model.prototype._directionalJetShift=function(bg){
     if(!this.terrain||!this.config.organizedWarmSector)return {x:0,y:0};
-    const angle=bg.windAngle??this._monsoonAngle(this.t),sw=clip((angle*180/Math.PI-28)/25),s=sw*sw*(3-2*sw);
-    const jitter=(random(hash(this.config.seed,'directional-jet-target'))()-.5)*.6;
+    const angle=bg.windAngle??this._monsoonAngle(this.t),sw=clip((angle*180/Math.PI-35)/23),s=sw*sw*(3-2*sw);
+    const jitter=(random(hash(this.config.seed,'directional-jet-target'))()-.5)*.8;
     const south=clip((angle*180/Math.PI-55)/20),ss=south*south*(3-2*south);
-    const lon=((111.75+jitter)*s+(114.25+jitter)*(1-s))*(1-ss)+(113.65+jitter)*ss,lat=(21.85*s+22.45*(1-s))*(1-ss)+22.2*ss;
+    const lon=((111.75+jitter)*s+(115.15+jitter)*(1-s))*(1-ss)+(112.2+jitter)*ss,lat=(21.85*s+22.45*(1-s))*(1-ss)+22.2*ss;
     const x=this.config.width/2+(lon-this.terrain.meta.center[0])*111195*Math.cos(this.terrain.meta.center[1]*Math.PI/180),y=this.config.height/2+(lat-this.terrain.meta.center[1])*111195;
     return {x:x-this.coastalGeometry.crossing.x,y:y-this.coastalGeometry.crossing.y};
   };
@@ -1032,9 +1055,9 @@
   Model.prototype._coastalDirectionAccess=function(x,bg){
     if(!this.config.directionalCoastalTrigger)return 1;
     const smooth=x=>{x=clip(x);return x*x*(3-2*x);},lon=this._approxLongitude(x),angle=(bg.windAngle??this._monsoonAngle(this.t))*180/Math.PI;
-    const west=1-smooth((lon-112.6)/.7),east=smooth((lon-113.9)/.8),sw=smooth((angle-30)/25);
+    const west=1-smooth((lon-112.6)/.7),east=smooth((lon-113.9)/.8),sw=smooth((angle-25)/25),wsw=1-smooth((angle-42)/18);
     const prd=smooth((lon-112.65)/.4)*(1-smooth((lon-114.5)/.4));
-    const preference=Math.max(west*sw+east*(1-sw)+(1-west-east)*.65,.92*prd);
+    const preference=Math.max(west*sw+east*wsw+(1-west-east)*.65,.92*prd);
     return preference<.12?0:preference;
   };
   Model.prototype._trainingBarrier=function(a,speed){
@@ -1098,7 +1121,7 @@
       barrier=Math.max(barrier,clip((g.sample(z,x,y)-base-100)/300)*(1-this._terrainTrainingAlignment(x,y,bg)));
     }
     const sourceAlignment=this._terrainTrainingAlignment(ox,oy,bg);
-    return sourceAlignment<.12?0:travel*sourceAlignment*(1-.95*barrier);
+    return sourceAlignment<.12?0:travel*(1-.95*barrier);
   };
   Model.prototype._terrainTrainingAlignment=function(x,y,bg){
     if(!this.terrain||!this.config.organizedWarmSector||!this._ridge)return 1;
@@ -1107,7 +1130,7 @@
     const r=this._ridge,angle=bg.windAngle??this._monsoonAngle(this.t),parallel=Math.abs(r.x[k]*Math.cos(angle)+r.y[k]*Math.sin(angle));
     // Weakly organized delta relief stays nearly direction neutral. Coherent
     // ranges strongly suppress cross-range training, not the moving wind itself.
-    const organized=clip((r.strength[k]-.15)/.4),aligned=clip((parallel*parallel-.2)/.8)**2;
+    const organized=clip((r.strength[k]-.15)/.4),aligned=clip((parallel*parallel-.25)/.5);
     return 1-organized+organized*aligned;
   };
   Model.prototype._coastalFoothillAccess=function(x,y){
@@ -1268,14 +1291,31 @@
   Model.prototype._southernRelaySource=function(x,y,bg){
     if(!this.config.organizedWarmSector)return null;
     const angle=bg.windAngle??this._monsoonAngle(this.t),ex=Math.cos(angle),ey=Math.sin(angle);
-    let nearest=null,best=30000;
+    let nearest=null,best=45000;
     for(const source of this.triggerSources){
       const dx=x-source.x,dy=y-source.y,d=Math.hypot(dx,dy),cross=Math.abs(-ey*dx+ex*dy);
       // Allow both upstream extension and southward flank propagation, but
-      // not a remote unrelated front or a second source on the northern side.
-      if(dy < -1500 && d<best && cross<18000){nearest=source;best=d;}
+      // eastward flank hand-off. The actual cold-front gate must still verify
+      // warm-side lifting; a pure northern extension gets no preference.
+      if(((dy < -1500&&cross<24000)||(dx>1500&&Math.abs(dy)<12000))&&d<best){nearest=source;best=d;}
+    }
+    // The outflow is produced beneath moving rain cores, not only beneath
+    // the stationary root. Follow a still-active parent's nearby rain core
+    // when the front has travelled beyond the root's local search radius.
+    if(!nearest)for(const cell of this.cells){
+      if(!cell.triggerSourceId||cell.age>3600||!(cell.a>.1))continue;
+      const dx=x-cell.x,dy=y-cell.y,d=Math.hypot(dx,dy);
+      if(d>=20000||d>=best||!(dy<-1500||(dx>1500&&Math.abs(dy)<12000)))continue;
+      const source=this.triggerSources.find(s=>s.id===cell.triggerSourceId);
+      if(source){nearest=source;best=d;}
     }
     return nearest;
+  };
+  Model.prototype._trainingMeander=function(id,bg){
+    if(!id)return 0;
+    const r=random(hash(this.config.seed,'training-meander',id??'local')),phase=r()*2*Math.PI,period=7200+r()*5400;
+    const speed=this.config.boundedMonsoon?this._monsoonSpeeds(bg).jet:13;
+    return Math.min(1.5,speed/10)*Math.sin(2*Math.PI*this.t/period+phase);
   };
   // A bounded lateral displacement responds to actual changes in wind and
   // cold outflow; no independent random walk and no cloud-water source.
@@ -1283,14 +1323,14 @@
     if(!this.config.organizedWarmSector||dt<=0)return [0,0];
     const speed=Math.hypot(u,v);if(speed<1)return [0,0];const nx=-v/speed,ny=u/speed,k=this.env.index(c.x,c.y),out=this._coldCarrierAt(c.x,c.y);
     const cross=k<0?0:(this.fields.u[k]-u)*nx+(this.fields.v[k]-v)*ny;
-    const target=2500*Math.tanh((cross+.25*(out.relativeX*nx+out.relativeY*ny))/2),old=c.swayOffsetM||0,next=old+(target-old)*(-Math.expm1(-dt/2400));c.swayOffsetM=next;
+    const target=2500*Math.tanh((cross+.25*(out.relativeX*nx+out.relativeY*ny)+this._trainingMeander(c.triggerSourceId,this.background()))/2),old=c.swayOffsetM||0,next=old+(target-old)*(-Math.expm1(-dt/2400));c.swayOffsetM=next;
     return [nx*(next-old)/dt,ny*(next-old)/dt];
   };
   Model.prototype._shiftTrainingSource=function(source,bg){
     if(!this.config.organizedWarmSector)return;
     source.anchorX??=source.x;source.anchorY??=source.y;source.anchorAngle??=bg.windAngle??this._monsoonAngle(this.t);
     const angle=bg.windAngle??this._monsoonAngle(this.t),nx=-Math.sin(angle),ny=Math.cos(angle),out=this._coldCarrierAt(source.x,source.y);
-    const offset=5000*Math.tanh(2*(angle-source.anchorAngle)+.12*(out.relativeX*nx+out.relativeY*ny));
+    const offset=5000*Math.tanh(2*(angle-source.anchorAngle)+.12*(out.relativeX*nx+out.relativeY*ny)+.45*this._trainingMeander(source.id,bg));
     const dx=source.anchorX+nx*offset-source.x,dy=source.anchorY+ny*offset-source.y,length=Math.hypot(dx,dy),scale=Math.min(1,1000/Math.max(1,length)),candidate={...source,x:source.x+dx*scale,y:source.y+dy*scale};
     if(this.env.index(candidate.x,candidate.y)<0)return;
     if(length<1)return;const gate=this._persistentSourceGate(candidate,bg);if(gate.F>0){source.x=candidate.x;source.y=candidate.y;}
@@ -1330,7 +1370,8 @@
     // Require local relief and a reachable jet; never extend this inland.
     const coastalPrd=(prd&&lat<22.72||prdLon>=114.9&&prdLon<=116.6&&Math.abs(l)<p.exitLength)&&distance<30000;
     const hillGate=hillEligible?Math.max(hillFront,coastalPrd ? .55 : 0)*terrainSite*remainingJet:0;
-    const westernWindwardLift=prdLon>=111.4&&prdLon<112.65&&hillEligible?Math.min(.4,(speeds?.jet??13)*exposure.riseM/7500)*terrainSite*remainingJet:0;
+    const windwardChannel=(prdLon>=111.4&&prdLon<112.65)||(prdLon>=114.65&&frame.angle*180/Math.PI<50);
+    const westernWindwardLift=windwardChannel&&hillEligible?Math.min(.4,(speeds?.jet??13)*exposure.riseM/7500)*terrainSite*remainingJet:0;
     const prdLift=coastalPrd&&hillEligible ? Math.max(.13*clip(anchor.reliefM/160),Math.min(.28,(speeds?.jet??13)*exposure.riseM/12000))*terrainSite*remainingJet:0;
     return {factor:clip(Math.max(along*(1-brake)*site,hillGate)+.6*slopeGate)*across*exitSupport*this._coastalDirectionAccess(x,bg)*this._marineInitiationAccess(x,y,bg)*(land>=.45||island?this._terrainTrainingAlignment(x,y,bg):1),trainingAlignment:this._terrainTrainingAlignment(x,y,bg),siteFactor:Math.max(site,hillEligible?terrainSite:0),directionAccess:this._coastalDirectionAccess(x,bg),terrainAnchor:anchor,windwardExposure:exposure,slopeChannel,hillBrake:brake,hillFront,ascent:(Math.max(1800*gradient,hillAscent,prdLift,westernWindwardLift)+.6*slopeAscent)*across,alignment,placement:frame.placement,sampledExitM:frame.sampledExit,exitM:coord.exit,distanceFromExitM:l,crossAxisM:cross};
   };

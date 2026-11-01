@@ -1,50 +1,159 @@
 {
-  "model": "vacation-1.43.0",
-  "resource": "1.43.0-r1",
+  "model": "vacation-1.44.0",
+  "resource": "1.44.0-r1",
   "date": "2026-11-01",
-  "scope": "Source-proximal growth, distance/cross-range supply limits, coastal source placement, README rewrite; targeted tests and four-hour summary",
   "checks": {
-    "northernEnpingZhuhaiSourcesExcluded": true,
-    "ZhuhaiCoastalSlopePreserved": true,
-    "crossRangeNewAndPersistentSourcesSuppressed": true,
-    "southerlyShanweiSuppressed": true,
-    "distanceAndTerrainApplyToLocalAndSharedFeed": true,
-    "marineSoutherlyExclusionPreserved": true,
-    "westernSlopeAndEasternExitRegression": true,
-    "coreRainCapAndWaterLedger": true,
-    "readmeLocalLinks": true,
-    "controlledSupplyFactors": {
-      "within8km": 1,
-      "at50km": 0.2465969639416065,
-      "at50kmAfterCrossRangeBarrier": 0.012329848197080336,
-      "at84km": 0
-    }
+    "targetedRegressionSuitesPassed": 9,
+    "rainPolesSeeds": [
+      17,
+      131,
+      920
+    ],
+    "coldVolumeHeatMomentumConserved": true,
+    "nonnegativeColdFields": true,
+    "coreRainCapMmH": 100,
+    "windwardAndMarineRestrictionsPreserved": true
   },
-  "shortWeatherRun": {
-    "seed": 17,
-    "windTurnStart": "south",
-    "hours": 4,
-    "exitOffsetM": 35000,
-    "births": 39,
-    "persistentBirths": 34,
-    "closedSources": 0,
-    "relativeWaterResidual": 3.691295071747692e-13,
-    "peakSlidingHourMm": 79.47357166913321,
-    "maxCellCondensationKgPerSecondByOriginDistance": {
-      "under15km": 12748940.103626588,
-      "15to35km": 3806589.4946528394,
-      "over35km": 498248.86718259694
+  "finalWeatherRun": {
+    "scenario": "final version controlled 232 degrees",
+    "seed": 131,
+    "hours": 6,
+    "regional": {
+      "west": {
+        "births": 35,
+        "maxSourceHours": 2.3333333333333335
+      },
+      "delta": {
+        "births": 137,
+        "maxSourceHours": 4.666666666666667
+      },
+      "east": {
+        "births": 38,
+        "maxSourceHours": 4.5
+      }
     },
-    "cellSamplesByDistance": [
-      68,
-      79,
-      51
-    ]
+    "stats": {
+      "eastwardRelayBirths": 1,
+      "southwardRelayBirths": 2,
+      "sourceClosureReasons": {
+        "maintenanceEnvironment": 23
+      },
+      "upstreamBlockedBirths": 1,
+      "persistentBirths": 176,
+      "closedTriggerSources": 23,
+      "births": 210,
+      "coldBirths": 26,
+      "deaths": 129,
+      "deathReasons": {
+        "thermal_or_updraft_support_lost": 62,
+        "pulse_completed": 51,
+        "maximum_age_protection": 16
+      }
+    },
+    "peakHourMm": 100.00000000000001,
+    "maxSourceSwayM": 3761.040599714748,
+    "maxColdKm2": 147162.5,
+    "earlyColdKm2": 8706.25,
+    "relativeResidual": 5.885212662186279e-13
   },
-  "fullMeteorologicalRun": false,
-  "newBrowserRun": false,
+  "southerlySeedComparisonBeforeColdMaturationChange": [
+    {
+      "seed": 17,
+      "hours": 4,
+      "regional": {
+        "west": {
+          "births": 18,
+          "maxSourceHours": 2.3333333333333335
+        },
+        "delta": {
+          "births": 17,
+          "maxSourceHours": 1.3333333333333333
+        },
+        "east": {
+          "births": 0,
+          "maxSourceHours": 0
+        }
+      },
+      "peakHourMm": 100.00000000000001,
+      "maxSourceSwayM": 3337.617315280194,
+      "relativeResidual": 3.6623128850497106e-13,
+      "roots": [
+        {
+          "x": 668107.3248963803,
+          "y": 350863.4808054194,
+          "count": 15
+        },
+        {
+          "x": 779443.7826266512,
+          "y": 381157.6903956011,
+          "count": 9
+        },
+        {
+          "x": 903607.1172927957,
+          "y": 402305.99658188154,
+          "count": 8
+        },
+        {
+          "x": 540064.1845189966,
+          "y": 313053.07421833277,
+          "count": 2
+        }
+      ]
+    },
+    {
+      "seed": 131,
+      "hours": 4,
+      "regional": {
+        "west": {
+          "births": 19,
+          "maxSourceHours": 2.1666666666666665
+        },
+        "delta": {
+          "births": 15,
+          "maxSourceHours": 1.1666666666666667
+        },
+        "east": {
+          "births": 0,
+          "maxSourceHours": 0
+        }
+      },
+      "peakHourMm": 100.00000000000003,
+      "maxSourceSwayM": 3102.793662806717,
+      "relativeResidual": 4.878381425520975e-13,
+      "roots": [
+        {
+          "x": 650768.5196809471,
+          "y": 351085.9058359637,
+          "count": 14
+        },
+        {
+          "x": 732559.5242968261,
+          "y": 364020.72053065186,
+          "count": 8
+        },
+        {
+          "x": 736243.3827894407,
+          "y": 335922.1403643319,
+          "count": 7
+        },
+        {
+          "x": 576513.3966179565,
+          "y": 317890.84936026484,
+          "count": 3
+        }
+      ]
+    }
+  ],
+  "coldComparison": {
+    "sameSeedDirectionAndExit": true,
+    "beforeEarlyColdKm2": 12125,
+    "afterEarlyColdKm2": 8706.25,
+    "beforeSixHourColdKm2": 179387.5,
+    "afterSixHourColdKm2": 147162.5
+  },
   "limitations": [
-    "Condensation-rate diagnostics are not a direct proof that radar maxima lie at every lifting point.",
-    "The four-hour sample does not validate every seed or the full three-day propagation sequence."
+    "Six-hour controlled-direction run, not a full three-day ensemble or visual acceptance.",
+    "Eastern and southern relay counts are nearby physical-front hand-offs, not proof of a province-wide propagation sequence.",
+    "Southern seed comparison predates only the final cold maturation adjustment."
   ]
 }

@@ -1,11 +1,11 @@
-# Vacation 1.43 validation (2026-11-01)
+# 当前验证：vacation-1.44.0
 
-Established roots initialize a finite updraft area from resolved lifting, with a shorter initial pulse growth stage. Condensation still draws from the shared finite water budget. All moving training cells now reduce supply demand and intensity with birth-origin distance; a fresh local donor does not bypass this reduction. Intervening high terrain further reduces support when the wind crosses an organized range. Root-origin coordinates and support are serialized in the existing cell records.
+2026-11-01。通过 9 组短回归：双雨区/摆动/接续、冷池成熟和守恒、源端供给、海上触发、迎风面、粤西山前、沿海风向响应、粤东减速区、雨强上限。
 
-Coherent cross-range flow suppresses new initiation, land cold-front initiation and persistent maintenance. Northern Enping and northern Zhuhai/Doumen source access fades earlier, while exposed southern foothills remain eligible. Existing marine restrictions and random exit-location response remain. Pulse range is 5.4–8.1 turnovers; organized cell age is capped at 120 minutes; source-linked support ceases at 84 km.
+最终代码的真实地形试算：种子 131，固定来向 232°，减速区偏移 20 km，从前一日 20:00 推进 6 小时。粤西/珠三角/粤东分别生成 35/137/38 个单体（包括持续补生）；出现 26 次冷池触发，其中 1 次向东、2 次向南接续。最大源点偏移 3.761 km，滑动小时降水峰值约 100 mm，水量相对残差 5.89e-13。
 
-Passed real-terrain source-placement and cross-range tests, controlled distance/barrier comparisons, marine gate/maintenance tests, western foothill and eastern exit regressions, lee exposure/sway/relay tests, and core-rate/water-ledger checks. Controlled support factors were 1 within 8 km, 0.247 at 50 km, and 0.0123 at 50 km behind a strong perpendicular ridge; parallel terrain did not impose that extra barrier. README local links resolve.
+同条件冷池调整前后：第 2 小时覆盖从 12125 降至 8706.25 km²（减少约 28%），第 6 小时从 179387.5 降至 147162.5 km²。统计口径为厚度至少 40 m、温差积分至少 20 K m、温差至少 0.3 K，含陆地和海面。受控交换测试确认幼期交换小于成熟期的四分之一，成熟横风交换小于顺风的四成，并保持体积、热亏损和动量守恒。
 
-Final four-hour southerly sample: seed 17, exit offset 35 km; 39 births, including 34 persistent births, zero closed roots, and 79.47 mm peak sliding-hour rainfall. Relative water residual: 3.69e-13. Peak cell condensation rates were 12.75 million kg/s within 15 km of birth, 3.81 million kg/s at 15–35 km, and 0.498 million kg/s beyond 35 km (68/79/51 cell samples). This supports stronger near-source condensation in this case; it is not a direct verification of radar maxima at every terrain point or of all three-day random processes.
+最后冷池调整前的两次南风 4 小时试算（种子 17/131），粤西分别生成 18/19 个单体，主要粤西起爆点相隔约 17 km。此对照验证了种子位置差异，不作为最终冷池版本的南风整体效果验收。
 
-No new full browser/gameplay run was performed. No screenshots, full replay, disk checkpoints, or temporary dependencies were generated. Summary statistics were computed in memory and the single current report was overwritten.
+没有录制完整模拟、截图或检查点。没有运行三天多种子集合或浏览器视觉验收；局地接续计数不等于已验证跨省长距离传播。完整紧凑数据见 ../tests/results/vacation-validation.json。
