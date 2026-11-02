@@ -4,7 +4,7 @@ const assert=require('node:assert/strict'),C=require('../../assets/scripts/vacat
 C.prepareBackendSync();
 const data=terrain(),project=proj4('EPSG:4326',data.meta.projection),m=new C.Model({preset:'monsoon',geography:'real',seed:17,weatherRegion:'west_guangdong',windTurnStart:'south',coastalForcing:{exitOffset:50000}},data),bg={...m.background(),windAngle:Math.PI/4};
 const xy=(lon,lat)=>{const p=project.forward([lon,lat]);return [p[0]+640000,p[1]+400000];},rows=[];
-for(const [name,lon,lat] of [['Yangchun SW',111.67,22.03],['Yangjiang NE',112.10,22.03],['South Enping',112.20,22.10]]){
+for(const [name,lon,lat] of [['Yangchun SW',111.70,22.02],['Yangjiang NE',112.10,22.03],['South Enping',112.20,22.10]]){
  const [x,y]=xy(lon,lat),a=m._jetExitAccess(x,y,bg);
  assert(a.slopeChannel.easternFlank>0,name+' is east of actual mountain relief');
  assert(a.factor>.2 && a.ascent>.1,name+' supports mountain lifting');

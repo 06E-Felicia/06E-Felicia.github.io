@@ -1,173 +1,85 @@
 {
-  "model": "vacation-1.45.0",
-  "resource": "1.45.0-r1",
-  "date": "2026-11-01",
+  "model": "vacation-1.47.0",
+  "resource": "1.47.0-r1",
+  "date": "2026-11-02",
   "checks": {
-    "regressionSuitesPassed": 10,
-    "remoteMarineColdFrontRejected": true,
-    "marineJetArrivalAllowsTrigger": true,
-    "southerlySeaExclusionPreserved": true,
-    "newCloudFootprintTestM": {
-      "major": 6250,
-      "minor": 4600
+    "regressionSuitesPassed": 11,
+    "realTerrainWindSamples": 24,
+    "westOpeningFlowDegrees": [
+      19.70938721671701,
+      42.40444986149669
+    ],
+    "southOpeningFlowDegrees": [
+      45.94026014674454,
+      72.40444986149669
+    ],
+    "midTurnProgressRange": [
+      0.3790892060537829,
+      0.6832580987134798
+    ],
+    "monotoneAndReproducible": true,
+    "leeCandidatesRejected": {
+      "pearlEast": 155,
+      "east": 251
     },
-    "youngStratiformSpreadMoment": 2.187,
-    "matureStratiformSpreadMoment": 18.224199353344495,
-    "condensateConservation": true,
-    "coreRainCapMmH": 100
+    "windwardCandidatesRetained": {
+      "pearlEast": 58,
+      "east": 123
+    }
   },
   "weatherRun": {
-    "scenario": "controlled 232 degrees",
     "seed": 131,
-    "hours": 6,
+    "hours": 4,
+    "windTurnStart": "west",
+    "exitOffsetM": 20000,
     "regional": {
       "west": {
-        "births": 31,
-        "maxSourceHours": 2.3333333333333335
+        "births": 2,
+        "maxSourceHours": 0.16666666666666666
       },
       "delta": {
-        "births": 128,
-        "maxSourceHours": 4.666666666666667
+        "births": 67,
+        "maxSourceHours": 2.6666666666666665
       },
       "east": {
         "births": 30,
-        "maxSourceHours": 4.5
+        "maxSourceHours": 2.5
       }
     },
+    "peakHourMm": 100,
+    "maxRedBandKm": 115.91374534882799,
+    "maxEastRedBandKm": 73.36566316713505,
+    "maxLinkedGroupSources": 2,
+    "audit": {
+      "water": 46078553771146.555,
+      "expected": 46078553771176.625,
+      "residual": -30.0703125,
+      "relativeResidual": 4.934189607623132e-13,
+      "activityResidual": 9.926306234715206e-13,
+      "coldVolumeResidual": 0.6123046875,
+      "coldHeatResidual": -0.04296875
+    },
     "stats": {
+      "linkedCoastalSources": 2,
       "eastwardRelayBirths": 0,
       "southwardRelayBirths": 1,
       "sourceClosureReasons": {
-        "maintenanceEnvironment": 5
+        "maintenanceEnvironment": 2
       },
       "upstreamBlockedBirths": 1,
-      "persistentBirths": 176,
-      "closedTriggerSources": 5,
-      "births": 189,
-      "coldBirths": 5,
-      "deaths": 109,
+      "persistentBirths": 89,
+      "closedTriggerSources": 2,
+      "births": 99,
+      "coldBirths": 2,
+      "deaths": 31,
       "deathReasons": {
-        "thermal_or_updraft_support_lost": 58,
-        "pulse_completed": 41,
-        "maximum_age_protection": 10
+        "thermal_or_updraft_support_lost": 15,
+        "pulse_completed": 16
       }
-    },
-    "peakHourMm": 99.64702716615184,
-    "maxRedBandKm": 61.083237998247924,
-    "maxEastRedBandKm": 34.01785965700717,
-    "maxActiveTravelKm": 64.79597579971589,
-    "firstRain": {
-      "t": 4800,
-      "localHour": 21.333333333333332,
-      "peakDbz": 55.469754020056506,
-      "echo5Km2": 712,
-      "echo20Km2": 456,
-      "stratiform5Km2": 592,
-      "stratiform20Km2": 324,
-      "rainRate": 25.703614281484743,
-      "hourMm": 4.2839357135807905,
-      "coldKm2": 287.5,
-      "connectedCold": {
-        "pixels": 46,
-        "lengthKm": 21.010585970015686,
-        "widthKm": 17.789857579750986,
-        "areaKm2": 287.5
-      },
-      "regionColdKm2": null,
-      "births": 1,
-      "coldBirths": 0,
-      "cells": 1,
-      "activeSources": 1,
-      "persistentBirths": 0,
-      "triggerFraction": 0.0022216796875,
-      "inflowLandRH": 0.8466936172122758,
-      "redBand": {
-        "pixels": 14,
-        "lengthKm": 10.15353749728675,
-        "widthKm": 7.622529449021368
-      },
-      "eastRedBand": {
-        "pixels": 0,
-        "lengthKm": 0,
-        "widthKm": 0
-      }
-    },
-    "atTwoHours": {
-      "t": 7200,
-      "localHour": 22,
-      "peakDbz": 62.89002404039347,
-      "echo5Km2": 8696,
-      "echo20Km2": 6276,
-      "stratiform5Km2": 8428,
-      "stratiform20Km2": 5916,
-      "rainRate": 100.00000000000001,
-      "hourMm": 50.849949398128416,
-      "coldKm2": 7831.25,
-      "connectedCold": {
-        "pixels": 554,
-        "lengthKm": 72.2955667569038,
-        "widthKm": 62.22323989559307,
-        "areaKm2": 3462.5
-      },
-      "regionColdKm2": null,
-      "births": 15,
-      "coldBirths": 0,
-      "cells": 15,
-      "activeSources": 5,
-      "persistentBirths": 10,
-      "triggerFraction": 0.0026123046875,
-      "inflowLandRH": 0.8467811799371296,
-      "redBand": {
-        "pixels": 96,
-        "lengthKm": 39.1746547177794,
-        "widthKm": 12.817058293496562
-      },
-      "eastRedBand": {
-        "pixels": 74,
-        "lengthKm": 30.134884454605203,
-        "widthKm": 12.909935535228872
-      }
-    },
-    "atSixHours": {
-      "t": 21600,
-      "localHour": 2,
-      "peakDbz": 61.15506415350109,
-      "echo5Km2": 63216,
-      "echo20Km2": 38820,
-      "stratiform5Km2": 63152,
-      "stratiform20Km2": 38708,
-      "rainRate": 100.00000000000001,
-      "hourMm": 95.08712234968687,
-      "coldKm2": 141837.5,
-      "connectedCold": {
-        "pixels": 22694,
-        "lengthKm": 730.2663094141018,
-        "widthKm": 260.58053248211985,
-        "areaKm2": 141837.5
-      },
-      "regionColdKm2": null,
-      "births": 189,
-      "coldBirths": 5,
-      "cells": 80,
-      "activeSources": 8,
-      "persistentBirths": 176,
-      "triggerFraction": 0.002685546875,
-      "inflowLandRH": 0.8520478018153375,
-      "redBand": {
-        "pixels": 76,
-        "lengthKm": 52.22435446392426,
-        "widthKm": 8.404808636384432
-      },
-      "eastRedBand": {
-        "pixels": 36,
-        "lengthKm": 20.924717198763364,
-        "widthKm": 9.074896198517965
-      }
-    },
-    "relativeResidual": 5.455258493411712e-13
+    }
   },
   "limitations": [
-    "Controlled 232-degree six-hour run only; no full three-day ensemble or browser screenshot acceptance.",
-    "100 km is the maximum source-feed distance, not a promised radar train length."
+    "One four-hour weather run; no full three-day ensemble or browser screenshot acceptance.",
+    "Terrain candidate scan counts sample several wind directions; these are not unique stations or simulated storm counts."
   ]
 }

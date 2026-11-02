@@ -217,7 +217,7 @@
       if(!['legacy','inertial'].includes(this.config.coldDynamics)||!['point','head_work'].includes(this.config.frontClosure)||!Number.isFinite(this.config.coldDampingSeconds)||this.config.coldDampingSeconds<0)throw Error('冷层动力或头部闭合参数非法');
       if(!['face_1d','levelset_2d'].includes(this.config.frontKinematics)||!['legacy','finite_jet'].includes(this.config.coastalWindModel))throw Error('轮廓或沿岸风场模式非法');
       if(!['local_latent','carried_export'].includes(this.config.convectiveHeating))throw Error('对流加热模式非法');
-      this.terrain=terrain;this.preset=PRESETS[this.config.preset];if(this.config.preset==='monsoon'){const r=random(hash(this.config.seed,'monsoon-environment'));this.monsoon=this.config.environment||{hour:Math.floor(r()*24),rhL:.79+.17*r(),rhM:.62+.25*r(),eL:.5+.45*r(),eM:.35+.4*r(),iL:1+8*r(),iM:4+12*r(),day:1+2.5*r(),night:1+2.5*r(),baseV:6+7*r(),nightBoost:1+5*r(),axisAngle:(15+60*r())*Math.PI/180,axisX:-160000+320000*r(),axisY:-200000+140000*r(),width:80000+100000*r(),end:200000+280000*r(),endWidth:50000+60000*r(),steerSpeed:6+9*r(),steerOffset:(-25+45*r())*Math.PI/180,dayHeating:.05+.2*r()};if(!this.config.environment){const group=this.config.scenarioGroup||'coastal',p=this.monsoon;if(group==='coastal'){p.hour=22;p.rhL=.92;p.rhM=.81;p.iL=2.5;p.iM=7;p.steerOffset=-.45;p.steerSpeed=9;}else if(group==='terrain'){p.hour=2;p.rhL=.91;p.rhM=.80;p.iL=3;p.steerSpeed=6;p.width=140000;}else if(group==='afternoon'){p.hour=11;p.rhL=.86;p.rhM=.70;p.iL=4;p.dayHeating=.25;p.nightBoost=1;}else if(group==='fastline'){p.hour=20;p.rhL=.92;p.rhM=.82;p.iL=2;p.steerSpeed=17;p.steerOffset=.1;p.baseV=14;}}if(this.config.slowMonsoonTurn&&!this.config.environment){const turn=random(hash(this.config.seed,'three-day-wind-turn'));const startsWest=this.config.windTurnStart?this.config.windTurnStart==='west':turn()<.5;this.monsoon.axisAngle=(startsWest?15+5*turn():70+5*turn())*Math.PI/180;}if(this.config.organizedWarmSector&&!this.config.environment&&['coastal','terrain'].includes(this.config.scenarioGroup||'coastal')){const energy=random(hash(this.config.seed,'warm-sector-energy'));this.monsoon.eL=.84+.1*energy();this.monsoon.eM=.70+.1*energy();}const mr=random(hash(this.config.seed,'independent-midwind')),group=this.config.scenarioGroup||'coastal';this.monsoon.midDirection??=(group==='coastal'?10+35*mr():group==='terrain'?10+35*mr():group==='fastline'?-10+45*mr():360*mr())*Math.PI/180;this.monsoon.midSpeed??=(group==='fastline'?14+6*mr():6+8*mr());this.monsoon.hour=this.config.startHour??20;this.config.calendarOrigin??='previous_day';this.preset=this.monsoon;this.config.environment=Object.assign({},this.monsoon);this.config.startHour=this.monsoon.hour;}else this.config.startHour=this.preset.hour;this.t=0;this.triggerSources=[];this.cells=[];this.events=[];this.lifeEvents=[];this.forcingEvents=[];this.forcingEventStates={};this.operationLog=[];
+      this.terrain=terrain;this.preset=PRESETS[this.config.preset];if(this.config.preset==='monsoon'){const r=random(hash(this.config.seed,'monsoon-environment'));this.monsoon=this.config.environment||{hour:Math.floor(r()*24),rhL:.79+.17*r(),rhM:.62+.25*r(),eL:.5+.45*r(),eM:.35+.4*r(),iL:1+8*r(),iM:4+12*r(),day:1+2.5*r(),night:1+2.5*r(),baseV:6+7*r(),nightBoost:1+5*r(),axisAngle:(15+60*r())*Math.PI/180,axisX:-160000+320000*r(),axisY:-200000+140000*r(),width:80000+100000*r(),end:200000+280000*r(),endWidth:50000+60000*r(),steerSpeed:6+9*r(),steerOffset:(-25+45*r())*Math.PI/180,dayHeating:.05+.2*r()};if(!this.config.environment){const group=this.config.scenarioGroup||'coastal',p=this.monsoon;if(group==='coastal'){p.hour=22;p.rhL=.92;p.rhM=.81;p.iL=2.5;p.iM=7;p.steerOffset=-.45;p.steerSpeed=9;}else if(group==='terrain'){p.hour=2;p.rhL=.91;p.rhM=.80;p.iL=3;p.steerSpeed=6;p.width=140000;}else if(group==='afternoon'){p.hour=11;p.rhL=.86;p.rhM=.70;p.iL=4;p.dayHeating=.25;p.nightBoost=1;}else if(group==='fastline'){p.hour=20;p.rhL=.92;p.rhM=.82;p.iL=2;p.steerSpeed=17;p.steerOffset=.1;p.baseV=14;}}if(this.config.slowMonsoonTurn&&!this.config.environment){const turn=random(hash(this.config.seed,'three-day-wind-turn'));const startsWest=this.config.windTurnStart?this.config.windTurnStart==='west':turn()<.5;this.monsoon.axisAngle=(startsWest?15+30*turn():45+30*turn())*Math.PI/180;}if(this.config.organizedWarmSector&&!this.config.environment&&['coastal','terrain'].includes(this.config.scenarioGroup||'coastal')){const energy=random(hash(this.config.seed,'warm-sector-energy'));this.monsoon.eL=.84+.1*energy();this.monsoon.eM=.70+.1*energy();}const mr=random(hash(this.config.seed,'independent-midwind')),group=this.config.scenarioGroup||'coastal';this.monsoon.midDirection??=(group==='coastal'?10+35*mr():group==='terrain'?10+35*mr():group==='fastline'?-10+45*mr():360*mr())*Math.PI/180;this.monsoon.midSpeed??=(group==='fastline'?14+6*mr():6+8*mr());this.monsoon.hour=this.config.startHour??20;this.config.calendarOrigin??='previous_day';this.preset=this.monsoon;this.config.environment=Object.assign({},this.monsoon);this.config.startHour=this.monsoon.hour;}else this.config.startHour=this.preset.hour;this.t=0;this.triggerSources=[];this.cells=[];this.events=[];this.lifeEvents=[];this.forcingEvents=[];this.forcingEventStates={};this.operationLog=[];
       const product=PRODUCTS[this.config.quality],w=this.config.width,h=this.config.height;
       for(const dx of [5000,2500,2000,1000,product.dx])validateGridExtent(w,h,dx);
       this.interval=this.config.outputInterval??product.interval;
@@ -454,8 +454,9 @@
       for(const e of events){
         if(!this._birthRegionAllowed(e.x,e.y))continue;
         const advancingFront=e.gate.source==='coldPool'&&e.gate.coldPower>0&&e.gate.F>0;
-        if(!e.triggerSource&&!advancingFront&&this._southernColdBarrier(e.x,e.y)){this.stats.southernColdBlockedBirths=(this.stats.southernColdBlockedBirths||0)+1;continue;}
-        if(!e.triggerSource&&!advancingFront&&this._upstreamSource(e.x,e.y,bg)){
+        const peer=!e.layer&&!e.triggerSource?this._coastalPeer(e.x,e.y,bg):null;
+        if(!e.triggerSource&&!advancingFront&&!peer&&this._southernColdBarrier(e.x,e.y)){this.stats.southernColdBlockedBirths=(this.stats.southernColdBlockedBirths||0)+1;continue;}
+        if(!e.triggerSource&&!advancingFront&&!peer&&this._upstreamSource(e.x,e.y,bg)){
           this.stats.upstreamBlockedBirths=(this.stats.upstreamBlockedBirths||0)+1;
           
           continue;
@@ -468,7 +469,8 @@
         if(!e.layer&&this.config.persistentInitiation){
           const source=e.triggerSource||{id:'root:'+c.id,x:c.x,y:c.y,anchorX:c.x,anchorY:c.y,anchorAngle:bg.windAngle??this._monsoonAngle(this.t),activated:c.born,lastBirth:c.born};
           if(!e.triggerSource){if(relaySource){source.relayFrom=relaySource.id;const relayKey=source.y<relaySource.y-1500?'southwardRelayBirths':'eastwardRelayBirths';this.stats[relayKey]=(this.stats[relayKey]||0)+1;}this.triggerSources.push(source);}else this.stats.persistentBirths=(this.stats.persistentBirths||0)+1;
-          source.lastBirth=c.born;c.triggerSourceId=source.id;
+          if(!e.triggerSource&&peer){source.linkedSourceId=peer.source.id;source.trainGroupId=peer.source.trainGroupId||peer.source.id;this.stats.linkedCoastalSources=(this.stats.linkedCoastalSources||0)+1;}
+          source.lastBirth=c.born;c.triggerSourceId=source.id;c.trainGroupId=source.trainGroupId||source.id;
           if(this.config.organizedWarmSector)c.updraftArea=Math.PI*(3500+2000*clip(e.gate.power/40))**2;
         }
         if(c.triggerSourceId&&this.config.connectedTrainingFeed)c.phase=random(hash(this.config.seed,'train-phase',c.triggerSourceId))()*2*Math.PI;
@@ -874,7 +876,13 @@
   Model.prototype._monsoonAngle=function(at){
     const c=this.coastalGeometry,initial=c?Math.atan2(c.axisDirection.y,c.axisDirection.x):(this.monsoon?.axisAngle??Math.PI/4);
     if(!this.config.varyMonsoonDirection||!this.monsoon)return initial;
-    if(this.config.slowMonsoonTurn){const r=random(hash(this.config.seed,'three-day-wind-end')),end=(initial<Math.PI/4?70+5*r():15+5*r())*Math.PI/180;return initial+(end-initial)*clip(at/(72*3600));}
+    if(this.config.slowMonsoonTurn){
+      const r=random(hash(this.config.seed,'three-day-wind-end')),end=(initial<Math.PI/4?55+20*r():15+20*r())*Math.PI/180;
+      // Seeded, monotone timing: retain the three-day turn without identical
+      // opening angles or a fixed angular speed in every game. Derivative > 0.
+      const u=clip(at/(72*3600)),skew=(r()-.5)*1.2,progress=u+skew*Math.sin(Math.PI*u)/Math.PI;
+      return initial+(end-initial)*progress;
+    }
     const phase=Math.asin(Math.max(-1,Math.min(1,(initial-Math.PI/4)/(Math.PI/6))));
     return Math.PI/4+Math.PI/6*Math.sin(2*Math.PI*at/86400+phase);
   };
@@ -1026,6 +1034,20 @@
   Model.prototype._sourceOrder=function(a,b,bg){
     if(this.config.organizedWarmSector&&this.terrain){const g=this.forcing,d=this.terrain.fields.signedDistance;return g.sample(d,a.x,a.y)-g.sample(d,b.x,b.y);}
     const e=this.coastalGeometry?this._jetFrame(bg).e:{x:0,y:1};return (a.x-b.x)*e.x+(a.y-b.y)*e.y;
+  };
+  // Separate windward hills in one coastal inflow corridor may cooperate.
+  // A source is not evidence that all downstream moisture has been consumed.
+  Model.prototype._coastalPeer=function(x,y,bg){
+    if(!this.config.organizedWarmSector||!this.terrain||!this.triggerSources.length)return null;
+    const jet=this._jetExitAccess(x,y,bg),g=this.forcing,f=this.terrain.fields,d=g.sample(f.signedDistance,x,y);
+    if(!this._birthRegionAllowed(x,y)||d>45000||d< -10000||jet.factor<.04||jet.ascent<.025||jet.windwardExposure.factor<.2||jet.windwardExposure.riseM<20)return null;
+    const angle=bg.windAngle??this._monsoonAngle(this.t),ex=Math.cos(angle),ey=Math.sin(angle);let peer=null,best=110000;
+    for(const source of this.triggerSources){const dx=x-source.x,dy=y-source.y,length=Math.hypot(dx,dy),sd=g.sample(f.signedDistance,source.x,source.y);
+      if(length<12000||length>=best||Math.abs(d-sd)>22000||Math.abs(dx*ex+dy*ey)/length<.72)continue;
+      peer=source;best=length;
+    }
+    if(!peer)return null;
+    const feed=this._trainingFeed(x,y);return feed.accessible?{source:peer,feed,jet}:null;
   };
   Model.prototype._upstreamSource=function(x,y,bg,sources=this.triggerSources){
     if(!this.config.upstreamSourceBlocking)return null;
@@ -1257,8 +1279,11 @@
       broadLee=bd<=near&&drop>35&&bu-bd>45?0:1-clip((drop-40)/120)*clip((bu-bd-30)/120);
       this._exposureCache.set(broadKey,broadLee);
     }
-    const factor=crest?0:broadLee*(1-southerly+southerly*lee*ahead);
-    const result={factor,riseM,leeDropM,crest,remainingAscentM:riseM,localM:local,upstreamM:up,downstreamM:down};this._exposureCache.set(key,result);return result;
+    // Local descent applies to every inflow direction. A second distant hill
+    // must not turn the descending face immediately behind a crest into lift.
+    const localDescent=upNear>local+20&&downNear<local-10;
+    const factor=crest||localDescent?0:broadLee*lee*(1-southerly+southerly*ahead);
+    const result={factor,riseM,leeDropM,crest,localDescent,remainingAscentM:riseM,localM:local,upstreamM:up,downstreamM:down};this._exposureCache.set(key,result);return result;
   };
   // Southward backbuilding is new lifting at the warm edge, not southward
   // advection of existing echoes. Meridional trains stop at their last hill;
@@ -1439,7 +1464,17 @@
     const rh=layer?f.rhM[k]:f.rhL[k],energy=layer?f.em[k]:f.el[k],access=this.surfaceAccess(x,y),CIN=(layer?bg.iM:bg.iL)+20*clip(((layer?.65:.75)-rh)/.25)+(layer?0:.08*access.Q),basePower=.08*(layer?f.xiM[k]:f.xiL[k]);
     const lift=this._liftAccess(k,x,y,layer,bg),power=Math.max(basePower,.08*lift.parcelDisplacementM),wetness=this._newInitiationMoisture(x,y),F=(!layer&&!access.warmAccessible)?0:clip((rh-(layer?.45:.65))/(layer?.35:.25))*clip((energy-.15)/.65)*clip((power-CIN)/15)*lift.factor*wetness;
     let result={F,power,coldPower:0,CIN,rh,energy,Qlocal:access.Q,source:'environment',parent:null,rejection:F>0?null:!access.warmAccessible&&!layer?'fineCold':lift.reason||'inhibition',evidence:{F,Kenv:power,Kcp:0,CIN,rh,energy,surfaceAccess:access,position:{x,y},triggerLayer:layer?'mid':'low',focusedLift:lift,mechanism:f.xiTerrain[k]>f.xiConvergence[k]?'terrain':'convergence'}};
-    if(!environmentOnly&&!layer&&!this.config.disableCold){const b=this._areaFrontExposure(x,y);if(b){const front=this._boundaryEventGate(b,x,y,bg);if(front.F>F)result=front;}}
+    // A neighboring rain shaft may cover the surface while an independent
+    // coastal hill still lifts the connected warm column above that shallow air.
+    // Do not borrow a mature plume's maintenance shortcut for this NEW source.
+    if(!layer&&access.cold&&this._columnSupplyFraction(access,x,y)>.4){
+      const peer=this._coastalPeer(x,y,bg);
+      if(peer){const inlet=peer.feed,raised=this._liftAccess(k,x,y,0,bg,0,inlet),cin=bg.iL+20*clip((.75-inlet.rh)/.25),power=.08*raised.parcelDisplacementM;
+        const linkedF=clip((inlet.rh-.65)/.25)*clip((inlet.energy-.15)/.65)*clip((power-cin)/15)*raised.factor*this._newInitiationMoisture(inlet.x,inlet.y)*this._columnSupplyFraction(access,x,y);
+        if(linkedF>result.F)result={...result,F:linkedF,power,CIN:cin,rh:inlet.rh,energy:inlet.energy,rejection:null,evidence:{...result.evidence,F:linkedF,Kenv:power,CIN:cin,focusedLift:raised,linkedSourceId:peer.source.id,connectedFeed:inlet,mechanism:'independentCoastalLifting'}};
+      }
+    }
+    if(!environmentOnly&&!layer&&!this.config.disableCold){const b=this._areaFrontExposure(x,y);if(b){const front=this._boundaryEventGate(b,x,y,bg);if(front.F>result.F)result=front;}}
     return result;
   };
 
@@ -1877,7 +1912,9 @@
       // Rejection-sample the initial random direction when a shallow approach
       // cannot reach open sea and continuous mainland. Never invent a trigger
       // coordinate or relax the geographic admission checks.
-      const attempts=flat?candidates:candidates.flatMap(candidate=>Array.from({length:8},(_,attempt)=>({...candidate,axisAngle:attempt===0?axisAngle:((this.config.slowMonsoonTurn?(axisAngle<Math.PI/4?15:55):15)+(this.config.slowMonsoonTurn?20:60)*random(hash(this.config.seed,'axis-retry',attempt))())*Math.PI/180})));
+      // Try the sampled direction at every suitable coastal crossing before
+      // replacing it; candidate-first retries biased openings toward one angle.
+      const attempts=flat?candidates:Array.from({length:8},(_,attempt)=>candidates.map(candidate=>({...candidate,axisAngle:attempt===0?axisAngle:((this.config.slowMonsoonTurn?(axisAngle<Math.PI/4?15:45):15)+(this.config.slowMonsoonTurn?30:60)*random(hash(this.config.seed,'axis-retry',attempt))())*Math.PI/180}))).flat();
       for(const candidate of attempts){
         const n={x:candidate.nx,y:candidate.ny},t={x:n.y,y:-n.x},vx=normalSpeed*n.x+alongSpeed*t.x,vy=normalSpeed*n.y+alongSpeed*t.y,js=Math.min(5,Math.hypot(parameters.jetExcessNormal,parameters.jetExcessAlong)),directionAngle=candidate.axisAngle??axisAngle,jx=js*Math.cos(directionAngle),jy=js*Math.sin(directionAngle),speed=Math.hypot(vx,vy),dir=finite?{x:Math.cos(directionAngle),y:Math.sin(directionAngle)}:{x:vx/speed,y:vy/speed};
         if(!flat&&!finite&&(vy<=0||vx<-.25*speed)){rejected.direction++;continue;}
