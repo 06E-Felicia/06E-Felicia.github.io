@@ -1,0 +1,14 @@
+'use strict';
+const assert=require('node:assert/strict'),C=require('../../assets/scripts/vacation-model.js');
+const m=Object.create(C.Model.prototype);m.config={organizedWarmSector:true,seed:9,width:200000,height:200000};m.t=0;m.terrain={meta:{center:[114,22.5]},fields:{z:[]}};m.env={index:()=>0};m.fields={u:[13],v:[0]};m._sourceOrder=()=>0;m._trainingBarrier=a=>a.blocked;let blocked=false;m.surfaceAccess=()=>({blocked});
+m.triggerSources=[{id:'a',x:0,y:10000},{id:'b',x:60000,y:10000},{id:'c',x:110000,y:10000}];m.cells=[{triggerSourceId:'c'}];m._linkTrainingSources({windAngle:0});assert(m.triggerSources.every(r=>r.trainGroupId==='a'));assert.equal(m.cells[0].trainGroupId,'a');
+m._trainingFeed=()=>({accessible:true});const c={x:40000,y:10000};assert(m._linkedCorridorSupport(c,m.triggerSources[0])>.7);assert.equal(m._linkedCorridorSupport({x:150000,y:10000},m.triggerSources[0]),0);assert.equal(m._linkedCorridorSupport({x:40000,y:40000},m.triggerSources[0]),0);
+m._trainingFeed=()=>({accessible:false});assert.equal(m._linkedCorridorSupport(c,m.triggerSources[0]),0);blocked=true;m._linkTrainingSources({windAngle:0});assert.equal(new Set(m.triggerSources.map(r=>r.trainGroupId)).size,3,'deep cutoff splits existing groups');
+m.config.coastalWindParameters={exitLength:20000,sigmaJet:100000};let along=0;m._jetCoordinates=()=>({along,exit:0,cross:0});const xy=(lon,lat)=>[100000+(lon-114)*111195*Math.cos(22.5*Math.PI/180),100000+(lat-22.5)*111195];
+for(const p of [[112.75,21.72],[112.6,21.63],[117.1,23.43]]){along=0;assert.equal(m._restrictedIslandJetAccess(...xy(...p),{}),1);along=50000;assert.equal(m._restrictedIslandJetAccess(...xy(...p),{}),0);}
+assert.equal(m._restrictedIslandJetAccess(...xy(114.15,22.35),{}),1,'Hong Kong unchanged');
+m.background=()=>({});m._coldCarrierAt=()=>({relativeX:0,relativeY:0});m.fields.u=[13];m.fields.v=[0];let range=[Infinity,-Infinity];const a={x:0,y:0,trainGroupId:'a'},b={x:0,y:0,trainGroupId:'a'};
+for(let t=0;t<18000;t+=600){m.t=t;m._cellSway(a,13,0,600);m._cellSway(b,13,0,600);assert.equal(a.swayOffsetM,b.swayOffsetM);range=[Math.min(range[0],a.swayOffsetM),Math.max(range[1],a.swayOffsetM)];}
+assert(range[1]-range[0]>3000,'whole group visibly sweeps laterally over time');console.log(JSON.stringify({pass:true,linkedFedSegment:true,noExtensionPastLastRoot:true,islandExitRequired:true,coherentSwayRangeM:range[1]-range[0]}));
+
+blocked=false;m.triggerSources=[{id:'a',trainGroupId:'a',x:0,y:0},{id:'b',trainGroupId:'a',x:60000,y:12000}];const velocity=m._trainVelocity({x:20000,y:0,triggerSourceId:'a',trainGroupId:'a'},13,0);assert(velocity[1]>0);assert(Math.abs(Math.hypot(...velocity)-13)<1e-10);assert(Math.atan2(velocity[1],velocity[0])<=Math.PI/12);assert.deepEqual(m._trainVelocity({x:80000,y:0,triggerSourceId:'a',trainGroupId:'a'},13,0),[13,0]);

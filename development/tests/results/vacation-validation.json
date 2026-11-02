@@ -1,69 +1,96 @@
 {
-  "model": "vacation-1.48.0",
-  "resource": "1.48.0-r1",
-  "date": "2026-11-02",
-  "checks": {
-    "regressionSuitesPassed": 13,
-    "warmPocketBehindRemoteBarrierRejected": true,
-    "lowMidFrontAndPersistentChannelsChecked": true,
-    "openFlankAndShallowWarmColumnPreserved": true,
-    "reversedUpstreamFlowRejected": true,
-    "workflowYamlParsed": true
-  },
-  "weatherRun": {
+  "model": "vacation-1.50.0",
+  "config": {
+    "preset": "monsoon",
+    "geography": "real",
     "seed": 131,
-    "hours": 4,
     "windTurnStart": "west",
-    "exitOffsetM": 20000,
-    "regional": {
-      "west": {
-        "births": 2,
-        "maxSourceHours": 0.16666666666666666
-      },
-      "delta": {
-        "births": 67,
-        "maxSourceHours": 2.6666666666666665
-      },
-      "east": {
-        "births": 21,
-        "maxSourceHours": 2.5
-      }
+    "quality": "low",
+    "hours": 72,
+    "validationHours": 6,
+    "coastalForcing": {
+      "exitOffset": 20000
     },
-    "peakHourMm": 98.51590758432049,
-    "maxRedBandKm": 52.5665426262476,
-    "maxEastRedBandKm": 47.97457286083487,
-    "maxLinkedGroupSources": 2,
-    "audit": {
-      "water": 46131965690638.18,
-      "expected": 46131965690668.34,
-      "residual": -30.1640625,
-      "relativeResidual": 4.949572895565838e-13,
-      "activityResidual": 1.0012741063277794e-12,
-      "coldVolumeResidual": 0.46923828125,
-      "coldHeatResidual": 1.654296875
-    },
-    "stats": {
-      "linkedCoastalSources": 2,
-      "eastwardRelayBirths": 0,
-      "southwardRelayBirths": 0,
-      "sourceClosureReasons": {
-        "coldBarrier": 1,
-        "maintenanceEnvironment": 1
-      },
-      "upstreamBlockedBirths": 1,
-      "persistentBirths": 81,
-      "closedTriggerSources": 2,
-      "births": 90,
-      "coldBirths": 1,
-      "deaths": 28,
-      "deathReasons": {
-        "thermal_or_updraft_support_lost": 17,
-        "pulse_completed": 11
-      }
+    "startHour": 20,
+    "calendarOrigin": "previous_day",
+    "jetExitGeometry": "coast_following",
+    "upstreamSourceBlocking": true,
+    "longTrainingPulse": true,
+    "connectedTrainingFeed": true,
+    "directionalCoastalTrigger": true,
+    "monsoon925": true,
+    "boundedMonsoon": true,
+    "hillJetBraking": true,
+    "slowMonsoonTurn": true,
+    "trainingInflowFan": true,
+    "stratiformOutflow": true,
+    "coldDampingSeconds": 21600,
+    "coldVolumeMixingSeconds": 64800,
+    "coldThermalMixingSeconds": 64800,
+    "terrainBoundTrigger": true,
+    "region": "auto",
+    "group": "coastal",
+    "controls": {
+      "flow": 1,
+      "humidity": 0
     }
   },
+  "regional": {
+    "west": {
+      "births": 19,
+      "maxSourceHours": 2.1666666666666665,
+      "firstBirthSeconds": 13743.67791172117
+    },
+    "delta": {
+      "births": 117,
+      "maxSourceHours": 5,
+      "firstBirthSeconds": 697.6183708291501
+    },
+    "east": {
+      "births": 29,
+      "maxSourceHours": 2.8333333333333335,
+      "firstBirthSeconds": 4130.085080629215
+    }
+  },
+  "maxLinkedGroupSources": 5,
+  "maxSourceSwayM": 3638.4285282119904,
+  "maxRedBandKm": 51.08211497458645,
+  "maxEastRedBandKm": 49.96360342834231,
+  "peakHourMm": 96.35797307353418,
+  "stats": {
+    "linkedCoastalSources": 7,
+    "eastwardRelayBirths": 0,
+    "southwardRelayBirths": 0,
+    "sourceClosureReasons": {
+      "coldBarrier": 8,
+      "maintenanceEnvironment": 3
+    },
+    "upstreamBlockedBirths": 1,
+    "persistentBirths": 149,
+    "closedTriggerSources": 11,
+    "births": 165,
+    "coldBirths": 4,
+    "deaths": 122,
+    "deathReasons": {
+      "pulse_completed": 34,
+      "thermal_or_updraft_support_lost": 82,
+      "maximum_age_protection": 6
+    }
+  },
+  "audit": {
+    "water": 45920944819835.164,
+    "expected": 45920944819873.2,
+    "residual": -38.0390625,
+    "relativeResidual": 5.572831713117998e-13,
+    "activityResidual": 8.349898965355209e-13,
+    "coldVolumeResidual": 3.9375,
+    "coldHeatResidual": 8.265625
+  },
+  "regressionSuitesPassed": 15,
+  "date": "2026-11-02",
+  "controlledGroupSwayRangeM": 3641.3908862239487,
   "limitations": [
-    "One four-hour weather run, not a full three-day ensemble or screenshot acceptance.",
-    "Inflow tracing is bounded to the existing search range; this is a reduced-model connectivity parameterization."
+    "One low-resolution seed, six hours; not a three-day ensemble or visual verification of the supplied screenshot.",
+    "Continuous strong echo remains conditional on actual moisture and terrain."
   ]
 }

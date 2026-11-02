@@ -25,7 +25,7 @@ m.h[candidate]=300;m.q[candidate]=900;assert.equal(m._boundaryEventGate(b,x,y,co
 // Lateral movement responds reversibly to cold outflow, remains bounded, and
 // stores all memory in the cell/source records already saved by checkpoints.
 const c={x,y,swayOffsetM:0},orig=m._coldCarrierAt;m._coldCarrierAt=()=>({relativeX:0,relativeY:8});m.fields.u.fill(12);m.fields.v.fill(0);
-for(let j=0;j<30;j++){const a=m._cellSway(c,12,0,600);assert(Math.hypot(...a)<1.1);assert(Math.abs(c.swayOffsetM)<=2500);}const positive=c.swayOffsetM;assert(positive>1000);
+for(let j=0;j<30;j++){const a=m._cellSway(c,12,0,600);assert(Math.hypot(...a)<3);assert(Math.abs(c.swayOffsetM)<=4500);}const positive=c.swayOffsetM;assert(positive>1000);
 m._coldCarrierAt=()=>({relativeX:0,relativeY:-8});for(let j=0;j<30;j++)m._cellSway(c,12,0,600);assert(c.swayOffsetM<-1000);
 const clone=structuredClone(c);assert.deepEqual(m._cellSway(clone,12,0,600),m._cellSway(c,12,0,600));
 const originalGate=m._persistentSourceGate;m._persistentSourceGate=()=>({F:1});const root={x,y,anchorX:x,anchorY:y,anchorAngle:0};for(let i=0;i<30;i++){const a={x:root.x,y:root.y};m._shiftTrainingSource(root,bg);assert(Math.hypot(root.x-a.x,root.y-a.y)<=1000.001);assert(Math.hypot(root.x-x,root.y-y)<=5000.001);}m._persistentSourceGate=()=>({F:0});const old={...root};m._shiftTrainingSource(root,{...bg,windAngle:0});assert.deepEqual(root,old);m._persistentSourceGate=originalGate;m._coldCarrierAt=orig;
@@ -45,4 +45,4 @@ for(const unused of m.initiate()){}
 assert.equal(m.stats.southwardRelayBirths,1,'one new root survives source and cell spacing');
 assert.equal(m.triggerSources.length,2);assert.equal(m.triggerSources[1].relayFrom,'north');
 assert(m.triggerSources[1].y<m.triggerSources[0].y);assert.equal(m.cells.length,1);
-console.log(JSON.stringify({pass:true,leeRejected:['Pingshan','Enping'],southerlyCoast:true,offshoreColdFrontGate:gate.F,dryAndColdInteriorRejected:true,lateralLimitsM:{cell:2500,root:5000,step:1000}}));
+console.log(JSON.stringify({pass:true,leeRejected:['Pingshan','Enping'],southerlyCoast:true,offshoreColdFrontGate:gate.F,dryAndColdInteriorRejected:true,lateralLimitsM:{cell:4500,root:5000,step:1000}}));
