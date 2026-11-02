@@ -326,7 +326,7 @@
     }
     _ensurePulse(c){
       if(this.config.cellLifecycle==='legacy')return;
-      if(!c.pulse){const rng=random(hash(this.config.seed,'cell-pulse-1.7',c.id)),Hc=4500+2000*rng(),Nend=c.triggerSourceId&&this.config.jetExitControl?(this.config.longTrainingPulse?6.2+3*rng():5+2*rng()):3+1.2*rng();c.pulse={Hc,Nend,Ngrow:c.triggerSourceId&&this.config.organizedWarmSector?.18:.35,Ndecay:(c.triggerSourceId&&this.config.longTrainingPulse ? .55 : .60)*Nend,N:0,L:0,wturn:3,parameterization:'seeded finite engineering convection pulse'};}
+      if(!c.pulse){const rng=random(hash(this.config.seed,'cell-pulse-1.7',c.id)),Hc=4500+2000*rng(),Nend=c.triggerSourceId&&this.config.jetExitControl?(this.config.longTrainingPulse?8+3.5*rng():5+2*rng()):3+1.2*rng();c.pulse={Hc,Nend,Ngrow:c.triggerSourceId&&this.config.organizedWarmSector?.18:.35,Ndecay:(c.triggerSourceId&&this.config.longTrainingPulse ? .68 : .60)*Nend,N:0,L:0,wturn:3,parameterization:'seeded finite engineering convection pulse'};}
       c.physicalUpdraftArea??=c.updraftArea??Math.PI*1000**2;c.pulseEnvelope??=c.pulse.L;c.effectiveUpdraftArea??=c.physicalUpdraftArea*c.pulseEnvelope;c.updraftAirMassFlux??=0;
     }
     _advancePulse(c,thermal,dt=DT){
@@ -466,9 +466,9 @@
           continue;
         }
         const relaySource=advancingFront?this._southernRelaySource(e.x,e.y,bg):null;
-        const sourceBlocked=!e.triggerSource&&!e.layer&&this.config.persistentInitiation&&this.triggerSources.some(s=>(s.x-e.x)**2+(s.y-e.y)**2<(relaySource?4000:8000)**2),ix=Math.floor(e.x/bin),iy=Math.floor(e.y/bin);let blocked=sourceBlocked;for(let yy=iy-1;yy<=iy+1&&!blocked;yy++)for(let xx=ix-1;xx<=ix+1&&!blocked;xx++)for(const c of recent.get(xx+','+yy)||[])if((c.x-e.x)**2+(c.y-e.y)**2<bin*bin){blocked=true;break;}
+        const sourceBlocked=!e.triggerSource&&!e.layer&&this.config.persistentInitiation&&this._competingTriggerSource(e.x,e.y,bg,!!relaySource),ix=Math.floor(e.x/bin),iy=Math.floor(e.y/bin);let blocked=sourceBlocked;for(let yy=iy-1;yy<=iy+1&&!blocked;yy++)for(let xx=ix-1;xx<=ix+1&&!blocked;xx++)for(const c of recent.get(xx+','+yy)||[])if((c.x-e.x)**2+(c.y-e.y)**2<bin*bin){blocked=true;break;}
         if(blocked&&!e.triggerSource){this.stats.spacingRejected++;diagnostic.byLayer[e.layer?'mid':'low'].spacingRejected++;if(this._organizationContains(e.x,e.y))diagnostic.local.byLayer[e.layer?'mid':'low'].spacingRejected++;this._recordFrontCandidate(e.x,e.y,e.channel,'spacingRejected',1);if(e.inBand)this._recordFrontCandidate(e.x,e.y,e.channel,'inBandSpacingRejected',1);continue;}
-        const rng=random(hash(this.config.seed,'cell',e.id)),c={id:e.id,born:e.born??(this.t+DT*random(hash(this.config.seed,'birth-time',e.id))()),age:0,x:e.x,y:e.y,originX:e.x,originY:e.y,T:this.config.organizedWarmSector?8400:9360,major:1800,minor:1200,updraftArea:Math.PI*1000**2,starvedSeconds:0,supplyRatio:0,a:0,M:0,convectivePhaseEnergyJ:0,layer:e.layer,source:e.gate.source,parent:e.gate.parent,channel:e.channel,segmentKey:e.segmentKey,physicalFaceId:e.physicalFaceId,angle:Math.atan2(...this.steer().slice().reverse()),phase:rng()*Math.PI*2};
+        const rng=random(hash(this.config.seed,'cell',e.id)),c={id:e.id,born:e.born??(this.t+DT*random(hash(this.config.seed,'birth-time',e.id))()),age:0,x:e.x,y:e.y,originX:e.x,originY:e.y,T:this.config.organizedWarmSector?10200:9360,major:1800,minor:1200,updraftArea:Math.PI*1000**2,starvedSeconds:0,supplyRatio:0,a:0,M:0,convectivePhaseEnergyJ:0,layer:e.layer,source:e.gate.source,parent:e.gate.parent,channel:e.channel,segmentKey:e.segmentKey,physicalFaceId:e.physicalFaceId,angle:Math.atan2(...this.steer().slice().reverse()),phase:rng()*Math.PI*2};
         if(this.config.monsoon925){const k=this.env.index(c.x,c.y);c.vx=this.fields.um[k];c.vy=this.fields.vm[k];c.angle=Math.atan2(c.vy,c.vx);}
         if(!e.layer&&this.config.persistentInitiation){
           const source=e.triggerSource||{id:'root:'+c.id,x:c.x,y:c.y,anchorX:c.x,anchorY:c.y,anchorAngle:bg.windAngle??this._monsoonAngle(this.t),activated:c.born,lastBirth:c.born};
@@ -981,7 +981,8 @@
     const lon=this._approxLongitude(x),lat=(this.terrain?.meta.center[1]??22.5)+(y-this.config.height/2)/111195;
     const longmen=((lon-114.25)/.40)**2+((lat-23.78)/.32)**2<1;
     const northernDelta=lon>=112.95&&lon<=114.65&&lat>=22.83;
-    return !(northernDelta||longmen||(lon>=108.5&&lon<=112&&lat<20.35)||(lon>=110.35&&lon<=112&&lat<21.65));
+    const easternInterior=lon>=114.65&&this.terrain&&this.forcing.sample(this.terrain.fields.signedDistance,x,y)>35000;
+    return !(easternInterior||northernDelta||longmen||(lon>=108.5&&lon<=112&&lat<20.35)||(lon>=110.35&&lon<=112&&lat<21.65));
   };
   // Smooth humidity response for NEW parcels only. No clock threshold: real
   // moisture transport, night-time inflow humidification and daytime drying
@@ -1069,6 +1070,14 @@
   };
   // Separate windward hills in one coastal inflow corridor may cooperate.
   // A source is not evidence that all downstream moisture has been consumed.
+  Model.prototype._competingTriggerSource=function(x,y,bg,relay=false){
+    const angle=bg.windAngle??this._monsoonAngle(this.t),ex=Math.cos(angle),ey=Math.sin(angle);
+    return this.triggerSources.some(s=>{const dx=x-s.x,dy=y-s.y;
+      if(relay)return dx*dx+dy*dy<4000**2;
+      if(!this.config.organizedWarmSector)return dx*dx+dy*dy<8000**2;
+      return ((dx*ex+dy*ey)/26000)**2+((-dx*ey+dy*ex)/16000)**2<1;
+    });
+  };
   Model.prototype._coastalPeer=function(x,y,bg){
     if(!this.config.organizedWarmSector||!this.terrain||!this.triggerSources.length)return null;
     const jet=this._jetExitAccess(x,y,bg),g=this.forcing,f=this.terrain.fields,d=g.sample(f.signedDistance,x,y);
@@ -1233,7 +1242,7 @@
     if(!this.config.organizedWarmSector||!cell.triggerSourceId||cell.layer)return 1;
     const source=this.triggerSources.find(s=>s.id===cell.triggerSourceId);
     const ox=cell.originX??source?.x??cell.x,oy=cell.originY??source?.y??cell.y,dx=cell.x-ox,dy=cell.y-oy,distance=Math.hypot(dx,dy);
-    const travel=Math.exp(-Math.max(0,distance-8000)/38000)*clip((100000-distance)/16000);
+    const travel=Math.exp(-Math.max(0,distance-14000)/48000)*clip((120000-distance)/20000);
     if(!this.terrain)return travel;
     const g=this.forcing,z=this.terrain.fields.z,base=g.sample(z,ox,oy),bg=this.background();let barrier=0;
     for(let d=2500;d<=distance;d+=2500){const x=ox+dx*d/distance,y=oy+dy*d/distance;
@@ -1258,7 +1267,8 @@
     // Doumen / eastern Zhuhai foothills: fade before the northern Zhongshan
     // hills rather than treating every delta hill as the same lifting point.
     const westDelta=clip((lon-112.75)/.15)*clip((113.85-lon)/.2);
-    return 1-westDelta+westDelta*clip((22.55-lat)/.22);
+    const east=clip((lon-114.55)/.25),d=this.forcing.sample(this.terrain.fields.signedDistance,x,y);
+    return (1-westDelta+westDelta*clip((22.55-lat)/.22))*(1-east+east*clip((35000-d)/20000));
   };
   Model.prototype._movingTrainingFeed=function(cell){
     const local=this._trainingFeed(cell.x,cell.y,true);
@@ -1266,7 +1276,7 @@
     const source=this.triggerSources.find(s=>s.id===cell.triggerSourceId);
     if(!source)return local;
     const k=this.env.index(source.x,source.y),u=this.fields.um[k],v=this.fields.vm[k],speed=Math.hypot(u,v),dx=cell.x-source.x,dy=cell.y-source.y,distance=Math.hypot(dx,dy),along=(dx*u+dy*v)/Math.max(1,speed),cross=Math.abs(dx*v-dy*u)/Math.max(1,speed);
-    if(along<0||distance>100000||cross>25000+.1*along)return local;
+    if(along<0||distance>120000||cross>25000+.1*along)return local;
     const feed=this._trainingFeed(source.x,source.y);if(!feed.accessible)return local;
     // Same source, same finite water budget. A detached core cannot find a new
     // interior donor or cross a deep blocking pool to prolong its life.
@@ -1639,8 +1649,9 @@
       for(let j=0;j<count;j++){
         const weight=j===count-1?1-assigned:raw[j]/norm;assigned+=weight;
         const broad=this.config.organizedWarmSector,aspect=broad?1.55:1;
-        const phase=(c.phase||0)+j*2.1,along=(j-(count-1)/2)*c.major*.6,across=c.minor*(broad?Math.sin(phase+c.age/900)*.25+(j%2?1:-1)*.18:Math.sin(phase+c.age/900)*(c.triggerSourceId&&this.config.connectedTrainingFeed ? .10 : .35)),x=sourceX+Math.cos(c.angle)*along-Math.sin(c.angle)*across,y=sourceY+Math.sin(c.angle)*along+Math.cos(c.angle)*across,width=Math.max(800,Math.min(c.minor,Math.sqrt((c.updraftArea||Math.PI*1000**2)/(Math.PI*aspect)))*Math.sqrt(weight));
-        c.subcores.push({x:x+c.x-sourceX,y:y+c.y-sourceY,width,minor:width*aspect,weight});yield*this.depositPrecip(coreSource,x,y,width*(1+.3*clip((c.shear||0)/15)),width*aspect,c.angle,core*weight,'core');
+        const phase=(c.phase||0)+j*2.1,along=(j-(count-1)/2)*c.major*.6,across=c.minor*(broad?Math.sin(phase+c.age/900)*.12+(j%2?1:-1)*.08:Math.sin(phase+c.age/900)*(c.triggerSourceId&&this.config.connectedTrainingFeed ? .10 : .35)),x=sourceX+Math.cos(c.angle)*along-Math.sin(c.angle)*across,y=sourceY+Math.sin(c.angle)*along+Math.cos(c.angle)*across,width=Math.max(800,Math.min(c.minor,Math.sqrt((c.updraftArea||Math.PI*1000**2)/(Math.PI*aspect)))*Math.sqrt(weight));
+        const coreMajor=width*aspect*(1+.3*clip((c.shear||0)/15)),coreMinor=width;
+        c.subcores.push({x:x+c.x-sourceX,y:y+c.y-sourceY,width:coreMajor,minor:coreMinor,weight});yield*this.depositPrecip(coreSource,x,y,coreMajor,coreMinor,c.angle,core*weight,'core');
       }
       yield*this.depositPrecip(P.qa,sourceX-(c.vx||0)*300,sourceY-(c.vy||0)*300,Math.max(c.major*1.25,3000),Math.max(c.minor*1.15,2000),c.angle,detach,'detrained');yield;
     }

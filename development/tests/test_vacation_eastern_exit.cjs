@@ -8,10 +8,10 @@ function sample(exit){m.coastalGeometry.options.exitOffset=exit;m.coastalGeometr
 // Keep the movable exit test on the actual windward inland face.
 assert.equal(m._windwardExposure(...xy(115.3,23.05),bg).factor,0);
 const interior=sample(60000),coastal=sample(10000),offshore=sample(-40000);
-assert(interior.inland.factor>interior.coast.factor*4,'inland deceleration can initiate inland first');
+assert.equal(interior.inland.factor,0,'deep eastern interior is excluded even when deceleration lies inland');
 assert(coastal.coast.factor>coastal.inland.factor*4,'shoreward deceleration moves the preferred zone to coast');
 assert.equal(offshore.inland.factor,0);assert(offshore.coast.exitM<0,'negative random exit remains offshore');
-assert(m._birthRegionAllowed(...xy(115.3,23.05)),'no permanent eastern inland exclusion');
+assert.equal(m._birthRegionAllowed(...xy(115.05,23.10)),false,'Huizhou northeast interior cannot establish a root');
 const coord=m._jetCoordinates(...xy(116.29,23.03),bg);assert.equal(coord.exit,offshore.coast.exitM,'wind and lifting use shared effective exit');
 // Random daily migration remains reproducible, with either sign possible.
 function exits(seed){const a=new C.Model({preset:'monsoon',geography:'real',seed},data);return [0,43200,86400,129600,172800].map(t=>a._jetCoordinates(...xy(116.29,23.03),{...a.background(t),atSeconds:t,windAngle:25*Math.PI/180}).exit);}

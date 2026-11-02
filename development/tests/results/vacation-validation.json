@@ -1,5 +1,5 @@
 {
-  "model": "vacation-1.50.0",
+  "model": "vacation-1.51.0",
   "config": {
     "preset": "monsoon",
     "geography": "real",
@@ -42,55 +42,72 @@
       "firstBirthSeconds": 13743.67791172117
     },
     "delta": {
-      "births": 117,
+      "births": 116,
       "maxSourceHours": 5,
       "firstBirthSeconds": 697.6183708291501
     },
     "east": {
-      "births": 29,
-      "maxSourceHours": 2.8333333333333335,
-      "firstBirthSeconds": 4130.085080629215
+      "births": 3,
+      "maxSourceHours": 0.3333333333333333,
+      "firstBirthSeconds": 7260.705804917961
     }
   },
-  "maxLinkedGroupSources": 5,
-  "maxSourceSwayM": 3638.4285282119904,
-  "maxRedBandKm": 51.08211497458645,
-  "maxEastRedBandKm": 49.96360342834231,
-  "peakHourMm": 96.35797307353418,
+  "maxLinkedGroupSources": 3,
+  "maxSourceSwayM": 3649.5070450947983,
+  "maxRedBandKm": 112.63078898294069,
+  "maxEastRedBandKm": 29.092565391342273,
+  "peakHourMm": 98.97048984129964,
   "stats": {
     "linkedCoastalSources": 7,
     "eastwardRelayBirths": 0,
     "southwardRelayBirths": 0,
     "sourceClosureReasons": {
-      "coldBarrier": 8,
-      "maintenanceEnvironment": 3
+      "coldBarrier": 6,
+      "maintenanceEnvironment": 1
     },
     "upstreamBlockedBirths": 1,
-    "persistentBirths": 149,
-    "closedTriggerSources": 11,
-    "births": 165,
-    "coldBirths": 4,
-    "deaths": 122,
+    "persistentBirths": 126,
+    "closedTriggerSources": 7,
+    "births": 138,
+    "coldBirths": 2,
+    "deaths": 96,
     "deathReasons": {
-      "pulse_completed": 34,
-      "thermal_or_updraft_support_lost": 82,
-      "maximum_age_protection": 6
+      "pulse_completed": 27,
+      "thermal_or_updraft_support_lost": 64,
+      "maximum_age_protection": 5
     }
   },
   "audit": {
-    "water": 45920944819835.164,
-    "expected": 45920944819873.2,
-    "residual": -38.0390625,
-    "relativeResidual": 5.572831713117998e-13,
-    "activityResidual": 8.349898965355209e-13,
-    "coldVolumeResidual": 3.9375,
-    "coldHeatResidual": 8.265625
+    "water": 45982216583001.77,
+    "expected": 45982216583039.07,
+    "residual": -37.296875,
+    "relativeResidual": 5.46409911653837e-13,
+    "activityResidual": 8.228348444485447e-13,
+    "coldVolumeResidual": 1.06640625,
+    "coldHeatResidual": 3.640625
   },
-  "regressionSuitesPassed": 15,
   "date": "2026-11-02",
-  "controlledGroupSwayRangeM": 3641.3908862239487,
+  "regressionSuitesPassed": 16,
+  "comparison": {
+    "maxRedBandKm": {
+      "previous": 51.08211497458645,
+      "current": 112.63078898294069
+    },
+    "maxEastRedBandKm": {
+      "previous": 49.96360342834231,
+      "current": 29.092565391342273
+    },
+    "maxLinkedGroupSources": {
+      "previous": 5,
+      "current": 3
+    },
+    "peakHourMm": {
+      "previous": 96.35797307353418,
+      "current": 98.97048984129964
+    }
+  },
   "limitations": [
-    "One low-resolution seed, six hours; not a three-day ensemble or visual verification of the supplied screenshot.",
-    "Continuous strong echo remains conditional on actual moisture and terrain."
+    "One low-resolution six-hour westerly seed; not a full three-day or screenshot-matched visual validation.",
+    "Eastern-only strong band length decreased after removing inland sources; the 112.6 km maximum is domain-wide, not a Guangdong-east-only result."
   ]
 }
