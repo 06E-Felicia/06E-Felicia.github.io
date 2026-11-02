@@ -23,7 +23,7 @@
 
 ## 放假模拟器
 
-当前模型版本：**vacation-1.47.0**。这是面向华南暖区暴雨的参数化模拟和互动游戏，不是业务天气预报，也不保证每个随机环境都产生暴雨。
+当前模型版本：**vacation-1.48.0**。这是面向华南暖区暴雨的参数化模拟和互动游戏，不是业务天气预报，也不保证每个随机环境都产生暴雨。
 
 起爆位置采用阳春、汕尾两个宽范围雨区偏好，叠加种子控制的局地位置变化；实际起爆仍需满足地形迎风面、急流减速与湿度条件。偏西风允许粤东沿山风触发，偏南风保留粤西山前供给。列车根部和单体具有有界的小幅摆动，冷池暖侧可接续南向或东向新源；不会强制每轮出现两条固定雨带。冷池随局地降水和厚度逐渐成熟，幼期扩散较慢，成熟后按风向和地形非对称铺开。层状云水从实际对流核附近渐进输送，不再瞬间铺出固定大圆圈；海上新生和冷池接续必须位于当前急流减速带。
 
@@ -148,3 +148,9 @@ node development/tests/test_vacation_core_rate.cjs
 保留底图、地形、站点以及第三方运行时的署名和许可。地形来源与许可分别见 [暖区地形许可](assets/data/vacation-terrain-LICENSE.md)、[上游署名](assets/data/vacation-terrain-UPSTREAM-ATTRIBUTION.md) 和 [StormSim 地形许可](assets/data/simulation-terrain-LICENSE.md)。各组件遵守各自许可，不将整个仓库笼统声明为同一许可证。
 
 进一步阅读：[暖区模型与玩法](VACATION.md) · [开发工具](development/README.md) · [StormSim](simulation/README.md) · [Flightdat](flightdata/README.md) · [Feimadat](feimadata/README.md)。
+
+### 网站发布
+
+GitHub 仓库的 Settings → Pages → Build and deployment → Source 使用 **GitHub Actions**。网站代码推送由 `.github/workflows/update.yml` 更新天气、恢复模拟产物并部署；定时天气与航班更新继续走同一链路。不要同时启用“Deploy from a branch”，否则自动分支构建与天气工作流会竞争同一个 Pages 部署。
+
+1.48 继续检查暖湿入口后方的上游路径，避免把已被冷池隔离的局地湿暖空气当作无限补给。普通起爆、冷池前缘及持续源均受连通性约束；仍开放的侧向入口与浅冷层上方暖湿柱保留。

@@ -3,13 +3,14 @@ name: 自动更新天气数据
 on:
   push:
     branches: [main]
-    paths:
-      - 'Vacation.html'
-      - 'index.html'
-      - 'assets/scripts/vacation*.js'
-      - 'assets/data/vacation-*'
-      - 'assets/styles/vacation*.css'
-      - 'assets/wasm/**'
+    # Pages uses GitHub Actions as its sole source. Publish site changes here;
+    # bot data commits are handled by this run / workflow_run, without a loop.
+    paths-ignore:
+      - 'config.json'
+      - 'development/**'
+      - '**/*.md'
+      - 'flightdata/docs/data/**'
+      - 'feimadata/data/**'
   # GITHUB_TOKEN 提交不触发 push 工作流；航班更新结束后使用原有全站发布链路。
   workflow_run:
     workflows: ['更新航班数据', '每日更新飞常准航班']
@@ -147,7 +148,8 @@ jobs:
           git commit -m "Auto Update: $(date -u +'%Y-%m-%dT%H:%M:%SZ')" || exit 0
           git push origin HEAD:${{ github.ref_name }}
 
-      # GITHUB_TOKEN pushes do not trigger a branch-source Pages rebuild.
+      # Repository Settings > Pages > Source must be GitHub Actions.
+      # Do not also enable branch-source publishing: it races this deployment.
       # Publish the same refreshed checkout explicitly; no personal token needed.
       - name: 保留最近一次强对流模拟结果
         if: steps.frequency.outputs.run == 'true'

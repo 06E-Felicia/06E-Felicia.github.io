@@ -777,7 +777,7 @@
     // do not apply the squared spontaneous-birth moisture penalty a second time.
     const frontWetness=this.config.organizedWarmSector?Math.sqrt(this._newInitiationMoisture(inlet.x,inlet.y)):this._newInitiationMoisture(x,y);
     const resolvedPower=Math.max(Kenv,.08*Math.max(0,(focused?.parcelDisplacementM??0)-lift.Hlift));
-    const F=clip((rh-.65)/.25)*clip((energy-.15)/.65)*clip((resolvedPower+Kcp-CIN)/15)*(focused?.factor??1)*frontWetness,reason=F>0?null:focused?.factor===0?focused.reason:resolvedPower+Kcp<=CIN?'inhibition':'zeroGate';return {...result,power:resolvedPower,F,rejection:reason,evidence:{...result.evidence,Kenv:resolvedPower,F,rejection:reason}};
+    const F=clip((rh-.65)/.25)*clip((energy-.15)/.65)*clip((resolvedPower+Kcp-CIN)/15)*(focused?.factor??1)*frontWetness,reason=F>0?null:focused?.factor===0?focused.reason:resolvedPower+Kcp<=CIN?'inhibition':'zeroGate';return this._requireConnectedInitiation({...result,power:resolvedPower,F,rejection:reason,evidence:{...result.evidence,Kenv:resolvedPower,F,rejection:reason}},x,y);
   };
   Model.prototype._observeFront=function*(b,readable){
     const n=b.geometricNormal,vertical=n.x!==0,constant=vertical?b.x:b.y,start=(vertical?b.y:b.x)-b.lengthM/2,sign=vertical?n.x:n.y,axis=vertical?'v':'h';b.faceId=[axis,constant,start,b.lengthM,sign].join(':');
@@ -1108,27 +1108,46 @@
     const offsets=this.config.trainingInflowFan?[0,-Math.PI/6,Math.PI/6,-Math.PI/3,Math.PI/3]:[0],limit=moving&&this.config.organizedWarmSector?45000:this.config.trainingInflowFan?120000:60000;
     let rejected={accessible:false,reason:'noConnectedWarmIntake',speed,maxColdSpeed:0},best=null;
     for(const offset of offsets){
-      const ax=Math.cos(angle+offset),ay=Math.sin(angle+offset);let headLift=0,maxColdSpeed=0,warmRun=0;
+      const ax=Math.cos(angle+offset),ay=Math.sin(angle+offset),traceWholePath=this.config.monsoon925&&this.config.organizedWarmSector;let headLift=0,maxColdSpeed=0,warmRun=0,intake=null,blocked=false,validatedDistance=0;
       for(let distance=0;distance<=limit;distance+=2500){
         const px=x-ax*distance,py=y-ay*distance,a=this.surfaceAccess(px,py),i=this.env.index(px,py);
         if(!a.inDomain||i<0)break;
+        const pathSpeed=traceWholePath?this.fields.u[i]*ax+this.fields.v[i]*ay:speed;
+        if(traceWholePath&&pathSpeed<2){rejected={accessible:false,reason:'disconnectedWind',speed,pathSpeed,distance};blocked=true;break;}
+        validatedDistance=distance;
         if(a.cold){
           const coldSpeed=Math.sqrt(2*9.81*a.Q/300);maxColdSpeed=Math.max(maxColdSpeed,coldSpeed);
-          if(this._trainingBarrier(a,speed)){rejected={accessible:false,reason:'coldBarrier',speed,maxColdSpeed,distance};break;}
+          if(this._trainingBarrier(a,pathSpeed)){rejected={accessible:false,reason:'coldBarrier',speed,maxColdSpeed,distance};blocked=true;break;}
           warmRun=this._columnSupplyFraction(a,px,py)>=.4?warmRun+2500:0;
           headLift=Math.max(headLift,Math.min(250,a.h));
         }else warmRun+=2500;
-        if(distance>=10000&&warmRun>=7500){
+        if(!intake&&distance>=10000&&warmRun>=7500){
           const rh=this.fields.rhL[i],energy=this.fields.el[i],candidate={accessible:rh>.75&&energy>.25,reason:rh<=.75?'dryInflow':energy<=.25?'weakEnergy':null,x:px,y:py,angle,speed,distance,offset,headLift,maxColdSpeed,rh,energy};
           if(candidate.accessible&&moving&&this.config.organizedWarmSector){const bg=this.background(),focus=this._inflowFocus(px,py,bg),brake=this._hillBrake(px,py,bg);if(focus<.3||brake>.8){candidate.accessible=false;candidate.reason='outsideFedJet';}}
-          if(candidate.accessible){if(!best||distance<best.distance)best=candidate;break;}
+          if(candidate.accessible){
+            intake=candidate;
+            // A warm pocket 10 km upstream may itself be cut off by a cold
+            // barrier farther south. Validate the rest of this same path before
+            // allowing it to feed new or persistent convection.
+            if(!traceWholePath)break;
+            continue;
+          }
           rejected=candidate;
           // A depleted nearby parcel is not the end of an open inflow path.
           // Keep searching farther upstream until a real barrier or domain edge.
         }
       }
+      if(intake&&!blocked){intake.validatedDistanceM=validatedDistance;if(!best||intake.distance<best.distance)best=intake;}
     }
     return best||rejected;
+  };
+  // All warm-sector birth channels require connected monsoon inflow, including
+  // ordinary environment and warm-side gust fronts. Stored local RH/lift alone
+  // cannot restart convection behind a severed supply corridor.
+  Model.prototype._requireConnectedInitiation=function(result,x,y){
+    if(!(result.F>0)||!this.config.organizedWarmSector||!this.config.connectedTrainingFeed)return result;
+    const feed=this._trainingFeed(x,y);
+    return {...result,F:feed.accessible?result.F:0,rejection:feed.accessible?result.rejection:feed.reason,evidence:{...result.evidence,F:feed.accessible?result.F:0,connectedFeed:feed}};
   };
   // Apply distance and intervening cross-range terrain to all feed routes,
   // including a moving core that can find a fresh local moisture donor.
@@ -1475,7 +1494,7 @@
       }
     }
     if(!environmentOnly&&!layer&&!this.config.disableCold){const b=this._areaFrontExposure(x,y);if(b){const front=this._boundaryEventGate(b,x,y,bg);if(front.F>result.F)result=front;}}
-    return result;
+    return this._requireConnectedInitiation(result,x,y);
   };
 
   Model.prototype.diagnoseEnvironment=function*(recover){

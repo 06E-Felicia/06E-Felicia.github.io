@@ -1,31 +1,14 @@
 {
-  "model": "vacation-1.47.0",
-  "resource": "1.47.0-r1",
+  "model": "vacation-1.48.0",
+  "resource": "1.48.0-r1",
   "date": "2026-11-02",
   "checks": {
-    "regressionSuitesPassed": 11,
-    "realTerrainWindSamples": 24,
-    "westOpeningFlowDegrees": [
-      19.70938721671701,
-      42.40444986149669
-    ],
-    "southOpeningFlowDegrees": [
-      45.94026014674454,
-      72.40444986149669
-    ],
-    "midTurnProgressRange": [
-      0.3790892060537829,
-      0.6832580987134798
-    ],
-    "monotoneAndReproducible": true,
-    "leeCandidatesRejected": {
-      "pearlEast": 155,
-      "east": 251
-    },
-    "windwardCandidatesRetained": {
-      "pearlEast": 58,
-      "east": 123
-    }
+    "regressionSuitesPassed": 13,
+    "warmPocketBehindRemoteBarrierRejected": true,
+    "lowMidFrontAndPersistentChannelsChecked": true,
+    "openFlankAndShallowWarmColumnPreserved": true,
+    "reversedUpstreamFlowRejected": true,
+    "workflowYamlParsed": true
   },
   "weatherRun": {
     "seed": 131,
@@ -42,44 +25,45 @@
         "maxSourceHours": 2.6666666666666665
       },
       "east": {
-        "births": 30,
+        "births": 21,
         "maxSourceHours": 2.5
       }
     },
-    "peakHourMm": 100,
-    "maxRedBandKm": 115.91374534882799,
-    "maxEastRedBandKm": 73.36566316713505,
+    "peakHourMm": 98.51590758432049,
+    "maxRedBandKm": 52.5665426262476,
+    "maxEastRedBandKm": 47.97457286083487,
     "maxLinkedGroupSources": 2,
     "audit": {
-      "water": 46078553771146.555,
-      "expected": 46078553771176.625,
-      "residual": -30.0703125,
-      "relativeResidual": 4.934189607623132e-13,
-      "activityResidual": 9.926306234715206e-13,
-      "coldVolumeResidual": 0.6123046875,
-      "coldHeatResidual": -0.04296875
+      "water": 46131965690638.18,
+      "expected": 46131965690668.34,
+      "residual": -30.1640625,
+      "relativeResidual": 4.949572895565838e-13,
+      "activityResidual": 1.0012741063277794e-12,
+      "coldVolumeResidual": 0.46923828125,
+      "coldHeatResidual": 1.654296875
     },
     "stats": {
       "linkedCoastalSources": 2,
       "eastwardRelayBirths": 0,
-      "southwardRelayBirths": 1,
+      "southwardRelayBirths": 0,
       "sourceClosureReasons": {
-        "maintenanceEnvironment": 2
+        "coldBarrier": 1,
+        "maintenanceEnvironment": 1
       },
       "upstreamBlockedBirths": 1,
-      "persistentBirths": 89,
+      "persistentBirths": 81,
       "closedTriggerSources": 2,
-      "births": 99,
-      "coldBirths": 2,
-      "deaths": 31,
+      "births": 90,
+      "coldBirths": 1,
+      "deaths": 28,
       "deathReasons": {
-        "thermal_or_updraft_support_lost": 15,
-        "pulse_completed": 16
+        "thermal_or_updraft_support_lost": 17,
+        "pulse_completed": 11
       }
     }
   },
   "limitations": [
-    "One four-hour weather run; no full three-day ensemble or browser screenshot acceptance.",
-    "Terrain candidate scan counts sample several wind directions; these are not unique stations or simulated storm counts."
+    "One four-hour weather run, not a full three-day ensemble or screenshot acceptance.",
+    "Inflow tracing is bounded to the existing search range; this is a reduced-model connectivity parameterization."
   ]
 }
