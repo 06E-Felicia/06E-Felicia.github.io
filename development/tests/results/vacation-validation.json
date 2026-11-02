@@ -1,113 +1,281 @@
 {
-  "model": "vacation-1.51.0",
-  "config": {
-    "preset": "monsoon",
-    "geography": "real",
-    "seed": 131,
-    "windTurnStart": "west",
-    "quality": "low",
-    "hours": 72,
-    "validationHours": 6,
-    "coastalForcing": {
-      "exitOffset": 20000
-    },
-    "startHour": 20,
-    "calendarOrigin": "previous_day",
-    "jetExitGeometry": "coast_following",
-    "upstreamSourceBlocking": true,
-    "longTrainingPulse": true,
-    "connectedTrainingFeed": true,
-    "directionalCoastalTrigger": true,
-    "monsoon925": true,
-    "boundedMonsoon": true,
-    "hillJetBraking": true,
-    "slowMonsoonTurn": true,
-    "trainingInflowFan": true,
-    "stratiformOutflow": true,
-    "coldDampingSeconds": 21600,
-    "coldVolumeMixingSeconds": 64800,
-    "coldThermalMixingSeconds": 64800,
-    "terrainBoundTrigger": true,
-    "region": "auto",
-    "group": "coastal",
-    "controls": {
-      "flow": 1,
-      "humidity": 0
-    }
-  },
-  "regional": {
-    "west": {
-      "births": 19,
-      "maxSourceHours": 2.1666666666666665,
-      "firstBirthSeconds": 13743.67791172117
-    },
-    "delta": {
-      "births": 116,
-      "maxSourceHours": 5,
-      "firstBirthSeconds": 697.6183708291501
-    },
-    "east": {
-      "births": 3,
-      "maxSourceHours": 0.3333333333333333,
-      "firstBirthSeconds": 7260.705804917961
-    }
-  },
-  "maxLinkedGroupSources": 3,
-  "maxSourceSwayM": 3649.5070450947983,
-  "maxRedBandKm": 112.63078898294069,
-  "maxEastRedBandKm": 29.092565391342273,
-  "peakHourMm": 98.97048984129964,
-  "stats": {
-    "linkedCoastalSources": 7,
-    "eastwardRelayBirths": 0,
-    "southwardRelayBirths": 0,
-    "sourceClosureReasons": {
-      "coldBarrier": 6,
-      "maintenanceEnvironment": 1
-    },
-    "upstreamBlockedBirths": 1,
-    "persistentBirths": 126,
-    "closedTriggerSources": 7,
-    "births": 138,
-    "coldBirths": 2,
-    "deaths": 96,
-    "deathReasons": {
-      "pulse_completed": 27,
-      "thermal_or_updraft_support_lost": 64,
-      "maximum_age_protection": 5
-    }
-  },
-  "audit": {
-    "water": 45982216583001.77,
-    "expected": 45982216583039.07,
-    "residual": -37.296875,
-    "relativeResidual": 5.46409911653837e-13,
-    "activityResidual": 8.228348444485447e-13,
-    "coldVolumeResidual": 1.06640625,
-    "coldHeatResidual": 3.640625
-  },
+  "model": "vacation-1.52.0",
   "date": "2026-11-02",
-  "regressionSuitesPassed": 16,
-  "comparison": {
-    "maxRedBandKm": {
-      "previous": 51.08211497458645,
-      "current": 112.63078898294069
+  "regressionSuitesPassed": [
+    {
+      "test": "train_density",
+      "passed": true
     },
-    "maxEastRedBandKm": {
-      "previous": 49.96360342834231,
-      "current": 29.092565391342273
+    {
+      "test": "train_corridor",
+      "passed": true
     },
-    "maxLinkedGroupSources": {
-      "previous": 5,
-      "current": 3
+    {
+      "test": "relay_sampling",
+      "passed": true
     },
-    "peakHourMm": {
-      "previous": 96.35797307353418,
-      "current": 98.97048984129964
+    {
+      "test": "disconnected_inflow",
+      "passed": true
+    },
+    {
+      "test": "windward_front",
+      "passed": true
+    },
+    {
+      "test": "western_slope",
+      "passed": true
+    },
+    {
+      "test": "eastern_exit",
+      "passed": true
+    },
+    {
+      "test": "westerly_lee",
+      "passed": true
+    },
+    {
+      "test": "linked_sources",
+      "passed": true
+    },
+    {
+      "test": "source_support",
+      "passed": true
+    },
+    {
+      "test": "marine_initiation",
+      "passed": true
+    },
+    {
+      "test": "coastal_response",
+      "passed": true
+    },
+    {
+      "test": "core_rate",
+      "passed": true
+    },
+    {
+      "test": "stratiform_growth",
+      "passed": true
+    },
+    {
+      "test": "connected_feed",
+      "passed": true
+    },
+    {
+      "test": "wind_randomness",
+      "passed": true
     }
+  ],
+  "runs": {
+    "south": {
+      "model": "vacation-1.52.0",
+      "config": {
+        "preset": "monsoon",
+        "geography": "real",
+        "seed": 131,
+        "windTurnStart": "south",
+        "quality": "low",
+        "hours": 72,
+        "validationHours": 6,
+        "coastalForcing": {
+          "exitOffset": 20000
+        },
+        "startHour": 20,
+        "calendarOrigin": "previous_day",
+        "jetExitGeometry": "coast_following",
+        "upstreamSourceBlocking": true,
+        "longTrainingPulse": true,
+        "connectedTrainingFeed": true,
+        "directionalCoastalTrigger": true,
+        "monsoon925": true,
+        "boundedMonsoon": true,
+        "hillJetBraking": true,
+        "slowMonsoonTurn": true,
+        "trainingInflowFan": true,
+        "stratiformOutflow": true,
+        "coldDampingSeconds": 21600,
+        "coldVolumeMixingSeconds": 64800,
+        "coldThermalMixingSeconds": 64800,
+        "terrainBoundTrigger": true,
+        "region": "auto",
+        "group": "coastal",
+        "controls": {
+          "flow": 1,
+          "humidity": 0
+        }
+      },
+      "regional": {
+        "west": {
+          "births": 63,
+          "maxSourceHours": 4.166666666666667,
+          "firstBirthSeconds": 6519.780985917896
+        },
+        "delta": {
+          "births": 0,
+          "maxSourceHours": 0,
+          "firstBirthSeconds": null
+        },
+        "east": {
+          "births": 0,
+          "maxSourceHours": 0,
+          "firstBirthSeconds": null
+        }
+      },
+      "maxLinkedGroupSources": 1,
+      "maxSourceSwayM": 3752.609194971341,
+      "maxRedBandKm": 66.55676922917952,
+      "maxEastRedBandKm": 0,
+      "multipointRedBand": {
+        "lengthKm": 0,
+        "roots": []
+      },
+      "peakHourMm": 100.00000000000003,
+      "stats": {
+        "linkedCoastalSources": 0,
+        "eastwardRelayBirths": 1,
+        "southwardRelayBirths": 0,
+        "sourceClosureReasons": {},
+        "upstreamBlockedBirths": 0,
+        "persistentBirths": 60,
+        "closedTriggerSources": 0,
+        "births": 63,
+        "coldBirths": 1,
+        "deaths": 49,
+        "deathReasons": {
+          "thermal_or_updraft_support_lost": 49
+        }
+      },
+      "audit": {
+        "water": 46542659774482.2,
+        "expected": 46542659774517.03,
+        "residual": -34.828125,
+        "relativeResidual": 5.087533169079731e-13,
+        "activityResidual": 7.83651366574468e-13,
+        "coldVolumeResidual": 0.560546875,
+        "coldHeatResidual": 0.34765625
+      }
+    },
+    "west": {
+      "model": "vacation-1.52.0",
+      "config": {
+        "preset": "monsoon",
+        "geography": "real",
+        "seed": 131,
+        "windTurnStart": "west",
+        "quality": "low",
+        "hours": 72,
+        "validationHours": 6,
+        "coastalForcing": {
+          "exitOffset": 20000
+        },
+        "startHour": 20,
+        "calendarOrigin": "previous_day",
+        "jetExitGeometry": "coast_following",
+        "upstreamSourceBlocking": true,
+        "longTrainingPulse": true,
+        "connectedTrainingFeed": true,
+        "directionalCoastalTrigger": true,
+        "monsoon925": true,
+        "boundedMonsoon": true,
+        "hillJetBraking": true,
+        "slowMonsoonTurn": true,
+        "trainingInflowFan": true,
+        "stratiformOutflow": true,
+        "coldDampingSeconds": 21600,
+        "coldVolumeMixingSeconds": 64800,
+        "coldThermalMixingSeconds": 64800,
+        "terrainBoundTrigger": true,
+        "region": "auto",
+        "group": "coastal",
+        "controls": {
+          "flow": 1,
+          "humidity": 0
+        }
+      },
+      "regional": {
+        "west": {
+          "births": 13,
+          "maxSourceHours": 1.8333333333333333,
+          "firstBirthSeconds": 14559.865012345836
+        },
+        "delta": {
+          "births": 81,
+          "maxSourceHours": 4.666666666666667,
+          "firstBirthSeconds": 697.6183708291501
+        },
+        "east": {
+          "births": 3,
+          "maxSourceHours": 0.3333333333333333,
+          "firstBirthSeconds": 7260.705804917961
+        }
+      },
+      "maxLinkedGroupSources": 3,
+      "maxSourceSwayM": 3611.213927217309,
+      "maxRedBandKm": 126.39918057972822,
+      "maxEastRedBandKm": 53.3285838917269,
+      "multipointRedBand": {
+        "t": 6600,
+        "lengthKm": 112.07289541323259,
+        "roots": [
+          {
+            "id": "root:belt:1:167:74",
+            "x": 833841.2509762022,
+            "y": 374074.9423219681
+          },
+          {
+            "id": "root:belt:7:178:82",
+            "x": 891838.212505254,
+            "y": 412494.8049812327
+          }
+        ]
+      },
+      "peakHourMm": 92.21974944222063,
+      "stats": {
+        "linkedCoastalSources": 4,
+        "eastwardRelayBirths": 1,
+        "southwardRelayBirths": 0,
+        "sourceClosureReasons": {
+          "maintenanceEnvironment": 3,
+          "coldBarrier": 5
+        },
+        "upstreamBlockedBirths": 1,
+        "persistentBirths": 87,
+        "closedTriggerSources": 8,
+        "births": 97,
+        "coldBirths": 3,
+        "deaths": 71,
+        "deathReasons": {
+          "thermal_or_updraft_support_lost": 42,
+          "pulse_completed": 24,
+          "maximum_age_protection": 5
+        }
+      },
+      "audit": {
+        "water": 46032157672286.76,
+        "expected": 46032157672323.43,
+        "residual": -36.671875,
+        "relativeResidual": 5.37253482468184e-13,
+        "activityResidual": 8.130448056344933e-13,
+        "coldVolumeResidual": 0.3779296875,
+        "coldHeatResidual": -0.96875
+      }
+    }
+  },
+  "comparison": {
+    "southRedBandKm": [
+      56.49707129832312,
+      66.55676922917952
+    ],
+    "westBirthsIncludingRepeats": [
+      19,
+      13
+    ]
   },
   "limitations": [
-    "One low-resolution six-hour westerly seed; not a full three-day or screenshot-matched visual validation.",
-    "Eastern-only strong band length decreased after removing inland sources; the 112.6 km maximum is domain-wide, not a Guangdong-east-only result."
+    "6-hour real-terrain samples, seed 131; not an ensemble or three-day replay.",
+    "Red-band length is 4 standard deviations of a >=50 dBZ connected component, not exact end-to-end span.",
+    "Multipoint metric counts distinct active roots within 8 km of one connected component; it does not track condensate provenance.",
+    "The west sample has two roots adjoining a 112 km strong band; it does not establish simultaneous Hong Kong-Dapeng-Huidong-Shanwei activation in every seed."
   ]
 }

@@ -466,7 +466,7 @@
           continue;
         }
         const relaySource=advancingFront?this._southernRelaySource(e.x,e.y,bg):null;
-        const sourceBlocked=!e.triggerSource&&!e.layer&&this.config.persistentInitiation&&this._competingTriggerSource(e.x,e.y,bg,!!relaySource),ix=Math.floor(e.x/bin),iy=Math.floor(e.y/bin);let blocked=sourceBlocked;for(let yy=iy-1;yy<=iy+1&&!blocked;yy++)for(let xx=ix-1;xx<=ix+1&&!blocked;xx++)for(const c of recent.get(xx+','+yy)||[])if((c.x-e.x)**2+(c.y-e.y)**2<bin*bin){blocked=true;break;}
+        const sourceBlocked=!e.triggerSource&&!e.layer&&this.config.persistentInitiation&&this._competingTriggerSource(e.x,e.y,bg,!!relaySource,!!peer),ix=Math.floor(e.x/bin),iy=Math.floor(e.y/bin);let blocked=sourceBlocked;for(let yy=iy-1;yy<=iy+1&&!blocked;yy++)for(let xx=ix-1;xx<=ix+1&&!blocked;xx++)for(const c of recent.get(xx+','+yy)||[])if((c.x-e.x)**2+(c.y-e.y)**2<bin*bin){blocked=true;break;}
         if(blocked&&!e.triggerSource){this.stats.spacingRejected++;diagnostic.byLayer[e.layer?'mid':'low'].spacingRejected++;if(this._organizationContains(e.x,e.y))diagnostic.local.byLayer[e.layer?'mid':'low'].spacingRejected++;this._recordFrontCandidate(e.x,e.y,e.channel,'spacingRejected',1);if(e.inBand)this._recordFrontCandidate(e.x,e.y,e.channel,'inBandSpacingRejected',1);continue;}
         const rng=random(hash(this.config.seed,'cell',e.id)),c={id:e.id,born:e.born??(this.t+DT*random(hash(this.config.seed,'birth-time',e.id))()),age:0,x:e.x,y:e.y,originX:e.x,originY:e.y,T:this.config.organizedWarmSector?10200:9360,major:1800,minor:1200,updraftArea:Math.PI*1000**2,starvedSeconds:0,supplyRatio:0,a:0,M:0,convectivePhaseEnergyJ:0,layer:e.layer,source:e.gate.source,parent:e.gate.parent,channel:e.channel,segmentKey:e.segmentKey,physicalFaceId:e.physicalFaceId,angle:Math.atan2(...this.steer().slice().reverse()),phase:rng()*Math.PI*2};
         if(this.config.monsoon925){const k=this.env.index(c.x,c.y);c.vx=this.fields.um[k];c.vy=this.fields.vm[k];c.angle=Math.atan2(c.vy,c.vx);}
@@ -543,7 +543,7 @@
         c.lifecycle=c.starvedSeconds>=600||pulseDecay?'decaying':this.config.cellLifecycle==='pulse'?(c.pulse.N<c.pulse.Ngrow?'growing':'mature'):c.age<600?'growing':'mature';
         const target=c.starvedSeconds>=600?0:c.thermalPotential*c.supplyRatio*c.pulseEnvelope*(c.trainingSupport??1)*(this.config.cellLifecycle==='legacy'?Math.min(1,c.age/600):1);
         c.a=target+(c.a-target)*Math.exp(-dt/(target>c.a?180:240));
-        const areaTarget=Math.PI*1000**2+((this.config.organizedWarmSector?1.55:1)*Math.PI*(this.config.organizedWarmSector?1900+5200*c.thermalPotential:1500+4000*c.thermalPotential)**2-Math.PI*1000**2)*clip(c.a*c.supplyRatio);
+        const areaTarget=this._updraftAreaTarget(c);
         c.updraftArea=areaTarget+(c.updraftArea-areaTarget)*Math.exp(-dt/180);
         const growth=Math.sqrt(clip(c.a*c.supplyRatio)),stretch=1+.4*clip(c.shear/15),major=(1800+5200*growth)*stretch,minor=(this.config.organizedWarmSector?2200:1200)+(this.config.organizedWarmSector?5200:3000)*growth;
         c.major=major+(c.major-major)*Math.exp(-dt/180);c.minor=minor+(c.minor-minor)*Math.exp(-dt/180);
@@ -1070,10 +1070,13 @@
   };
   // Separate windward hills in one coastal inflow corridor may cooperate.
   // A source is not evidence that all downstream moisture has been consumed.
-  Model.prototype._competingTriggerSource=function(x,y,bg,relay=false){
+  Model.prototype._competingTriggerSource=function(x,y,bg,relay=false,independentHill=false){
     const angle=bg.windAngle??this._monsoonAngle(this.t),ex=Math.cos(angle),ey=Math.sin(angle);
     return this.triggerSources.some(s=>{const dx=x-s.x,dy=y-s.y;
       if(relay)return dx*dx+dy*dy<4000**2;
+      // Separate verified hills may feed one corridor without opening a cluster
+      // of duplicate roots on the same hill. Ordinary candidates keep 26 km.
+      if(independentHill)return dx*dx+dy*dy<12000**2;
       if(!this.config.organizedWarmSector)return dx*dx+dy*dy<8000**2;
       return ((dx*ex+dy*ey)/26000)**2+((-dx*ey+dy*ex)/16000)**2<1;
     });
@@ -1164,7 +1167,7 @@
   Model.prototype._coastalDirectionAccess=function(x,bg){
     if(!this.config.directionalCoastalTrigger)return 1;
     const smooth=x=>{x=clip(x);return x*x*(3-2*x);},lon=this._approxLongitude(x),angle=(bg.windAngle??this._monsoonAngle(this.t))*180/Math.PI;
-    const west=1-smooth((lon-112.6)/.7),east=smooth((lon-113.9)/.8),sw=smooth((angle-25)/25),wsw=1-smooth((angle-42)/18);
+    const west=1-smooth((lon-112.6)/.7),east=smooth((lon-113.9)/.8),sw=smooth((angle-32)/18),wsw=1-smooth((angle-42)/18);
     const prd=smooth((lon-112.65)/.4)*(1-smooth((lon-114.5)/.4));
     const preference=Math.max(west*sw+east*wsw+(1-west-east)*.65,.92*prd);
     return preference<.12?0:preference;
@@ -1236,6 +1239,13 @@
     const feed=this._trainingFeed(x,y);
     return {...result,F:feed.accessible?result.F:0,rejection:feed.accessible?result.rejection:feed.reason,evidence:{...result.evidence,F:feed.accessible?result.F:0,connectedFeed:feed}};
   };
+  Model.prototype._updraftAreaTarget=function(c){
+    // Pulse and along-track support already multiply effectiveUpdraftArea.
+    // Applying them again through c.a made adequately supplied trains shrink
+    // twice. Physical plume size follows buoyancy and the actual water supply.
+    const activity=this.config.organizedWarmSector?(c.starvedSeconds>=600?0:c.thermalPotential*c.supplyRatio):c.a;
+    return Math.PI*1000**2+((this.config.organizedWarmSector?1.55:1)*Math.PI*(this.config.organizedWarmSector?1900+5200*c.thermalPotential:1500+4000*c.thermalPotential)**2-Math.PI*1000**2)*clip(activity*c.supplyRatio);
+  };
   // Apply distance and intervening cross-range terrain to all feed routes,
   // including a moving core that can find a fresh local moisture donor.
   Model.prototype._trainingSupport=function(cell){
@@ -1261,14 +1271,19 @@
     const organized=clip((r.strength[k]-.15)/.4),aligned=clip((parallel*parallel-.25)/.5);
     return 1-organized+organized*aligned;
   };
-  Model.prototype._coastalFoothillAccess=function(x,y){
+  Model.prototype._coastalFoothillAccess=function(x,y,bg=this.background()){
     if(!this.terrain||!this.config.organizedWarmSector)return 1;
     const lon=this._approxLongitude(x),lat=this.terrain.meta.center[1]+(y-this.config.height/2)/111195;
     // Doumen / eastern Zhuhai foothills: fade before the northern Zhongshan
     // hills rather than treating every delta hill as the same lifting point.
     const westDelta=clip((lon-112.75)/.15)*clip((113.85-lon)/.2);
     const east=clip((lon-114.55)/.25),d=this.forcing.sample(this.terrain.fields.signedDistance,x,y);
-    return (1-westDelta+westDelta*clip((22.55-lat)/.22))*(1-east+east*clip((35000-d)/20000));
+    const angle=(bg.windAngle??this._monsoonAngle(this.t))*180/Math.PI;
+    const westerly=clip((45-angle)/15),west=clip((113.15-lon)/.5);
+    // Westerly flow can still lift at the western coastal front, but cannot
+    // use the inland western ranges as an alternative unlimited rain pole.
+    const westernInterior=1-westerly*west*(1-clip((26000-d)/18000));
+    return westernInterior*(1-westDelta+westDelta*clip((22.55-lat)/.22))*(1-east+east*clip((35000-d)/20000));
   };
   Model.prototype._movingTrainingFeed=function(cell){
     const local=this._trainingFeed(cell.x,cell.y,true);
@@ -1435,7 +1450,7 @@
     const land=this.forcing.sample(this.terrain.fields.land,x,y);
     // On land a genuine lee slope remains excluded even for zonal flow.
     const terrainSide=land>=.5?exposure.factor:1;
-    return Math.min(Math.max(mountain,zonal*terrainSide),this._marineInitiationAccess(x,y,bg))*this._marineJetAccess(x,y,bg)*(land>=.45?this._terrainTrainingAlignment(x,y,bg)*this._coastalFoothillAccess(x,y):1);
+    return Math.min(Math.max(mountain,zonal*terrainSide),this._marineInitiationAccess(x,y,bg))*this._marineJetAccess(x,y,bg)*(land>=.45?this._terrainTrainingAlignment(x,y,bg)*this._coastalFoothillAccess(x,y,bg)*this._coastalDirectionAccess(x,bg):1);
   };
   Model.prototype._southernRelaySource=function(x,y,bg){
     if(!this.config.organizedWarmSector)return null;
@@ -1501,7 +1516,7 @@
     const prdLon=this._approxLongitude(x),prd=prdLon>=112.7&&prdLon<=114.65;
     const lat=(this.terrain?.meta.center[1]??22.5)+(y-this.config.height/2)/111195;
     const coastCap=prd?clip((22.83-lat)/.19)*clip((45000-distance)/25000):1;
-    const terrainSite=exposure.factor*coastCap*this._coastalFoothillAccess(x,y)*(this.config.terrainBoundTrigger?((mainland&&land>=.45)||island?Math.max(anchor.factor*slopeChannel.coastalWeight,slopeChannel.factor):0):(distance>=0?1:0)),seaSite=land<.5&&!island&&distance<=0?1:0;
+    const terrainSite=exposure.factor*coastCap*this._coastalFoothillAccess(x,y,bg)*(this.config.terrainBoundTrigger?((mainland&&land>=.45)||island?Math.max(anchor.factor*slopeChannel.coastalWeight,slopeChannel.factor):0):(distance>=0?1:0)),seaSite=land<.5&&!island&&distance<=0?1:0;
     const site=frame.placement==='offshore'?seaSite:terrainSite,remainingJet=this._remainingMonsoonFraction(bg,l,p.exitLength);
     const k=this.env.index(x,y),r=this._ridge,speed=Math.hypot(frame.e.x,frame.e.y),parallel=k>=0&&r?Math.abs((r.x[k]*frame.e.x+r.y[k]*frame.e.y)/speed):1;
     const longitude=this._approxLongitude(x),deltaNeutral=longitude>=112.7&&longitude<=114.35;
@@ -1583,13 +1598,13 @@
     const rh=layer?f.rhM[k]:f.rhL[k],energy=layer?f.em[k]:f.el[k],access=this.surfaceAccess(x,y),CIN=(layer?bg.iM:bg.iL)+20*clip(((layer?.65:.75)-rh)/.25)+(layer?0:.08*access.Q),basePower=.08*(layer?f.xiM[k]:f.xiL[k]);
     const lift=this._liftAccess(k,x,y,layer,bg),power=Math.max(basePower,.08*lift.parcelDisplacementM),wetness=this._newInitiationMoisture(x,y)*this._initiationSequenceWeight(x,y,bg),F=(!layer&&!access.warmAccessible)?0:clip((rh-(layer?.45:.65))/(layer?.35:.25))*clip((energy-.15)/.65)*clip((power-CIN)/15)*lift.factor*wetness;
     let result={F,power,coldPower:0,CIN,rh,energy,Qlocal:access.Q,source:'environment',parent:null,rejection:F>0?null:!access.warmAccessible&&!layer?'fineCold':lift.reason||'inhibition',evidence:{F,Kenv:power,Kcp:0,CIN,rh,energy,surfaceAccess:access,position:{x,y},triggerLayer:layer?'mid':'low',focusedLift:lift,mechanism:f.xiTerrain[k]>f.xiConvergence[k]?'terrain':'convergence'}};
-    // A neighboring rain shaft may cover the surface while an independent
-    // coastal hill still lifts the connected warm column above that shallow air.
+    // Each independent coastal hill samples its own connected incoming column,
+    // including before neighboring rain cools its local surface.
     // Do not borrow a mature plume's maintenance shortcut for this NEW source.
-    if(!layer&&access.cold&&this._columnSupplyFraction(access,x,y)>.4){
+    if(!layer&&this._columnSupplyFraction(access,x,y)>.4){
       const peer=this._coastalPeer(x,y,bg);
       if(peer){const inlet=peer.feed,raised=this._liftAccess(k,x,y,0,bg,0,inlet),cin=bg.iL+20*clip((.75-inlet.rh)/.25),power=.08*raised.parcelDisplacementM;
-        const linkedF=clip((inlet.rh-.65)/.25)*clip((inlet.energy-.15)/.65)*clip((power-cin)/15)*raised.factor*this._newInitiationMoisture(inlet.x,inlet.y)*this._columnSupplyFraction(access,x,y);
+        const linkedF=clip((inlet.rh-.65)/.25)*clip((inlet.energy-.15)/.65)*clip((power-cin)/15)*raised.factor*this._newInitiationMoisture(inlet.x,inlet.y)*this._columnSupplyFraction(access,x,y)*(access.cold?1:this._initiationSequenceWeight(x,y,bg));
         if(linkedF>result.F)result={...result,F:linkedF,power,CIN:cin,rh:inlet.rh,energy:inlet.energy,rejection:null,evidence:{...result.evidence,F:linkedF,Kenv:power,CIN:cin,focusedLift:raised,linkedSourceId:peer.source.id,connectedFeed:inlet,mechanism:'independentCoastalLifting'}};
       }
     }
