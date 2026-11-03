@@ -54,6 +54,7 @@ jobs:
           python development/tests/test_flightdata_session.py -v
           python development/tests/test_flightdata_coverage.py -v
           python development/tests/test_flightdata_pagination.py -v
+          python development/tests/test_flightdata_document_transport.py -v
           python development/tests/test_flightdata_schedule.py -v
           python development/tests/test_flightdata_access.py -v
 
@@ -63,6 +64,7 @@ jobs:
         continue-on-error: true
         env:
           PLAYWRIGHT_CHANNEL: chrome
+          FR24_DOCUMENT_TRANSPORT: '1'
           FLIGHTDATA_CHECKED_AT: ${{ steps.freshness.outputs.checked_at }}
           # Optional private browser state; never passed to test/artifact steps.
           FR24_STORAGE_STATE_B64: ${{ secrets.FR24_STORAGE_STATE_B64 }}

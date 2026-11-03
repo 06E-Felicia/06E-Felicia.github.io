@@ -2,6 +2,12 @@
 
 当前状态：维护中。页面以大字显示维护提示，暂停加载航班快照及浏览器自动刷新；旧列表、代码和数据保留。`.github/workflows/flightdata.yml` 已删除全部 `schedule` 和 `push` 触发，只保留管理员手动运行；以下采集说明供恢复维护后参考。恢复页面需将 `Flightdat.html` 根元素的 `data-flightdat-maintenance` 改为 `false`，恢复自动采集需另行配置工作流触发器。
 
+### 2026-11-03：可选文档采集实验
+
+按 [403 排查指南](https://github.com/hpdhblaj/scraping-403-bypass) 测试，本机以授权会话、浏览器式请求头及随机间隔直接读取服务器 HTML，深圳到达、深圳出发和北京到达的前两页分别返回不同的 100 条航班，窗口均为 24 小时；接入后深圳到达连续三页共取得 300 条。真实 Chrome 的深圳到达第二页 Inertia 请求仍返回 Cloudflare 403；curl_cffi 模拟 Chrome TLS 的首页也返回 403。代理轮换及付费服务未测试。本机结果不保证其他页、机场或 GitHub Actions 可用。
+
+Actions 采集步骤已设置 `FR24_DOCUMENT_TRANSPORT=1`，本机可用 `FR24_DOCUMENT_TRANSPORT=1 python3 flightdata/scraper.py --headed` 启用。它需要现有授权会话，仍启动浏览器，使用同一个范围受限的 FR24 登录状态读取服务器 HTML，仅跟随响应中的官网分页链接；相邻请求间隔 3.5–4 秒，包括切换机场或方向后的首页。收到 401/403/429 或挑战立即停止，保留部分数据和真实状态，不自动切换身份或重试验证。会话不足 24 小时会报错，不降为匿名。该模式不支持 `PROXY_URL`，不导出 Cloudflare 通行凭据。运行完整采集会更新真实快照；目前未启用自动采集。2026-11-03 云端以 15–20 秒间隔完整通过七机场验证，但耗时约 29 分钟；3.5–4 秒间隔尚未完成云端验收，10 分钟内完成及避免限流均不能保证。
+
 主站页面为根目录 `Flightdat.html`，首页菜单已添加入口。由用户提供的 `爬FR24` 整合而来，支持深圳、北京首都、上海浦东、广州、香港、成都双流（CTU / ZUUU）、东京羽田（HND / RJTT）七机场，到达 / 出发、搜索、排序、当日历史、机型照片与署名，以及宽体 / 彩绘 / 外航 / 四发 / 货机筛选。新增机场的真实快照由后续采集任务生成，不补造数据；首次采集前显示“航班资料正在准备”。机场代码依据 [FR24 中国机场目录](https://www.flightradar24.com/data/airports/china)和 [FR24 羽田机场资料](https://www.flightradar24.com/data/airports/hnd)。
 
 宽体展示同时修改前端筛选与采集器保留规则，宽体但没有彩绘、外航、货机等其他标记的航班不会再被过滤。“特殊机型”指四发或货机，不与宽体分类混淆；页面已移除公务机统计、筛选与标记，旧快照的相关字段仅为兼容保留。分类可交叉，但“精选航班”总数逐条去重计算，不累加各分类。
@@ -75,7 +81,7 @@ Secret 只传给采集步骤，在内存中还原到临时浏览器上下文；�
 
 本机使用现有授权会话和完整 Chrome，第一页正常取得100条、24小时范围，`outsideAllowance=false`、`withinMaxAllowance=true`。前端 Vue 已挂载，第二页请求类型是 `xhr`，由官网发送 `X-Inertia: true`，但返回403且明确包含 `cf-mitigated: challenge`。增加20秒正常初始化等待、确认官网检测脚本加载成功后仍得到相同结果。因此此次拒绝来自 Cloudflare 挑战，不能只归因于 GitHub 出口 IP、未完成前端加载、纯HTML翻页或第一页权限不足；具体触发信号需源站安全事件确认。
 
-后台 `access_diagnostics` 仅保存请求类型、Inertia布尔标识、Cloudflare挑战标识、服务器标识和 MIME 类型。不会保存完整响应头、响应正文、Cookie、Authorization、URL或账号信息；`server=cloudflare` 单独出现不被当作挑战证据。识别依据：[Cloudflare 官方响应检测说明](https://developers.cloudflare.com/cloudflare-challenges/challenge-types/challenge-pages/detect-response/)。目前没有验证成功的绕行方案，诊断增强不代表源站已放行。
+后台 `access_diagnostics` 仅保存请求类型、Inertia布尔标识、Cloudflare挑战标识、服务器标识和 MIME 类型。不会保存完整响应头、响应正文、Cookie、Authorization、URL或账号信息；`server=cloudflare` 单独出现不被当作挑战证据。识别依据：[Cloudflare 官方响应检测说明](https://developers.cloudflare.com/cloudflare-challenges/challenge-types/challenge-pages/detect-response/)。此项诊断不代表源站已放行；后续的本机文档采集实验见文首。
 
 原本地启动器选择系统 Chrome，而此前整合的 CI 使用默认 Chromium headless shell。现 CI 明确安装并使用完整 Chrome，在 xvfb 窗口环境执行，不再伪装旧版 macOS Chrome/131 或修改浏览器特征。指定 Chrome 启动失败时报告实际错误，不在 CI 静默降级。此调整依据 [Playwright 浏览器说明](https://playwright.dev/python/docs/browsers)，分页响应处理依据 [Inertia 协议](https://inertiajs.com/the-protocol)。
 

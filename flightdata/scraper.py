@@ -593,6 +593,8 @@ def fetch_board(
     url: str | None = None,
     label: str | None = None,
 ) -> dict[str, Any]:
+    if cfg.get('_document_client'):
+        return cfg['_document_client'].first(board, airport)
     iata = airport["iata"].lower()
     if not url:
         url = f"https://www.flightradar24.com/data/airports/{iata}/{board}"
@@ -676,6 +678,12 @@ def _launch_browser(pw, headless: bool, proxy: str | None, channel: str | None):
 
 
 def fetch_next_board(page, board, airport, cfg, debug, previous):
+    if cfg.get('_document_client'):
+        data = cfg['_document_client'].next(board, airport, previous)
+        meta = data['props'].get('meta') or {}
+        if cfg.get('_require_authenticated_24h') and meta.get('hoursRange') is not None:
+            session.assert_24h(data)
+        return data
     from playwright.sync_api import TimeoutError as BrowserTimeout
     try:
         return fetch_next_native(page, board, airport, cfg, debug, previous)
@@ -1105,6 +1113,16 @@ def collect_all(
     if private_state:
         cfg = dict(cfg, _require_authenticated_24h=True)
         debug = False
+    if os.environ.get('FR24_DOCUMENT_TRANSPORT') == '1':
+        if not private_state:
+            raise session.SessionError('文档采集模式需要已授权的 FR24 会话')
+        if proxy:
+            raise RuntimeError('文档采集模式不支持 PROXY_URL')
+        spec = importlib.util.spec_from_file_location('flightdat_document_transport', BASE_DIR/'document_transport.py')
+        document_transport = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(document_transport)
+        cfg = dict(cfg, _document_client=document_transport.DocumentTransport(private_state, access_error))
+        LOG.info('使用文档采集方式；遇到访问拒绝立即停止')
     results: dict[str, tuple[list[dict[str, Any]], int | None]] = {}
     with sync_playwright() as pw:
         channel = (os.environ.get("PLAYWRIGHT_CHANNEL") or "").strip() or None
