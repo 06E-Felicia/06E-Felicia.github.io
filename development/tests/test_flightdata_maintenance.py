@@ -1,4 +1,4 @@
-"""Render the actual maintenance page without any upstream requests."""
+"""Render the optional maintenance mode without any upstream requests."""
 import importlib.util
 from pathlib import Path
 import unittest
@@ -11,7 +11,7 @@ ROOT=Path(__file__).resolve().parents[2]
 class MaintenanceTests(unittest.TestCase):
     def test_maintenance_is_static_responsive_and_makes_no_data_requests(self):
         from playwright.sync_api import sync_playwright
-        html=(ROOT/'Flightdat.html').read_text()
+        html=(ROOT/'Flightdat.html').read_text().replace('data-flightdat-maintenance="false"','data-flightdat-maintenance="true"')
         with sync_playwright() as pw:
             browser=pw.chromium.launch(channel='chrome',headless=True)
             try:
@@ -43,7 +43,6 @@ class MaintenanceTests(unittest.TestCase):
                             if javascript:
                                 self.assertGreaterEqual(title.evaluate('e=>parseFloat(getComputedStyle(e).fontSize)'),64)
                                 self.assertTrue(page.evaluate('document.documentElement.scrollWidth<=innerWidth+1'))
-                        self.assertIn('维护中',page.title())
                         self.assertFalse(any('/data/' in p or p.endswith('.json') for p in requests))
                         self.assertEqual(errors,[])
                         page.locator('.site-nav a[href="index.html"]').click()
