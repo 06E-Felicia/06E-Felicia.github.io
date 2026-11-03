@@ -15,7 +15,7 @@
   let meta=null,projection=null,coastlines=[],views=[],syncing=false,picking=false;
   const rain24Cache=new WeakMap(),rain24Pending=new WeakMap(),rain1Cache=new WeakMap(),rain1Pending=new WeakMap(),rainBreaks=[0,10,25,50,100,250,500],rainPalette=[[232,245,250],[126,211,186],[60,173,111],[239,211,80],[240,132,50],[197,57,99],[127,62,162]];
   const rain24Color=value=>{let i=0;while(i<rainBreaks.length-2&&value>rainBreaks[i+1])i++;return interpolate(rainPalette,(i+Math.min(1,(value-rainBreaks[i])/(rainBreaks[i+1]-rainBreaks[i])))/(rainBreaks.length-1));};
-  const choices=['radar','rain1'],windCache=new WeakMap();
+  const choices=['monsoon','warning'],windCache=new WeakMap();
   const majorCities={'59287':'广州','59493':'深圳','59488':'珠海','59316':'汕头','59288':'佛山','59082':'韶关','59658':'湛江','59659':'茂名','59278':'肇庆','59298':'惠州','59117':'梅州','59501':'汕尾','59293':'河源','59663':'阳江','59280':'清远','59289':'东莞','59485':'中山','59312':'潮州','59315':'揭阳','59471':'云浮','59476':'江门','59431':'南宁','59046':'柳州','57957':'桂林','59265':'梧州','59644':'北海','59635':'防城港','59632':'钦州','59211':'百色','59065':'贺州','59023':'河池','59242':'来宾'};
   const radarColors=Array.from({length:255},(_,i)=>radarColor(i*.5-10)),windColors=Array.from({length:301},(_,i)=>windColor(i/10));
   let worker=null,runId=null,store=null,frame=null,latest=null,config=null,state='idle',isPaused=false,replaying=false,replayPlaying=false,paintTask=null;

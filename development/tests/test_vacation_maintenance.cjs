@@ -1,0 +1,13 @@
+'use strict';
+const assert=require('node:assert/strict'),C=require('../../assets/scripts/vacation-model.js');
+C.prepareBackendSync();
+const m=new C.Model({preset:'coast',geography:'idealized',width:240000,height:240000,trainingInflowFan:true,connectedTrainingFeed:true,lambda0:0});
+Object.assign(m.config,{organizedWarmSector:true,monsoon925:true});m.fields.u.fill(0);m.fields.v.fill(13);m.fields.rhL.fill(.78);m.fields.el.fill(.9);
+for(let k=0;k<m.env.n;k++)if((Math.floor(k/m.env.nx)+.5)*m.env.dx<130000)m.fields.rhL[k]=.99;
+const feed=m._trainingFeed(120000,150000);assert(feed.accessible);assert(feed.rh>.95,'depleted nearest parcel does not mask stronger connected upstream supply');assert(feed.distance<=40000,'this fixture selects the nearby moist corridor');assert(feed.validatedDistanceM>=100000,'chosen donor still validates the distant inflow corridor');
+const data=require('../scripts/record_vacation_replay.cjs').terrain(),pr=require('../../assets/vendor/proj4/proj4.js')('EPSG:4326',data.meta.projection),real=new C.Model({preset:'monsoon',geography:'real',seed:131,windTurnStart:'south',coastalForcing:{exitOffset:20000}},data);
+const xy=(lon,lat)=>{const p=pr.forward([lon,lat]);return[p[0]+640000,p[1]+400000];},bg={...real.background(),windAngle:Math.PI/3};
+const foot=real._jetExitAccess(...xy(113.58,22.30),bg);assert(foot.factor>.15&&foot.ascent>.04,'mixed land cell on eastern Phoenix foothill can lift');
+assert.equal(real._jetExitAccess(...xy(113.58,22.36),bg).factor,0,'Phoenix northern lee remains closed');
+assert.equal(real._jetExitAccess(...xy(113.61,22.27),bg).factor,0,'adjacent open water is not granted mountain lifting');
+console.log(JSON.stringify({pass:true,upstreamIntakeDistance:feed.distance,phoenixFoot:foot.factor,northernLeeAndOpenWaterExcluded:true}));

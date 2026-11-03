@@ -6,8 +6,8 @@
  function settle(d,at=schedule(d.day).deadline){
   const s=schedule(d.day),homework=d.first==='write'||d.second==='makeup'||d.repentAt!==null;
   const correct=homework?!d.red:d.red;
-  const value=d.repentAt!==null?Math.round(667*Math.max(0,1-(d.repentAt-s.second)/(s.deadline-s.second))):d.second==='makeup'?667:1000;
-  const caption=!correct?'Mission Failed':!homework&&d.red?'暖区，简单！':d.first==='skip'&&homework&&!d.red?'好险，活过来了':'';
+  const value=d.repentAt!==null?Math.round(667*Math.max(0,1-(d.repentAt-s.second)/(s.deadline-s.second))):d.second==='makeup'?667:d.second==='awake'?666:1000;
+  const caption=homework&&d.red?'不赌就是赌自己输':!correct?'Mission Failed':!homework&&d.red?'暖区，简单！':d.first==='skip'&&homework&&!d.red?'好险，活过来了':'';
   return {day:d.day,at,homework,red:d.red,redAt:d.redAt,repentAt:d.repentAt,correct,points:correct?value:0,caption,outcome:correct?'complete':'failed'};
  }
  class Game{

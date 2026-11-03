@@ -1137,7 +1137,7 @@
       support=Math.max(support,.72*clip(1-(cross/18000)**2));
     }
     // No extension beyond the last root, no support for a severed inflow.
-    return support>0&&this._trainingFeed(cell.x,cell.y,true).accessible?support:0;
+    return support>0&&this._trainingFeed(cell.x,cell.y,true,true).accessible?support:0;
   };
   Model.prototype._upstreamSource=function(x,y,bg,sources=this.triggerSources){
     if(!this.config.upstreamSourceBlocking)return null;
@@ -1191,7 +1191,7 @@
   // can be overrun only if inflow kinetic energy exceeds its density-current head.
   // Only the remaining column above shallow cold air is accessible; supplyFootprint
   // and the global capacity ledger use the same fractional water budget.
-  Model.prototype._trainingFeed=function(x,y,moving=false){
+  Model.prototype._trainingFeed=function(x,y,moving=false,established=false){
     const k=this.env.index(x,y);if(k<0)return {accessible:false,reason:'outside'};
     const u=this.fields.u[k],v=this.fields.v[k],speed=Math.hypot(u,v),ex=u/Math.max(speed,1e-9),ey=v/Math.max(speed,1e-9),angle=Math.atan2(v,u);
     if(speed<3)return {accessible:false,reason:'weakInflow',speed};
@@ -1200,9 +1200,14 @@
     for(const offset of offsets){
       const ax=Math.cos(angle+offset),ay=Math.sin(angle+offset),traceWholePath=this.config.monsoon925&&this.config.organizedWarmSector;let headLift=0,maxColdSpeed=0,warmRun=0,intake=null,blocked=false,validatedDistance=0;
       for(let distance=0;distance<=limit;distance+=2500){
-        const px=x-ax*distance,py=y-ay*distance,a=this.surfaceAccess(px,py),i=this.env.index(px,py);
+        // A local warm flank may feed a train, but a straight 60-degree ray
+        // must not bypass a province-scale cold barrier 100 km upstream.
+        // Established plumes may keep their broader warm flank (up to 35 km
+        // laterally); new roots use a narrower, at most 17 km approach.
+        const fanLimit=established?40000:20000,fanDistance=traceWholePath?Math.min(distance,fanLimit):distance,along=fanDistance*Math.cos(offset)+(distance-fanDistance),lateral=fanDistance*Math.sin(offset);
+        const px=x-ex*along+ey*lateral,py=y-ey*along-ex*lateral,a=this.surfaceAccess(px,py),i=this.env.index(px,py);
         if(!a.inDomain||i<0)break;
-        const pathSpeed=traceWholePath?this.fields.u[i]*ax+this.fields.v[i]*ay:speed;
+        const pathSpeed=traceWholePath?(distance<=fanLimit?this.fields.u[i]*ax+this.fields.v[i]*ay:this.fields.u[i]*ex+this.fields.v[i]*ey):speed;
         if(traceWholePath&&pathSpeed<2){rejected={accessible:false,reason:'disconnectedWind',speed,pathSpeed,distance};blocked=true;break;}
         validatedDistance=distance;
         if(a.cold){
@@ -1211,11 +1216,12 @@
           warmRun=this._columnSupplyFraction(a,px,py)>=.4?warmRun+2500:0;
           headLift=Math.max(headLift,Math.min(250,a.h));
         }else warmRun+=2500;
-        if(!intake&&distance>=10000&&warmRun>=7500){
+        if(distance>=10000&&warmRun>=7500){
           const rh=this.fields.rhL[i],energy=this.fields.el[i],candidate={accessible:rh>.75&&energy>.25,reason:rh<=.75?'dryInflow':energy<=.25?'weakEnergy':null,x:px,y:py,angle,speed,distance,offset,headLift,maxColdSpeed,rh,energy};
           if(candidate.accessible&&moving&&this.config.organizedWarmSector){const bg=this.background(),focus=this._inflowFocus(px,py,bg),brake=this._hillBrake(px,py,bg);if(focus<.3||brake>.8){candidate.accessible=false;candidate.reason='outsideFedJet';}}
           if(candidate.accessible){
-            intake=candidate;
+            candidate.supplyScore=(rh-.65)*energy*this._columnSupplyFraction(a,px,py)*Math.exp(-distance/60000);
+            if(!intake||candidate.supplyScore>intake.supplyScore)intake=candidate;
             // A warm pocket 10 km upstream may itself be cut off by a cold
             // barrier farther south. Validate the rest of this same path before
             // allowing it to feed new or persistent convection.
@@ -1227,7 +1233,7 @@
           // Keep searching farther upstream until a real barrier or domain edge.
         }
       }
-      if(intake&&!blocked){intake.validatedDistanceM=validatedDistance;if(!best||intake.distance<best.distance)best=intake;}
+      if(intake&&!blocked){intake.validatedDistanceM=validatedDistance;if(!best||intake.supplyScore>best.supplyScore)best=intake;}
     }
     return best||rejected;
   };
@@ -1254,12 +1260,16 @@
     const ox=cell.originX??source?.x??cell.x,oy=cell.originY??source?.y??cell.y,dx=cell.x-ox,dy=cell.y-oy,distance=Math.hypot(dx,dy);
     const travel=Math.exp(-Math.max(0,distance-14000)/48000)*clip((120000-distance)/20000);
     if(!this.terrain)return travel;
-    const g=this.forcing,z=this.terrain.fields.z,base=g.sample(z,ox,oy),bg=this.background();let barrier=0;
+    const g=this.forcing,z=this.terrain.fields.z,base=g.sample(z,ox,oy),bg=this.background();let barrier=0,crest=base,leeBarrier=0;
     for(let d=2500;d<=distance;d+=2500){const x=ox+dx*d/distance,y=oy+dy*d/distance;
-      barrier=Math.max(barrier,clip((g.sample(z,x,y)-base-100)/300)*(1-this._terrainTrainingAlignment(x,y,bg)));
+      const height=g.sample(z,x,y);crest=Math.max(crest,height);
+      barrier=Math.max(barrier,clip((height-base-100)/300)*(1-this._terrainTrainingAlignment(x,y,bg)));
+      // Actual descent behind an intervening ridge erodes moving towers even
+      // where the smoothed ridge orientation is parallel to the wind.
+      leeBarrier=Math.max(leeBarrier,clip((crest-base-80)/200)*clip((crest-height-40)/180));
     }
     const sourceAlignment=this._terrainTrainingAlignment(ox,oy,bg);
-    return sourceAlignment<.12?0:Math.max(travel,this._linkedCorridorSupport(cell,source))*(1-.95*barrier);
+    return sourceAlignment<.12?0:Math.max(travel,this._linkedCorridorSupport(cell,source))*(1-.95*Math.max(barrier,leeBarrier));
   };
   Model.prototype._terrainTrainingAlignment=function(x,y,bg){
     if(!this.terrain||!this.config.organizedWarmSector||!this._ridge)return 1;
@@ -1286,13 +1296,13 @@
     return westernInterior*(1-westDelta+westDelta*clip((22.55-lat)/.22))*(1-east+east*clip((35000-d)/20000));
   };
   Model.prototype._movingTrainingFeed=function(cell){
-    const local=this._trainingFeed(cell.x,cell.y,true);
+    const local=this._trainingFeed(cell.x,cell.y,true,true);
     if(local.accessible||!this.config.organizedWarmSector)return local;
     const source=this.triggerSources.find(s=>s.id===cell.triggerSourceId);
     if(!source)return local;
     const k=this.env.index(source.x,source.y),u=this.fields.um[k],v=this.fields.vm[k],speed=Math.hypot(u,v),dx=cell.x-source.x,dy=cell.y-source.y,distance=Math.hypot(dx,dy),along=(dx*u+dy*v)/Math.max(1,speed),cross=Math.abs(dx*v-dy*u)/Math.max(1,speed);
     if(along<0||distance>120000||cross>25000+.1*along)return local;
-    const feed=this._trainingFeed(source.x,source.y);if(!feed.accessible)return local;
+    const feed=this._trainingFeed(source.x,source.y,false,true);if(!feed.accessible)return local;
     // Same source, same finite water budget. A detached core cannot find a new
     // interior donor or cross a deep blocking pool to prolong its life.
     const segments=Math.max(1,Math.ceil(distance/5000));
@@ -1304,7 +1314,7 @@
   Model.prototype._persistentSourceGate=function(source,bg){
     const ordinary=this.gate(source.x,source.y,0,bg,false);
     if(!this.config.connectedTrainingFeed||!this._birthRegionAllowed(source.x,source.y))return ordinary;
-    const inlet=this._trainingFeed(source.x,source.y);
+    const inlet=this._trainingFeed(source.x,source.y,false,true);
     if(!inlet.accessible)return {...ordinary,F:0,rejection:inlet.reason,evidence:{...ordinary.evidence,connectedFeed:inlet}};
     if(this.config.organizedWarmSector&&this.config.jetExitControl){
       const k=this.env.index(source.x,source.y),f=this.fields,jet=this._jetExitAccess(source.x,source.y,bg),focus=this._inflowFocus(inlet.x,inlet.y,bg),rh=inlet.rh,energy=inlet.energy;
@@ -1516,7 +1526,11 @@
     const prdLon=this._approxLongitude(x),prd=prdLon>=112.7&&prdLon<=114.65;
     const lat=(this.terrain?.meta.center[1]??22.5)+(y-this.config.height/2)/111195;
     const coastCap=prd?clip((22.83-lat)/.19)*clip((45000-distance)/25000):1;
-    const terrainSite=exposure.factor*coastCap*this._coastalFoothillAccess(x,y,bg)*(this.config.terrainBoundTrigger?((mainland&&land>=.45)||island?Math.max(anchor.factor*slopeChannel.coastalWeight,slopeChannel.factor):0):(distance>=0?1:0)),seaSite=land<.5&&!island&&distance<=0?1:0;
+    // Mixed coastal DEM cells can miss the binary mainland mask (e.g.
+    // eastern Phoenix Mountain). Recover only resolved land foothills next
+    // to connected mainland; open water and lee faces remain ineligible.
+    const coastalFoot=land>=.55&&anchor.localPeakM>=150&&anchor.reliefM>=120&&exposure.riseM>10&&distance> -5000&&this._coastalMainland&&[[2500,0],[-2500,0],[0,2500],[0,-2500],[5000,0],[-5000,0]].some(([dx,dy])=>{const i=this.forcing.index(x+dx,y+dy);return i>=0&&this._coastalMainland[i]===1;});
+    const terrainSite=exposure.factor*coastCap*this._coastalFoothillAccess(x,y,bg)*(this.config.terrainBoundTrigger?(((mainland||coastalFoot)&&land>=.45)||island?Math.max(anchor.factor*slopeChannel.coastalWeight,slopeChannel.factor):0):(distance>=0?1:0)),seaSite=land<.5&&!island&&distance<=0?1:0;
     const site=frame.placement==='offshore'?seaSite:terrainSite,remainingJet=this._remainingMonsoonFraction(bg,l,p.exitLength);
     const k=this.env.index(x,y),r=this._ridge,speed=Math.hypot(frame.e.x,frame.e.y),parallel=k>=0&&r?Math.abs((r.x[k]*frame.e.x+r.y[k]*frame.e.y)/speed):1;
     const longitude=this._approxLongitude(x),deltaNeutral=longitude>=112.7&&longitude<=114.35;

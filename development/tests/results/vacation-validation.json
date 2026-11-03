@@ -1,7 +1,15 @@
 {
-  "model": "vacation-1.52.0",
-  "date": "2026-11-02",
+  "model": "vacation-1.53.0",
+  "date": "2026-11-03",
   "regressionSuitesPassed": [
+    {
+      "test": "game",
+      "passed": true
+    },
+    {
+      "test": "maintenance",
+      "passed": true
+    },
     {
       "test": "train_density",
       "passed": true
@@ -69,7 +77,30 @@
   ],
   "runs": {
     "south": {
-      "model": "vacation-1.52.0",
+      "model": "vacation-1.53.0",
+      "windRange": {
+        "min": 9.950526655976379,
+        "max": 13.790825705827615
+      },
+      "maxConnectedColdKm2": 42581.25,
+      "regional": {
+        "west": {
+          "births": 54,
+          "maxSourceHours": 3.6666666666666665,
+          "firstBirthSeconds": 6519.780985917896
+        },
+        "delta": {
+          "births": 7,
+          "maxSourceHours": 1.6666666666666667,
+          "firstBirthSeconds": 14234.385766927153
+        },
+        "east": {
+          "births": 0,
+          "maxSourceHours": 0,
+          "firstBirthSeconds": null
+        }
+      },
+      "coldRegion": null,
       "config": {
         "preset": "monsoon",
         "geography": "real",
@@ -105,59 +136,2270 @@
           "humidity": 0
         }
       },
-      "regional": {
-        "west": {
-          "births": 63,
-          "maxSourceHours": 4.166666666666667,
-          "firstBirthSeconds": 6519.780985917896
-        },
-        "delta": {
-          "births": 0,
-          "maxSourceHours": 0,
-          "firstBirthSeconds": null
-        },
-        "east": {
-          "births": 0,
-          "maxSourceHours": 0,
-          "firstBirthSeconds": null
-        }
+      "wind": {
+        "backgroundNormal": 0,
+        "backgroundAlong": 10.144913105294108,
+        "jetExcessNormal": 0,
+        "jetExcessAlong": 3.4564986049663275,
+        "sigmaJet": 225000,
+        "exitLength": 16000,
+        "breezeDay": 1.5,
+        "breezeNight": 1
       },
-      "maxLinkedGroupSources": 1,
-      "maxSourceSwayM": 3752.609194971341,
-      "maxRedBandKm": 66.55676922917952,
-      "maxEastRedBandKm": 0,
-      "multipointRedBand": {
-        "lengthKm": 0,
-        "roots": []
+      "crossing": {
+        "x": 614201.4652684723,
+        "y": 301748.7246311569
       },
+      "axis": {
+        "x": 0.3502264323518965,
+        "y": 0.936665066115985
+      },
+      "peakDbz": 68.70190550161331,
       "peakHourMm": 100.00000000000003,
+      "maxColdKm2": 42581.25,
+      "maxRedBandKm": 75.87698548866129,
+      "maxEastRedBandKm": 0,
+      "maxActiveTravelKm": 60.47883959550103,
+      "maxSourceSwayM": 3238.5606902888435,
+      "maxLinkedGroupSources": 1,
+      "multipointRedBand": {
+        "t": 20400,
+        "lengthKm": 72.30066560545819,
+        "roots": [
+          {
+            "id": "root:flux:23:h:340000:705000:2500:-1:0",
+            "x": 710356.2783917685,
+            "y": 334505.35323593125
+          },
+          {
+            "id": "root:flux:22:h:335000:700000:2500:-1:0",
+            "x": 702350.1159334218,
+            "y": 332721.57289003115
+          }
+        ]
+      },
+      "birthLocations": {
+        "offshore": 0,
+        "inlandMountain": 61,
+        "invalidSite": 11,
+        "wrongDirection": 0
+      },
+      "movingTrainSources": [
+        [
+          "32,17",
+          {
+            "count": 15,
+            "first": 6519.780985917896,
+            "last": 17919.780985917896
+          }
+        ],
+        [
+          "28,15",
+          {
+            "count": 12,
+            "first": 13196.364980796352,
+            "last": 19796.364980796352
+          }
+        ],
+        [
+          "35,16",
+          {
+            "count": 18,
+            "first": 13647.771426150575,
+            "last": 19047.771426150575
+          }
+        ]
+      ],
+      "repeatSourceBoxes": [
+        [
+          "32,17",
+          {
+            "count": 23,
+            "first": 6519.780985917896,
+            "last": 19719.780985917896
+          }
+        ],
+        [
+          "28,15",
+          {
+            "count": 15,
+            "first": 13196.364980796352,
+            "last": 21596.364980796352
+          }
+        ],
+        [
+          "35,16",
+          {
+            "count": 22,
+            "first": 13647.771426150575,
+            "last": 20247.771426150575
+          }
+        ]
+      ],
+      "sourceEpisodes": [
+        {
+          "id": "root:belt:10:130:70",
+          "x": 648271.8091428913,
+          "y": 350175.44634254236,
+          "count": 23,
+          "first": 6519.780985917896,
+          "last": 19719.780985917896
+        },
+        {
+          "id": "root:21:57:31:0:1",
+          "x": 576513.3966179565,
+          "y": 317890.84936026484,
+          "count": 15,
+          "first": 13196.364980796352,
+          "last": 21596.364980796352
+        },
+        {
+          "id": "root:flux:22:h:335000:700000:2500:-1:0",
+          "x": 700082.5583055848,
+          "y": 333667.9546055384,
+          "count": 12,
+          "first": 13647.771426150575,
+          "last": 20247.771426150575
+        },
+        {
+          "id": "root:flux:23:h:340000:705000:2500:-1:0",
+          "x": 707367.5710824318,
+          "y": 335752.71203106677,
+          "count": 11,
+          "first": 14234.385766927153,
+          "last": 20234.385766927153
+        }
+      ],
       "stats": {
         "linkedCoastalSources": 0,
         "eastwardRelayBirths": 1,
         "southwardRelayBirths": 0,
-        "sourceClosureReasons": {},
+        "sourceClosureReasons": {
+          "coldBarrier": 1,
+          "dryInflow": 2
+        },
         "upstreamBlockedBirths": 0,
-        "persistentBirths": 60,
-        "closedTriggerSources": 0,
-        "births": 63,
-        "coldBirths": 1,
-        "deaths": 49,
+        "persistentBirths": 57,
+        "closedTriggerSources": 3,
+        "births": 61,
+        "coldBirths": 2,
+        "deaths": 25,
         "deathReasons": {
-          "thermal_or_updraft_support_lost": 49
+          "thermal_or_updraft_support_lost": 19,
+          "pulse_completed": 6
         }
       },
       "audit": {
-        "water": 46542659774482.2,
-        "expected": 46542659774517.03,
-        "residual": -34.828125,
-        "relativeResidual": 5.087533169079731e-13,
-        "activityResidual": 7.83651366574468e-13,
-        "coldVolumeResidual": 0.560546875,
-        "coldHeatResidual": 0.34765625
-      }
+        "water": 46455431222340.72,
+        "expected": 46455431222375.63,
+        "residual": -34.9140625,
+        "relativeResidual": 5.100086525934795e-13,
+        "activityResidual": 7.827818706023011e-13,
+        "coldVolumeResidual": 0.365966796875,
+        "coldHeatResidual": 0.939453125
+      },
+      "heatAudit": {
+        "initial": 1.3008429133019396e+21,
+        "initialEnvironment": 1.3008429133019396e+21,
+        "initialConvective": 0,
+        "in": 675940843436787100000,
+        "out": 675368765124019900000,
+        "flows": {
+          "transportBoundary:in": 675263488907190200000,
+          "transportBoundary:out": 674177317760635200000,
+          "diurnalSensible:out": 369.148159601832,
+          "surfaceVapor:in": 677354531249187000,
+          "convectiveVentilationTop:out": 1152161629400444400,
+          "convectiveDeathVentilationTop:out": 39285733984964700
+        },
+        "definition": "Henv(cp*m*T + Lv*Wv) + sum(cell.convectivePhaseEnergyJ); unresolved upper-layer export is an explicit boundary; liquid sensible heat and full potential/kinetic energy excluded",
+        "mode": "carried_export",
+        "environmentInventory": 1.3013591647314232e+21,
+        "convectiveInventory": 55826884864503360,
+        "combinedInventory": 1.3014149916162877e+21,
+        "absoluteRoundoffEnvelopeJ": 2311777.4212556123,
+        "environmentResidual": -1580728320,
+        "inventory": 1.3014149916162877e+21,
+        "residual": -1580990464,
+        "relativeResidual": 1.168687718677555e-12,
+        "phaseHeating": 1247274338728455400,
+        "phaseCooling": 234319346511628480
+      },
+      "rows": [
+        {
+          "t": 600,
+          "localHour": 20.166666666666668,
+          "peakDbz": null,
+          "echo5Km2": 0,
+          "echo20Km2": 0,
+          "stratiform5Km2": 0,
+          "stratiform20Km2": 0,
+          "rainRate": 0,
+          "hourMm": 0,
+          "coldKm2": 0,
+          "connectedCold": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 0
+          },
+          "regionColdKm2": null,
+          "births": 0,
+          "coldBirths": 0,
+          "cells": 0,
+          "activeSources": 0,
+          "persistentBirths": 0,
+          "triggerFraction": 0,
+          "inflowLandRH": 0.8357956984925663,
+          "redBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 1200,
+          "localHour": 20.333333333333332,
+          "peakDbz": null,
+          "echo5Km2": 0,
+          "echo20Km2": 0,
+          "stratiform5Km2": 0,
+          "stratiform20Km2": 0,
+          "rainRate": 0,
+          "hourMm": 0,
+          "coldKm2": 0,
+          "connectedCold": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 0
+          },
+          "regionColdKm2": null,
+          "births": 0,
+          "coldBirths": 0,
+          "cells": 0,
+          "activeSources": 0,
+          "persistentBirths": 0,
+          "triggerFraction": 7.32421875e-05,
+          "inflowLandRH": 0.8374265315077611,
+          "redBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 1800,
+          "localHour": 20.5,
+          "peakDbz": null,
+          "echo5Km2": 0,
+          "echo20Km2": 0,
+          "stratiform5Km2": 0,
+          "stratiform20Km2": 0,
+          "rainRate": 0,
+          "hourMm": 0,
+          "coldKm2": 0,
+          "connectedCold": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 0
+          },
+          "regionColdKm2": null,
+          "births": 0,
+          "coldBirths": 0,
+          "cells": 0,
+          "activeSources": 0,
+          "persistentBirths": 0,
+          "triggerFraction": 0.0001220703125,
+          "inflowLandRH": 0.8389426149869179,
+          "redBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 2400,
+          "localHour": 20.666666666666668,
+          "peakDbz": null,
+          "echo5Km2": 0,
+          "echo20Km2": 0,
+          "stratiform5Km2": 0,
+          "stratiform20Km2": 0,
+          "rainRate": 0,
+          "hourMm": 0,
+          "coldKm2": 0,
+          "connectedCold": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 0
+          },
+          "regionColdKm2": null,
+          "births": 0,
+          "coldBirths": 0,
+          "cells": 0,
+          "activeSources": 0,
+          "persistentBirths": 0,
+          "triggerFraction": 0.00029296875,
+          "inflowLandRH": 0.8403847582844559,
+          "redBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 3000,
+          "localHour": 20.833333333333332,
+          "peakDbz": null,
+          "echo5Km2": 0,
+          "echo20Km2": 0,
+          "stratiform5Km2": 0,
+          "stratiform20Km2": 0,
+          "rainRate": 0,
+          "hourMm": 0,
+          "coldKm2": 0,
+          "connectedCold": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 0
+          },
+          "regionColdKm2": null,
+          "births": 0,
+          "coldBirths": 0,
+          "cells": 0,
+          "activeSources": 0,
+          "persistentBirths": 0,
+          "triggerFraction": 0.0004150390625,
+          "inflowLandRH": 0.8417807337992552,
+          "redBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 3600,
+          "localHour": 21,
+          "peakDbz": null,
+          "echo5Km2": 0,
+          "echo20Km2": 0,
+          "stratiform5Km2": 0,
+          "stratiform20Km2": 0,
+          "rainRate": 0,
+          "hourMm": 0,
+          "coldKm2": 0,
+          "connectedCold": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 0
+          },
+          "regionColdKm2": null,
+          "births": 0,
+          "coldBirths": 0,
+          "cells": 0,
+          "activeSources": 0,
+          "persistentBirths": 0,
+          "triggerFraction": 0.00048828125,
+          "inflowLandRH": 0.8431561373191621,
+          "redBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 4200,
+          "localHour": 21.166666666666668,
+          "peakDbz": null,
+          "echo5Km2": 0,
+          "echo20Km2": 0,
+          "stratiform5Km2": 0,
+          "stratiform20Km2": 0,
+          "rainRate": 0,
+          "hourMm": 0,
+          "coldKm2": 0,
+          "connectedCold": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 0
+          },
+          "regionColdKm2": null,
+          "births": 0,
+          "coldBirths": 0,
+          "cells": 0,
+          "activeSources": 0,
+          "persistentBirths": 0,
+          "triggerFraction": 0.0005615234375,
+          "inflowLandRH": 0.8445169397323842,
+          "redBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 4800,
+          "localHour": 21.333333333333332,
+          "peakDbz": null,
+          "echo5Km2": 0,
+          "echo20Km2": 0,
+          "stratiform5Km2": 0,
+          "stratiform20Km2": 0,
+          "rainRate": 0,
+          "hourMm": 0,
+          "coldKm2": 0,
+          "connectedCold": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 0
+          },
+          "regionColdKm2": null,
+          "births": 0,
+          "coldBirths": 0,
+          "cells": 0,
+          "activeSources": 0,
+          "persistentBirths": 0,
+          "triggerFraction": 0.0006103515625,
+          "inflowLandRH": 0.8458753509119471,
+          "redBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 5400,
+          "localHour": 21.5,
+          "peakDbz": null,
+          "echo5Km2": 0,
+          "echo20Km2": 0,
+          "stratiform5Km2": 0,
+          "stratiform20Km2": 0,
+          "rainRate": 0,
+          "hourMm": 0,
+          "coldKm2": 0,
+          "connectedCold": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 0
+          },
+          "regionColdKm2": null,
+          "births": 0,
+          "coldBirths": 0,
+          "cells": 0,
+          "activeSources": 0,
+          "persistentBirths": 0,
+          "triggerFraction": 0.000634765625,
+          "inflowLandRH": 0.8472230558430206,
+          "redBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 6000,
+          "localHour": 21.666666666666668,
+          "peakDbz": null,
+          "echo5Km2": 0,
+          "echo20Km2": 0,
+          "stratiform5Km2": 0,
+          "stratiform20Km2": 0,
+          "rainRate": 0,
+          "hourMm": 0,
+          "coldKm2": 0,
+          "connectedCold": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 0
+          },
+          "regionColdKm2": null,
+          "births": 0,
+          "coldBirths": 0,
+          "cells": 0,
+          "activeSources": 0,
+          "persistentBirths": 0,
+          "triggerFraction": 0.000634765625,
+          "inflowLandRH": 0.8485515292606465,
+          "redBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 6600,
+          "localHour": 21.833333333333332,
+          "peakDbz": 22.415831163935618,
+          "echo5Km2": 136,
+          "echo20Km2": 24,
+          "stratiform5Km2": 52,
+          "stratiform20Km2": 0,
+          "rainRate": 0.3177720925393824,
+          "hourMm": 0.052962015423230396,
+          "coldKm2": 0,
+          "connectedCold": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 0
+          },
+          "regionColdKm2": null,
+          "births": 1,
+          "coldBirths": 0,
+          "cells": 1,
+          "activeSources": 1,
+          "persistentBirths": 0,
+          "triggerFraction": 0.000634765625,
+          "inflowLandRH": 0.8498202658086216,
+          "redBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 7200,
+          "localHour": 22,
+          "peakDbz": 59.56506860589702,
+          "echo5Km2": 672,
+          "echo20Km2": 448,
+          "stratiform5Km2": 568,
+          "stratiform20Km2": 348,
+          "rainRate": 44.00647017351701,
+          "hourMm": 7.34141732238081,
+          "coldKm2": 281.25,
+          "connectedCold": {
+            "pixels": 45,
+            "lengthKm": 24.66573732749558,
+            "widthKm": 14.942570543069502,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 281.25
+          },
+          "regionColdKm2": null,
+          "births": 2,
+          "coldBirths": 0,
+          "cells": 2,
+          "activeSources": 1,
+          "persistentBirths": 1,
+          "triggerFraction": 0.000634765625,
+          "inflowLandRH": 0.8505527125708079,
+          "redBand": {
+            "pixels": 24,
+            "lengthKm": 14.424148721972177,
+            "widthKm": 9.009226152659453,
+            "roots": [
+              {
+                "id": "root:belt:10:130:70",
+                "x": 647540.4603861294,
+                "y": 350459.3510648893
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 7800,
+          "localHour": 22.166666666666668,
+          "peakDbz": 65.16817328154083,
+          "echo5Km2": 1008,
+          "echo20Km2": 712,
+          "stratiform5Km2": 972,
+          "stratiform20Km2": 668,
+          "rainRate": 100.00000000000001,
+          "hourMm": 23.076298282983718,
+          "coldKm2": 731.25,
+          "connectedCold": {
+            "pixels": 117,
+            "lengthKm": 35.050784976413205,
+            "widthKm": 27.546606793019482,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 731.25
+          },
+          "regionColdKm2": null,
+          "births": 3,
+          "coldBirths": 0,
+          "cells": 3,
+          "activeSources": 1,
+          "persistentBirths": 2,
+          "triggerFraction": 0.0004638671875,
+          "inflowLandRH": 0.8512769530301286,
+          "redBand": {
+            "pixels": 46,
+            "lengthKm": 21.144247781582948,
+            "widthKm": 11.635432678938821,
+            "roots": [
+              {
+                "id": "root:belt:10:130:70",
+                "x": 646715.3562734528,
+                "y": 350781.68514499
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 8400,
+          "localHour": 22.333333333333332,
+          "peakDbz": 68.02978721031485,
+          "echo5Km2": 1552,
+          "echo20Km2": 1172,
+          "stratiform5Km2": 1540,
+          "stratiform20Km2": 1164,
+          "rainRate": 100.00000000000001,
+          "hourMm": 38.89580483359181,
+          "coldKm2": 1400,
+          "connectedCold": {
+            "pixels": 224,
+            "lengthKm": 46.55105873615669,
+            "widthKm": 38.87229739459687,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 1400
+          },
+          "regionColdKm2": null,
+          "births": 4,
+          "coldBirths": 0,
+          "cells": 4,
+          "activeSources": 1,
+          "persistentBirths": 3,
+          "triggerFraction": 0.0004150390625,
+          "inflowLandRH": 0.8519768766640068,
+          "redBand": {
+            "pixels": 64,
+            "lengthKm": 26.42129663695761,
+            "widthKm": 12.843548991169035,
+            "roots": [
+              {
+                "id": "root:belt:10:130:70",
+                "x": 645784.6320463209,
+                "y": 351147.4069149597
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 9000,
+          "localHour": 22.5,
+          "peakDbz": 68.70190550161331,
+          "echo5Km2": 2252,
+          "echo20Km2": 1712,
+          "stratiform5Km2": 2252,
+          "stratiform20Km2": 1712,
+          "rainRate": 100.00000000000001,
+          "hourMm": 54.58134665657326,
+          "coldKm2": 2337.5,
+          "connectedCold": {
+            "pixels": 374,
+            "lengthKm": 57.620092547474556,
+            "widthKm": 52.452461686832955,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 2337.5
+          },
+          "regionColdKm2": null,
+          "births": 5,
+          "coldBirths": 0,
+          "cells": 5,
+          "activeSources": 1,
+          "persistentBirths": 4,
+          "triggerFraction": 0.0004150390625,
+          "inflowLandRH": 0.8527092046787089,
+          "redBand": {
+            "pixels": 91,
+            "lengthKm": 33.60478489355674,
+            "widthKm": 14.148581046676695,
+            "roots": [
+              {
+                "id": "root:belt:10:130:70",
+                "x": 645620.5568696732,
+                "y": 351215.0520066746
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 9600,
+          "localHour": 22.666666666666668,
+          "peakDbz": 66.85238591841576,
+          "echo5Km2": 3000,
+          "echo20Km2": 2252,
+          "stratiform5Km2": 3000,
+          "stratiform20Km2": 2252,
+          "rainRate": 100.00000000000001,
+          "hourMm": 71.24801332323993,
+          "coldKm2": 3387.5,
+          "connectedCold": {
+            "pixels": 542,
+            "lengthKm": 68.14373017833078,
+            "widthKm": 64.22511789611315,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 3387.5
+          },
+          "regionColdKm2": null,
+          "births": 6,
+          "coldBirths": 0,
+          "cells": 6,
+          "activeSources": 1,
+          "persistentBirths": 5,
+          "triggerFraction": 0.0004150390625,
+          "inflowLandRH": 0.8533681505415093,
+          "redBand": {
+            "pixels": 100,
+            "lengthKm": 37.895095599943986,
+            "widthKm": 13.663074183282335,
+            "roots": [
+              {
+                "id": "root:belt:10:130:70",
+                "x": 645656.3179675245,
+                "y": 351204.4599458505
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 10200,
+          "localHour": 22.833333333333332,
+          "peakDbz": 66.70688740306626,
+          "echo5Km2": 3776,
+          "echo20Km2": 2816,
+          "stratiform5Km2": 3776,
+          "stratiform20Km2": 2816,
+          "rainRate": 100.00000000000001,
+          "hourMm": 87.9135948612565,
+          "coldKm2": 4768.75,
+          "connectedCold": {
+            "pixels": 763,
+            "lengthKm": 79.87058918348332,
+            "widthKm": 76.7099956068383,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 4768.75
+          },
+          "regionColdKm2": null,
+          "births": 7,
+          "coldBirths": 0,
+          "cells": 7,
+          "activeSources": 1,
+          "persistentBirths": 6,
+          "triggerFraction": 0.000439453125,
+          "inflowLandRH": 0.8546678923223051,
+          "redBand": {
+            "pixels": 112,
+            "lengthKm": 42.52866010143459,
+            "widthKm": 13.671627924778857,
+            "roots": [
+              {
+                "id": "root:belt:10:130:70",
+                "x": 645861.3294855158,
+                "y": 351126.96779199975
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 10800,
+          "localHour": 23,
+          "peakDbz": 64.77465927571382,
+          "echo5Km2": 4524,
+          "echo20Km2": 3328,
+          "stratiform5Km2": 4524,
+          "stratiform20Km2": 3328,
+          "rainRate": 100.00000000000001,
+          "hourMm": 99.85816567042943,
+          "coldKm2": 6181.25,
+          "connectedCold": {
+            "pixels": 989,
+            "lengthKm": 91.18047670510778,
+            "widthKm": 86.92456469710015,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 6181.25
+          },
+          "regionColdKm2": null,
+          "births": 8,
+          "coldBirths": 0,
+          "cells": 5,
+          "activeSources": 1,
+          "persistentBirths": 7,
+          "triggerFraction": 0.000439453125,
+          "inflowLandRH": 0.8557981006454789,
+          "redBand": {
+            "pixels": 119,
+            "lengthKm": 46.52023995096957,
+            "widthKm": 13.253758353159743,
+            "roots": [
+              {
+                "id": "root:belt:10:130:70",
+                "x": 646267.387968087,
+                "y": 350969.31450505985
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 11400,
+          "localHour": 23.166666666666668,
+          "peakDbz": 64.09349024731544,
+          "echo5Km2": 5240,
+          "echo20Km2": 3796,
+          "stratiform5Km2": 5240,
+          "stratiform20Km2": 3796,
+          "rainRate": 100.00000000000001,
+          "hourMm": 100.00000000000001,
+          "coldKm2": 7650,
+          "connectedCold": {
+            "pixels": 1224,
+            "lengthKm": 101.7850665814886,
+            "widthKm": 96.36427219313445,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 7650
+          },
+          "regionColdKm2": null,
+          "births": 9,
+          "coldBirths": 0,
+          "cells": 5,
+          "activeSources": 1,
+          "persistentBirths": 8,
+          "triggerFraction": 0.000439453125,
+          "inflowLandRH": 0.8565361616902194,
+          "redBand": {
+            "pixels": 114,
+            "lengthKm": 47.25281345241685,
+            "widthKm": 12.671921397331069,
+            "roots": [
+              {
+                "id": "root:belt:10:130:70",
+                "x": 646875.4351744566,
+                "y": 350730.330760505
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 12000,
+          "localHour": 23.333333333333332,
+          "peakDbz": 63.626691001465886,
+          "echo5Km2": 5896,
+          "echo20Km2": 4264,
+          "stratiform5Km2": 5896,
+          "stratiform20Km2": 4264,
+          "rainRate": 100.00000000000001,
+          "hourMm": 100.00000000000001,
+          "coldKm2": 9312.5,
+          "connectedCold": {
+            "pixels": 1490,
+            "lengthKm": 111.77708276536842,
+            "widthKm": 106.99431373860492,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 9312.5
+          },
+          "regionColdKm2": null,
+          "births": 10,
+          "coldBirths": 0,
+          "cells": 5,
+          "activeSources": 1,
+          "persistentBirths": 9,
+          "triggerFraction": 0.000439453125,
+          "inflowLandRH": 0.8577402996385428,
+          "redBand": {
+            "pixels": 98,
+            "lengthKm": 43.56103128383165,
+            "widthKm": 11.782437597265373,
+            "roots": [
+              {
+                "id": "root:belt:10:130:70",
+                "x": 647613.4503119133,
+                "y": 350437.92982401745
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 12600,
+          "localHour": 23.5,
+          "peakDbz": 64.48252015992834,
+          "echo5Km2": 6560,
+          "echo20Km2": 4680,
+          "stratiform5Km2": 6560,
+          "stratiform20Km2": 4680,
+          "rainRate": 100.00000000000001,
+          "hourMm": 100.00000000000001,
+          "coldKm2": 10887.5,
+          "connectedCold": {
+            "pixels": 1742,
+            "lengthKm": 120.27659461981472,
+            "widthKm": 116.16768091399285,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 10887.5
+          },
+          "regionColdKm2": null,
+          "births": 11,
+          "coldBirths": 0,
+          "cells": 5,
+          "activeSources": 1,
+          "persistentBirths": 10,
+          "triggerFraction": 0.0004638671875,
+          "inflowLandRH": 0.8588925813783473,
+          "redBand": {
+            "pixels": 85,
+            "lengthKm": 39.32142103317592,
+            "widthKm": 11.452072041593642,
+            "roots": [
+              {
+                "id": "root:belt:10:130:70",
+                "x": 648542.1128317794,
+                "y": 350067.0040575954
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 13200,
+          "localHour": 23.666666666666668,
+          "peakDbz": 65.04620691010628,
+          "echo5Km2": 7128,
+          "echo20Km2": 5064,
+          "stratiform5Km2": 7128,
+          "stratiform20Km2": 5064,
+          "rainRate": 100.00000000000001,
+          "hourMm": 100.00000000000001,
+          "coldKm2": 12475,
+          "connectedCold": {
+            "pixels": 1996,
+            "lengthKm": 128.9071864080218,
+            "widthKm": 124.21126572090768,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 12475
+          },
+          "regionColdKm2": null,
+          "births": 13,
+          "coldBirths": 0,
+          "cells": 6,
+          "activeSources": 2,
+          "persistentBirths": 11,
+          "triggerFraction": 0.0004638671875,
+          "inflowLandRH": 0.859811921503529,
+          "redBand": {
+            "pixels": 86,
+            "lengthKm": 36.52655059275595,
+            "widthKm": 12.214226999901822,
+            "roots": [
+              {
+                "id": "root:belt:10:130:70",
+                "x": 649470.1506778956,
+                "y": 349694.51814353146
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 13800,
+          "localHour": 23.833333333333332,
+          "peakDbz": 65.5142916329745,
+          "echo5Km2": 8672,
+          "echo20Km2": 5972,
+          "stratiform5Km2": 8448,
+          "stratiform20Km2": 5736,
+          "rainRate": 100.00000000000001,
+          "hourMm": 100.00000000000001,
+          "coldKm2": 14400,
+          "connectedCold": {
+            "pixels": 2258,
+            "lengthKm": 136.78607818799125,
+            "widthKm": 132.290911362245,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 14112.5
+          },
+          "regionColdKm2": null,
+          "births": 16,
+          "coldBirths": 1,
+          "cells": 9,
+          "activeSources": 3,
+          "persistentBirths": 13,
+          "triggerFraction": 0.0004638671875,
+          "inflowLandRH": 0.8602542051316071,
+          "redBand": {
+            "pixels": 92,
+            "lengthKm": 37.96424491999675,
+            "widthKm": 12.579538071924599,
+            "roots": [
+              {
+                "id": "root:belt:10:130:70",
+                "x": 650378.0997325906,
+                "y": 349327.3277509169
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 14400,
+          "localHour": 0,
+          "peakDbz": 65.50348595240416,
+          "echo5Km2": 10048,
+          "echo20Km2": 6844,
+          "stratiform5Km2": 9912,
+          "stratiform20Km2": 6672,
+          "rainRate": 100.00000000000001,
+          "hourMm": 100.00000000000001,
+          "coldKm2": 16487.5,
+          "connectedCold": {
+            "pixels": 2524,
+            "lengthKm": 143.98678739896766,
+            "widthKm": 140.6837858781614,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 15775
+          },
+          "regionColdKm2": null,
+          "births": 20,
+          "coldBirths": 2,
+          "cells": 13,
+          "activeSources": 4,
+          "persistentBirths": 16,
+          "triggerFraction": 0.0004150390625,
+          "inflowLandRH": 0.8603110753213864,
+          "redBand": {
+            "pixels": 106,
+            "lengthKm": 41.90949416091139,
+            "widthKm": 13.194967770286318,
+            "roots": [
+              {
+                "id": "root:belt:10:130:70",
+                "x": 651036.6314559203,
+                "y": 349058.49781714723
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 14.475326629096456,
+              "roots": [
+                {
+                  "id": "root:flux:22:h:335000:700000:2500:-1:0",
+                  "x": 700082.5583055848,
+                  "y": 333667.9546055384
+                },
+                {
+                  "id": "root:flux:23:h:340000:705000:2500:-1:0",
+                  "x": 707367.5710824318,
+                  "y": 335752.71203106677
+                }
+              ]
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 15000,
+          "localHour": 0.16666666666666785,
+          "peakDbz": 66.54713900415214,
+          "echo5Km2": 11540,
+          "echo20Km2": 7924,
+          "stratiform5Km2": 11516,
+          "stratiform20Km2": 7836,
+          "rainRate": 100.00000000000001,
+          "hourMm": 98.96949934669973,
+          "coldKm2": 18962.5,
+          "connectedCold": {
+            "pixels": 2805,
+            "lengthKm": 151.89859908403713,
+            "widthKm": 148.42570187743505,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 17531.25
+          },
+          "regionColdKm2": null,
+          "births": 24,
+          "coldBirths": 2,
+          "cells": 17,
+          "activeSources": 4,
+          "persistentBirths": 20,
+          "triggerFraction": 0.0003173828125,
+          "inflowLandRH": 0.8605365406665746,
+          "redBand": {
+            "pixels": 116,
+            "lengthKm": 45.863839346274126,
+            "widthKm": 13.226738352402334,
+            "roots": [
+              {
+                "id": "root:belt:10:130:70",
+                "x": 651135.3399063757,
+                "y": 349014.8189089944
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 21.93098987081705,
+              "roots": [
+                {
+                  "id": "root:flux:23:h:340000:705000:2500:-1:0",
+                  "x": 706915.1942470551,
+                  "y": 335936.0664312133
+                },
+                {
+                  "id": "root:flux:22:h:335000:700000:2500:-1:0",
+                  "x": 700082.5583055848,
+                  "y": 333667.9546055384
+                }
+              ]
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 15600,
+          "localHour": 0.33333333333333215,
+          "peakDbz": 67.29005233460879,
+          "echo5Km2": 13068,
+          "echo20Km2": 9068,
+          "stratiform5Km2": 13068,
+          "stratiform20Km2": 9060,
+          "rainRate": 100.00000000000001,
+          "hourMm": 96.61447916906164,
+          "coldKm2": 21431.25,
+          "connectedCold": {
+            "pixels": 3429,
+            "lengthKm": 201.31302045623943,
+            "widthKm": 147.9402019827062,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 21431.25
+          },
+          "regionColdKm2": null,
+          "births": 28,
+          "coldBirths": 2,
+          "cells": 21,
+          "activeSources": 4,
+          "persistentBirths": 24,
+          "triggerFraction": 0.000244140625,
+          "inflowLandRH": 0.8606180975105617,
+          "redBand": {
+            "pixels": 120,
+            "lengthKm": 47.92777318899155,
+            "widthKm": 13.07532457341779,
+            "roots": [
+              {
+                "id": "root:belt:10:130:70",
+                "x": 651088.4015825592,
+                "y": 349030.09826372546
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 27.168692096663328,
+              "roots": [
+                {
+                  "id": "root:flux:23:h:340000:705000:2500:-1:0",
+                  "x": 706021.6476240435,
+                  "y": 336300.0226130271
+                },
+                {
+                  "id": "root:flux:22:h:335000:700000:2500:-1:0",
+                  "x": 700082.5583055848,
+                  "y": 333667.9546055384
+                }
+              ]
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 16200,
+          "localHour": 0.5,
+          "peakDbz": 66.44335339416548,
+          "echo5Km2": 14700,
+          "echo20Km2": 10480,
+          "stratiform5Km2": 14700,
+          "stratiform20Km2": 10476,
+          "rainRate": 100.00000000000001,
+          "hourMm": 96.6422613702726,
+          "coldKm2": 23537.5,
+          "connectedCold": {
+            "pixels": 3766,
+            "lengthKm": 211.20887502120837,
+            "widthKm": 153.322668757551,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 23537.5
+          },
+          "regionColdKm2": null,
+          "births": 32,
+          "coldBirths": 2,
+          "cells": 25,
+          "activeSources": 4,
+          "persistentBirths": 28,
+          "triggerFraction": 0.0001953125,
+          "inflowLandRH": 0.8617411767422106,
+          "redBand": {
+            "pixels": 125,
+            "lengthKm": 52.858983558429905,
+            "widthKm": 12.443951616547304,
+            "roots": [
+              {
+                "id": "root:belt:10:130:70",
+                "x": 650902.9922290265,
+                "y": 349101.98955938115
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 33.94877407442792,
+              "roots": [
+                {
+                  "id": "root:flux:23:h:340000:705000:2500:-1:0",
+                  "x": 705538.3547678604,
+                  "y": 336498.9864621745
+                },
+                {
+                  "id": "root:flux:22:h:335000:700000:2500:-1:0",
+                  "x": 700082.5583055848,
+                  "y": 333667.9546055384
+                }
+              ]
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 16800,
+          "localHour": 0.6666666666666679,
+          "peakDbz": 65.27326088485859,
+          "echo5Km2": 16360,
+          "echo20Km2": 11668,
+          "stratiform5Km2": 16360,
+          "stratiform20Km2": 11668,
+          "rainRate": 100.00000000000001,
+          "hourMm": 98.44850297388162,
+          "coldKm2": 25837.5,
+          "connectedCold": {
+            "pixels": 4134,
+            "lengthKm": 221.17047167395359,
+            "widthKm": 159.5354016635628,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 25837.5
+          },
+          "regionColdKm2": null,
+          "births": 36,
+          "coldBirths": 2,
+          "cells": 29,
+          "activeSources": 4,
+          "persistentBirths": 32,
+          "triggerFraction": 0.0001953125,
+          "inflowLandRH": 0.8627927031434856,
+          "redBand": {
+            "pixels": 129,
+            "lengthKm": 56.16569350993669,
+            "widthKm": 12.212815771266593,
+            "roots": [
+              {
+                "id": "root:belt:10:130:70",
+                "x": 650553.8575548164,
+                "y": 349241.3838734481
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 39.85389507811051,
+              "roots": [
+                {
+                  "id": "root:flux:23:h:340000:705000:2500:-1:0",
+                  "x": 705576.3093256017,
+                  "y": 336485.8912093154
+                },
+                {
+                  "id": "root:flux:22:h:335000:700000:2500:-1:0",
+                  "x": 699967.7735108192,
+                  "y": 333714.9370307372
+                }
+              ]
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 17400,
+          "localHour": 0.8333333333333321,
+          "peakDbz": 64.52370968722161,
+          "echo5Km2": 17896,
+          "echo20Km2": 12720,
+          "stratiform5Km2": 17896,
+          "stratiform20Km2": 12720,
+          "rainRate": 100.00000000000001,
+          "hourMm": 99.48403720605664,
+          "coldKm2": 28162.5,
+          "connectedCold": {
+            "pixels": 4506,
+            "lengthKm": 230.2505977465502,
+            "widthKm": 165.102986759064,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 28162.5
+          },
+          "regionColdKm2": null,
+          "births": 40,
+          "coldBirths": 2,
+          "cells": 33,
+          "activeSources": 4,
+          "persistentBirths": 36,
+          "triggerFraction": 0.000244140625,
+          "inflowLandRH": 0.8631103261089751,
+          "redBand": {
+            "pixels": 132,
+            "lengthKm": 56.9969029433018,
+            "widthKm": 12.448737005680663,
+            "roots": [
+              {
+                "id": "root:belt:10:130:70",
+                "x": 650025.6220246378,
+                "y": 349455.25232930057
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 45.817852927929124,
+              "roots": [
+                {
+                  "id": "root:flux:23:h:340000:705000:2500:-1:0",
+                  "x": 705988.3971087678,
+                  "y": 336319.06255191745
+                },
+                {
+                  "id": "root:flux:22:h:335000:700000:2500:-1:0",
+                  "x": 700291.1003963377,
+                  "y": 333582.31789546955
+                }
+              ]
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 18000,
+          "localHour": 1,
+          "peakDbz": 64.44037741998591,
+          "echo5Km2": 19364,
+          "echo20Km2": 13628,
+          "stratiform5Km2": 19364,
+          "stratiform20Km2": 13628,
+          "rainRate": 100.00000000000001,
+          "hourMm": 100.00000000000001,
+          "coldKm2": 30300,
+          "connectedCold": {
+            "pixels": 4848,
+            "lengthKm": 237.51252946916986,
+            "widthKm": 170.94946203729862,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 30300
+          },
+          "regionColdKm2": null,
+          "births": 44,
+          "coldBirths": 2,
+          "cells": 37,
+          "activeSources": 4,
+          "persistentBirths": 40,
+          "triggerFraction": 0.0002197265625,
+          "inflowLandRH": 0.8641841656231388,
+          "redBand": {
+            "pixels": 138,
+            "lengthKm": 59.838179359832615,
+            "widthKm": 12.284031784327748,
+            "roots": [
+              {
+                "id": "root:belt:10:130:70",
+                "x": 649353.8031187117,
+                "y": 349729.68342750496
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 51.1020315730829,
+              "roots": [
+                {
+                  "id": "root:flux:23:h:340000:705000:2500:-1:0",
+                  "x": 706804.6413333081,
+                  "y": 335984.6294091098
+                },
+                {
+                  "id": "root:flux:22:h:335000:700000:2500:-1:0",
+                  "x": 701215.6274846816,
+                  "y": 333201.2015576952
+                }
+              ]
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 18600,
+          "localHour": 1.1666666666666679,
+          "peakDbz": 64.83765926848004,
+          "echo5Km2": 20796,
+          "echo20Km2": 14572,
+          "stratiform5Km2": 20796,
+          "stratiform20Km2": 14572,
+          "rainRate": 100.00000000000001,
+          "hourMm": 100.00000000000003,
+          "coldKm2": 32387.5,
+          "connectedCold": {
+            "pixels": 5182,
+            "lengthKm": 245.0914075303588,
+            "widthKm": 176.15218955917777,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 32387.5
+          },
+          "regionColdKm2": null,
+          "births": 48,
+          "coldBirths": 2,
+          "cells": 40,
+          "activeSources": 4,
+          "persistentBirths": 44,
+          "triggerFraction": 0.0002197265625,
+          "inflowLandRH": 0.8649979041721684,
+          "redBand": {
+            "pixels": 145,
+            "lengthKm": 63.49681272483944,
+            "widthKm": 12.124884809930952,
+            "roots": [
+              {
+                "id": "root:belt:10:130:70",
+                "x": 648819.457202423,
+                "y": 349949.09076867654
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 56.717828663483544,
+              "roots": [
+                {
+                  "id": "root:flux:23:h:340000:705000:2500:-1:0",
+                  "x": 707729.04290852,
+                  "y": 335603.20873879193
+                },
+                {
+                  "id": "root:flux:22:h:335000:700000:2500:-1:0",
+                  "x": 702051.8321501692,
+                  "y": 332854.00830657594
+                }
+              ]
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 19200,
+          "localHour": 1.3333333333333321,
+          "peakDbz": 62.26435923836825,
+          "echo5Km2": 22044,
+          "echo20Km2": 15328,
+          "stratiform5Km2": 22044,
+          "stratiform20Km2": 15328,
+          "rainRate": 100.00000000000001,
+          "hourMm": 100.00000000000003,
+          "coldKm2": 34500,
+          "connectedCold": {
+            "pixels": 5520,
+            "lengthKm": 252.61700236082558,
+            "widthKm": 181.74148583170214,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 34500
+          },
+          "regionColdKm2": null,
+          "births": 52,
+          "coldBirths": 2,
+          "cells": 43,
+          "activeSources": 4,
+          "persistentBirths": 48,
+          "triggerFraction": 0.0002197265625,
+          "inflowLandRH": 0.8660036190556007,
+          "redBand": {
+            "pixels": 151,
+            "lengthKm": 66.254578284409,
+            "widthKm": 12.157289205346336,
+            "roots": [
+              {
+                "id": "root:belt:10:130:70",
+                "x": 648899.3594964842,
+                "y": 349915.2228375704
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 61.96177566382775,
+              "roots": [
+                {
+                  "id": "root:flux:23:h:340000:705000:2500:-1:0",
+                  "x": 708652.6951354286,
+                  "y": 335219.9770024667
+                },
+                {
+                  "id": "root:flux:22:h:335000:700000:2500:-1:0",
+                  "x": 702371.5726069193,
+                  "y": 332718.77925886883
+                }
+              ]
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 19800,
+          "localHour": 1.5,
+          "peakDbz": 63.004983197204034,
+          "echo5Km2": 23104,
+          "echo20Km2": 16188,
+          "stratiform5Km2": 23104,
+          "stratiform20Km2": 16184,
+          "rainRate": 100.00000000000001,
+          "hourMm": 100.00000000000001,
+          "coldKm2": 36450,
+          "connectedCold": {
+            "pixels": 5832,
+            "lengthKm": 259.45846580611715,
+            "widthKm": 186.4374117184444,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 36450
+          },
+          "regionColdKm2": null,
+          "births": 56,
+          "coldBirths": 2,
+          "cells": 46,
+          "activeSources": 4,
+          "persistentBirths": 52,
+          "triggerFraction": 0.0002197265625,
+          "inflowLandRH": 0.8669000971216059,
+          "redBand": {
+            "pixels": 238,
+            "lengthKm": 67.2137550235434,
+            "widthKm": 18.441736319337906,
+            "roots": [
+              {
+                "id": "root:flux:23:h:340000:705000:2500:-1:0",
+                "x": 709575.4969885688,
+                "y": 334834.7021137951
+              },
+              {
+                "id": "root:flux:22:h:335000:700000:2500:-1:0",
+                "x": 702475.6044043477,
+                "y": 332672.42285600735
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 67.2137550235434,
+              "roots": [
+                {
+                  "id": "root:flux:23:h:340000:705000:2500:-1:0",
+                  "x": 709575.4969885688,
+                  "y": 334834.7021137951
+                },
+                {
+                  "id": "root:flux:22:h:335000:700000:2500:-1:0",
+                  "x": 702475.6044043477,
+                  "y": 332672.42285600735
+                }
+              ]
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 20400,
+          "localHour": 1.6666666666666679,
+          "peakDbz": 62.33734511261608,
+          "echo5Km2": 24108,
+          "echo20Km2": 16936,
+          "stratiform5Km2": 24108,
+          "stratiform20Km2": 16936,
+          "rainRate": 100.00000000000001,
+          "hourMm": 100.00000000000003,
+          "coldKm2": 38481.25,
+          "connectedCold": {
+            "pixels": 6157,
+            "lengthKm": 267.1406304082742,
+            "widthKm": 190.85355637858154,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 38481.25
+          },
+          "regionColdKm2": null,
+          "births": 59,
+          "coldBirths": 2,
+          "cells": 48,
+          "activeSources": 3,
+          "persistentBirths": 55,
+          "triggerFraction": 0.0002197265625,
+          "inflowLandRH": 0.8676847411758987,
+          "redBand": {
+            "pixels": 255,
+            "lengthKm": 72.30066560545819,
+            "widthKm": 18.483075288395014,
+            "roots": [
+              {
+                "id": "root:flux:23:h:340000:705000:2500:-1:0",
+                "x": 710356.2783917685,
+                "y": 334505.35323593125
+              },
+              {
+                "id": "root:flux:22:h:335000:700000:2500:-1:0",
+                "x": 702350.1159334218,
+                "y": 332721.57289003115
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 72.30066560545819,
+              "roots": [
+                {
+                  "id": "root:flux:23:h:340000:705000:2500:-1:0",
+                  "x": 710356.2783917685,
+                  "y": 334505.35323593125
+                },
+                {
+                  "id": "root:flux:22:h:335000:700000:2500:-1:0",
+                  "x": 702350.1159334218,
+                  "y": 332721.57289003115
+                }
+              ]
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 21000,
+          "localHour": 1.8333333333333321,
+          "peakDbz": 63.83140211977277,
+          "echo5Km2": 24956,
+          "echo20Km2": 17696,
+          "stratiform5Km2": 24956,
+          "stratiform20Km2": 17696,
+          "rainRate": 100.00000000000001,
+          "hourMm": 100.00000000000001,
+          "coldKm2": 40512.5,
+          "connectedCold": {
+            "pixels": 6482,
+            "lengthKm": 274.33805811749545,
+            "widthKm": 195.28645191314644,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 40512.5
+          },
+          "regionColdKm2": null,
+          "births": 60,
+          "coldBirths": 2,
+          "cells": 39,
+          "activeSources": 1,
+          "persistentBirths": 56,
+          "triggerFraction": 0.000244140625,
+          "inflowLandRH": 0.8684283575360757,
+          "redBand": {
+            "pixels": 233,
+            "lengthKm": 75.87698548866129,
+            "widthKm": 16.281562636914625,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 21600,
+          "localHour": 2,
+          "peakDbz": 64.64794908404491,
+          "echo5Km2": 25748,
+          "echo20Km2": 18192,
+          "stratiform5Km2": 25748,
+          "stratiform20Km2": 18192,
+          "rainRate": 100.00000000000001,
+          "hourMm": 100.00000000000001,
+          "coldKm2": 42581.25,
+          "connectedCold": {
+            "pixels": 6813,
+            "lengthKm": 282.965396295348,
+            "widthKm": 198.61657879356056,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 42581.25
+          },
+          "regionColdKm2": null,
+          "births": 61,
+          "coldBirths": 2,
+          "cells": 36,
+          "activeSources": 1,
+          "persistentBirths": 57,
+          "triggerFraction": 0.000244140625,
+          "inflowLandRH": 0.8691601232707787,
+          "redBand": {
+            "pixels": 203,
+            "lengthKm": 70.9622904143454,
+            "widthKm": 15.156820900960263,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        }
+      ]
     },
     "west": {
-      "model": "vacation-1.52.0",
+      "model": "vacation-1.53.0",
+      "windRange": {
+        "min": 9.927975038328638,
+        "max": 13.7908257059661
+      },
+      "maxConnectedColdKm2": 95925,
+      "regional": {
+        "west": {
+          "births": 12,
+          "maxSourceHours": 1.8333333333333333,
+          "firstBirthSeconds": 14559.865012345836
+        },
+        "delta": {
+          "births": 87,
+          "maxSourceHours": 4.666666666666667,
+          "firstBirthSeconds": 697.6183708291501
+        },
+        "east": {
+          "births": 21,
+          "maxSourceHours": 1.6666666666666667,
+          "firstBirthSeconds": 7334.236667957157
+        }
+      },
+      "coldRegion": null,
       "config": {
         "preset": "monsoon",
         "geography": "real",
@@ -193,89 +2435,2552 @@
           "humidity": 0
         }
       },
-      "regional": {
-        "west": {
-          "births": 13,
-          "maxSourceHours": 1.8333333333333333,
-          "firstBirthSeconds": 14559.865012345836
-        },
-        "delta": {
-          "births": 81,
-          "maxSourceHours": 4.666666666666667,
-          "firstBirthSeconds": 697.6183708291501
-        },
-        "east": {
-          "births": 3,
-          "maxSourceHours": 0.3333333333333333,
-          "firstBirthSeconds": 7260.705804917961
-        }
+      "wind": {
+        "backgroundNormal": 0,
+        "backgroundAlong": 10.144913105294108,
+        "jetExcessNormal": 0,
+        "jetExcessAlong": 3.4564986049663275,
+        "sigmaJet": 225000,
+        "exitLength": 16000,
+        "breezeDay": 1.5,
+        "breezeNight": 1
       },
+      "crossing": {
+        "x": 676722.9861901201,
+        "y": 313948.04036775895
+      },
+      "axis": {
+        "x": 0.771637520551527,
+        "y": 0.6360625259179256
+      },
+      "peakDbz": 67.34470521513562,
+      "peakHourMm": 100.00000000000003,
+      "maxColdKm2": 108068.75,
+      "maxRedBandKm": 91.531374695571,
+      "maxEastRedBandKm": 49.13608831964118,
+      "maxActiveTravelKm": 76.20040868768866,
+      "maxSourceSwayM": 3711.480698907345,
       "maxLinkedGroupSources": 3,
-      "maxSourceSwayM": 3611.213927217309,
-      "maxRedBandKm": 126.39918057972822,
-      "maxEastRedBandKm": 53.3285838917269,
       "multipointRedBand": {
-        "t": 6600,
-        "lengthKm": 112.07289541323259,
+        "t": 11400,
+        "lengthKm": 91.531374695571,
         "roots": [
           {
-            "id": "root:belt:1:167:74",
-            "x": 833841.2509762022,
-            "y": 374074.9423219681
+            "id": "root:belt:10:151:72",
+            "x": 758288.0450107576,
+            "y": 357221.3340318828
           },
           {
-            "id": "root:belt:7:178:82",
-            "x": 891838.212505254,
-            "y": 412494.8049812327
+            "id": "root:belt:7:145:67",
+            "x": 729378.4514067081,
+            "y": 334876.74943253916
           }
         ]
       },
-      "peakHourMm": 92.21974944222063,
+      "birthLocations": {
+        "offshore": 0,
+        "inlandMountain": 120,
+        "invalidSite": 0,
+        "wrongDirection": 0
+      },
+      "movingTrainSources": [
+        [
+          "41,18",
+          {
+            "count": 15,
+            "first": 697.6183708291501,
+            "last": 10897.61837082915
+          }
+        ],
+        [
+          "36,16",
+          {
+            "count": 15,
+            "first": 4305.585265997797,
+            "last": 19905.585265997797
+          }
+        ],
+        [
+          "44,20",
+          {
+            "count": 9,
+            "first": 4313.676322018728,
+            "last": 17790.122248744592
+          }
+        ],
+        [
+          "41,20",
+          {
+            "count": 9,
+            "first": 5538.230761466548,
+            "last": 10338.230761466548
+          }
+        ],
+        [
+          "37,17",
+          {
+            "count": 11,
+            "first": 6593.563721794635,
+            "last": 12593.563721794635
+          }
+        ],
+        [
+          "46,20",
+          {
+            "count": 9,
+            "first": 12298.151234490797,
+            "last": 17098.151234490797
+          }
+        ],
+        [
+          "27,15",
+          {
+            "count": 10,
+            "first": 14559.865012345836,
+            "last": 19959.865012345836
+          }
+        ]
+      ],
+      "repeatSourceBoxes": [
+        [
+          "41,18",
+          {
+            "count": 20,
+            "first": 697.6183708291501,
+            "last": 12097.61837082915
+          }
+        ],
+        [
+          "36,16",
+          {
+            "count": 29,
+            "first": 4305.585265997797,
+            "last": 21105.585265997797
+          }
+        ],
+        [
+          "44,20",
+          {
+            "count": 12,
+            "first": 4313.676322018728,
+            "last": 18390.122248744592
+          }
+        ],
+        [
+          "41,20",
+          {
+            "count": 11,
+            "first": 5538.230761466548,
+            "last": 11538.230761466548
+          }
+        ],
+        [
+          "37,17",
+          {
+            "count": 13,
+            "first": 6593.563721794635,
+            "last": 13793.563721794635
+          }
+        ],
+        [
+          "46,20",
+          {
+            "count": 11,
+            "first": 12298.151234490797,
+            "last": 18298.151234490797
+          }
+        ],
+        [
+          "27,15",
+          {
+            "count": 12,
+            "first": 14559.865012345836,
+            "last": 21159.865012345836
+          }
+        ]
+      ],
+      "sourceEpisodes": [
+        {
+          "id": "root:belt:7:145:67",
+          "x": 729026.0967224296,
+          "y": 335291.67392982816,
+          "count": 29,
+          "first": 4305.585265997797,
+          "last": 21105.585265997797
+        },
+        {
+          "id": "root:belt:1:167:74",
+          "x": 835116.1968041472,
+          "y": 372553.3488594265,
+          "count": 20,
+          "first": 697.6183708291501,
+          "last": 12097.61837082915
+        },
+        {
+          "id": "root:belt:10:151:72",
+          "x": 757653.8630803965,
+          "y": 357968.44135755196,
+          "count": 13,
+          "first": 6593.563721794635,
+          "last": 13793.563721794635
+        },
+        {
+          "id": "root:belt:24:111:61",
+          "x": 557464.9640189358,
+          "y": 308078.0291967246,
+          "count": 12,
+          "first": 14559.865012345836,
+          "last": 21159.865012345836
+        },
+        {
+          "id": "root:belt:9:167:82",
+          "x": 834452.6201456535,
+          "y": 413069.22293417295,
+          "count": 11,
+          "first": 5538.230761466548,
+          "last": 11538.230761466548
+        },
+        {
+          "id": "root:belt:20:185:83",
+          "x": 923847.6219789358,
+          "y": 417116.2333044962,
+          "count": 11,
+          "first": 12298.151234490797,
+          "last": 18298.151234490797
+        },
+        {
+          "id": "root:belt:7:178:82",
+          "x": 891886.0366257448,
+          "y": 412437.91818579,
+          "count": 7,
+          "first": 4313.676322018728,
+          "last": 7913.676322018728
+        },
+        {
+          "id": "root:26:89:40:0:0",
+          "x": 898109.3610962853,
+          "y": 403879.13941638544,
+          "count": 6,
+          "first": 15990.122248744592,
+          "last": 18990.122248744592
+        },
+        {
+          "id": "root:belt:31:219:93",
+          "x": 1093294.844696375,
+          "y": 467806.00392886676,
+          "count": 5,
+          "first": 18883.840606268495,
+          "last": 21283.840606268495
+        },
+        {
+          "id": "root:belt:32:215:93",
+          "x": 1077409.0750212763,
+          "y": 468026.7798224656,
+          "count": 4,
+          "first": 19594.579372555017,
+          "last": 21394.579372555017
+        },
+        {
+          "id": "root:12:93:44:0:0",
+          "x": 935478.4454428591,
+          "y": 448771.9710613601,
+          "count": 1,
+          "first": 7334.236667957157,
+          "last": 7334.236667957157
+        },
+        {
+          "id": "root:belt:35:159:75",
+          "x": 795115.9075095037,
+          "y": 378965.9566581611,
+          "count": 1,
+          "first": 21014.506835583597,
+          "last": 21014.506835583597
+        }
+      ],
       "stats": {
-        "linkedCoastalSources": 4,
-        "eastwardRelayBirths": 1,
+        "linkedCoastalSources": 8,
+        "eastwardRelayBirths": 0,
         "southwardRelayBirths": 0,
         "sourceClosureReasons": {
-          "maintenanceEnvironment": 3,
-          "coldBarrier": 5
+          "coldBarrier": 7
         },
-        "upstreamBlockedBirths": 1,
-        "persistentBirths": 87,
-        "closedTriggerSources": 8,
-        "births": 97,
-        "coldBirths": 3,
-        "deaths": 71,
+        "upstreamBlockedBirths": 0,
+        "persistentBirths": 108,
+        "closedTriggerSources": 7,
+        "births": 120,
+        "coldBirths": 0,
+        "deaths": 84,
         "deathReasons": {
-          "thermal_or_updraft_support_lost": 42,
-          "pulse_completed": 24,
-          "maximum_age_protection": 5
+          "pulse_completed": 33,
+          "thermal_or_updraft_support_lost": 48,
+          "maximum_age_protection": 3
         }
       },
       "audit": {
-        "water": 46032157672286.76,
-        "expected": 46032157672323.43,
-        "residual": -36.671875,
-        "relativeResidual": 5.37253482468184e-13,
-        "activityResidual": 8.130448056344933e-13,
-        "coldVolumeResidual": 0.3779296875,
-        "coldHeatResidual": -0.96875
-      }
+        "water": 46021193134584.39,
+        "expected": 46021193134621.08,
+        "residual": -36.6875,
+        "relativeResidual": 5.374823931978254e-13,
+        "activityResidual": 8.127847218773139e-13,
+        "coldVolumeResidual": 1.4775390625,
+        "coldHeatResidual": -1.67578125
+      },
+      "heatAudit": {
+        "initial": 1.3008429133019396e+21,
+        "initialEnvironment": 1.3008429133019396e+21,
+        "initialConvective": 0,
+        "in": 672121696985049500000,
+        "out": 673201923493033100000,
+        "flows": {
+          "transportBoundary:in": 671444342455452600000,
+          "transportBoundary:out": 671123502360318200000,
+          "diurnalSensible:out": 369.148159601832,
+          "surfaceVapor:in": 677354531249187000,
+          "convectiveVentilationTop:out": 2026293697714921500,
+          "convectiveDeathVentilationTop:out": 52127435000036960
+        },
+        "definition": "Henv(cp*m*T + Lv*Wv) + sum(cell.convectivePhaseEnergyJ); unresolved upper-layer export is an explicit boundary; liquid sensible heat and full potential/kinetic energy excluded",
+        "mode": "carried_export",
+        "environmentInventory": 1.2996482265702243e+21,
+        "convectiveInventory": 114460225313615920,
+        "combinedInventory": 1.299762686795538e+21,
+        "absoluteRoundoffEnvelopeJ": 2310761.2060292475,
+        "environmentResidual": -1582039040,
+        "inventory": 1.299762686795538e+21,
+        "residual": -1582039040,
+        "relativeResidual": 1.1735698370843657e-12,
+        "phaseHeating": 2192881358028577300,
+        "phaseCooling": 540503386893947970
+      },
+      "rows": [
+        {
+          "t": 600,
+          "localHour": 20.166666666666668,
+          "peakDbz": null,
+          "echo5Km2": 0,
+          "echo20Km2": 0,
+          "stratiform5Km2": 0,
+          "stratiform20Km2": 0,
+          "rainRate": 0,
+          "hourMm": 0,
+          "coldKm2": 0,
+          "connectedCold": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 0
+          },
+          "regionColdKm2": null,
+          "births": 0,
+          "coldBirths": 0,
+          "cells": 0,
+          "activeSources": 0,
+          "persistentBirths": 0,
+          "triggerFraction": 4.8828125e-05,
+          "inflowLandRH": 0.8359615565288463,
+          "redBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 1200,
+          "localHour": 20.333333333333332,
+          "peakDbz": 54.26626530045411,
+          "echo5Km2": 700,
+          "echo20Km2": 444,
+          "stratiform5Km2": 556,
+          "stratiform20Km2": 300,
+          "rainRate": 21.508878890811072,
+          "hourMm": 0,
+          "coldKm2": 281.25,
+          "connectedCold": {
+            "pixels": 45,
+            "lengthKm": 21.753117250726028,
+            "widthKm": 16.876074480697167,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 281.25
+          },
+          "regionColdKm2": null,
+          "births": 1,
+          "coldBirths": 0,
+          "cells": 1,
+          "activeSources": 1,
+          "persistentBirths": 0,
+          "triggerFraction": 0.000244140625,
+          "inflowLandRH": 0.8376194724946202,
+          "redBand": {
+            "pixels": 13,
+            "lengthKm": 8.940742901398723,
+            "widthKm": 7.7127932351701824,
+            "roots": [
+              {
+                "id": "root:belt:1:167:74",
+                "x": 835116.1968041472,
+                "y": 372553.3488594265
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 1800,
+          "localHour": 20.5,
+          "peakDbz": 60.922560291860144,
+          "echo5Km2": 1100,
+          "echo20Km2": 764,
+          "stratiform5Km2": 1016,
+          "stratiform20Km2": 660,
+          "rainRate": 64.30078016646911,
+          "hourMm": 0,
+          "coldKm2": 687.5,
+          "connectedCold": {
+            "pixels": 110,
+            "lengthKm": 32.68279069872796,
+            "widthKm": 27.46127625445041,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 687.5
+          },
+          "regionColdKm2": null,
+          "births": 2,
+          "coldBirths": 0,
+          "cells": 2,
+          "activeSources": 1,
+          "persistentBirths": 1,
+          "triggerFraction": 0.00029296875,
+          "inflowLandRH": 0.8392445589937735,
+          "redBand": {
+            "pixels": 45,
+            "lengthKm": 19.564438776839555,
+            "widthKm": 12.162526724940689,
+            "roots": [
+              {
+                "id": "root:belt:1:167:74",
+                "x": 835753.5125859948,
+                "y": 371782.74611208646
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 2400,
+          "localHour": 20.666666666666668,
+          "peakDbz": 61.64577672086078,
+          "echo5Km2": 1632,
+          "echo20Km2": 1188,
+          "stratiform5Km2": 1612,
+          "stratiform20Km2": 1156,
+          "rainRate": 98.94892296377465,
+          "hourMm": 0,
+          "coldKm2": 1300,
+          "connectedCold": {
+            "pixels": 208,
+            "lengthKm": 42.40168133638401,
+            "widthKm": 40.02833611685048,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 1300
+          },
+          "regionColdKm2": null,
+          "births": 3,
+          "coldBirths": 0,
+          "cells": 3,
+          "activeSources": 1,
+          "persistentBirths": 2,
+          "triggerFraction": 0.000390625,
+          "inflowLandRH": 0.8407529257957418,
+          "redBand": {
+            "pixels": 71,
+            "lengthKm": 28.007384478150303,
+            "widthKm": 13.350729285463164,
+            "roots": [
+              {
+                "id": "root:belt:1:167:74",
+                "x": 836391.82418298,
+                "y": 371012.96802383364
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 3000,
+          "localHour": 20.833333333333332,
+          "peakDbz": 61.158726172714005,
+          "echo5Km2": 2352,
+          "echo20Km2": 1728,
+          "stratiform5Km2": 2352,
+          "stratiform20Km2": 1724,
+          "rainRate": 100.00000000000001,
+          "hourMm": 0,
+          "coldKm2": 2131.25,
+          "connectedCold": {
+            "pixels": 341,
+            "lengthKm": 54.115837134365236,
+            "widthKm": 51.32766902843032,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 2131.25
+          },
+          "regionColdKm2": null,
+          "births": 4,
+          "coldBirths": 0,
+          "cells": 4,
+          "activeSources": 1,
+          "persistentBirths": 3,
+          "triggerFraction": 0.000732421875,
+          "inflowLandRH": 0.8424918365776624,
+          "redBand": {
+            "pixels": 91,
+            "lengthKm": 35.41555584188195,
+            "widthKm": 13.504874821925123,
+            "roots": [
+              {
+                "id": "root:belt:1:167:74",
+                "x": 836367.2594159627,
+                "y": 371045.6381045083
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 3600,
+          "localHour": 21,
+          "peakDbz": 59.52522037420373,
+          "echo5Km2": 3144,
+          "echo20Km2": 2340,
+          "stratiform5Km2": 3140,
+          "stratiform20Km2": 2340,
+          "rainRate": 100.00000000000001,
+          "hourMm": 47.93696075500698,
+          "coldKm2": 3218.75,
+          "connectedCold": {
+            "pixels": 515,
+            "lengthKm": 67.70783919196009,
+            "widthKm": 62.03459557510789,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 3218.75
+          },
+          "regionColdKm2": null,
+          "births": 5,
+          "coldBirths": 0,
+          "cells": 5,
+          "activeSources": 1,
+          "persistentBirths": 4,
+          "triggerFraction": 0.001171875,
+          "inflowLandRH": 0.843794670011172,
+          "redBand": {
+            "pixels": 103,
+            "lengthKm": 41.613514566106176,
+            "widthKm": 13.155453742117274,
+            "roots": [
+              {
+                "id": "root:belt:1:167:74",
+                "x": 835729.2117022981,
+                "y": 371815.6349324805
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 4200,
+          "localHour": 21.166666666666668,
+          "peakDbz": 59.45417614396604,
+          "echo5Km2": 4012,
+          "echo20Km2": 2904,
+          "stratiform5Km2": 4008,
+          "stratiform20Km2": 2904,
+          "rainRate": 80.69027515238531,
+          "hourMm": 60.50338153410222,
+          "coldKm2": 4487.5,
+          "connectedCold": {
+            "pixels": 718,
+            "lengthKm": 79.93694736292159,
+            "widthKm": 73.06942610144456,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 4487.5
+          },
+          "regionColdKm2": null,
+          "births": 6,
+          "coldBirths": 0,
+          "cells": 6,
+          "activeSources": 1,
+          "persistentBirths": 5,
+          "triggerFraction": 0.001611328125,
+          "inflowLandRH": 0.8454802979934072,
+          "redBand": {
+            "pixels": 112,
+            "lengthKm": 47.20520145818923,
+            "widthKm": 12.668614179255345,
+            "roots": [
+              {
+                "id": "root:belt:1:167:74",
+                "x": 835089.9732151171,
+                "y": 372584.6434867284
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 4800,
+          "localHour": 21.333333333333332,
+          "peakDbz": 60.737357317887366,
+          "echo5Km2": 5784,
+          "echo20Km2": 4220,
+          "stratiform5Km2": 5520,
+          "stratiform20Km2": 3956,
+          "rainRate": 87.06754885820038,
+          "hourMm": 74.2288037863452,
+          "coldKm2": 6187.5,
+          "connectedCold": {
+            "pixels": 943,
+            "lengthKm": 90.7536797238853,
+            "widthKm": 84.25849274788466,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 5893.75
+          },
+          "regionColdKm2": null,
+          "births": 9,
+          "coldBirths": 0,
+          "cells": 9,
+          "activeSources": 3,
+          "persistentBirths": 6,
+          "triggerFraction": 0.0019287109375,
+          "inflowLandRH": 0.8462815610357032,
+          "redBand": {
+            "pixels": 110,
+            "lengthKm": 50.437739065150836,
+            "widthKm": 12.016998464663825,
+            "roots": [
+              {
+                "id": "root:belt:1:167:74",
+                "x": 834449.5642183338,
+                "y": 373352.6775464152
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 5400,
+          "localHour": 21.5,
+          "peakDbz": 61.349765674310746,
+          "echo5Km2": 7056,
+          "echo20Km2": 5188,
+          "stratiform5Km2": 6924,
+          "stratiform20Km2": 5012,
+          "rainRate": 100.00000000000001,
+          "hourMm": 84.56047440808226,
+          "coldKm2": 8143.75,
+          "connectedCold": {
+            "pixels": 1189,
+            "lengthKm": 103.46391836065175,
+            "widthKm": 92.14671257783536,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 7431.25
+          },
+          "regionColdKm2": null,
+          "births": 12,
+          "coldBirths": 0,
+          "cells": 12,
+          "activeSources": 3,
+          "persistentBirths": 9,
+          "triggerFraction": 0.002001953125,
+          "inflowLandRH": 0.8466566582342663,
+          "redBand": {
+            "pixels": 100,
+            "lengthKm": 44.090321483161105,
+            "widthKm": 12.5356379247167,
+            "roots": [
+              {
+                "id": "root:belt:1:167:74",
+                "x": 833808.1900803654,
+                "y": 374119.9058143676
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 6000,
+          "localHour": 21.666666666666668,
+          "peakDbz": 61.92023385162631,
+          "echo5Km2": 8804,
+          "echo20Km2": 6608,
+          "stratiform5Km2": 8756,
+          "stratiform20Km2": 6488,
+          "rainRate": 100.00000000000001,
+          "hourMm": 84.98061116912163,
+          "coldKm2": 10425,
+          "connectedCold": {
+            "pixels": 1456,
+            "lengthKm": 115.8604025614338,
+            "widthKm": 100.70583009599211,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 9100
+          },
+          "regionColdKm2": null,
+          "births": 16,
+          "coldBirths": 0,
+          "cells": 16,
+          "activeSources": 4,
+          "persistentBirths": 12,
+          "triggerFraction": 0.0019775390625,
+          "inflowLandRH": 0.8473353744735269,
+          "redBand": {
+            "pixels": 104,
+            "lengthKm": 39.81009869648852,
+            "widthKm": 13.5437135194266,
+            "roots": [
+              {
+                "id": "root:belt:1:167:74",
+                "x": 833165.0827406448,
+                "y": 374885.6818583893
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 6600,
+          "localHour": 21.833333333333332,
+          "peakDbz": 61.3665663759119,
+          "echo5Km2": 10684,
+          "echo20Km2": 8064,
+          "stratiform5Km2": 10680,
+          "stratiform20Km2": 8016,
+          "rainRate": 100.00000000000001,
+          "hourMm": 79.89270261396672,
+          "coldKm2": 13175,
+          "connectedCold": {
+            "pixels": 1765,
+            "lengthKm": 126.86910899193323,
+            "widthKm": 111.51298302350226,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 11031.25
+          },
+          "regionColdKm2": null,
+          "births": 21,
+          "coldBirths": 0,
+          "cells": 21,
+          "activeSources": 5,
+          "persistentBirths": 16,
+          "triggerFraction": 0.00205078125,
+          "inflowLandRH": 0.8481254189044182,
+          "redBand": {
+            "pixels": 111,
+            "lengthKm": 43.9109560887711,
+            "widthKm": 13.228366933307674,
+            "roots": [
+              {
+                "id": "root:belt:1:167:74",
+                "x": 833207.2440748389,
+                "y": 374831.2059791242
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 31.532687849445995,
+              "roots": [
+                {
+                  "id": "root:belt:7:145:67",
+                  "x": 729724.7852651016,
+                  "y": 334457.97112655797
+                },
+                {
+                  "id": "root:belt:10:151:72",
+                  "x": 757653.8630803965,
+                  "y": 357968.44135755196
+                }
+              ]
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 7200,
+          "localHour": 22,
+          "peakDbz": 60.68503837049268,
+          "echo5Km2": 12660,
+          "echo20Km2": 9624,
+          "stratiform5Km2": 12656,
+          "stratiform20Km2": 9588,
+          "rainRate": 95.15724620141843,
+          "hourMm": 77.88267141411072,
+          "coldKm2": 16212.5,
+          "connectedCold": {
+            "pixels": 2087,
+            "lengthKm": 137.30004210446816,
+            "widthKm": 121.688460826961,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 13043.75
+          },
+          "regionColdKm2": null,
+          "births": 26,
+          "coldBirths": 0,
+          "cells": 26,
+          "activeSources": 5,
+          "persistentBirths": 21,
+          "triggerFraction": 0.0022705078125,
+          "inflowLandRH": 0.8484772435427617,
+          "redBand": {
+            "pixels": 117,
+            "lengthKm": 46.1454254650959,
+            "widthKm": 13.66302718664838,
+            "roots": [
+              {
+                "id": "root:belt:10:151:72",
+                "x": 757576.1430129058,
+                "y": 358061.02766485047
+              },
+              {
+                "id": "root:belt:7:145:67",
+                "x": 729082.1644012633,
+                "y": 335224.1554551368
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 46.1454254650959,
+              "roots": [
+                {
+                  "id": "root:belt:10:151:72",
+                  "x": 757576.1430129058,
+                  "y": 358061.02766485047
+                },
+                {
+                  "id": "root:belt:7:145:67",
+                  "x": 729082.1644012633,
+                  "y": 335224.1554551368
+                }
+              ]
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 7800,
+          "localHour": 22.166666666666668,
+          "peakDbz": 59.79730977521092,
+          "echo5Km2": 14860,
+          "echo20Km2": 11416,
+          "stratiform5Km2": 14788,
+          "stratiform20Km2": 11320,
+          "rainRate": 99.17027473324697,
+          "hourMm": 78.38800148801268,
+          "coldKm2": 19587.5,
+          "connectedCold": {
+            "pixels": 2433,
+            "lengthKm": 148.35049701284564,
+            "widthKm": 131.4439849598826,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 15206.25
+          },
+          "regionColdKm2": null,
+          "births": 32,
+          "coldBirths": 0,
+          "cells": 32,
+          "activeSources": 6,
+          "persistentBirths": 26,
+          "triggerFraction": 0.00234375,
+          "inflowLandRH": 0.8494241401704749,
+          "redBand": {
+            "pixels": 146,
+            "lengthKm": 59.20088750514678,
+            "widthKm": 13.541067328302645,
+            "roots": [
+              {
+                "id": "root:belt:10:151:72",
+                "x": 758219.6598946177,
+                "y": 357295.5957456364
+              },
+              {
+                "id": "root:belt:7:145:67",
+                "x": 729451.6483409281,
+                "y": 334785.56016791635
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 59.20088750514678,
+              "roots": [
+                {
+                  "id": "root:belt:10:151:72",
+                  "x": 758219.6598946177,
+                  "y": 357295.5957456364
+                },
+                {
+                  "id": "root:belt:7:145:67",
+                  "x": 729451.6483409281,
+                  "y": 334785.56016791635
+                }
+              ]
+            }
+          },
+          "eastRedBand": {
+            "pixels": 8,
+            "lengthKm": 7.302967433402215,
+            "widthKm": 5.94418483337567,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 8400,
+          "localHour": 22.333333333333332,
+          "peakDbz": 60.31136937717836,
+          "echo5Km2": 16976,
+          "echo20Km2": 12944,
+          "stratiform5Km2": 16952,
+          "stratiform20Km2": 12884,
+          "rainRate": 86.40097981073356,
+          "hourMm": 78.72099327427718,
+          "coldKm2": 23081.25,
+          "connectedCold": {
+            "pixels": 2775,
+            "lengthKm": 158.85129989189664,
+            "widthKm": 140.22025156892755,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 17343.75
+          },
+          "regionColdKm2": null,
+          "births": 37,
+          "coldBirths": 0,
+          "cells": 37,
+          "activeSources": 5,
+          "persistentBirths": 31,
+          "triggerFraction": 0.0025390625,
+          "inflowLandRH": 0.8510773001141123,
+          "redBand": {
+            "pixels": 144,
+            "lengthKm": 64.44469596140942,
+            "widthKm": 12.83038646200548,
+            "roots": [
+              {
+                "id": "root:belt:10:151:72",
+                "x": 758864.115904292,
+                "y": 356530.95435806003
+              },
+              {
+                "id": "root:belt:7:145:67",
+                "x": 730096.164770378,
+                "y": 334020.9697074938
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 64.44469596140942,
+              "roots": [
+                {
+                  "id": "root:belt:10:151:72",
+                  "x": 758864.115904292,
+                  "y": 356530.95435806003
+                },
+                {
+                  "id": "root:belt:7:145:67",
+                  "x": 730096.164770378,
+                  "y": 334020.9697074938
+                }
+              ]
+            }
+          },
+          "eastRedBand": {
+            "pixels": 12,
+            "lengthKm": 9.237604307034012,
+            "widthKm": 6.928203230264307,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 9000,
+          "localHour": 22.5,
+          "peakDbz": 61.60436627320708,
+          "echo5Km2": 19096,
+          "echo20Km2": 14428,
+          "stratiform5Km2": 19084,
+          "stratiform20Km2": 14404,
+          "rainRate": 100.00000000000001,
+          "hourMm": 76.54682698092108,
+          "coldKm2": 27093.75,
+          "connectedCold": {
+            "pixels": 3149,
+            "lengthKm": 169.51125254620155,
+            "widthKm": 149.44582643492564,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 19681.25
+          },
+          "regionColdKm2": null,
+          "births": 41,
+          "coldBirths": 0,
+          "cells": 40,
+          "activeSources": 4,
+          "persistentBirths": 35,
+          "triggerFraction": 0.003076171875,
+          "inflowLandRH": 0.8521870002818791,
+          "redBand": {
+            "pixels": 170,
+            "lengthKm": 74.22339903536039,
+            "widthKm": 13.6892527195345,
+            "roots": [
+              {
+                "id": "root:belt:10:151:72",
+                "x": 759510.0810457519,
+                "y": 355767.58745019813
+              },
+              {
+                "id": "root:belt:7:145:67",
+                "x": 730676.9248066281,
+                "y": 333334.8023105685
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 74.22339903536039,
+              "roots": [
+                {
+                  "id": "root:belt:10:151:72",
+                  "x": 759510.0810457519,
+                  "y": 355767.58745019813
+                },
+                {
+                  "id": "root:belt:7:145:67",
+                  "x": 730676.9248066281,
+                  "y": 333334.8023105685
+                }
+              ]
+            }
+          },
+          "eastRedBand": {
+            "pixels": 12,
+            "lengthKm": 12.722059426641895,
+            "widthKm": 5.650396598582212,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 9600,
+          "localHour": 22.666666666666668,
+          "peakDbz": 60.64155291955543,
+          "echo5Km2": 21172,
+          "echo20Km2": 15876,
+          "stratiform5Km2": 21172,
+          "stratiform20Km2": 15864,
+          "rainRate": 99.45710609331442,
+          "hourMm": 69.45446849507465,
+          "coldKm2": 31400,
+          "connectedCold": {
+            "pixels": 5024,
+            "lengthKm": 302.9062046437647,
+            "widthKm": 144.5071202574934,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 31400
+          },
+          "regionColdKm2": null,
+          "births": 45,
+          "coldBirths": 0,
+          "cells": 43,
+          "activeSources": 4,
+          "persistentBirths": 39,
+          "triggerFraction": 0.0031982421875,
+          "inflowLandRH": 0.8538380821222836,
+          "redBand": {
+            "pixels": 176,
+            "lengthKm": 78.908642085754,
+            "widthKm": 13.560619141832527,
+            "roots": [
+              {
+                "id": "root:belt:10:151:72",
+                "x": 759663.9496389617,
+                "y": 355589.64377753076
+              },
+              {
+                "id": "root:belt:7:145:67",
+                "x": 730667.3693983814,
+                "y": 333349.34191776987
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 78.908642085754,
+              "roots": [
+                {
+                  "id": "root:belt:10:151:72",
+                  "x": 759663.9496389617,
+                  "y": 355589.64377753076
+                },
+                {
+                  "id": "root:belt:7:145:67",
+                  "x": 730667.3693983814,
+                  "y": 333349.34191776987
+                }
+              ]
+            }
+          },
+          "eastRedBand": {
+            "pixels": 13,
+            "lengthKm": 17.51159574561337,
+            "widthKm": 4.368936276136992,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 10200,
+          "localHour": 22.833333333333332,
+          "peakDbz": 59.424048350639744,
+          "echo5Km2": 23300,
+          "echo20Km2": 17148,
+          "stratiform5Km2": 23300,
+          "stratiform20Km2": 17148,
+          "rainRate": 89.03296974701091,
+          "hourMm": 63.61724180182318,
+          "coldKm2": 35306.25,
+          "connectedCold": {
+            "pixels": 5649,
+            "lengthKm": 311.70447580121333,
+            "widthKm": 153.15786188151526,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 35306.25
+          },
+          "regionColdKm2": null,
+          "births": 49,
+          "coldBirths": 0,
+          "cells": 39,
+          "activeSources": 4,
+          "persistentBirths": 43,
+          "triggerFraction": 0.0033935546875,
+          "inflowLandRH": 0.8549292566097174,
+          "redBand": {
+            "pixels": 208,
+            "lengthKm": 86.40381120955225,
+            "widthKm": 13.936165691671002,
+            "roots": [
+              {
+                "id": "root:belt:10:151:72",
+                "x": 759421.4138440648,
+                "y": 355880.12251254823
+              },
+              {
+                "id": "root:belt:7:145:67",
+                "x": 730456.9407426274,
+                "y": 333601.16602869227
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 86.40381120955225,
+              "roots": [
+                {
+                  "id": "root:belt:10:151:72",
+                  "x": 759421.4138440648,
+                  "y": 355880.12251254823
+                },
+                {
+                  "id": "root:belt:7:145:67",
+                  "x": 730456.9407426274,
+                  "y": 333601.16602869227
+                }
+              ]
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 10800,
+          "localHour": 23,
+          "peakDbz": 60.118814377928615,
+          "echo5Km2": 24972,
+          "echo20Km2": 18440,
+          "stratiform5Km2": 24972,
+          "stratiform20Km2": 18436,
+          "rainRate": 84.48311467973085,
+          "hourMm": 74.33220068340032,
+          "coldKm2": 39243.75,
+          "connectedCold": {
+            "pixels": 6279,
+            "lengthKm": 320.6738862377831,
+            "widthKm": 162.5996084100806,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 39243.75
+          },
+          "regionColdKm2": null,
+          "births": 53,
+          "coldBirths": 0,
+          "cells": 43,
+          "activeSources": 4,
+          "persistentBirths": 47,
+          "triggerFraction": 0.0032958984375,
+          "inflowLandRH": 0.8561841263810056,
+          "redBand": {
+            "pixels": 216,
+            "lengthKm": 89.76388408105498,
+            "widthKm": 13.956648960664594,
+            "roots": [
+              {
+                "id": "root:belt:10:151:72",
+                "x": 758934.2614925945,
+                "y": 356458.17988061166
+              },
+              {
+                "id": "root:belt:7:145:67",
+                "x": 730023.0751838518,
+                "y": 334115.71326845844
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 89.76388408105498,
+              "roots": [
+                {
+                  "id": "root:belt:10:151:72",
+                  "x": 758934.2614925945,
+                  "y": 356458.17988061166
+                },
+                {
+                  "id": "root:belt:7:145:67",
+                  "x": 730023.0751838518,
+                  "y": 334115.71326845844
+                }
+              ]
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 11400,
+          "localHour": 23.166666666666668,
+          "peakDbz": 58.21820123259918,
+          "echo5Km2": 26428,
+          "echo20Km2": 19672,
+          "stratiform5Km2": 26428,
+          "stratiform20Km2": 19664,
+          "rainRate": 80.2728388954672,
+          "hourMm": 80.63933389357766,
+          "coldKm2": 43018.75,
+          "connectedCold": {
+            "pixels": 6883,
+            "lengthKm": 329.07309688977057,
+            "widthKm": 171.76916599222085,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 43018.75
+          },
+          "regionColdKm2": null,
+          "births": 57,
+          "coldBirths": 0,
+          "cells": 46,
+          "activeSources": 4,
+          "persistentBirths": 51,
+          "triggerFraction": 0.0033935546875,
+          "inflowLandRH": 0.8574513624189227,
+          "redBand": {
+            "pixels": 209,
+            "lengthKm": 91.531374695571,
+            "widthKm": 13.39249914028608,
+            "roots": [
+              {
+                "id": "root:belt:10:151:72",
+                "x": 758288.0450107576,
+                "y": 357221.3340318828
+              },
+              {
+                "id": "root:belt:7:145:67",
+                "x": 729378.4514067081,
+                "y": 334876.74943253916
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 91.531374695571,
+              "roots": [
+                {
+                  "id": "root:belt:10:151:72",
+                  "x": 758288.0450107576,
+                  "y": 357221.3340318828
+                },
+                {
+                  "id": "root:belt:7:145:67",
+                  "x": 729378.4514067081,
+                  "y": 334876.74943253916
+                }
+              ]
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 12000,
+          "localHour": 23.333333333333332,
+          "peakDbz": 57.37780437260887,
+          "echo5Km2": 27688,
+          "echo20Km2": 20588,
+          "stratiform5Km2": 27688,
+          "stratiform20Km2": 20588,
+          "rainRate": 65.7984717263098,
+          "hourMm": 81.16135894217702,
+          "coldKm2": 46681.25,
+          "connectedCold": {
+            "pixels": 7469,
+            "lengthKm": 336.86823625167216,
+            "widthKm": 180.79738640761676,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 46681.25
+          },
+          "regionColdKm2": null,
+          "births": 61,
+          "coldBirths": 0,
+          "cells": 48,
+          "activeSources": 4,
+          "persistentBirths": 55,
+          "triggerFraction": 0.003466796875,
+          "inflowLandRH": 0.857913542977575,
+          "redBand": {
+            "pixels": 156,
+            "lengthKm": 65.4873130966116,
+            "widthKm": 12.974698064118705,
+            "roots": [
+              {
+                "id": "root:belt:10:151:72",
+                "x": 757640.734952287,
+                "y": 357983.5608276613
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 12600,
+          "localHour": 23.5,
+          "peakDbz": 58.767282048135485,
+          "echo5Km2": 28752,
+          "echo20Km2": 21208,
+          "stratiform5Km2": 28752,
+          "stratiform20Km2": 21200,
+          "rainRate": 58.257872707922544,
+          "hourMm": 76.50286374359914,
+          "coldKm2": 50143.75,
+          "connectedCold": {
+            "pixels": 8023,
+            "lengthKm": 343.90024736189895,
+            "widthKm": 189.23122484298156,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 50143.75
+          },
+          "regionColdKm2": null,
+          "births": 65,
+          "coldBirths": 0,
+          "cells": 51,
+          "activeSources": 4,
+          "persistentBirths": 58,
+          "triggerFraction": 0.0032470703125,
+          "inflowLandRH": 0.8587623899050586,
+          "redBand": {
+            "pixels": 146,
+            "lengthKm": 67.57645237577827,
+            "widthKm": 12.139570235249584,
+            "roots": [
+              {
+                "id": "root:belt:10:151:72",
+                "x": 757640.734952287,
+                "y": 357983.5608276613
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 0,
+            "lengthKm": 0,
+            "widthKm": 0,
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 13200,
+          "localHour": 23.666666666666668,
+          "peakDbz": 58.375358009680724,
+          "echo5Km2": 29648,
+          "echo20Km2": 21736,
+          "stratiform5Km2": 29648,
+          "stratiform20Km2": 21716,
+          "rainRate": 66.58592911891465,
+          "hourMm": 69.41851009405035,
+          "coldKm2": 53312.5,
+          "connectedCold": {
+            "pixels": 8530,
+            "lengthKm": 350.544645093751,
+            "widthKm": 196.83630636117073,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 53312.5
+          },
+          "regionColdKm2": null,
+          "births": 68,
+          "coldBirths": 0,
+          "cells": 53,
+          "activeSources": 3,
+          "persistentBirths": 61,
+          "triggerFraction": 0.0031005859375,
+          "inflowLandRH": 0.8596864192656486,
+          "redBand": {
+            "pixels": 124,
+            "lengthKm": 59.37396485266537,
+            "widthKm": 11.50199750697821,
+            "roots": [
+              {
+                "id": "root:belt:10:151:72",
+                "x": 757640.734952287,
+                "y": 357983.5608276613
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 16,
+            "lengthKm": 10.852289144338776,
+            "widthKm": 7.914827035023154,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 13800,
+          "localHour": 23.833333333333332,
+          "peakDbz": 59.4617756507587,
+          "echo5Km2": 30468,
+          "echo20Km2": 22076,
+          "stratiform5Km2": 30468,
+          "stratiform20Km2": 22064,
+          "rainRate": 69.17836458732437,
+          "hourMm": 62.13515174524155,
+          "coldKm2": 56512.5,
+          "connectedCold": {
+            "pixels": 9042,
+            "lengthKm": 357.93834151153635,
+            "widthKm": 204.0667920491818,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 56512.5
+          },
+          "regionColdKm2": null,
+          "births": 71,
+          "coldBirths": 0,
+          "cells": 42,
+          "activeSources": 3,
+          "persistentBirths": 64,
+          "triggerFraction": 0.0030517578125,
+          "inflowLandRH": 0.8607847459350648,
+          "redBand": {
+            "pixels": 105,
+            "lengthKm": 55.44149801725248,
+            "widthKm": 10.500021730225718,
+            "roots": [
+              {
+                "id": "root:belt:10:151:72",
+                "x": 757640.734952287,
+                "y": 357983.5608276613
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 30.01596547888006,
+              "roots": [
+                {
+                  "id": "root:belt:10:151:72",
+                  "x": 757640.734952287,
+                  "y": 357983.5608276613
+                },
+                {
+                  "id": "root:belt:7:145:67",
+                  "x": 727594.2561498533,
+                  "y": 336969.3862552324
+                }
+              ]
+            }
+          },
+          "eastRedBand": {
+            "pixels": 34,
+            "lengthKm": 18.792039190806243,
+            "widthKm": 9.411947367442073,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 14400,
+          "localHour": 0,
+          "peakDbz": 58.37096020862888,
+          "echo5Km2": 31152,
+          "echo20Km2": 22392,
+          "stratiform5Km2": 31152,
+          "stratiform20Km2": 22384,
+          "rainRate": 73.70286779395887,
+          "hourMm": 55.82194173794217,
+          "coldKm2": 59650,
+          "connectedCold": {
+            "pixels": 9544,
+            "lengthKm": 364.93168780230656,
+            "widthKm": 210.9721229863416,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 59650
+          },
+          "regionColdKm2": null,
+          "births": 73,
+          "coldBirths": 0,
+          "cells": 32,
+          "activeSources": 2,
+          "persistentBirths": 66,
+          "triggerFraction": 0.0030517578125,
+          "inflowLandRH": 0.8616679442497978,
+          "redBand": {
+            "pixels": 169,
+            "lengthKm": 91.00071691738563,
+            "widthKm": 10.977584965310387,
+            "roots": [
+              {
+                "id": "root:belt:7:145:67",
+                "x": 727594.2561498533,
+                "y": 336969.3862552324
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 45,
+            "lengthKm": 24.928347324838217,
+            "widthKm": 9.446181194428034,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 15000,
+          "localHour": 0.16666666666666785,
+          "peakDbz": 59.01983162941494,
+          "echo5Km2": 32444,
+          "echo20Km2": 22976,
+          "stratiform5Km2": 32328,
+          "stratiform20Km2": 22836,
+          "rainRate": 68.18178889785061,
+          "hourMm": 56.30986661741104,
+          "coldKm2": 63100,
+          "connectedCold": {
+            "pixels": 10057,
+            "lengthKm": 371.84689613382255,
+            "widthKm": 218.06676533667616,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 62856.25
+          },
+          "regionColdKm2": null,
+          "births": 76,
+          "coldBirths": 0,
+          "cells": 31,
+          "activeSources": 3,
+          "persistentBirths": 68,
+          "triggerFraction": 0.0032958984375,
+          "inflowLandRH": 0.8614911751028567,
+          "redBand": {
+            "pixels": 164,
+            "lengthKm": 85.05109539759049,
+            "widthKm": 11.245773778042283,
+            "roots": [
+              {
+                "id": "root:belt:7:145:67",
+                "x": 728244.0434127442,
+                "y": 336209.2701371393
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 59,
+            "lengthKm": 33.18162938054196,
+            "widthKm": 9.492466773710957,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 15600,
+          "localHour": 0.33333333333333215,
+          "peakDbz": 63.33812462798345,
+          "echo5Km2": 33392,
+          "echo20Km2": 23232,
+          "stratiform5Km2": 33312,
+          "stratiform20Km2": 23152,
+          "rainRate": 82.30408552468892,
+          "hourMm": 63.22058957213544,
+          "coldKm2": 66525,
+          "connectedCold": {
+            "pixels": 10546,
+            "lengthKm": 378.66064333397384,
+            "widthKm": 224.3549764293649,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 65912.5
+          },
+          "regionColdKm2": null,
+          "births": 79,
+          "coldBirths": 0,
+          "cells": 25,
+          "activeSources": 3,
+          "persistentBirths": 71,
+          "triggerFraction": 0.003125,
+          "inflowLandRH": 0.8615222856600473,
+          "redBand": {
+            "pixels": 124,
+            "lengthKm": 51.06473805094576,
+            "widthKm": 12.760659410316581,
+            "roots": [
+              {
+                "id": "root:belt:7:145:67",
+                "x": 728894.5417152635,
+                "y": 335449.7624291998
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 56,
+            "lengthKm": 36.34077188906339,
+            "widthKm": 8.389416673008762,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 16200,
+          "localHour": 0.5,
+          "peakDbz": 65.21263045643596,
+          "echo5Km2": 34272,
+          "echo20Km2": 23312,
+          "stratiform5Km2": 34244,
+          "stratiform20Km2": 23288,
+          "rainRate": 100.00000000000001,
+          "hourMm": 65.94542700468226,
+          "coldKm2": 70025,
+          "connectedCold": {
+            "pixels": 11012,
+            "lengthKm": 384.2031793433727,
+            "widthKm": 230.81389816468413,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 68825
+          },
+          "regionColdKm2": null,
+          "births": 83,
+          "coldBirths": 0,
+          "cells": 28,
+          "activeSources": 4,
+          "persistentBirths": 74,
+          "triggerFraction": 0.0028076171875,
+          "inflowLandRH": 0.8620053646324665,
+          "redBand": {
+            "pixels": 136,
+            "lengthKm": 55.20102852384035,
+            "widthKm": 12.948432550115278,
+            "roots": [
+              {
+                "id": "root:belt:7:145:67",
+                "x": 729545.7534607466,
+                "y": 334690.8663476808
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 45,
+            "lengthKm": 40.900954482075385,
+            "widthKm": 7.239454415351954,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 16800,
+          "localHour": 0.6666666666666679,
+          "peakDbz": 67.25573144290577,
+          "echo5Km2": 35240,
+          "echo20Km2": 22916,
+          "stratiform5Km2": 35236,
+          "stratiform20Km2": 22916,
+          "rainRate": 100.00000000000001,
+          "hourMm": 64.59425755354148,
+          "coldKm2": 73612.5,
+          "connectedCold": {
+            "pixels": 11461,
+            "lengthKm": 389.2843420301774,
+            "widthKm": 237.1289804217883,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 71631.25
+          },
+          "regionColdKm2": null,
+          "births": 87,
+          "coldBirths": 0,
+          "cells": 32,
+          "activeSources": 4,
+          "persistentBirths": 78,
+          "triggerFraction": 0.0026611328125,
+          "inflowLandRH": 0.8618775338799478,
+          "redBand": {
+            "pixels": 144,
+            "lengthKm": 62.605561224061724,
+            "widthKm": 12.183164871652346,
+            "roots": [
+              {
+                "id": "root:belt:7:145:67",
+                "x": 730197.9818107933,
+                "y": 333932.84380224074
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 24,
+            "lengthKm": 19.974890808374997,
+            "widthKm": 6.498150461072381,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 17400,
+          "localHour": 0.8333333333333321,
+          "peakDbz": 67.34470521513562,
+          "echo5Km2": 36128,
+          "echo20Km2": 23040,
+          "stratiform5Km2": 36128,
+          "stratiform20Km2": 23036,
+          "rainRate": 100.00000000000001,
+          "hourMm": 61.22834677286195,
+          "coldKm2": 77450,
+          "connectedCold": {
+            "pixels": 11917,
+            "lengthKm": 394.68720209470234,
+            "widthKm": 243.23554555045294,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 74481.25
+          },
+          "regionColdKm2": null,
+          "births": 91,
+          "coldBirths": 0,
+          "cells": 32,
+          "activeSources": 4,
+          "persistentBirths": 82,
+          "triggerFraction": 0.0025146484375,
+          "inflowLandRH": 0.8626520781257551,
+          "redBand": {
+            "pixels": 150,
+            "lengthKm": 71.87950434404078,
+            "widthKm": 11.580702805859515,
+            "roots": [
+              {
+                "id": "root:belt:7:145:67",
+                "x": 730275.7272732288,
+                "y": 333844.2980691596
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 25,
+            "lengthKm": 23.859470107771052,
+            "widthKm": 5.767525712384839,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 18000,
+          "localHour": 1,
+          "peakDbz": 67.07906015573232,
+          "echo5Km2": 36832,
+          "echo20Km2": 23444,
+          "stratiform5Km2": 36832,
+          "stratiform20Km2": 23444,
+          "rainRate": 100.00000000000001,
+          "hourMm": 76.02749186759544,
+          "coldKm2": 81243.75,
+          "connectedCold": {
+            "pixels": 12363,
+            "lengthKm": 399.4910187080042,
+            "widthKm": 249.49570924134716,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 77268.75
+          },
+          "regionColdKm2": null,
+          "births": 95,
+          "coldBirths": 0,
+          "cells": 34,
+          "activeSources": 4,
+          "persistentBirths": 86,
+          "triggerFraction": 0.002490234375,
+          "inflowLandRH": 0.8627558254596045,
+          "redBand": {
+            "pixels": 138,
+            "lengthKm": 42.186146363804454,
+            "widthKm": 17.057734786663392,
+            "roots": [
+              {
+                "id": "root:belt:24:111:61",
+                "x": 559273.0805689018,
+                "y": 305987.26128171646
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 38,
+            "lengthKm": 34.54864065515521,
+            "widthKm": 6.325863126798358,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 18600,
+          "localHour": 1.1666666666666679,
+          "peakDbz": 65.53723409946556,
+          "echo5Km2": 37572,
+          "echo20Km2": 23736,
+          "stratiform5Km2": 37572,
+          "stratiform20Km2": 23736,
+          "rainRate": 100.00000000000001,
+          "hourMm": 90.45653587396254,
+          "coldKm2": 85068.75,
+          "connectedCold": {
+            "pixels": 12782,
+            "lengthKm": 403.8105886477466,
+            "widthKm": 255.31985365290822,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 79887.5
+          },
+          "regionColdKm2": null,
+          "births": 99,
+          "coldBirths": 0,
+          "cells": 38,
+          "activeSources": 4,
+          "persistentBirths": 90,
+          "triggerFraction": 0.002490234375,
+          "inflowLandRH": 0.8638313072522535,
+          "redBand": {
+            "pixels": 155,
+            "lengthKm": 46.47546992634641,
+            "widthKm": 17.41963693563479,
+            "roots": [
+              {
+                "id": "root:belt:24:111:61",
+                "x": 558875.14289748,
+                "y": 306450.10939564597
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 28.379413653209532,
+              "roots": [
+                {
+                  "id": "root:26:89:40:0:0",
+                  "x": 899884.3445146837,
+                  "y": 401829.361881014
+                },
+                {
+                  "id": "root:belt:20:185:83",
+                  "x": 925002.0669836033,
+                  "y": 415780.9814759235
+                }
+              ]
+            }
+          },
+          "eastRedBand": {
+            "pixels": 28,
+            "lengthKm": 20.93706418821488,
+            "widthKm": 7.35540129517348,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 19200,
+          "localHour": 1.3333333333333321,
+          "peakDbz": 63.4332109238332,
+          "echo5Km2": 38844,
+          "echo20Km2": 24224,
+          "stratiform5Km2": 38712,
+          "stratiform20Km2": 24092,
+          "rainRate": 100.00000000000001,
+          "hourMm": 100.00000000000001,
+          "coldKm2": 89112.5,
+          "connectedCold": {
+            "pixels": 13231,
+            "lengthKm": 409.69013775046284,
+            "widthKm": 260.7932646118173,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 82693.75
+          },
+          "regionColdKm2": null,
+          "births": 103,
+          "coldBirths": 0,
+          "cells": 41,
+          "activeSources": 4,
+          "persistentBirths": 93,
+          "triggerFraction": 0.002587890625,
+          "inflowLandRH": 0.8637277515992028,
+          "redBand": {
+            "pixels": 76,
+            "lengthKm": 50.149812921402216,
+            "widthKm": 9.992007602673846,
+            "roots": [
+              {
+                "id": "root:26:89:40:0:0",
+                "x": 900541.7216484845,
+                "y": 401075.8001357298
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 23,
+            "lengthKm": 22.130010495771835,
+            "widthKm": 6.799811075686633,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 19800,
+          "localHour": 1.5,
+          "peakDbz": 61.188230258374,
+          "echo5Km2": 39968,
+          "echo20Km2": 24624,
+          "stratiform5Km2": 39832,
+          "stratiform20Km2": 24428,
+          "rainRate": 100.00000000000001,
+          "hourMm": 100.00000000000003,
+          "coldKm2": 93337.5,
+          "connectedCold": {
+            "pixels": 13689,
+            "lengthKm": 416.30583170463757,
+            "widthKm": 265.8850024469809,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 85556.25
+          },
+          "regionColdKm2": null,
+          "births": 107,
+          "coldBirths": 0,
+          "cells": 44,
+          "activeSources": 4,
+          "persistentBirths": 96,
+          "triggerFraction": 0.0026123046875,
+          "inflowLandRH": 0.8630653846164728,
+          "redBand": {
+            "pixels": 164,
+            "lengthKm": 54.580789140382194,
+            "widthKm": 15.978542489517965,
+            "roots": [
+              {
+                "id": "root:belt:24:111:61",
+                "x": 557565.5987897959,
+                "y": 307961.761238527
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          },
+          "eastRedBand": {
+            "pixels": 33,
+            "lengthKm": 15.764281732724514,
+            "widthKm": 10.93573354192518,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 20400,
+          "localHour": 1.6666666666666679,
+          "peakDbz": 62.487467420245366,
+          "echo5Km2": 40832,
+          "echo20Km2": 25008,
+          "stratiform5Km2": 40796,
+          "stratiform20Km2": 24952,
+          "rainRate": 100.00000000000001,
+          "hourMm": 100.00000000000001,
+          "coldKm2": 97981.25,
+          "connectedCold": {
+            "pixels": 14210,
+            "lengthKm": 425.7786256813158,
+            "widthKm": 270.59880953552045,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 88812.5
+          },
+          "regionColdKm2": null,
+          "births": 111,
+          "coldBirths": 0,
+          "cells": 36,
+          "activeSources": 4,
+          "persistentBirths": 100,
+          "triggerFraction": 0.0027099609375,
+          "inflowLandRH": 0.8636572158385071,
+          "redBand": {
+            "pixels": 166,
+            "lengthKm": 57.26019511347724,
+            "widthKm": 15.428199300039639,
+            "roots": [
+              {
+                "id": "root:belt:24:111:61",
+                "x": 556909.158037923,
+                "y": 308716.13882255286
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 38.9453398487904,
+              "roots": [
+                {
+                  "id": "root:belt:31:219:93",
+                  "x": 1092294.0181638498,
+                  "y": 468955.62229255197
+                },
+                {
+                  "id": "root:belt:32:215:93",
+                  "x": 1076786.7689223283,
+                  "y": 468741.6035166166
+                }
+              ]
+            }
+          },
+          "eastRedBand": {
+            "pixels": 75,
+            "lengthKm": 38.9453398487904,
+            "widthKm": 11.863672546237778,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 21000,
+          "localHour": 1.8333333333333321,
+          "peakDbz": 60.55398224328516,
+          "echo5Km2": 42008,
+          "echo20Km2": 25532,
+          "stratiform5Km2": 41996,
+          "stratiform20Km2": 25508,
+          "rainRate": 100.00000000000001,
+          "hourMm": 98.70707801590906,
+          "coldKm2": 102906.25,
+          "connectedCold": {
+            "pixels": 14763,
+            "lengthKm": 436.5376711608647,
+            "widthKm": 274.89040630326355,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 92268.75
+          },
+          "regionColdKm2": null,
+          "births": 115,
+          "coldBirths": 0,
+          "cells": 34,
+          "activeSources": 4,
+          "persistentBirths": 104,
+          "triggerFraction": 0.0026123046875,
+          "inflowLandRH": 0.8629659936797839,
+          "redBand": {
+            "pixels": 152,
+            "lengthKm": 55.38509583032206,
+            "widthKm": 14.482004821601048,
+            "roots": [
+              {
+                "id": "root:belt:24:111:61",
+                "x": 556251.7373739304,
+                "y": 309469.66259162425
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 46.89010156320782,
+              "roots": [
+                {
+                  "id": "root:belt:31:219:93",
+                  "x": 1092720.2078117018,
+                  "y": 468464.974945533
+                },
+                {
+                  "id": "root:belt:32:215:93",
+                  "x": 1076738.1122659782,
+                  "y": 468796.2135654027
+                }
+              ]
+            }
+          },
+          "eastRedBand": {
+            "pixels": 109,
+            "lengthKm": 46.89010156320782,
+            "widthKm": 13.207244254051767,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        },
+        {
+          "t": 21600,
+          "localHour": 2,
+          "peakDbz": 60.5502304594509,
+          "echo5Km2": 43180,
+          "echo20Km2": 25984,
+          "stratiform5Km2": 43180,
+          "stratiform20Km2": 25980,
+          "rainRate": 100.00000000000001,
+          "hourMm": 96.77859705616979,
+          "coldKm2": 108068.75,
+          "connectedCold": {
+            "pixels": 15348,
+            "lengthKm": 448.94867139134954,
+            "widthKm": 278.7069921638137,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            },
+            "areaKm2": 95925
+          },
+          "regionColdKm2": null,
+          "births": 120,
+          "coldBirths": 0,
+          "cells": 36,
+          "activeSources": 5,
+          "persistentBirths": 108,
+          "triggerFraction": 0.002734375,
+          "inflowLandRH": 0.863865645597753,
+          "redBand": {
+            "pixels": 147,
+            "lengthKm": 54.079673994797844,
+            "widthKm": 14.14065302205657,
+            "roots": [
+              {
+                "id": "root:belt:24:111:61",
+                "x": 555922.2017459505,
+                "y": 309845.7028419856
+              }
+            ],
+            "multipoint": {
+              "lengthKm": 49.13608831964118,
+              "roots": [
+                {
+                  "id": "root:belt:31:219:93",
+                  "x": 1093377.6336592068,
+                  "y": 467711.4556989093
+                },
+                {
+                  "id": "root:belt:32:215:93",
+                  "x": 1077032.5232228648,
+                  "y": 468457.8768832939
+                }
+              ]
+            }
+          },
+          "eastRedBand": {
+            "pixels": 132,
+            "lengthKm": 49.13608831964118,
+            "widthKm": 14.833858412547073,
+            "roots": [],
+            "multipoint": {
+              "lengthKm": 0,
+              "roots": []
+            }
+          }
+        }
+      ]
     }
   },
-  "comparison": {
-    "southRedBandKm": [
-      56.49707129832312,
-      66.55676922917952
-    ],
-    "westBirthsIncludingRepeats": [
-      19,
-      13
-    ]
-  },
   "limitations": [
-    "6-hour real-terrain samples, seed 131; not an ensemble or three-day replay.",
-    "Red-band length is 4 standard deviations of a >=50 dBZ connected component, not exact end-to-end span.",
-    "Multipoint metric counts distinct active roots within 8 km of one connected component; it does not track condensate provenance.",
-    "The west sample has two roots adjoining a 112 km strong band; it does not establish simultaneous Hong Kong-Dapeng-Huidong-Shanwei activation in every seed."
+    "两组真实地形种子 131、6 小时低分辨率试算，不能代表所有随机过程。",
+    "强回波带长度为 >=50 dBZ 连通分量协方差推算的 4 倍标准差。多点指标为活动根部邻接关系，并非云水来源追踪。",
+    "冷池真实断供和水汽耗尽仍可关闭源，本次没有强制延长所有列车寿命。",
+    "runs.windRange 为风速范围，不是风向；15–75 度主季风角度由 wind_randomness 回归验证。"
   ]
 }
