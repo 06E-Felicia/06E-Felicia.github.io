@@ -1,12 +1,12 @@
 {
     "LIVE_DATA": {
-        "time": "2026-11-04 06:46",
-        "t": "25.2°C",
-        "th": "25.6°C",
+        "time": "2026-11-04 09:00",
+        "t": "26.5°C",
+        "th": "26.4°C",
         "tl": "25°C",
         "r_day": "0mm",
         "r_1h": "0mm",
-        "p": "1009.2hPa"
+        "p": "1010.7hPa"
     },
     "MANUAL_CONFIG": {
         "low": "25°C",
@@ -34,7 +34,7 @@
             "humidity": "65%-95%",
             "wind": "东风 3-4级",
             "icon": "assets/images/weather_icons/04.png",
-            "published_at": "2026-11-04 06:01:00"
+            "published_at": "2026-11-04 08:49:00"
         },
         {
             "date": "11月5日",
@@ -45,7 +45,7 @@
             "humidity": "70%-95%",
             "wind": "东风 2-3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-11-04 06:01:22"
+            "published_at": "2026-11-04 08:49:53"
         },
         {
             "date": "11月6日",
@@ -56,7 +56,7 @@
             "humidity": "70%-95%",
             "wind": "东风 2-3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-11-04 06:01:22"
+            "published_at": "2026-11-04 08:49:53"
         },
         {
             "date": "11月7日",
@@ -67,7 +67,7 @@
             "humidity": "65%-90%",
             "wind": "东风 3-4级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-11-04 06:01:22"
+            "published_at": "2026-11-04 08:49:53"
         },
         {
             "date": "11月8日",
@@ -78,7 +78,7 @@
             "humidity": "60%-90%",
             "wind": "东风 3-4级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-11-04 06:01:22"
+            "published_at": "2026-11-04 08:49:53"
         },
         {
             "date": "11月9日",
@@ -89,7 +89,7 @@
             "humidity": "55%-85%",
             "wind": "东北风 3-4级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-11-04 06:01:23"
+            "published_at": "2026-11-04 08:49:53"
         },
         {
             "date": "11月10日",
@@ -100,7 +100,7 @@
             "humidity": "50%-85%",
             "wind": "东北风 3级",
             "icon": "assets/images/weather_icons/02.png",
-            "published_at": "2026-11-04 06:01:23"
+            "published_at": "2026-11-04 08:49:53"
         }
     ],
     "WARNINGS": [
@@ -129,7 +129,7 @@
     "THUNDER_ALERT_CONFIG": {
         "enabled": false,
         "status": "source_error",
-        "generated_at": "2026-11-04T06:50:54+08:00",
+        "generated_at": "2026-11-04T09:04:05+08:00",
         "settings": {
             "default_mode": "auto",
             "speed_kmh": 50,
@@ -147,8 +147,8 @@
     },
     "META": {
         "source": "深圳市气象台",
-        "forecast_updated_at": "11月4日 06:01",
-        "updated_at": "2026-11-04 06:46",
+        "forecast_updated_at": "11月4日 08:49",
+        "updated_at": "2026-11-04 09:00",
         "warnings_updated_at": "2026-10-22 09:30:00"
     }
 }
