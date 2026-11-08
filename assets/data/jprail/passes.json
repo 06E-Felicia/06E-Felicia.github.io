@@ -1,0 +1,2582 @@
+{
+  "version": 1,
+  "checked": "2026-11-08",
+  "scope": "外国游客用铁路pass；部分外国护照产品也允许在日外国人使用。纯地铁/巴士券、普通单程票、面向所有人的一日券不收录。",
+  "coverageNote": "目录依据列出的运营商公开产品页整理；各官网不存在统一全国完整目录，新增或渠道限定产品可能尚未收录。未公布或未核实的日期明确标示，不推定为全年。",
+  "passes": [
+    {
+      "id": "japan",
+      "name": "日本全国铁路周游券",
+      "en": "JAPAN RAIL PASS",
+      "issuer": "JR Group",
+      "regions": [
+        "全国"
+      ],
+      "group": "JR",
+      "durations": [
+        7,
+        14,
+        21
+      ],
+      "continuous": true,
+      "scope": "全国 JR 客运线；另含东京单轨及官方列明的第三部门特例。",
+      "selectors": [
+        {
+          "operators": [
+            "北海道旅客鉄道",
+            "東日本旅客鉄道",
+            "東海旅客鉄道",
+            "西日本旅客鉄道",
+            "四国旅客鉄道",
+            "九州旅客鉄道"
+          ]
+        },
+        {
+          "operators": [
+            "東京モノレール"
+          ]
+        }
+      ],
+      "source": "https://japanrailpass.net/en/use/conditions-for-use/",
+      "checked": "2026-11-08",
+      "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
+      "exceptions": [
+        "Nozomi、Mizuho 须另购专用附加票，不能仅凭 pass 乘坐。",
+        "普通车版与绿色车厢版权益不同；私铁并非普遍适用。"
+      ],
+      "extras": "另含指定 JR 巴士和 JR 西日本宫岛渡轮；未画入铁路高亮。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "第三部门通行特例未逐段绘制；地图并非所有可乘权益的完整清单。",
+      "precision": "schematic"
+    },
+    {
+      "id": "hokkaido",
+      "name": "北海道铁路周游券",
+      "en": "Hokkaido Rail Pass",
+      "issuer": "JR 北海道",
+      "regions": [
+        "北海道"
+      ],
+      "group": "JR",
+      "durations": [
+        5,
+        7,
+        10
+      ],
+      "continuous": true,
+      "scope": "JR 北海道在来线全线。",
+      "selectors": [
+        {
+          "operators": [
+            "北海道旅客鉄道"
+          ],
+          "kinds": [
+            "2"
+          ]
+        }
+      ],
+      "source": "https://www.jrhokkaido.co.jp/global/english/ticket/railpass/",
+      "checked": "2026-11-08",
+      "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
+      "exceptions": [
+        "不含北海道新干线、道南渔火铁路、地铁、路面电车及巴士。",
+        "特急多为全车指定席，须先办理划位；部分观光列车需附加票。"
+      ],
+      "extras": "无单独确认的附带交通权益。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照持有人；包含部分在日外国居民，具体资格以官网为准。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "noboribetsu",
+      "name": "札幌－登别区域周游券",
+      "en": "Sapporo-Noboribetsu Area Pass",
+      "issuer": "JR 北海道",
+      "regions": [
+        "北海道"
+      ],
+      "group": "JR",
+      "durations": [
+        4
+      ],
+      "continuous": true,
+      "scope": "小樽、札幌、新千岁机场至登别的指定 JR 区间。",
+      "selectors": [
+        {
+          "operators": [
+            "北海道旅客鉄道"
+          ],
+          "bbox": [
+            140.85,
+            42.4,
+            141.85,
+            43.25
+          ],
+          "lines": [
+            "函館線",
+            "千歳線",
+            "室蘭線"
+          ]
+        }
+      ],
+      "source": "https://www.jrhokkaido.co.jp/global/english/ticket/railpass/",
+      "checked": "2026-11-08",
+      "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
+      "exceptions": [
+        "不含洞爷；不含地铁与登别温泉巴士。"
+      ],
+      "extras": "无单独确认的附带交通权益。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照持有人；包含部分在日外国居民，具体资格以官网为准。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "furano",
+      "name": "札幌－富良野区域周游券",
+      "en": "Sapporo-Furano Area Pass",
+      "issuer": "JR 北海道",
+      "regions": [
+        "北海道"
+      ],
+      "group": "JR",
+      "durations": [
+        4
+      ],
+      "continuous": true,
+      "scope": "小樽、札幌、新千岁、旭川、美瑛、富良野指定区间。",
+      "selectors": [
+        {
+          "operators": [
+            "北海道旅客鉄道"
+          ],
+          "bbox": [
+            140.85,
+            42.72,
+            142.65,
+            43.85
+          ],
+          "lines": [
+            "函館線",
+            "千歳線",
+            "富良野線",
+            "根室線"
+          ]
+        }
+      ],
+      "source": "https://www.jrhokkaido.co.jp/global/english/ticket/railpass/",
+      "checked": "2026-11-08",
+      "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
+      "exceptions": [
+        "不含 Tomamu；地图矩形边界仅作区间示意。"
+      ],
+      "extras": "无单独确认的附带交通权益。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照持有人；包含部分在日外国居民，具体资格以官网为准。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "east",
+      "name": "JR 东日本铁路周游券",
+      "en": "JR EAST PASS",
+      "issuer": "JR 东日本",
+      "regions": [
+        "东北",
+        "关东",
+        "甲信越"
+      ],
+      "group": "JR",
+      "durations": [
+        5,
+        10
+      ],
+      "continuous": true,
+      "scope": "2026 年整合为 JR 东日本全线，另含指定第三部门与东武直通特例。",
+      "selectors": [
+        {
+          "operators": [
+            "東日本旅客鉄道"
+          ]
+        },
+        {
+          "operators": [
+            "東京モノレール",
+            "青い森鉄道",
+            "アイジーアールいわて銀河鉄道",
+            "仙台空港鉄道",
+            "三陸鉄道",
+            "北越急行"
+          ]
+        },
+        {
+          "operators": [
+            "えちごトキめき鉄道"
+          ],
+          "bbox": [
+            138.15,
+            36.98,
+            138.42,
+            37.2
+          ]
+        }
+      ],
+      "source": "https://www.jreast.co.jp/en/multi/pass/eastpass.html",
+      "checked": "2026-11-08",
+      "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
+      "exceptions": [
+        "不含东海道新干线、伊豆急行及富士急。",
+        "东武直通只在特定列车与区间适用；未绘制该条件区间。"
+      ],
+      "extras": "有效区内部分 JR 巴士/BRT，未作铁路高亮。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照持有人；不要求短期滞在资格，须出示有效护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "2026-03-14 新产品，旧东北/长野新潟两款不再作为在售票券。",
+      "precision": "schematic",
+      "eligibilitySource": "https://www.jreast.co.jp/en/multi/pass/eastpass_terms.html"
+    },
+    {
+      "id": "tokyo-wide",
+      "name": "东京广域周游券",
+      "en": "JR TOKYO Wide Pass",
+      "issuer": "JR 东日本",
+      "regions": [
+        "关东",
+        "甲信越"
+      ],
+      "group": "JR",
+      "durations": [
+        3
+      ],
+      "continuous": true,
+      "scope": "东京近郊 JR 及伊豆急行、富士急、上信电铁、临海线等指定区间。",
+      "selectors": [
+        {
+          "operators": [
+            "東日本旅客鉄道"
+          ],
+          "bbox": [
+            138.25,
+            34.6,
+            140.9,
+            36.95
+          ]
+        },
+        {
+          "operators": [
+            "東京モノレール",
+            "伊豆急行",
+            "富士山麓電気鉄道",
+            "上信電鉄",
+            "東京臨海高速鉄道"
+          ]
+        }
+      ],
+      "source": "https://www.jreast.co.jp/en/multi/pass/tokyowidepass.html",
+      "checked": "2026-11-08",
+      "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
+      "exceptions": [
+        "不含东海道新干线；富士急部分列车/座席加价。",
+        "边界与东武直通、新交通等特例以官方范围图为准。"
+      ],
+      "extras": "无单独确认的附带交通权益。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照持有人；包含部分在日外国居民，具体资格以官网为准。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "east-hokkaido",
+      "name": "东日本・南北海道周游券",
+      "en": "JR East-South Hokkaido Rail Pass",
+      "issuer": "JR 东日本 / 北海道",
+      "regions": [
+        "北海道",
+        "东北",
+        "关东",
+        "甲信越"
+      ],
+      "group": "JR",
+      "durations": [
+        6
+      ],
+      "continuous": true,
+      "scope": "东日本与函馆、札幌、小樽方向的南北海道指定 JR 范围。",
+      "selectors": [
+        {
+          "operators": [
+            "東日本旅客鉄道"
+          ]
+        },
+        {
+          "operators": [
+            "北海道旅客鉄道"
+          ],
+          "bbox": [
+            139.8,
+            41.2,
+            142.05,
+            43.25
+          ]
+        },
+        {
+          "operators": [
+            "東京モノレール",
+            "青い森鉄道",
+            "アイジーアールいわて銀河鉄道",
+            "仙台空港鉄道"
+          ]
+        }
+      ],
+      "source": "https://www.jreast.co.jp/en/multi/pass/easthokkaido.html",
+      "checked": "2026-11-08",
+      "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
+      "exceptions": [
+        "不含东海道新干线、道南渔火铁路；东武直通另有条件。"
+      ],
+      "extras": "无单独确认的附带交通权益。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "tohoku-hokkaido",
+      "name": "东北・南北海道周游券",
+      "en": "JR Tohoku-South Hokkaido Rail Pass",
+      "issuer": "JR 东日本 / 北海道",
+      "regions": [
+        "北海道",
+        "东北"
+      ],
+      "group": "JR",
+      "durations": [
+        6
+      ],
+      "continuous": true,
+      "scope": "东北与南北海道；不含东京地区。",
+      "selectors": [
+        {
+          "operators": [
+            "東日本旅客鉄道"
+          ],
+          "bbox": [
+            139.35,
+            37.65,
+            142.15,
+            41.6
+          ]
+        },
+        {
+          "operators": [
+            "北海道旅客鉄道"
+          ],
+          "bbox": [
+            139.8,
+            41.2,
+            142.05,
+            43.25
+          ]
+        },
+        {
+          "operators": [
+            "青い森鉄道",
+            "アイジーアールいわて銀河鉄道",
+            "仙台空港鉄道"
+          ]
+        }
+      ],
+      "source": "https://www.jreast.co.jp/en/multi/pass/tohokuhokkaido.html",
+      "checked": "2026-11-08",
+      "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
+      "exceptions": [
+        "不含道南渔火铁路；南端边界只作示意，以官方图为准。"
+      ],
+      "extras": "无单独确认的附带交通权益。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "sendai",
+      "name": "仙台区域周游券",
+      "en": "SENDAI AREA PASS",
+      "issuer": "JR 东日本 / 仙台联合",
+      "regions": [
+        "东北"
+      ],
+      "group": "JR",
+      "durations": [
+        1
+      ],
+      "continuous": true,
+      "scope": "仙台周边 JR 至松岛、松岛海岸、山寺、白石；仙台机场线与阿武隈急行槻木—阿武隈。",
+      "selectors": [
+        {
+          "operators": [
+            "東日本旅客鉄道"
+          ],
+          "bbox": [
+            140.43,
+            37.94,
+            141.1,
+            38.43
+          ],
+          "kinds": [
+            "2"
+          ]
+        },
+        {
+          "operators": [
+            "仙台空港鉄道"
+          ]
+        },
+        {
+          "operators": [
+            "阿武隈急行"
+          ],
+          "bbox": [
+            140.62,
+            37.82,
+            140.9,
+            38.1
+          ]
+        }
+      ],
+      "source": "https://sendaitravelpass.jp/1day/en/",
+      "checked": "2026-11-08",
+      "trains": "范围内普通、快速列车普通车自由席。",
+      "exceptions": [
+        "不含新干线；特急等另核相应费用。"
+      ],
+      "extras": "另含仙台地铁与指定巴士；本页不高亮地铁和巴士。",
+      "sales": "全年，可提前 1 个月购买。",
+      "use": "所选使用日当日。",
+      "eligibility": "持有效非日本护照；购买和使用时应携带护照。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "不等于面向所有人的两日仙台 Marugoto Pass。",
+      "precision": "schematic"
+    },
+    {
+      "id": "kansai-mini",
+      "name": "关西迷你周游券",
+      "en": "Kansai Mini Pass",
+      "issuer": "JR 西日本",
+      "regions": [
+        "关西",
+        "中国"
+      ],
+      "group": "JR",
+      "durations": [
+        3
+      ],
+      "continuous": true,
+      "scope": "大阪、京都、神户、奈良的 JR 在来线指定区间。",
+      "selectors": [
+        {
+          "operators": [
+            "西日本旅客鉄道"
+          ],
+          "bbox": [
+            134.95,
+            34.3,
+            136.0,
+            35.1
+          ],
+          "kinds": [
+            "2"
+          ]
+        }
+      ],
+      "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansaimini/",
+      "checked": "2026-11-08",
+      "trains": "普通、快速及新快速；特急另购特急券。",
+      "exceptions": [
+        "不含东海道、九州新干线；范围外须另付费。",
+        "指定席须提前划位；绿色车厢、卧铺及付费座席另有条件。",
+        "不含新干线。"
+      ],
+      "extras": "部分票券另含 JR 巴士或宫岛渡轮，具体以官网为准；地图仅画铁路。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "第三部门通行与山阳/北陆新干线具体起讫可能未精确表达。",
+      "precision": "schematic"
+    },
+    {
+      "id": "kansai-wide",
+      "name": "关西广域周游券",
+      "en": "Kansai WIDE Area Pass",
+      "issuer": "JR 西日本",
+      "regions": [
+        "关西",
+        "中国"
+      ],
+      "group": "JR",
+      "durations": [
+        5
+      ],
+      "continuous": true,
+      "scope": "关西至冈山、高松、鸟取、城崎温泉、白滨；山阳新干线新大阪—冈山。",
+      "selectors": [
+        {
+          "operators": [
+            "西日本旅客鉄道",
+            "四国旅客鉄道",
+            "智頭急行",
+            "WILLER　TRAINS"
+          ],
+          "bbox": [
+            133.8,
+            33.45,
+            136.25,
+            35.72
+          ]
+        }
+      ],
+      "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai_wide/",
+      "checked": "2026-11-08",
+      "trains": "普通、快速；特急及新干线依票券指定区间。",
+      "exceptions": [
+        "不含东海道、九州新干线；范围外须另付费。",
+        "指定席须提前划位；绿色车厢、卧铺及付费座席另有条件。"
+      ],
+      "extras": "部分票券另含 JR 巴士或宫岛渡轮，具体以官网为准；地图仅画铁路。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "第三部门通行与山阳/北陆新干线具体起讫可能未精确表达。",
+      "precision": "schematic"
+    },
+    {
+      "id": "kansai-hiroshima",
+      "name": "关西・广岛周游券",
+      "en": "Kansai-Hiroshima Area Pass",
+      "issuer": "JR 西日本",
+      "regions": [
+        "关西",
+        "中国"
+      ],
+      "group": "JR",
+      "durations": [
+        5
+      ],
+      "continuous": true,
+      "scope": "关西及广岛方向，含新大阪—广岛山阳新干线。",
+      "selectors": [
+        {
+          "operators": [
+            "西日本旅客鉄道"
+          ],
+          "bbox": [
+            132.15,
+            33.45,
+            136.25,
+            35.72
+          ]
+        }
+      ],
+      "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai_hiroshima/",
+      "checked": "2026-11-08",
+      "trains": "普通、快速；特急及新干线依票券指定区间。",
+      "exceptions": [
+        "不含东海道、九州新干线；范围外须另付费。",
+        "指定席须提前划位；绿色车厢、卧铺及付费座席另有条件。"
+      ],
+      "extras": "部分票券另含 JR 巴士或宫岛渡轮，具体以官网为准；地图仅画铁路。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "第三部门通行与山阳/北陆新干线具体起讫可能未精确表达。",
+      "precision": "schematic"
+    },
+    {
+      "id": "kansai-sanin",
+      "name": "关西・山阴周游券",
+      "en": "Kansai-San’in Area Pass",
+      "issuer": "JR 西日本",
+      "regions": [
+        "关西",
+        "中国"
+      ],
+      "group": "JR",
+      "durations": [
+        7
+      ],
+      "continuous": true,
+      "scope": "关西与鸟取、松江、出云等山阴地区。",
+      "selectors": [
+        {
+          "operators": [
+            "西日本旅客鉄道"
+          ],
+          "bbox": [
+            131.7,
+            33.45,
+            136.25,
+            36.5
+          ]
+        }
+      ],
+      "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai_sanin/",
+      "checked": "2026-11-08",
+      "trains": "普通、快速；特急及新干线依票券指定区间。",
+      "exceptions": [
+        "不含东海道、九州新干线；范围外须另付费。",
+        "指定席须提前划位；绿色车厢、卧铺及付费座席另有条件。"
+      ],
+      "extras": "部分票券另含 JR 巴士或宫岛渡轮，具体以官网为准；地图仅画铁路。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "第三部门通行与山阳/北陆新干线具体起讫可能未精确表达。",
+      "precision": "schematic"
+    },
+    {
+      "id": "kansai-hokuriku",
+      "name": "关西・北陆周游券",
+      "en": "Kansai-Hokuriku Area Pass",
+      "issuer": "JR 西日本",
+      "regions": [
+        "关西",
+        "中国",
+        "北陆"
+      ],
+      "group": "JR",
+      "durations": [
+        7
+      ],
+      "continuous": true,
+      "scope": "关西、冈山及北陆至上越妙高方向的指定范围。",
+      "selectors": [
+        {
+          "operators": [
+            "西日本旅客鉄道",
+            "四国旅客鉄道",
+            "智頭急行",
+            "WILLER　TRAINS"
+          ],
+          "bbox": [
+            133.8,
+            33.45,
+            137.7,
+            37.55
+          ]
+        }
+      ],
+      "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai_hokuriku/",
+      "checked": "2026-11-08",
+      "trains": "普通、快速；特急及新干线依票券指定区间。",
+      "exceptions": [
+        "不含东海道、九州新干线；范围外须另付费。",
+        "指定席须提前划位；绿色车厢、卧铺及付费座席另有条件。"
+      ],
+      "extras": "部分票券另含 JR 巴士或宫岛渡轮，具体以官网为准；地图仅画铁路。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "第三部门通行与山阳/北陆新干线具体起讫可能未精确表达。",
+      "precision": "schematic"
+    },
+    {
+      "id": "tottori-matsue",
+      "name": "鸟取・松江周游券",
+      "en": "Tottori-Matsue Pass",
+      "issuer": "JR 西日本",
+      "regions": [
+        "中国"
+      ],
+      "group": "JR",
+      "durations": [
+        3
+      ],
+      "continuous": true,
+      "scope": "鸟取、米子、松江及出云市方向的指定 JR 线路。",
+      "selectors": [
+        {
+          "operators": [
+            "西日本旅客鉄道"
+          ],
+          "bbox": [
+            132.6,
+            35.1,
+            134.35,
+            35.75
+          ],
+          "kinds": [
+            "2"
+          ]
+        }
+      ],
+      "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/tottorimatsue/",
+      "checked": "2026-11-08",
+      "trains": "普通、快速；特急及新干线依票券指定区间。",
+      "exceptions": [
+        "不含东海道、九州新干线；范围外须另付费。",
+        "指定席须提前划位；绿色车厢、卧铺及付费座席另有条件。",
+        "不含新干线。"
+      ],
+      "extras": "部分票券另含 JR 巴士或宫岛渡轮，具体以官网为准；地图仅画铁路。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "第三部门通行与山阳/北陆新干线具体起讫可能未精确表达。",
+      "precision": "schematic"
+    },
+    {
+      "id": "sanyo-sanin",
+      "name": "山阳・山阴周游券",
+      "en": "Sanyo-San’in Area Pass",
+      "issuer": "JR 西日本",
+      "regions": [
+        "关西",
+        "中国"
+      ],
+      "group": "JR",
+      "durations": [
+        7
+      ],
+      "continuous": true,
+      "scope": "关西至博多的山阳新干线及山阴地区指定线路。",
+      "selectors": [
+        {
+          "operators": [
+            "西日本旅客鉄道"
+          ],
+          "bbox": [
+            130.35,
+            33.45,
+            136.25,
+            36.5
+          ]
+        }
+      ],
+      "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/sanyo_sanin/",
+      "checked": "2026-11-08",
+      "trains": "普通、快速；特急及新干线依票券指定区间。",
+      "exceptions": [
+        "不含东海道、九州新干线；范围外须另付费。",
+        "指定席须提前划位；绿色车厢、卧铺及付费座席另有条件。"
+      ],
+      "extras": "部分票券另含 JR 巴士或宫岛渡轮，具体以官网为准；地图仅画铁路。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "第三部门通行与山阳/北陆新干线具体起讫可能未精确表达。",
+      "precision": "schematic"
+    },
+    {
+      "id": "hiroshima-yamaguchi",
+      "name": "广岛・山口周游券",
+      "en": "Hiroshima-Yamaguchi Area Pass",
+      "issuer": "JR 西日本",
+      "regions": [
+        "关西",
+        "中国"
+      ],
+      "group": "JR",
+      "durations": [
+        5
+      ],
+      "continuous": true,
+      "scope": "博多、山口与广岛指定区域。",
+      "selectors": [
+        {
+          "operators": [
+            "西日本旅客鉄道"
+          ],
+          "bbox": [
+            130.35,
+            33.45,
+            133.25,
+            34.9
+          ]
+        }
+      ],
+      "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/hiroshima_yamaguchi/",
+      "checked": "2026-11-08",
+      "trains": "普通、快速；特急及新干线依票券指定区间。",
+      "exceptions": [
+        "不含东海道、九州新干线；范围外须另付费。",
+        "指定席须提前划位；绿色车厢、卧铺及付费座席另有条件。"
+      ],
+      "extras": "部分票券另含 JR 巴士或宫岛渡轮，具体以官网为准；地图仅画铁路。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "第三部门通行与山阳/北陆新干线具体起讫可能未精确表达。",
+      "precision": "schematic"
+    },
+    {
+      "id": "kansai-excursion",
+      "name": "关西广域游览周游券",
+      "en": "Kansai WIDE Area Excursion Pass",
+      "issuer": "JR 西日本",
+      "regions": [
+        "关西",
+        "中国"
+      ],
+      "group": "JR",
+      "durations": [
+        3
+      ],
+      "continuous": true,
+      "scope": "关西至冈山、高松、鸟取、城崎温泉、白滨；山阳新干线新大阪—冈山。",
+      "selectors": [
+        {
+          "operators": [
+            "西日本旅客鉄道",
+            "四国旅客鉄道",
+            "智頭急行",
+            "WILLER　TRAINS"
+          ],
+          "bbox": [
+            133.8,
+            33.45,
+            136.25,
+            35.72
+          ]
+        }
+      ],
+      "source": "https://www.westjr.co.jp/global/en/ticket/pass/kansai_wide_excursion/",
+      "checked": "2026-11-08",
+      "trains": "普通、快速；特急及新干线依票券指定区间。",
+      "exceptions": [
+        "不含东海道、九州新干线；范围外须另付费。",
+        "指定席须提前划位；绿色车厢、卧铺及付费座席另有条件。"
+      ],
+      "extras": "部分票券另含 JR 巴士或宫岛渡轮，具体以官网为准；地图仅画铁路。",
+      "sales": "指定旅行社渠道；不在 JR 西日本车站或 WEST-TR 直接销售。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照持有人；可含在日外国居民。限指定渠道购买。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "与 5 日关西广域券为不同产品；具体使用/发售期须核对该渠道与官方条款。",
+      "precision": "schematic"
+    },
+    {
+      "id": "okayama-hiroshima-yamaguchi",
+      "name": "冈山・广岛・山口周游券",
+      "en": "Okayama-Hiroshima-Yamaguchi Area Pass",
+      "issuer": "JR 西日本",
+      "regions": [
+        "关西",
+        "中国"
+      ],
+      "group": "JR",
+      "durations": [
+        5
+      ],
+      "continuous": true,
+      "scope": "博多至冈山的山阳方向及指定在来线。",
+      "selectors": [
+        {
+          "operators": [
+            "西日本旅客鉄道"
+          ],
+          "bbox": [
+            130.35,
+            33.45,
+            134.2,
+            35.15
+          ]
+        }
+      ],
+      "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/okayama_hiroshima_yamaguchi/",
+      "checked": "2026-11-08",
+      "trains": "普通、快速；特急及新干线依票券指定区间。",
+      "exceptions": [
+        "不含东海道、九州新干线；范围外须另付费。",
+        "指定席须提前划位；绿色车厢、卧铺及付费座席另有条件。"
+      ],
+      "extras": "部分票券另含 JR 巴士或宫岛渡轮，具体以官网为准；地图仅画铁路。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "第三部门通行与山阳/北陆新干线具体起讫可能未精确表达。",
+      "precision": "schematic"
+    },
+    {
+      "id": "hokuriku",
+      "name": "北陆地区周游券",
+      "en": "Hokuriku Area Pass",
+      "issuer": "JR 西日本",
+      "regions": [
+        "北陆"
+      ],
+      "group": "JR",
+      "durations": [
+        4
+      ],
+      "continuous": true,
+      "scope": "北陆的指定 JR 与第三部门通行区间。",
+      "selectors": [
+        {
+          "operators": [
+            "西日本旅客鉄道"
+          ],
+          "bbox": [
+            135.85,
+            35.6,
+            137.7,
+            37.55
+          ]
+        }
+      ],
+      "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/hokuriku/",
+      "checked": "2026-11-08",
+      "trains": "普通、快速；特急及新干线依票券指定区间。",
+      "exceptions": [
+        "不含东海道、九州新干线；范围外须另付费。",
+        "指定席须提前划位；绿色车厢、卧铺及付费座席另有条件。"
+      ],
+      "extras": "部分票券另含 JR 巴士或宫岛渡轮，具体以官网为准；地图仅画铁路。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "第三部门通行与山阳/北陆新干线具体起讫可能未精确表达。",
+      "precision": "schematic"
+    },
+    {
+      "id": "west-all",
+      "name": "JR 西日本全地区周游券",
+      "en": "JR-WEST All Area Pass",
+      "issuer": "JR 西日本",
+      "regions": [
+        "关西",
+        "中国",
+        "北陆"
+      ],
+      "group": "JR",
+      "durations": [
+        7
+      ],
+      "continuous": true,
+      "scope": "JR 西日本范围及官方列明的第三部门通行特例。",
+      "selectors": [
+        {
+          "operators": [
+            "西日本旅客鉄道"
+          ]
+        }
+      ],
+      "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/all/",
+      "checked": "2026-11-08",
+      "trains": "普通、快速；特急及新干线依票券指定区间。",
+      "exceptions": [
+        "不含东海道、九州新干线；范围外须另付费。",
+        "指定席须提前划位；绿色车厢、卧铺及付费座席另有条件。"
+      ],
+      "extras": "部分票券另含 JR 巴士或宫岛渡轮，具体以官网为准；地图仅画铁路。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "第三部门通行与山阳/北陆新干线具体起讫可能未精确表达。",
+      "precision": "schematic"
+    },
+    {
+      "id": "hokuriku-arch",
+      "name": "北陆拱型铁路周游券",
+      "en": "Hokuriku Arch Pass",
+      "issuer": "JR 东日本 / 西日本",
+      "regions": [
+        "关东",
+        "甲信越",
+        "北陆",
+        "关西"
+      ],
+      "group": "JR",
+      "durations": [
+        7
+      ],
+      "continuous": true,
+      "scope": "东京经长野、北陆至京都、大阪；2026 年区域扩展。",
+      "selectors": [
+        {
+          "operators": [
+            "東日本旅客鉄道",
+            "西日本旅客鉄道"
+          ],
+          "bbox": [
+            135.0,
+            34.4,
+            140.9,
+            37.8
+          ],
+          "lines": [
+            "北陸新幹線",
+            "北陸線",
+            "湖西線",
+            "東海道線",
+            "大阪環状線",
+            "阪和線",
+            "関西空港線",
+            "中央線",
+            "大糸線",
+            "山手線",
+            "総武線",
+            "成田線",
+            "京浜東北線",
+            "埼京線",
+            "高崎線"
+          ]
+        }
+      ],
+      "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/other/hokuriku-arch-pass/",
+      "checked": "2026-11-08",
+      "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
+      "exceptions": [
+        "不含东海道新干线；不是东京—大阪所有路线通用票。"
+      ],
+      "extras": "无单独确认的附带交通权益。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "setouchi",
+      "name": "濑户内地区周游券",
+      "en": "Setouchi Area Pass",
+      "issuer": "JR 西日本 / 四国",
+      "regions": [
+        "关西",
+        "中国",
+        "四国"
+      ],
+      "group": "JR",
+      "durations": [
+        7
+      ],
+      "continuous": true,
+      "scope": "关西至博多的山阳方向及濑户内指定区间。",
+      "selectors": [
+        {
+          "operators": [
+            "西日本旅客鉄道",
+            "四国旅客鉄道"
+          ],
+          "bbox": [
+            130.35,
+            33.3,
+            135.95,
+            35.05
+          ]
+        }
+      ],
+      "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/other/setouchi/",
+      "checked": "2026-11-08",
+      "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
+      "exceptions": [
+        "不含东海道、九州新干线；范围外须另付费。",
+        "指定席须提前划位；绿色车厢、卧铺及付费座席另有条件。"
+      ],
+      "extras": "另有指定渡轮、巴士权益；不绘制为铁路。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "sanyo-kyushu",
+      "name": "山阳・山阴・北部九州周游券",
+      "en": "Sanyo-San’in Northern Kyushu Pass",
+      "issuer": "JR 西日本 / 九州",
+      "regions": [
+        "关西",
+        "中国",
+        "九州"
+      ],
+      "group": "JR",
+      "durations": [
+        7
+      ],
+      "continuous": true,
+      "scope": "山阳、山阴与北部九州指定网络。",
+      "selectors": [
+        {
+          "operators": [
+            "西日本旅客鉄道"
+          ]
+        },
+        {
+          "operators": [
+            "九州旅客鉄道"
+          ],
+          "bbox": [
+            129.45,
+            32.45,
+            131.95,
+            34.35
+          ]
+        }
+      ],
+      "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/other/ssnk/",
+      "checked": "2026-11-08",
+      "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
+      "exceptions": [
+        "九州新干线限博多—熊本；不含东海道新干线。"
+      ],
+      "extras": "无单独确认的附带交通权益。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "takayama",
+      "name": "高山・北陆地区周游券",
+      "en": "Takayama-Hokuriku Area Tourist Pass",
+      "issuer": "JR 东海 / 西日本",
+      "regions": [
+        "东海",
+        "北陆",
+        "关西"
+      ],
+      "group": "JR",
+      "durations": [
+        5
+      ],
+      "continuous": true,
+      "scope": "名古屋—高山—富山、敦贺—大阪—关西机场与富山—敦贺新干线。",
+      "selectors": [
+        {
+          "operators": [
+            "東海旅客鉄道",
+            "西日本旅客鉄道"
+          ],
+          "bbox": [
+            135.0,
+            34.35,
+            137.35,
+            36.95
+          ],
+          "lines": [
+            "高山線",
+            "北陸新幹線",
+            "北陸線",
+            "湖西線",
+            "東海道線",
+            "阪和線",
+            "関西空港線",
+            "大阪環状線"
+          ]
+        }
+      ],
+      "source": "https://touristpass.jp/en/takayama_hokuriku/",
+      "checked": "2026-11-08",
+      "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
+      "exceptions": [
+        "不含东海道新干线；指定席最多 6 次，详见官网。"
+      ],
+      "extras": "另含白川乡等指定巴士；地图不将巴士接驳画成铁路。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "alpine",
+      "name": "立山黑部・高山・松本地区周游券",
+      "en": "Alpine-Takayama-Matsumoto Area Tourist Pass",
+      "issuer": "JR 东海",
+      "regions": [
+        "东海",
+        "甲信越",
+        "北陆"
+      ],
+      "group": "JR",
+      "durations": [
+        5
+      ],
+      "continuous": true,
+      "scope": "名古屋—高山—富山与信浓大町—松本—名古屋；立山黑部交通另附。",
+      "selectors": [
+        {
+          "operators": [
+            "東海旅客鉄道",
+            "東日本旅客鉄道"
+          ],
+          "bbox": [
+            136.65,
+            35.0,
+            138.25,
+            36.8
+          ],
+          "lines": [
+            "高山線",
+            "東海道線",
+            "中央線",
+            "篠ノ井線",
+            "大糸線"
+          ]
+        },
+        {
+          "operators": [
+            "富山地方鉄道",
+            "立山黒部貫光"
+          ],
+          "bbox": [
+            137.1,
+            36.2,
+            137.8,
+            36.8
+          ]
+        }
+      ],
+      "source": "https://touristpass.jp/en/alpine/",
+      "checked": "2026-11-08",
+      "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
+      "exceptions": [
+        "不含新干线；观光交通受季节运营影响。"
+      ],
+      "extras": "含立山黑部的部分巴士、索道；非铁路权益仅文字说明。",
+      "sales": "海外 2026-02-01 起；网上/日本国内 03-15 起，均于 11-06 结束销售/兑换。",
+      "use": "2026-04-15 至 2026-11-10；已购票须在范围内使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "ended",
+      "salesEnd": "2026-11-06",
+      "useEnd": "2026-11-10",
+      "note": "2026 年季节销售已结束；现有票券仍受 11 月 10 日使用截止日限制。",
+      "precision": "schematic"
+    },
+    {
+      "id": "ise",
+      "name": "伊势・熊野・和歌山地区周游券",
+      "en": "Ise-Kumano-Wakayama Area Tourist Pass",
+      "issuer": "JR 东海 / 西日本",
+      "regions": [
+        "东海",
+        "关西"
+      ],
+      "group": "JR",
+      "durations": [
+        5
+      ],
+      "continuous": true,
+      "scope": "名古屋经纪势半岛至大阪，另含伊势铁道、和歌山电铁。",
+      "selectors": [
+        {
+          "operators": [
+            "東海旅客鉄道",
+            "西日本旅客鉄道"
+          ],
+          "bbox": [
+            135.0,
+            33.4,
+            136.98,
+            35.25
+          ],
+          "lines": [
+            "関西線",
+            "紀勢線",
+            "阪和線",
+            "参宮線",
+            "関西空港線",
+            "片町線",
+            "おおさか東線",
+            "大阪環状線"
+          ]
+        },
+        {
+          "operators": [
+            "伊勢鉄道",
+            "和歌山電鐵"
+          ]
+        }
+      ],
+      "source": "https://touristpass.jp/en/ise_kumano/",
+      "checked": "2026-11-08",
+      "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
+      "exceptions": [
+        "不含新干线；JR 特急指定席最多 6 次。"
+      ],
+      "extras": "另含指定巴士，未画入铁路图层。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "fuji-shizuoka",
+      "name": "富士山・静冈地区迷你周游券",
+      "en": "Mt. Fuji-Shizuoka Area Tourist Pass Mini",
+      "issuer": "JR 东海",
+      "regions": [
+        "东海"
+      ],
+      "group": "JR",
+      "durations": [
+        3
+      ],
+      "continuous": true,
+      "scope": "热海—丰桥、御殿场与身延方向指定 JR 在来线及伊豆箱根指定线。",
+      "selectors": [
+        {
+          "operators": [
+            "東海旅客鉄道"
+          ],
+          "bbox": [
+            137.35,
+            34.6,
+            139.15,
+            35.65
+          ],
+          "lines": [
+            "東海道線",
+            "御殿場線",
+            "身延線"
+          ]
+        },
+        {
+          "operators": [
+            "伊豆箱根鉄道"
+          ],
+          "bbox": [
+            138.8,
+            34.9,
+            139.0,
+            35.2
+          ],
+          "lines": [
+            "駿豆線"
+          ]
+        }
+      ],
+      "source": "https://touristpass.jp/en/fuji_shizuoka/",
+      "checked": "2026-11-08",
+      "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
+      "exceptions": [
+        "不含新干线；特急指定席等另有费用。"
+      ],
+      "extras": "另含指定巴士、渡轮；未绘制为铁路。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "kyushu",
+      "name": "全九州铁路周游券",
+      "en": "All Kyushu Area Pass",
+      "issuer": "JR 九州",
+      "regions": [
+        "九州"
+      ],
+      "group": "JR",
+      "durations": [
+        3,
+        5,
+        7
+      ],
+      "continuous": true,
+      "scope": "JR 九州票券指定的全岛、北部或南部范围。",
+      "selectors": [
+        {
+          "operators": [
+            "九州旅客鉄道"
+          ]
+        }
+      ],
+      "source": "https://www.jrkyushu.co.jp/english/railpass/railpass.html",
+      "checked": "2026-11-08",
+      "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
+      "exceptions": [
+        "不含博多—小仓山阳新干线及其他公司铁路。",
+        "北/南九州的熊本、大分边界以官方图为准。"
+      ],
+      "extras": "无单独确认的附带交通权益。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "north-kyushu",
+      "name": "北部九州铁路周游券",
+      "en": "Northern Kyushu Area Pass",
+      "issuer": "JR 九州",
+      "regions": [
+        "九州"
+      ],
+      "group": "JR",
+      "durations": [
+        3,
+        5
+      ],
+      "continuous": true,
+      "scope": "JR 九州票券指定的全岛、北部或南部范围。",
+      "selectors": [
+        {
+          "operators": [
+            "九州旅客鉄道"
+          ],
+          "bbox": [
+            129.4,
+            32.4,
+            132.1,
+            34.35
+          ]
+        }
+      ],
+      "source": "https://www.jrkyushu.co.jp/english/railpass/railpass.html",
+      "checked": "2026-11-08",
+      "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
+      "exceptions": [
+        "不含博多—小仓山阳新干线及其他公司铁路。",
+        "北/南九州的熊本、大分边界以官方图为准。"
+      ],
+      "extras": "无单独确认的附带交通权益。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "south-kyushu",
+      "name": "南部九州铁路周游券",
+      "en": "Southern Kyushu Area Pass",
+      "issuer": "JR 九州",
+      "regions": [
+        "九州"
+      ],
+      "group": "JR",
+      "durations": [
+        3
+      ],
+      "continuous": true,
+      "scope": "JR 九州票券指定的全岛、北部或南部范围。",
+      "selectors": [
+        {
+          "operators": [
+            "九州旅客鉄道"
+          ],
+          "bbox": [
+            129.8,
+            30.8,
+            132.1,
+            33.3
+          ]
+        }
+      ],
+      "source": "https://www.jrkyushu.co.jp/english/railpass/railpass.html",
+      "checked": "2026-11-08",
+      "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
+      "exceptions": [
+        "不含博多—小仓山阳新干线及其他公司铁路。",
+        "北/南九州的熊本、大分边界以官方图为准。"
+      ],
+      "extras": "无单独确认的附带交通权益。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "kyushu-mobile",
+      "name": "福冈广域手机周游券",
+      "en": "JR KYUSHU MOBILE PASS FUKUOKA WIDE",
+      "issuer": "JR 九州",
+      "regions": [
+        "九州"
+      ],
+      "group": "JR",
+      "durations": [
+        2
+      ],
+      "continuous": true,
+      "scope": "福冈近郊、门司港及久留米等指定在来线区间。",
+      "selectors": [
+        {
+          "operators": [
+            "九州旅客鉄道"
+          ],
+          "bbox": [
+            130.0,
+            33.2,
+            131.1,
+            34.0
+          ],
+          "kinds": [
+            "2"
+          ]
+        }
+      ],
+      "source": "https://www.jrkyushu.co.jp/english/railpass/mobilepass.html",
+      "checked": "2026-11-08",
+      "trains": "指定区间普通、快速及特急普通车自由席。",
+      "exceptions": [
+        "不含新干线；指定席需另购相关车票；须联网展示有效票面。"
+      ],
+      "extras": "无单独确认的附带交通权益。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "shikoku",
+      "name": "四国铁路周游券",
+      "en": "ALL SHIKOKU Rail Pass",
+      "issuer": "JR 四国 / 私铁",
+      "regions": [
+        "四国"
+      ],
+      "group": "JR",
+      "durations": [
+        3,
+        7
+      ],
+      "continuous": true,
+      "scope": "JR 四国、土佐黑潮、阿佐海岸、琴电与土佐电等指定网络。",
+      "selectors": [
+        {
+          "operators": [
+            "四国旅客鉄道",
+            "土佐くろしお鉄道",
+            "阿佐海岸鉄道",
+            "高松琴平電気鉄道",
+            "とさでん交通"
+          ]
+        }
+      ],
+      "source": "https://shikoku-railwaytrip.com/news/pdf/20260806_en_japan-rail-passes.pdf",
+      "checked": "2026-11-08",
+      "trains": "特急、快速和普通列车普通车自由席；指定席条件需另核。",
+      "exceptions": [
+        "2026-10 起停售 4/5 日款；现行 3/7 日款。",
+        "不含 Sunrise Seto；濑户大桥线限儿岛站以南。"
+      ],
+      "extras": "2026-10-01 后新售票不再含小豆岛渡轮及 Olive Bus。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "greater-tokyo",
+      "name": "大东京周游券",
+      "en": "Greater Tokyo Pass",
+      "issuer": "首都圈私铁联合",
+      "regions": [
+        "关东"
+      ],
+      "group": "私铁 / 联合",
+      "durations": [
+        5
+      ],
+      "continuous": true,
+      "scope": "首都圈参与私铁/电车；地图仅显示铁路部分，不显示地铁及巴士权益。",
+      "selectors": [
+        {
+          "operators": [
+            "小田急電鉄",
+            "京王電鉄",
+            "京成電鉄",
+            "京浜急行電鉄",
+            "相模鉄道",
+            "西武鉄道",
+            "東急電鉄",
+            "東武鉄道",
+            "江ノ島電鉄",
+            "横浜高速鉄道"
+          ]
+        }
+      ],
+      "source": "https://greater-tokyo-pass.jp/en/",
+      "checked": "2026-11-08",
+      "trains": "参与公司的普通、快速等列车；付费特急或指定席须另购附加票。",
+      "exceptions": [
+        "不含 JR、东京单轨及未参与线路；参加公司的区间例外见官方图。"
+      ],
+      "extras": "另含参与地铁/都营电车及都营巴士；本页不高亮其范围。",
+      "sales": "兑换/使用凭证自发行起 3 个月内有效。",
+      "use": "连续 5 日；每日按 03:00 至次日 02:59 计算。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "kintetsu1",
+      "name": "近铁铁路周游券 1 日",
+      "en": "KINTETSU RAIL PASS 1day",
+      "issuer": "近铁",
+      "regions": [
+        "关西"
+      ],
+      "group": "私铁 / 联合",
+      "durations": [
+        1
+      ],
+      "continuous": true,
+      "scope": "近铁指定区间；5 日款含近铁全线及伊贺铁道。",
+      "selectors": [
+        {
+          "operators": [
+            "近畿日本鉄道"
+          ],
+          "bbox": [
+            135.35,
+            34.5,
+            136.0,
+            35.08
+          ]
+        }
+      ],
+      "source": "https://www.kintetsu.co.jp/foreign/english/ticket/",
+      "checked": "2026-11-08",
+      "trains": "近铁普通、快速、急行；特急费另购。",
+      "exceptions": [
+        "不含直通大阪地铁、京都地铁或阪神区间。"
+      ],
+      "extras": "1/2 日和 plus 含指定巴士权益；普通 5 日款不含巴士。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "kintetsu2",
+      "name": "近铁铁路周游券 2 日",
+      "en": "KINTETSU RAIL PASS 2day",
+      "issuer": "近铁",
+      "regions": [
+        "关西"
+      ],
+      "group": "私铁 / 联合",
+      "durations": [
+        2
+      ],
+      "continuous": true,
+      "scope": "近铁指定区间；5 日款含近铁全线及伊贺铁道。",
+      "selectors": [
+        {
+          "operators": [
+            "近畿日本鉄道"
+          ],
+          "bbox": [
+            135.35,
+            34.2,
+            136.25,
+            35.08
+          ]
+        }
+      ],
+      "source": "https://www.kintetsu.co.jp/foreign/english/ticket/",
+      "checked": "2026-11-08",
+      "trains": "近铁普通、快速、急行；特急费另购。",
+      "exceptions": [
+        "不含直通大阪地铁、京都地铁或阪神区间。"
+      ],
+      "extras": "1/2 日和 plus 含指定巴士权益；普通 5 日款不含巴士。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "kintetsu5",
+      "name": "近铁铁路周游券 5 日",
+      "en": "KINTETSU RAIL PASS 5day",
+      "issuer": "近铁",
+      "regions": [
+        "关西",
+        "东海"
+      ],
+      "group": "私铁 / 联合",
+      "durations": [
+        5
+      ],
+      "continuous": true,
+      "scope": "近铁指定区间；5 日款含近铁全线及伊贺铁道。",
+      "selectors": [
+        {
+          "operators": [
+            "近畿日本鉄道",
+            "伊賀鉄道"
+          ]
+        }
+      ],
+      "source": "https://www.kintetsu.co.jp/foreign/english/ticket/",
+      "checked": "2026-11-08",
+      "trains": "近铁普通、快速、急行；特急费另购。",
+      "exceptions": [
+        "不含直通大阪地铁、京都地铁或阪神区间。"
+      ],
+      "extras": "1/2 日和 plus 含指定巴士权益；普通 5 日款不含巴士。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "kintetsu5plus",
+      "name": "近铁铁路周游券 5 日 plus",
+      "en": "KINTETSU RAIL PASS 5day plus",
+      "issuer": "近铁",
+      "regions": [
+        "关西",
+        "东海"
+      ],
+      "group": "私铁 / 联合",
+      "durations": [
+        5
+      ],
+      "continuous": true,
+      "scope": "近铁指定区间；5 日款含近铁全线及伊贺铁道。",
+      "selectors": [
+        {
+          "operators": [
+            "近畿日本鉄道",
+            "伊賀鉄道"
+          ]
+        }
+      ],
+      "source": "https://www.kintetsu.co.jp/foreign/english/ticket/",
+      "checked": "2026-11-08",
+      "trains": "近铁普通、快速、急行；特急费另购。",
+      "exceptions": [
+        "不含直通大阪地铁、京都地铁或阪神区间。"
+      ],
+      "extras": "1/2 日和 plus 含指定巴士权益；普通 5 日款不含巴士。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "nikko-all",
+      "name": "日光全地区周游券",
+      "en": "NIKKO PASS all area",
+      "issuer": "东武",
+      "regions": [
+        "关东"
+      ],
+      "group": "私铁 / 联合",
+      "durations": [
+        4
+      ],
+      "continuous": true,
+      "scope": "浅草—下今市往返一次，另可在下今市—东武日光/新藤原的指定区间自由乘车。",
+      "selectors": [
+        {
+          "operators": [
+            "東武鉄道"
+          ],
+          "bbox": [
+            139.55,
+            35.65,
+            139.85,
+            36.9
+          ],
+          "lines": [
+            "伊勢崎線",
+            "日光線",
+            "鬼怒川線"
+          ]
+        }
+      ],
+      "source": "https://www.tobu.co.jp/en/ticket/nikko/all.html",
+      "checked": "2026-11-08",
+      "trains": "普通、快速等；特急和 SL 须另购相应票。",
+      "exceptions": [
+        "进出日光的往返区间不是无限次乘坐。"
+      ],
+      "extras": "另含指定巴士；全地区款有季节性游船/观光权益，详见官网。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国旅行者；同行日本籍旅客可按官方规则购买。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "nikko-heritage",
+      "name": "日光世界遗产地区周游券",
+      "en": "NIKKO PASS world heritage area",
+      "issuer": "东武",
+      "regions": [
+        "关东"
+      ],
+      "group": "私铁 / 联合",
+      "durations": [
+        2
+      ],
+      "continuous": true,
+      "scope": "浅草—下今市往返一次，另可在下今市—东武日光/新藤原的指定区间自由乘车。",
+      "selectors": [
+        {
+          "operators": [
+            "東武鉄道"
+          ],
+          "bbox": [
+            139.55,
+            35.65,
+            139.85,
+            36.9
+          ],
+          "lines": [
+            "伊勢崎線",
+            "日光線",
+            "鬼怒川線"
+          ]
+        }
+      ],
+      "source": "https://www.tobu.co.jp/en/ticket/nikko/world.html",
+      "checked": "2026-11-08",
+      "trains": "普通、快速等；特急和 SL 须另购相应票。",
+      "exceptions": [
+        "进出日光的往返区间不是无限次乘坐。"
+      ],
+      "extras": "另含指定巴士；全地区款有季节性游船/观光权益，详见官网。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国旅行者；同行日本籍旅客可按官方规则购买。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "kawagoe",
+      "name": "川越优惠周游券 Premium",
+      "en": "KAWAGOE DISCOUNT PASS Premium",
+      "issuer": "东武",
+      "regions": [
+        "关东"
+      ],
+      "group": "私铁 / 联合",
+      "durations": [
+        1
+      ],
+      "continuous": true,
+      "scope": "池袋—川越/川越市往返；川越—川越市可自由乘坐。",
+      "selectors": [
+        {
+          "operators": [
+            "東武鉄道"
+          ],
+          "bbox": [
+            139.46,
+            35.72,
+            139.73,
+            35.93
+          ],
+          "lines": [
+            "東上本線",
+            "東上線"
+          ]
+        }
+      ],
+      "source": "https://www.tobu.co.jp/en/ticket/kawagoe/premium.html",
+      "checked": "2026-11-08",
+      "trains": "东武东上线指定区间；不是东武全线券。",
+      "exceptions": [
+        "池袋进出仅一次往返。"
+      ],
+      "extras": "附带川越指定巴士及商店优惠。",
+      "sales": "官方持续销售；以发行日及票面期限为准。",
+      "use": "发行后 1 个月内任选 1 日。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "seibu",
+      "name": "西武一日券",
+      "en": "SEIBU 1Day Pass",
+      "issuer": "西武",
+      "regions": [
+        "关东"
+      ],
+      "group": "私铁 / 联合",
+      "durations": [
+        1
+      ],
+      "continuous": true,
+      "scope": "西武全线（多摩川线除外）。",
+      "selectors": [
+        {
+          "operators": [
+            "西武鉄道"
+          ],
+          "exclude": [
+            "多摩川線"
+          ]
+        }
+      ],
+      "source": "https://www.seiburailway.jp/en/ticket/seibu1daypass/",
+      "checked": "2026-11-08",
+      "trains": "普通、快速等；Laview/Red Arrow 等特急与付费座席另购票。",
+      "exceptions": [],
+      "extras": "无单独确认的附带交通权益。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照持有人；包含部分在日外国居民，具体资格以官网为准。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "seibu-nagatoro",
+      "name": "西武一日券＋长瀞",
+      "en": "SEIBU 1Day Pass + Nagatoro",
+      "issuer": "西武",
+      "regions": [
+        "关东"
+      ],
+      "group": "私铁 / 联合",
+      "durations": [
+        1
+      ],
+      "continuous": true,
+      "scope": "西武全线（多摩川线除外），另含秩父铁道野上/长瀞—三峰口。",
+      "selectors": [
+        {
+          "operators": [
+            "西武鉄道"
+          ],
+          "exclude": [
+            "多摩川線"
+          ]
+        },
+        {
+          "operators": [
+            "秩父鉄道"
+          ],
+          "bbox": [
+            138.95,
+            35.9,
+            139.15,
+            36.12
+          ]
+        }
+      ],
+      "source": "https://www.seiburailway.jp/en/ticket/seibu1daypass/",
+      "checked": "2026-11-08",
+      "trains": "普通、快速等；Laview/Red Arrow 等特急与付费座席另购票。",
+      "exceptions": [],
+      "extras": "无单独确认的附带交通权益。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照持有人；包含部分在日外国居民，具体资格以官网为准。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "hakone-kamakura",
+      "name": "箱根・镰仓周游券",
+      "en": "Hakone Kamakura Pass",
+      "issuer": "小田急",
+      "regions": [
+        "关东"
+      ],
+      "group": "私铁 / 联合",
+      "durations": [
+        3
+      ],
+      "continuous": true,
+      "scope": "小田急全线、江之电及箱根指定铁路交通。",
+      "selectors": [
+        {
+          "operators": [
+            "小田急電鉄",
+            "小田急箱根",
+            "江ノ島電鉄"
+          ]
+        }
+      ],
+      "source": "https://www.odakyu.jp/english/passes/hakone_kamakura/",
+      "checked": "2026-11-08",
+      "trains": "普通列车；Romancecar 特急须另购特急券。",
+      "exceptions": [],
+      "extras": "另含箱根指定巴士、索道及观光船，未画入铁路高亮。",
+      "sales": "全年；预售、兑换期限随购买渠道而异。",
+      "use": "全年；在所选起始日开始使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "keihan-osaka",
+      "name": "京阪京都・大阪观光券",
+      "en": "KYOTO-OSAKA SIGHTSEEING PASS",
+      "issuer": "京阪",
+      "regions": [
+        "关西"
+      ],
+      "group": "私铁 / 联合",
+      "durations": [
+        "1 日",
+        "24 小时"
+      ],
+      "continuous": true,
+      "scope": "京阪京都/大阪指定线路；不含大津线。",
+      "selectors": [
+        {
+          "operators": [
+            "京阪電気鉄道"
+          ],
+          "exclude": [
+            "京津線",
+            "石山坂本線"
+          ]
+        }
+      ],
+      "source": "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/kyoto-osaka.html",
+      "checked": "2026-11-08",
+      "trains": "京阪列车；Premium Car 与 Liner 须另付费。",
+      "exceptions": [],
+      "extras": "无单独确认的附带交通权益。",
+      "sales": "全年；渠道的购买/激活有效期限见票面。",
+      "use": "1 日款 03:00 起按交通日计算；24 小时款从启用时起算。",
+      "eligibility": "官网面向访日游客介绍的产品；国籍及在留限制请核对购买渠道最终条款。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "keihan-kyoto",
+      "name": "京阪京都观光券",
+      "en": "KYOTO SIGHTSEEING PASS",
+      "issuer": "京阪",
+      "regions": [
+        "关西"
+      ],
+      "group": "私铁 / 联合",
+      "durations": [
+        "1 日",
+        "24 小时"
+      ],
+      "continuous": true,
+      "scope": "京阪京都/大阪指定线路；不含大津线。",
+      "selectors": [
+        {
+          "operators": [
+            "京阪電気鉄道"
+          ],
+          "bbox": [
+            135.68,
+            34.86,
+            135.85,
+            35.05
+          ],
+          "exclude": [
+            "京津線",
+            "石山坂本線"
+          ]
+        }
+      ],
+      "source": "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/kyoto-osaka.html",
+      "checked": "2026-11-08",
+      "trains": "京阪列车；Premium Car 与 Liner 须另付费。",
+      "exceptions": [],
+      "extras": "无单独确认的附带交通权益。",
+      "sales": "全年；渠道的购买/激活有效期限见票面。",
+      "use": "1 日款 03:00 起按交通日计算；24 小时款从启用时起算。",
+      "eligibility": "官网面向访日游客介绍的产品；国籍及在留限制请核对购买渠道最终条款。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "keihan-kurama",
+      "name": "京阪京都・大阪＋鞍马贵船观光券",
+      "en": "KYOTO-OSAKA SIGHTSEEING PASS (Greater KURAMA & KIBUNE area)",
+      "issuer": "京阪 / 叡山",
+      "regions": [
+        "关西"
+      ],
+      "group": "私铁 / 联合",
+      "durations": [
+        1
+      ],
+      "continuous": true,
+      "scope": "京阪京都大阪指定线与叡山电铁。",
+      "selectors": [
+        {
+          "operators": [
+            "京阪電気鉄道"
+          ],
+          "exclude": [
+            "京津線",
+            "石山坂本線"
+          ]
+        },
+        {
+          "operators": [
+            "叡山電鉄"
+          ]
+        }
+      ],
+      "source": "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/eizan-railway.html",
+      "checked": "2026-11-08",
+      "trains": "普通、快速及一般特急；Premium Car 等另购。",
+      "exceptions": [],
+      "extras": "无单独确认的附带交通权益。",
+      "sales": "按官网及渠道当年度票面期限。",
+      "use": "使用当日；年度截止日期应核对票面。",
+      "eligibility": "官网面向访日游客介绍的产品；国籍及在留限制请核对购买渠道最终条款。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "keihan-metro",
+      "name": "京阪京都・大阪观光券（大阪 Metro 版）",
+      "en": "KYOTO-OSAKA SIGHTSEEING PASS 1day (Osaka Metro)",
+      "issuer": "京阪",
+      "regions": [
+        "关西"
+      ],
+      "group": "私铁 / 联合",
+      "durations": [
+        1
+      ],
+      "continuous": true,
+      "scope": "京阪京都大阪指定线；大阪地铁权益只作文字说明。",
+      "selectors": [
+        {
+          "operators": [
+            "京阪電気鉄道"
+          ],
+          "exclude": [
+            "京津線",
+            "石山坂本線"
+          ]
+        }
+      ],
+      "source": "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/osaka-subway.html",
+      "checked": "2026-11-08",
+      "trains": "京阪一般列车；特殊座席另付费。",
+      "exceptions": [],
+      "extras": "附带大阪 Metro 权益，依本页范围设置不高亮地铁。",
+      "sales": "按官网及渠道当年度票面期限。",
+      "use": "使用当日；年度截止日期应核对票面。",
+      "eligibility": "官网面向访日游客介绍的产品；国籍及在留限制请核对购买渠道最终条款。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "keihan-otsu",
+      "name": "京阪大津观光券",
+      "en": "OTSU SIGHTSEEING PASS",
+      "issuer": "京阪",
+      "regions": [
+        "关西"
+      ],
+      "group": "私铁 / 联合",
+      "durations": [
+        1
+      ],
+      "continuous": true,
+      "scope": "京阪大津线（京津线、石山坂本线），不含京阪本线。",
+      "selectors": [
+        {
+          "operators": [
+            "京阪電気鉄道"
+          ],
+          "lines": [
+            "京津線",
+            "石山坂本線"
+          ]
+        }
+      ],
+      "source": "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/otsu.html",
+      "checked": "2026-11-08",
+      "trains": "京阪列车；Premium Car 与 Liner 须另付费。",
+      "exceptions": [],
+      "extras": "无单独确认的附带交通权益。",
+      "sales": "2026-04-01 至 2027-03-31；兑换期限另见购买渠道。",
+      "use": "任选 1 日，最晚使用日期 2027-04-30。",
+      "eligibility": "官网面向访日游客介绍的产品；国籍及在留限制请核对购买渠道最终条款。",
+      "status": "current",
+      "salesEnd": "2027-03-31",
+      "useEnd": "2027-04-30",
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "keihan-hirakata",
+      "name": "京阪京都・大阪观光券（枚方公园版）",
+      "en": "KYOTO-OSAKA SIGHTSEEING PASS (for Hirakata Park)",
+      "issuer": "京阪",
+      "regions": [
+        "关西"
+      ],
+      "group": "私铁 / 联合",
+      "durations": [
+        1
+      ],
+      "continuous": true,
+      "scope": "京阪京都/大阪指定线路；不含大津线。",
+      "selectors": [
+        {
+          "operators": [
+            "京阪電気鉄道"
+          ],
+          "exclude": [
+            "京津線",
+            "石山坂本線"
+          ]
+        }
+      ],
+      "source": "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/hirakata-park.html",
+      "checked": "2026-11-08",
+      "trains": "京阪列车；Premium Car 与 Liner 须另付费。",
+      "exceptions": [],
+      "extras": "附带枚方公园入园权益；休园与设施开放日另行确认。",
+      "sales": "全年；渠道的购买/激活有效期限见票面。",
+      "use": "使用当日；须同时核对公园开放日期。",
+      "eligibility": "官网面向访日游客介绍的产品；国籍及在留限制请核对购买渠道最终条款。",
+      "status": "current",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "kansai-old",
+      "name": "关西地区周游券（停售）",
+      "en": "Kansai Area Pass",
+      "issuer": "JR 西日本",
+      "regions": [
+        "关西"
+      ],
+      "group": "JR",
+      "durations": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "continuous": true,
+      "scope": "旧关西地区范围，含指定 HARUKA 权益。",
+      "selectors": [
+        {
+          "operators": [
+            "西日本旅客鉄道"
+          ],
+          "bbox": [
+            134.55,
+            33.9,
+            136.2,
+            35.7
+          ],
+          "kinds": [
+            "2"
+          ]
+        }
+      ],
+      "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai/",
+      "checked": "2026-11-08",
+      "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
+      "exceptions": [],
+      "extras": "无单独确认的附带交通权益。",
+      "sales": "2026-09-30 停售；已购票按规定期限使用。",
+      "use": "已购票的指定有效期内。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "ended",
+      "salesEnd": "2026-09-30",
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "kansai-lite",
+      "name": "关西铁路周游券 LITE（季节已结束）",
+      "en": "KANSAI RAILWAY PASS LITE",
+      "issuer": "关西私铁联合",
+      "regions": [
+        "关西"
+      ],
+      "group": "私铁 / 联合",
+      "durations": [
+        2,
+        3
+      ],
+      "continuous": true,
+      "scope": "关西参与私铁指定区域；不含 JR。",
+      "selectors": [
+        {
+          "operators": [
+            "近畿日本鉄道",
+            "南海電気鉄道",
+            "阪急電鉄",
+            "阪神電気鉄道",
+            "京阪電気鉄道",
+            "山陽電気鉄道",
+            "神戸電鉄",
+            "能勢電鉄",
+            "水間鉄道"
+          ],
+          "bbox": [
+            134.3,
+            33.7,
+            136.5,
+            35.6
+          ],
+          "exclude": [
+            "京津線",
+            "石山坂本線"
+          ]
+        }
+      ],
+      "source": "https://www.surutto.com/kansai_rwpl/en/krp.html",
+      "checked": "2026-11-08",
+      "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
+      "exceptions": [
+        "不含 JR、京都市营地铁、岚电、京阪大津线及巴士。"
+      ],
+      "extras": "参与地铁权益不作高亮。",
+      "sales": "2026-03-25 至 2026-09-30。",
+      "use": "须 09-30 前启用；2 日款至 10-01，3 日款至 10-02。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "ended",
+      "salesEnd": "2026-09-30",
+      "useEnd": "2026-10-02",
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "nankai-old",
+      "name": "南海全线 2 日券（停售）",
+      "en": "NANKAI ALL LINE 2day Pass",
+      "issuer": "南海",
+      "regions": [
+        "关西"
+      ],
+      "group": "私铁 / 联合",
+      "durations": [
+        2
+      ],
+      "continuous": false,
+      "scope": "南海全线，包括机场线。",
+      "selectors": [
+        {
+          "operators": [
+            "南海電気鉄道"
+          ]
+        }
+      ],
+      "source": "https://www.nankai.co.jp/en_railway/ticket/web-nankaiallline2daypass/",
+      "checked": "2026-11-08",
+      "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
+      "exceptions": [
+        "不是两日连续券；特急座席另付费。"
+      ],
+      "extras": "无单独确认的附带交通权益。",
+      "sales": "官网已标注销售结束，未给出统一最终日期。",
+      "use": "旧票可选 2 日，具体兑换与使用期限以券面为准。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "ended",
+      "salesEnd": null,
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    },
+    {
+      "id": "kagawa-old",
+      "name": "香川迷你铁路・渡轮券（停售）",
+      "en": "KAGAWA Mini Rail & Ferry Pass",
+      "issuer": "JR 四国 / 琴电",
+      "regions": [
+        "四国"
+      ],
+      "group": "JR",
+      "durations": [
+        2
+      ],
+      "continuous": true,
+      "scope": "香川指定 JR 与琴电区间。",
+      "selectors": [
+        {
+          "operators": [
+            "四国旅客鉄道"
+          ],
+          "bbox": [
+            133.5,
+            34.0,
+            134.5,
+            34.5
+          ]
+        },
+        {
+          "operators": [
+            "高松琴平電気鉄道"
+          ]
+        }
+      ],
+      "source": "https://shikoku-railwaytrip.com/news/pdf/20260806_en_japan-rail-passes.pdf",
+      "checked": "2026-11-08",
+      "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
+      "exceptions": [],
+      "extras": "无单独确认的附带交通权益。",
+      "sales": "2026-09-30 停售。",
+      "use": "旧票按票面规定使用。",
+      "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
+      "status": "ended",
+      "salesEnd": "2026-09-30",
+      "useEnd": null,
+      "note": "",
+      "precision": "schematic"
+    }
+  ]
+}

@@ -16,6 +16,7 @@
 | [simulator-sol.html](simulator-sol.html) | StormSim 2.5 Sol，28 km 网格版本 |
 | [VacationReplay.html](VacationReplay.html) | 已生成的放假模拟器离线回放查看器 |
 | [Flightdat.html](Flightdat.html) | 七机场航班精选，自动采集尝试每 10 分钟更新 |
+| [JPRail.html](JPRail.html) | 日本铁路设施地图、外国游客用 JR / 私铁 Pass 目录与范围示意 |
 | [Feimadat.html](Feimadat.html) | 保留的飞常准页面与数据工具，非默认公开入口，采集工作流仅手动运行 |
 | [agent.html](agent.html) | 智能体跳转入口 |
 

@@ -1,0 +1,6201 @@
+{
+  "source": "https://download.geofabrik.de/asia/japan.html",
+  "retrieved": "2026-11-08",
+  "snapshot": "2026-11-07T21:21:36Z",
+  "license": "OSM ODbL; MLIT CC BY 4.0",
+  "method": "按运营方与标准化线名归并；按带标签股道段数量统计，最多等级占比须达到 95%；冲突或缺标签时不猜测。非逐股道等级。",
+  "lines": [
+    {
+      "operator": "IRいしかわ鉄道",
+      "name": "IRいしかわ鉄道線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 318
+      },
+      "examples": [
+        24589067,
+        24589073,
+        24589074
+      ]
+    },
+    {
+      "operator": "JR東海交通事業",
+      "name": "城北線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "WILLER　TRAINS",
+      "name": "宮津線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "WILLER　TRAINS",
+      "name": "宮福線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "あいの風とやま鉄道",
+      "name": "あいの風とやま鉄道線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 469
+      },
+      "examples": [
+        24589044,
+        24589045,
+        24589051
+      ]
+    },
+    {
+      "operator": "いすみ鉄道",
+      "name": "いすみ線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "えちごトキめき鉄道",
+      "name": "妙高はねうまライン",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 51
+      },
+      "examples": [
+        24398684,
+        24398759,
+        24398787
+      ]
+    },
+    {
+      "operator": "えちごトキめき鉄道",
+      "name": "日本海ひすいライン",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 146
+      },
+      "examples": [
+        24589041,
+        24589048,
+        24589057
+      ]
+    },
+    {
+      "operator": "えちぜん鉄道",
+      "name": "三国芦原線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "えちぜん鉄道",
+      "name": "勝山永平寺線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "くま川鉄道",
+      "name": "湯前線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "こうべ未来都市機構",
+      "name": "摩耶ケーブル線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "しなの鉄道",
+      "name": "しなの鉄道線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 216
+      },
+      "examples": [
+        24410317,
+        24410318,
+        24410319
+      ]
+    },
+    {
+      "operator": "しなの鉄道",
+      "name": "北しなの線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 92,
+        "branch": 1
+      },
+      "examples": [
+        24398679,
+        24398703,
+        24398724
+      ]
+    },
+    {
+      "operator": "とさでん交通",
+      "name": "伊野線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "とさでん交通",
+      "name": "後免線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "とさでん交通",
+      "name": "桟橋線",
+      "grade": "tram",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "tram": 10
+      },
+      "examples": [
+        89552098,
+        89552114,
+        119416581
+      ]
+    },
+    {
+      "operator": "とさでん交通",
+      "name": "駅前線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "のと鉄道",
+      "name": "七尾線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "ひたちなか海浜鉄道",
+      "name": "湊線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "ゆりかもめ",
+      "name": "東京臨海新交通臨海線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "わたらせ渓谷鐵道",
+      "name": "わたらせ渓谷線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 71
+      },
+      "examples": [
+        24373729,
+        24373731,
+        24373733
+      ]
+    },
+    {
+      "operator": "アイジーアールいわて銀河鉄道",
+      "name": "いわて銀河鉄道線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 233
+      },
+      "examples": [
+        24373434,
+        24373436,
+        24373437
+      ]
+    },
+    {
+      "operator": "アルピコ交通",
+      "name": "上高地線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "ハピラインふくい",
+      "name": "ハピラインふくい線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 190
+      },
+      "examples": [
+        24589072,
+        24589080,
+        24589084
+      ]
+    },
+    {
+      "operator": "ラクテンチ",
+      "name": "別府ラクテンチケーブル線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "一畑電車",
+      "name": "北松江線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "一畑電車",
+      "name": "大社線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "一般社団法人札幌市交通事業振興公社",
+      "name": "1条線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "一般社団法人札幌市交通事業振興公社",
+      "name": "山鼻線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "一般社団法人札幌市交通事業振興公社",
+      "name": "山鼻西線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "一般社団法人札幌市交通事業振興公社",
+      "name": "都心線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "一般財団法人青函トンネル記念館",
+      "name": "青函トンネル竜飛斜坑線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "万葉線",
+      "name": "新湊港線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "万葉線",
+      "name": "高岡軌道線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "三国芦原線",
+      "name": "えちぜん鉄道",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "三岐鉄道",
+      "name": "三岐線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "三岐鉄道",
+      "name": "北勢線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "三岐鉄道",
+      "name": "近鉄連絡線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "三陸鉄道",
+      "name": "リアス線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "三陸鉄道",
+      "name": "北リアス線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "三陸鉄道",
+      "name": "南リアス線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "上信電鉄",
+      "name": "上信線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "上毛電気鉄道",
+      "name": "上毛線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "上田電鉄",
+      "name": "別所線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 44
+      },
+      "examples": [
+        24963056,
+        24963058,
+        24963060
+      ]
+    },
+    {
+      "operator": "丹後海陸交通",
+      "name": "天橋立鋼索鉄道",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "九州旅客鉄道",
+      "name": "三角線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "九州旅客鉄道",
+      "name": "久大線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "九州旅客鉄道",
+      "name": "九州新幹線",
+      "grade": "highspeed",
+      "basis": "MLIT 新干线种别",
+      "counts": {
+        "highspeed": 803
+      },
+      "examples": [
+        24603922,
+        110660043,
+        110660044
+      ]
+    },
+    {
+      "operator": "九州旅客鉄道",
+      "name": "佐世保線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "九州旅客鉄道",
+      "name": "吉都線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "九州旅客鉄道",
+      "name": "唐津線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "九州旅客鉄道",
+      "name": "大村線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "九州旅客鉄道",
+      "name": "宮崎空港線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "九州旅客鉄道",
+      "name": "山陽線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "九州旅客鉄道",
+      "name": "後藤寺線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "九州旅客鉄道",
+      "name": "指宿枕崎線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "九州旅客鉄道",
+      "name": "日南線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "九州旅客鉄道",
+      "name": "日田彦山線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "九州旅客鉄道",
+      "name": "日豊線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 12
+      },
+      "examples": [
+        188038698,
+        188038740,
+        188055577
+      ]
+    },
+    {
+      "operator": "九州旅客鉄道",
+      "name": "筑肥線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "九州旅客鉄道",
+      "name": "筑豊線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "九州旅客鉄道",
+      "name": "篠栗線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "九州旅客鉄道",
+      "name": "肥薩線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "九州旅客鉄道",
+      "name": "西九州新幹線",
+      "grade": "highspeed",
+      "basis": "MLIT 新干线种别",
+      "counts": {
+        "highspeed": 246
+      },
+      "examples": [
+        503230701,
+        503230702,
+        503230703
+      ]
+    },
+    {
+      "operator": "九州旅客鉄道",
+      "name": "豊肥線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "九州旅客鉄道",
+      "name": "長崎線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "九州旅客鉄道",
+      "name": "香椎線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "九州旅客鉄道",
+      "name": "鹿児島線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 2
+      },
+      "examples": [
+        407808463,
+        407808467
+      ]
+    },
+    {
+      "operator": "井原鉄道",
+      "name": "井原線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "京成電鉄",
+      "name": "千原線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 37
+      },
+      "examples": [
+        152338280,
+        152344061,
+        152344062
+      ]
+    },
+    {
+      "operator": "京成電鉄",
+      "name": "千葉線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 50
+      },
+      "examples": [
+        22728981,
+        22728982,
+        22728983
+      ]
+    },
+    {
+      "operator": "京成電鉄",
+      "name": "成田空港線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 8
+      },
+      "examples": [
+        153374501,
+        153374510,
+        154459162
+      ]
+    },
+    {
+      "operator": "京成電鉄",
+      "name": "押上線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 34
+      },
+      "examples": [
+        30661443,
+        30661445,
+        30661448
+      ]
+    },
+    {
+      "operator": "京成電鉄",
+      "name": "本線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 369
+      },
+      "examples": [
+        16705526,
+        19817177,
+        19817178
+      ]
+    },
+    {
+      "operator": "京成電鉄",
+      "name": "東成田線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 6
+      },
+      "examples": [
+        232398007,
+        248673905,
+        795437248
+      ]
+    },
+    {
+      "operator": "京成電鉄",
+      "name": "松戸線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 36
+      },
+      "examples": [
+        22728912,
+        22822563,
+        68517765
+      ]
+    },
+    {
+      "operator": "京成電鉄",
+      "name": "金町線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 9
+      },
+      "examples": [
+        155996063,
+        246543164,
+        246543168
+      ]
+    },
+    {
+      "operator": "京浜急行電鉄",
+      "name": "久里浜線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 115
+      },
+      "examples": [
+        24302069,
+        24302481,
+        24302489
+      ]
+    },
+    {
+      "operator": "京浜急行電鉄",
+      "name": "大師線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 13
+      },
+      "examples": [
+        24302539,
+        24302542,
+        24302544
+      ]
+    },
+    {
+      "operator": "京浜急行電鉄",
+      "name": "本線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 568
+      },
+      "examples": [
+        23631166,
+        24301998,
+        24301999
+      ]
+    },
+    {
+      "operator": "京浜急行電鉄",
+      "name": "空港線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 32
+      },
+      "examples": [
+        24302596,
+        24302598,
+        24302600
+      ]
+    },
+    {
+      "operator": "京浜急行電鉄",
+      "name": "逗子線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 36
+      },
+      "examples": [
+        24302713,
+        24302714,
+        24302715
+      ]
+    },
+    {
+      "operator": "京王電鉄",
+      "name": "井の頭線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 106
+      },
+      "examples": [
+        26204604,
+        26204605,
+        31610342
+      ]
+    },
+    {
+      "operator": "京王電鉄",
+      "name": "京王線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 2
+      },
+      "examples": [
+        47195914,
+        47196018
+      ]
+    },
+    {
+      "operator": "京王電鉄",
+      "name": "動物園線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 13
+      },
+      "examples": [
+        30661544,
+        401115165,
+        401115166
+      ]
+    },
+    {
+      "operator": "京王電鉄",
+      "name": "相模原線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 149
+      },
+      "examples": [
+        25734219,
+        25734227,
+        25734229
+      ]
+    },
+    {
+      "operator": "京王電鉄",
+      "name": "競馬場線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 4
+      },
+      "examples": [
+        30661569,
+        859299554,
+        1094393068
+      ]
+    },
+    {
+      "operator": "京王電鉄",
+      "name": "高尾線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 54
+      },
+      "examples": [
+        25803752,
+        25803753,
+        25803754
+      ]
+    },
+    {
+      "operator": "京福電気鉄道",
+      "name": "北野線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "京福電気鉄道",
+      "name": "嵐山本線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "京福電気鉄道",
+      "name": "鋼索線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "京都市",
+      "name": "東西線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "京都市",
+      "name": "烏丸線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "京阪電気鉄道",
+      "name": "中之島線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 11
+      },
+      "examples": [
+        229054415,
+        229054416,
+        229054417
+      ]
+    },
+    {
+      "operator": "京阪電気鉄道",
+      "name": "交野線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 66
+      },
+      "examples": [
+        30432454,
+        30432455,
+        30432456
+      ]
+    },
+    {
+      "operator": "京阪電気鉄道",
+      "name": "京津線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 26
+      },
+      "examples": [
+        30662139,
+        30662142,
+        30662144
+      ]
+    },
+    {
+      "operator": "京阪電気鉄道",
+      "name": "京阪本線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "京阪電気鉄道",
+      "name": "宇治線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 77
+      },
+      "examples": [
+        30432497,
+        30432498,
+        30432499
+      ]
+    },
+    {
+      "operator": "京阪電気鉄道",
+      "name": "石山坂本線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 80
+      },
+      "examples": [
+        30662151,
+        30662653,
+        30662654
+      ]
+    },
+    {
+      "operator": "京阪電気鉄道",
+      "name": "鋼索線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "京阪電気鉄道",
+      "name": "鴨東線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 5
+      },
+      "examples": [
+        30662339,
+        30662340,
+        734990379
+      ]
+    },
+    {
+      "operator": "仙台市",
+      "name": "南北線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "仙台市",
+      "name": "東西線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "仙台空港鉄道",
+      "name": "仙台空港線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "伊予鉄道",
+      "name": "城北線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "伊予鉄道",
+      "name": "城南線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "伊予鉄道",
+      "name": "大手町線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "伊予鉄道",
+      "name": "本町線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "伊予鉄道",
+      "name": "横河原線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 66
+      },
+      "examples": [
+        24412478,
+        24412481,
+        24412488
+      ]
+    },
+    {
+      "operator": "伊予鉄道",
+      "name": "花園線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "伊予鉄道",
+      "name": "連絡線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "伊予鉄道",
+      "name": "郡中線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 57
+      },
+      "examples": [
+        24412508,
+        24412509,
+        24412511
+      ]
+    },
+    {
+      "operator": "伊予鉄道",
+      "name": "高浜線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 30
+      },
+      "examples": [
+        24412535,
+        24412539,
+        24412541
+      ]
+    },
+    {
+      "operator": "伊勢鉄道",
+      "name": "伊勢線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "伊豆急行",
+      "name": "伊豆急行線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "伊豆箱根鉄道",
+      "name": "大雄山線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "伊豆箱根鉄道",
+      "name": "駿豆線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "伊賀鉄道",
+      "name": "伊賀線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "会津鉄道",
+      "name": "会津線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "信楽高原鐵道",
+      "name": "信楽線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "函館市",
+      "name": "大森線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "函館市",
+      "name": "宝来・谷地頭線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "函館市",
+      "name": "本線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "函館市",
+      "name": "湯の川線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "北九州高速鉄道",
+      "name": "小倉線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "北大阪急行電鉄",
+      "name": "南北線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "北条鉄道",
+      "name": "北条線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "北海道旅客鉄道",
+      "name": "函館線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 9
+      },
+      "examples": [
+        24371885,
+        592338680,
+        592338681
+      ]
+    },
+    {
+      "operator": "北海道旅客鉄道",
+      "name": "北海道新幹線",
+      "grade": "highspeed",
+      "basis": "MLIT 新干线种别",
+      "counts": {
+        "highspeed": 57
+      },
+      "examples": [
+        188414083,
+        396109848,
+        396109851
+      ]
+    },
+    {
+      "operator": "北海道旅客鉄道",
+      "name": "千歳線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 197,
+        "branch": 2
+      },
+      "examples": [
+        24371540,
+        24371708,
+        24371742
+      ]
+    },
+    {
+      "operator": "北海道旅客鉄道",
+      "name": "宗谷線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "北海道旅客鉄道",
+      "name": "室蘭線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 514,
+        "branch": 1
+      },
+      "examples": [
+        24371460,
+        24371462,
+        24371463
+      ]
+    },
+    {
+      "operator": "北海道旅客鉄道",
+      "name": "富良野線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "北海道旅客鉄道",
+      "name": "日高線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "北海道旅客鉄道",
+      "name": "札沼線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 49,
+        "main": 1
+      },
+      "examples": [
+        24373118,
+        24373125,
+        24373127
+      ]
+    },
+    {
+      "operator": "北海道旅客鉄道",
+      "name": "根室線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "北海道旅客鉄道",
+      "name": "海峡線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 39
+      },
+      "examples": [
+        24371189,
+        24371190,
+        24371192
+      ]
+    },
+    {
+      "operator": "北海道旅客鉄道",
+      "name": "留萌線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "北海道旅客鉄道",
+      "name": "石勝線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 63
+      },
+      "examples": [
+        24372542,
+        24372600,
+        24372688
+      ]
+    },
+    {
+      "operator": "北海道旅客鉄道",
+      "name": "石北線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 232
+      },
+      "examples": [
+        24372121,
+        24372122,
+        24372123
+      ]
+    },
+    {
+      "operator": "北海道旅客鉄道",
+      "name": "釧網線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 98
+      },
+      "examples": [
+        24372544,
+        24372899,
+        24372901
+      ]
+    },
+    {
+      "operator": "北総鉄道",
+      "name": "北総線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 100
+      },
+      "examples": [
+        60494635,
+        60609216,
+        60609218
+      ]
+    },
+    {
+      "operator": "北越急行",
+      "name": "ほくほく線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 126
+      },
+      "examples": [
+        32052164,
+        32052165,
+        32052166
+      ]
+    },
+    {
+      "operator": "北陸鉄道",
+      "name": "浅野川線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "北陸鉄道",
+      "name": "石川線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "十国峠",
+      "name": "十国鋼索線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "千葉都市モノレール",
+      "name": "1号線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "千葉都市モノレール",
+      "name": "2号線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "南海電気鉄道",
+      "name": "加太線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 38
+      },
+      "examples": [
+        32076862,
+        32076863,
+        32076864
+      ]
+    },
+    {
+      "operator": "南海電気鉄道",
+      "name": "南海本線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 3
+      },
+      "examples": [
+        395350156,
+        395350167,
+        858144844
+      ]
+    },
+    {
+      "operator": "南海電気鉄道",
+      "name": "和歌山港線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 11
+      },
+      "examples": [
+        32076906,
+        381667605,
+        381667610
+      ]
+    },
+    {
+      "operator": "南海電気鉄道",
+      "name": "多奈川線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 18
+      },
+      "examples": [
+        32076954,
+        32076957,
+        32076965
+      ]
+    },
+    {
+      "operator": "南海電気鉄道",
+      "name": "泉北線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 82,
+        "branch": 3
+      },
+      "examples": [
+        31150408,
+        31150411,
+        31150412
+      ]
+    },
+    {
+      "operator": "南海電気鉄道",
+      "name": "空港線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 13
+      },
+      "examples": [
+        89549968,
+        157339264,
+        157339275
+      ]
+    },
+    {
+      "operator": "南海電気鉄道",
+      "name": "鋼索線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "南海電気鉄道",
+      "name": "高師浜線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 3
+      },
+      "examples": [
+        32077167,
+        109577991,
+        881523345
+      ]
+    },
+    {
+      "operator": "南海電気鉄道",
+      "name": "高野線",
+      "grade": "unclassified",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 211,
+        "branch": 68
+      },
+      "examples": [
+        25723161,
+        25723184,
+        25723194
+      ]
+    },
+    {
+      "operator": "南阿蘇鉄道",
+      "name": "高森線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "叡山電鉄",
+      "name": "叡山本線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "叡山電鉄",
+      "name": "鞍馬線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋ガイドウェイバス",
+      "name": "ガイドウェイバス志段味線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋市",
+      "name": "1号線東山線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋市",
+      "name": "2号線名城線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋市",
+      "name": "2号線名港線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋市",
+      "name": "3号線鶴舞線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋市",
+      "name": "4号線名城線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋市",
+      "name": "6号線桜通線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋市",
+      "name": "上飯田線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋臨海高速鉄道",
+      "name": "西名古屋港線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋鉄道",
+      "name": "三河線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋鉄道",
+      "name": "各務原線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋鉄道",
+      "name": "名古屋本線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋鉄道",
+      "name": "小牧線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋鉄道",
+      "name": "尾西線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋鉄道",
+      "name": "常滑線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋鉄道",
+      "name": "広見線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋鉄道",
+      "name": "河和線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋鉄道",
+      "name": "津島線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋鉄道",
+      "name": "瀬戸線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋鉄道",
+      "name": "犬山線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋鉄道",
+      "name": "知多新線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋鉄道",
+      "name": "空港線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋鉄道",
+      "name": "竹鼻線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋鉄道",
+      "name": "築港線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋鉄道",
+      "name": "羽島線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋鉄道",
+      "name": "蒲郡線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋鉄道",
+      "name": "西尾線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 1
+      },
+      "examples": [
+        244938196
+      ]
+    },
+    {
+      "operator": "名古屋鉄道",
+      "name": "豊川線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "名古屋鉄道",
+      "name": "豊田線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "和歌山電鐵",
+      "name": "貴志川線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "四国ケーブル",
+      "name": "八栗ケーブル",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "四国旅客鉄道",
+      "name": "予土線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "四国旅客鉄道",
+      "name": "予讃線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 23
+      },
+      "examples": [
+        87472388,
+        87472397,
+        87472405
+      ]
+    },
+    {
+      "operator": "四国旅客鉄道",
+      "name": "内子線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 18
+      },
+      "examples": [
+        24410473,
+        24410475,
+        24410974
+      ]
+    },
+    {
+      "operator": "四国旅客鉄道",
+      "name": "土讃線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "四国旅客鉄道",
+      "name": "徳島線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "四国旅客鉄道",
+      "name": "本四備讃線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 1
+      },
+      "examples": [
+        102203387
+      ]
+    },
+    {
+      "operator": "四国旅客鉄道",
+      "name": "牟岐線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "四国旅客鉄道",
+      "name": "高徳線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 66
+      },
+      "examples": [
+        24411232,
+        24411246,
+        24411248
+      ]
+    },
+    {
+      "operator": "四国旅客鉄道",
+      "name": "鳴門線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "四日市あすなろう鉄道",
+      "name": "八王子線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "四日市あすなろう鉄道",
+      "name": "内部線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "土佐くろしお鉄道",
+      "name": "中村線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "土佐くろしお鉄道",
+      "name": "宿毛線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "土佐くろしお鉄道",
+      "name": "阿佐線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "埼玉新都市交通",
+      "name": "伊奈線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "埼玉高速鉄道",
+      "name": "埼玉高速鉄道線",
+      "grade": "subway",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "subway": 24
+      },
+      "examples": [
+        32175352,
+        32175354,
+        32175357
+      ]
+    },
+    {
+      "operator": "多摩都市モノレール",
+      "name": "多摩都市モノレール線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "大井川鐵道",
+      "name": "井川線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "大井川鐵道",
+      "name": "大井川本線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "大山観光電鉄",
+      "name": "大山鋼索線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "大阪モノレール",
+      "name": "国際文化公園都市モノレール線(彩都線)",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "大阪モノレール",
+      "name": "大阪モノレール線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "大阪市高速電気軌道",
+      "name": "1号線(御堂筋線)",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "大阪市高速電気軌道",
+      "name": "2号線(谷町線)",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "大阪市高速電気軌道",
+      "name": "3号線(四つ橋線)",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "大阪市高速電気軌道",
+      "name": "4号線(中央線)",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "大阪市高速電気軌道",
+      "name": "5号線(千日前線)",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "大阪市高速電気軌道",
+      "name": "6号線(堺筋線)",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "大阪市高速電気軌道",
+      "name": "7号線(長堀鶴見緑地線)",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "大阪市高速電気軌道",
+      "name": "8号線(今里筋線)",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "大阪市高速電気軌道",
+      "name": "南港ポートタウン線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "天竜浜名湖鉄道",
+      "name": "天竜浜名湖線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "宇都宮ライトレール",
+      "name": "宇都宮芳賀ライトレール線",
+      "grade": "tram",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "tram": 76
+      },
+      "examples": [
+        580796610,
+        629799411,
+        629799412
+      ]
+    },
+    {
+      "operator": "富士山麓電気鉄道",
+      "name": "大月線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "富士山麓電気鉄道",
+      "name": "河口湖線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "富山地方鉄道",
+      "name": "上滝線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "富山地方鉄道",
+      "name": "不二越線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "富山地方鉄道",
+      "name": "呉羽線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "富山地方鉄道",
+      "name": "安野屋線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "富山地方鉄道",
+      "name": "富山港線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "富山地方鉄道",
+      "name": "富山都心線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "富山地方鉄道",
+      "name": "富山駅南北接続線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "富山地方鉄道",
+      "name": "支線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "富山地方鉄道",
+      "name": "本線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "富山地方鉄道",
+      "name": "立山線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "小湊鐵道",
+      "name": "小湊鐵道線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "小田急箱根",
+      "name": "鉄道線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "小田急箱根",
+      "name": "鋼索線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "小田急電鉄",
+      "name": "多摩線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 101
+      },
+      "examples": [
+        25735191,
+        25735192,
+        25735193
+      ]
+    },
+    {
+      "operator": "小田急電鉄",
+      "name": "小田原線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 483,
+        "subway": 4
+      },
+      "examples": [
+        24357665,
+        25795716,
+        25795717
+      ]
+    },
+    {
+      "operator": "小田急電鉄",
+      "name": "江ノ島線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 117
+      },
+      "examples": [
+        24357655,
+        137522287,
+        144947301
+      ]
+    },
+    {
+      "operator": "山万",
+      "name": "ユーカリが丘線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "山形鉄道",
+      "name": "フラワー長井線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 62
+      },
+      "examples": [
+        24616962,
+        24616964,
+        24616968
+      ]
+    },
+    {
+      "operator": "山陽電気鉄道",
+      "name": "本線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "山陽電気鉄道",
+      "name": "網干線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "岡山電気軌道",
+      "name": "東山本線",
+      "grade": "tram",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "tram": 27
+      },
+      "examples": [
+        47019630,
+        248663300,
+        248663301
+      ]
+    },
+    {
+      "operator": "岡山電気軌道",
+      "name": "清輝橋線",
+      "grade": "tram",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "tram": 3
+      },
+      "examples": [
+        83697151,
+        407393109,
+        908328198
+      ]
+    },
+    {
+      "operator": "岳南電車",
+      "name": "岳南鉄道線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "島原鉄道",
+      "name": "島原鉄道線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "嵯峨野観光鉄道",
+      "name": "嵯峨野観光線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "平成筑豊鉄道",
+      "name": "伊田線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "平成筑豊鉄道",
+      "name": "田川線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "平成筑豊鉄道",
+      "name": "糸田線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "平成筑豊鉄道",
+      "name": "門司港レトロ観光線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "広島電鉄",
+      "name": "宇品線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "広島電鉄",
+      "name": "宮島線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "広島電鉄",
+      "name": "本線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "広島電鉄",
+      "name": "横川線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "広島電鉄",
+      "name": "江波線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "広島電鉄",
+      "name": "白島線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "広島電鉄",
+      "name": "皆実線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "広島高速交通",
+      "name": "広島新交通1号線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "弘南鉄道",
+      "name": "大鰐線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "弘南鉄道",
+      "name": "弘南線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "御岳登山鉄道",
+      "name": "ケーブルカー",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "愛知環状鉄道",
+      "name": "愛知環状鉄道線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 368
+      },
+      "examples": [
+        40546113,
+        41447498,
+        44173333
+      ]
+    },
+    {
+      "operator": "愛知高速交通",
+      "name": "東部丘陵線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "明知鉄道",
+      "name": "明知線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "智頭急行",
+      "name": "智頭線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "札幌市",
+      "name": "南北線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "札幌市",
+      "name": "東西線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "札幌市",
+      "name": "東豊線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東京モノレール",
+      "name": "東京モノレール羽田空港線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東京地下鉄",
+      "name": "11号線半蔵門線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東京地下鉄",
+      "name": "13号線副都心線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東京地下鉄",
+      "name": "2号線日比谷線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東京地下鉄",
+      "name": "3号線銀座線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東京地下鉄",
+      "name": "4号線丸ノ内線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東京地下鉄",
+      "name": "4号線丸ノ内線分岐線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東京地下鉄",
+      "name": "5号線東西線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東京地下鉄",
+      "name": "7号線南北線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東京地下鉄",
+      "name": "8号線有楽町線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東京地下鉄",
+      "name": "9号線千代田線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東京臨海高速鉄道",
+      "name": "臨海副都心線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東京都",
+      "name": "10号線新宿線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東京都",
+      "name": "12号線大江戸線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東京都",
+      "name": "1号線浅草線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東京都",
+      "name": "6号線三田線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東京都",
+      "name": "日暮里・舎人ライナー",
+      "grade": "light_rail",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "light_rail": 12
+      },
+      "examples": [
+        61957057,
+        62150122,
+        236819813
+      ]
+    },
+    {
+      "operator": "東京都",
+      "name": "荒川線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東急電鉄",
+      "name": "こどもの国線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 16
+      },
+      "examples": [
+        54936286,
+        222955123,
+        222955124
+      ]
+    },
+    {
+      "operator": "東急電鉄",
+      "name": "世田谷線",
+      "grade": "light_rail",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "light_rail": 6
+      },
+      "examples": [
+        175846080,
+        491297752,
+        491297757
+      ]
+    },
+    {
+      "operator": "東急電鉄",
+      "name": "大井町線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 86
+      },
+      "examples": [
+        24475024,
+        24475030,
+        24475035
+      ]
+    },
+    {
+      "operator": "東急電鉄",
+      "name": "東急多摩川線",
+      "grade": "unclassified",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 44,
+        "main": 4
+      },
+      "examples": [
+        24475070,
+        24475081,
+        24475082
+      ]
+    },
+    {
+      "operator": "東急電鉄",
+      "name": "東急新横浜線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東急電鉄",
+      "name": "東横線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 137
+      },
+      "examples": [
+        23584166,
+        27735563,
+        27735564
+      ]
+    },
+    {
+      "operator": "東急電鉄",
+      "name": "池上線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 118
+      },
+      "examples": [
+        27696316,
+        106911696,
+        106926801
+      ]
+    },
+    {
+      "operator": "東急電鉄",
+      "name": "田園都市線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 225
+      },
+      "examples": [
+        24474858,
+        24474861,
+        24474862
+      ]
+    },
+    {
+      "operator": "東急電鉄",
+      "name": "目黒線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 53
+      },
+      "examples": [
+        24475091,
+        24475092,
+        24475097
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "上越新幹線",
+      "grade": "highspeed",
+      "basis": "MLIT 新干线种别",
+      "counts": {
+        "highspeed": 204
+      },
+      "examples": [
+        24356165,
+        24356166,
+        24356167
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "上越線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 534,
+        "branch": 4,
+        "highspeed": 1
+      },
+      "examples": [
+        24399089,
+        24399090,
+        24399093
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "両毛線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 165,
+        "branch": 4
+      },
+      "examples": [
+        24371130,
+        24371132,
+        24371134
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "中央線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 1058
+      },
+      "examples": [
+        22928773,
+        24399334,
+        24399335
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "久留里線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "五日市線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 19
+      },
+      "examples": [
+        134123689,
+        134123690,
+        161930461
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "五能線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "京葉線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "仙山線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 1
+      },
+      "examples": [
+        105950880
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "仙石線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 7
+      },
+      "examples": [
+        24370567,
+        104501286,
+        104501291
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "伊東線",
+      "grade": "unclassified",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 35,
+        "branch": 15
+      },
+      "examples": [
+        24355225,
+        24355228,
+        24355233
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "信越線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 458
+      },
+      "examples": [
+        24398657,
+        24398661,
+        24398662
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "八戸線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "八高線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 252
+      },
+      "examples": [
+        25549522,
+        26300513,
+        26300514
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "内房線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 3
+      },
+      "examples": [
+        227686723,
+        386341052,
+        1241331169
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "北上線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 34
+      },
+      "examples": [
+        24359260,
+        24359262,
+        24359264
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "北陸新幹線",
+      "grade": "highspeed",
+      "basis": "MLIT 新干线种别",
+      "counts": {
+        "highspeed": 311
+      },
+      "examples": [
+        24412375,
+        24412377,
+        24412378
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "南武線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "只見線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "吾妻線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 171
+      },
+      "examples": [
+        31783411,
+        31783412,
+        31783413
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "外房線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 56
+      },
+      "examples": [
+        152357093,
+        152357096,
+        152357106
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "大湊線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "大糸線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 12
+      },
+      "examples": [
+        24412090,
+        496866269,
+        496866270
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "大船渡線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 92
+      },
+      "examples": [
+        24360333,
+        24360337,
+        24360341
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "奥羽線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 654
+      },
+      "examples": [
+        24299359,
+        24299363,
+        24299369
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "小海線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 165
+      },
+      "examples": [
+        24398541,
+        24398542,
+        24398543
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "山手線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 435
+      },
+      "examples": [
+        4848910,
+        4848920,
+        22562304
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "山田線",
+      "grade": "unclassified",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 4,
+        "main": 1
+      },
+      "examples": [
+        51248311,
+        53842687,
+        142922659
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "川越線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 85
+      },
+      "examples": [
+        22917652,
+        99196039,
+        99196107
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "左沢線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "常磐線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 1410
+      },
+      "examples": [
+        24370404,
+        24370405,
+        24370408
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "弥彦線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 46
+      },
+      "examples": [
+        24398423,
+        24398425,
+        24398427
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "成田線",
+      "grade": "unclassified",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 105,
+        "branch": 44
+      },
+      "examples": [
+        22729845,
+        22732952,
+        22788143
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "日光線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 21
+      },
+      "examples": [
+        24370835,
+        238142792,
+        238142793
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "東北新幹線",
+      "grade": "highspeed",
+      "basis": "MLIT 新干线种别",
+      "counts": {
+        "highspeed": 1239,
+        "main": 1
+      },
+      "examples": [
+        24299431,
+        24356178,
+        24412306
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "東北線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 2089,
+        "branch": 20
+      },
+      "examples": [
+        24300002,
+        24300024,
+        24353305
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "東海道線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 915
+      },
+      "examples": [
+        16679573,
+        23990495,
+        31990832
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "東金線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 1
+      },
+      "examples": [
+        350094907
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "根岸線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 239
+      },
+      "examples": [
+        24301682,
+        24398625,
+        24398627
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "横浜線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 194
+      },
+      "examples": [
+        25721964,
+        25721997,
+        25723878
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "横須賀線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "武蔵野線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "気仙沼線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "水戸線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 111
+      },
+      "examples": [
+        24370857,
+        24370858,
+        24370859
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "水郡線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 40,
+        "main": 1
+      },
+      "examples": [
+        24296450,
+        24296454,
+        24296458
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "津軽線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 50
+      },
+      "examples": [
+        24299447,
+        24356482,
+        24356489
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "烏山線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 65
+      },
+      "examples": [
+        24370740,
+        24370741,
+        24370743
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "田沢湖線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 118
+      },
+      "examples": [
+        24357231,
+        24357232,
+        24357237
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "男鹿線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "白新線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "相模線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 7
+      },
+      "examples": [
+        446741901,
+        741805710,
+        741805714
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "石巻線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "磐越東線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "磐越西線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 5
+      },
+      "examples": [
+        590800550,
+        753491388,
+        753491389
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "篠ノ井線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 116
+      },
+      "examples": [
+        24412205,
+        24412207,
+        24412212
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "米坂線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 235
+      },
+      "examples": [
+        24370766,
+        24370767,
+        24370772
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "総武線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 263
+      },
+      "examples": [
+        23993804,
+        62208002,
+        62251144
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "羽越線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 860
+      },
+      "examples": [
+        24359761,
+        24359762,
+        24359764
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "花輪線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 69
+      },
+      "examples": [
+        24357015,
+        24357018,
+        24357022
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "赤羽線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 58
+      },
+      "examples": [
+        22884093,
+        118272471,
+        144131732
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "越後線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 6
+      },
+      "examples": [
+        406748321,
+        580523649,
+        580523657
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "釜石線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "陸羽東線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "陸羽西線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 18
+      },
+      "examples": [
+        24370222,
+        24370224,
+        627576427
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "青梅線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 1
+      },
+      "examples": [
+        916563195
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "飯山線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 56
+      },
+      "examples": [
+        131284320,
+        131284322,
+        131284330
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "高崎線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 179
+      },
+      "examples": [
+        27188118,
+        39742996,
+        73025747
+      ]
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "鶴見線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東日本旅客鉄道",
+      "name": "鹿島線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 1
+      },
+      "examples": [
+        305398792
+      ]
+    },
+    {
+      "operator": "東武鉄道",
+      "name": "亀戸線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 18
+      },
+      "examples": [
+        58187417,
+        61716720,
+        154027484
+      ]
+    },
+    {
+      "operator": "東武鉄道",
+      "name": "伊勢崎線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 332,
+        "branch": 13
+      },
+      "examples": [
+        27380116,
+        28116852,
+        54680184
+      ]
+    },
+    {
+      "operator": "東武鉄道",
+      "name": "佐野線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 69
+      },
+      "examples": [
+        79170705,
+        79170708,
+        79170714
+      ]
+    },
+    {
+      "operator": "東武鉄道",
+      "name": "大師線",
+      "grade": "unclassified",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 3,
+        "main": 4
+      },
+      "examples": [
+        79171390,
+        79171391,
+        241412914
+      ]
+    },
+    {
+      "operator": "東武鉄道",
+      "name": "宇都宮線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 84
+      },
+      "examples": [
+        24402676,
+        24402679,
+        24402680
+      ]
+    },
+    {
+      "operator": "東武鉄道",
+      "name": "小泉線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 33,
+        "main": 1
+      },
+      "examples": [
+        79168079,
+        79168086,
+        79168093
+      ]
+    },
+    {
+      "operator": "東武鉄道",
+      "name": "日光線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 308
+      },
+      "examples": [
+        24403221,
+        24403223,
+        24403225
+      ]
+    },
+    {
+      "operator": "東武鉄道",
+      "name": "東上本線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 364
+      },
+      "examples": [
+        22562329,
+        22735744,
+        101530604
+      ]
+    },
+    {
+      "operator": "東武鉄道",
+      "name": "桐生線",
+      "grade": "unclassified",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 34,
+        "main": 2
+      },
+      "examples": [
+        79168101,
+        79171329,
+        79171331
+      ]
+    },
+    {
+      "operator": "東武鉄道",
+      "name": "越生線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 43
+      },
+      "examples": [
+        41235092,
+        41235096,
+        41235099
+      ]
+    },
+    {
+      "operator": "東武鉄道",
+      "name": "野田線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 209
+      },
+      "examples": [
+        24994977,
+        24994978,
+        95366479
+      ]
+    },
+    {
+      "operator": "東武鉄道",
+      "name": "鬼怒川線",
+      "grade": "unclassified",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 56,
+        "branch": 5
+      },
+      "examples": [
+        24356682,
+        79210187,
+        79210188
+      ]
+    },
+    {
+      "operator": "東海旅客鉄道",
+      "name": "中央線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 902
+      },
+      "examples": [
+        24402974,
+        24402976,
+        24402977
+      ]
+    },
+    {
+      "operator": "東海旅客鉄道",
+      "name": "参宮線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東海旅客鉄道",
+      "name": "名松線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東海旅客鉄道",
+      "name": "太多線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東海旅客鉄道",
+      "name": "御殿場線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 152
+      },
+      "examples": [
+        24355581,
+        24355584,
+        24355587
+      ]
+    },
+    {
+      "operator": "東海旅客鉄道",
+      "name": "東海道新幹線",
+      "grade": "highspeed",
+      "basis": "MLIT 新干线种别",
+      "counts": {
+        "highspeed": 6490,
+        "main": 1
+      },
+      "examples": [
+        4848893,
+        4853664,
+        4853667
+      ]
+    },
+    {
+      "operator": "東海旅客鉄道",
+      "name": "東海道線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 1552,
+        "branch": 5
+      },
+      "examples": [
+        4848877,
+        4848921,
+        4853663
+      ]
+    },
+    {
+      "operator": "東海旅客鉄道",
+      "name": "武豊線",
+      "grade": "unclassified",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 6,
+        "main": 3
+      },
+      "examples": [
+        24412749,
+        24412760,
+        289705333
+      ]
+    },
+    {
+      "operator": "東海旅客鉄道",
+      "name": "紀勢線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東海旅客鉄道",
+      "name": "身延線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 390
+      },
+      "examples": [
+        24459031,
+        24459036,
+        24459037
+      ]
+    },
+    {
+      "operator": "東海旅客鉄道",
+      "name": "関西線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "東海旅客鉄道",
+      "name": "飯田線",
+      "grade": "unclassified",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 35,
+        "branch": 2
+      },
+      "examples": [
+        24402327,
+        24402389,
+        24402423
+      ]
+    },
+    {
+      "operator": "東海旅客鉄道",
+      "name": "高山線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 493
+      },
+      "examples": [
+        24458943,
+        24458944,
+        24458945
+      ]
+    },
+    {
+      "operator": "東葉高速鉄道",
+      "name": "東葉高速線",
+      "grade": "subway",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "subway": 39
+      },
+      "examples": [
+        92964568,
+        151560240,
+        151560242
+      ]
+    },
+    {
+      "operator": "松浦鉄道",
+      "name": "西九州線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "横浜シーサイドライン",
+      "name": "金沢シーサイドライン",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "横浜市",
+      "name": "1号線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "横浜市",
+      "name": "3号線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "横浜市",
+      "name": "4号線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "横浜高速鉄道",
+      "name": "みなとみらい21線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "樽見鉄道",
+      "name": "樽見線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "比叡山鉄道",
+      "name": "比叡山鉄道線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "水島臨海鉄道",
+      "name": "水島本線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "水間鉄道",
+      "name": "水間線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "江ノ島電鉄",
+      "name": "江ノ島電鉄線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "沖縄都市モノレール",
+      "name": "沖縄都市モノレール線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "津軽鉄道",
+      "name": "津軽鉄道線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 4
+      },
+      "examples": [
+        24402515,
+        24402533,
+        655326113
+      ]
+    },
+    {
+      "operator": "流鉄",
+      "name": "流山線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "湘南モノレール",
+      "name": "江の島線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "熊本市",
+      "name": "上熊本線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "熊本市",
+      "name": "健軍線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "熊本市",
+      "name": "幹線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "熊本市",
+      "name": "水前寺線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "熊本市",
+      "name": "田崎線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "熊本電気鉄道",
+      "name": "菊池線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "熊本電気鉄道",
+      "name": "藤崎線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "甘木鉄道",
+      "name": "甘木線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "由利高原鉄道",
+      "name": "鳥海山ろく線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 27
+      },
+      "examples": [
+        24929099,
+        24929104,
+        24929108
+      ]
+    },
+    {
+      "operator": "皿倉登山鉄道",
+      "name": "帆柱ケーブル線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "相模鉄道",
+      "name": "相鉄いずみ野線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 60
+      },
+      "examples": [
+        145420832,
+        145420833,
+        145420836
+      ]
+    },
+    {
+      "operator": "相模鉄道",
+      "name": "相鉄新横浜線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 2
+      },
+      "examples": [
+        145557819,
+        145557821
+      ]
+    },
+    {
+      "operator": "相模鉄道",
+      "name": "相鉄本線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 114
+      },
+      "examples": [
+        144892860,
+        144892862,
+        144892863
+      ]
+    },
+    {
+      "operator": "真岡鐵道",
+      "name": "真岡線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "神戸六甲鉄道",
+      "name": "六甲ケーブル線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "神戸市",
+      "name": "北神線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "神戸市",
+      "name": "山手線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "神戸市",
+      "name": "海岸線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "神戸市",
+      "name": "西神延伸線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "神戸市",
+      "name": "西神線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "神戸新交通",
+      "name": "ポートアイランド線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "神戸新交通",
+      "name": "六甲アイランド線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "神戸電鉄",
+      "name": "三田線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "神戸電鉄",
+      "name": "公園都市線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "神戸電鉄",
+      "name": "有馬線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "神戸電鉄",
+      "name": "神戸高速線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "神戸電鉄",
+      "name": "粟生線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "福井鉄道",
+      "name": "福武線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "福岡市",
+      "name": "1号線(空港線)",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "福岡市",
+      "name": "2号線(箱崎線)",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "福岡市",
+      "name": "3号線(七隈線)",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "福島交通",
+      "name": "飯坂線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "秋田内陸縦貫鉄道",
+      "name": "秋田内陸線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "秩父鉄道",
+      "name": "秩父本線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 139
+      },
+      "examples": [
+        41234748,
+        41234751,
+        41234758
+      ]
+    },
+    {
+      "operator": "立山黒部貫光",
+      "name": "鋼索線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "筑波観光鉄道",
+      "name": "筑波山鋼索鉄道線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "筑豊電気鉄道",
+      "name": "筑豊電気鉄道線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "紀州鉄道",
+      "name": "紀州鉄道線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 7
+      },
+      "examples": [
+        68354409,
+        68354417,
+        68354420
+      ]
+    },
+    {
+      "operator": "肥薩おれんじ鉄道",
+      "name": "肥薩おれんじ鉄道線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 319,
+        "branch": 1
+      },
+      "examples": [
+        182297535,
+        182297537,
+        182297538
+      ]
+    },
+    {
+      "operator": "能勢電鉄",
+      "name": "妙見線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "能勢電鉄",
+      "name": "日生線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "舞浜リゾートライン",
+      "name": "ディズニーリゾートライン",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "芝山鉄道",
+      "name": "芝山鉄道線",
+      "grade": "branch",
+      "basis": "OSM 同名线路标签归并",
+      "counts": {
+        "branch": 5
+      },
+      "examples": [
+        184564188,
+        248673906,
+        358619559
+      ]
+    },
+    {
+      "operator": "若桜鉄道",
+      "name": "若桜線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "JR東西線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 55
+      },
+      "examples": [
+        24603895,
+        24603896,
+        24603897
+      ]
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "おおさか東線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 183
+      },
+      "examples": [
+        24604349,
+        80813358,
+        84278136
+      ]
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "七尾線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "伯備線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "加古川線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "北陸新幹線",
+      "grade": "highspeed",
+      "basis": "MLIT 新干线种别",
+      "counts": {
+        "highspeed": 301
+      },
+      "examples": [
+        164704288,
+        193865788,
+        290127127
+      ]
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "北陸線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 287,
+        "branch": 1
+      },
+      "examples": [
+        24589038,
+        24589046,
+        24589047
+      ]
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "博多南線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "可部線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "吉備線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "呉線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "和歌山線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "因美線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "城端線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "境線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "大糸線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "大阪環状線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 189
+      },
+      "examples": [
+        23853069,
+        34618685,
+        88886117
+      ]
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "奈良線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "姫新線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "宇部線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "宇野線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "小浜線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "小野田線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "山口線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "山陰線",
+      "grade": "unclassified",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 8,
+        "main": 7
+      },
+      "examples": [
+        27211437,
+        27352261,
+        27426461
+      ]
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "山陽新幹線",
+      "grade": "highspeed",
+      "basis": "MLIT 新干线种别",
+      "counts": {
+        "highspeed": 1718
+      },
+      "examples": [
+        24462263,
+        24462269,
+        24462277
+      ]
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "山陽線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 1003,
+        "branch": 7
+      },
+      "examples": [
+        24463389,
+        24463393,
+        24463401
+      ]
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "岩徳線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "播但線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "木次線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "本四備讃線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "東海道線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 1283
+      },
+      "examples": [
+        24588653,
+        24604126,
+        24604127
+      ]
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "桜井線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "桜島線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 32
+      },
+      "examples": [
+        24604266,
+        24604270,
+        24604272
+      ]
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "氷見線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "津山線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "湖西線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 17
+      },
+      "examples": [
+        24589059,
+        24589089,
+        24589105
+      ]
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "片町線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 255
+      },
+      "examples": [
+        24604311,
+        24604312,
+        24604313
+      ]
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "福塩線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "福知山線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 11
+      },
+      "examples": [
+        143308649,
+        143308664,
+        143308719
+      ]
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "紀勢線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "美祢線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "舞鶴線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "芸備線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "草津線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "赤穂線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "越美北線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 2
+      },
+      "examples": [
+        24603019,
+        516389325
+      ]
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "関西空港線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "関西線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "阪和線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本旅客鉄道",
+      "name": "高山線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 68
+      },
+      "examples": [
+        24603444,
+        24603446,
+        24603448
+      ]
+    },
+    {
+      "operator": "西日本鉄道",
+      "name": "天神大牟田線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本鉄道",
+      "name": "太宰府線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本鉄道",
+      "name": "甘木線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西日本鉄道",
+      "name": "貝塚線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "西武鉄道",
+      "name": "国分寺線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 31
+      },
+      "examples": [
+        24616921,
+        24616929,
+        65369003
+      ]
+    },
+    {
+      "operator": "西武鉄道",
+      "name": "多摩川線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 20
+      },
+      "examples": [
+        35139727,
+        58700270,
+        58700282
+      ]
+    },
+    {
+      "operator": "西武鉄道",
+      "name": "多摩湖線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 46,
+        "main": 2
+      },
+      "examples": [
+        55603169,
+        56419423,
+        56419429
+      ]
+    },
+    {
+      "operator": "西武鉄道",
+      "name": "山口線",
+      "grade": "light_rail",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "light_rail": 7
+      },
+      "examples": [
+        239174259,
+        239174261,
+        239174646
+      ]
+    },
+    {
+      "operator": "西武鉄道",
+      "name": "拝島線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 65
+      },
+      "examples": [
+        58686699,
+        58686701,
+        58686716
+      ]
+    },
+    {
+      "operator": "西武鉄道",
+      "name": "新宿線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 167
+      },
+      "examples": [
+        35005634,
+        35005636,
+        73682869
+      ]
+    },
+    {
+      "operator": "西武鉄道",
+      "name": "池袋線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 279
+      },
+      "examples": [
+        24015496,
+        32726097,
+        32726124
+      ]
+    },
+    {
+      "operator": "西武鉄道",
+      "name": "狭山線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 21
+      },
+      "examples": [
+        128994072,
+        128994073,
+        284227128
+      ]
+    },
+    {
+      "operator": "西武鉄道",
+      "name": "西武園線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 8
+      },
+      "examples": [
+        24616923,
+        35096694,
+        283617591
+      ]
+    },
+    {
+      "operator": "西武鉄道",
+      "name": "西武有楽町線",
+      "grade": "unclassified",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "subway": 2,
+        "branch": 15
+      },
+      "examples": [
+        55356236,
+        223290646,
+        223290647
+      ]
+    },
+    {
+      "operator": "西武鉄道",
+      "name": "西武秩父線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 127
+      },
+      "examples": [
+        41233800,
+        41233820,
+        41233833
+      ]
+    },
+    {
+      "operator": "西武鉄道",
+      "name": "豊島線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 5
+      },
+      "examples": [
+        35203254,
+        223290657,
+        241211156
+      ]
+    },
+    {
+      "operator": "豊橋鉄道",
+      "name": "東田本線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "豊橋鉄道",
+      "name": "渥美線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "近江鉄道",
+      "name": "八日市線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "近江鉄道",
+      "name": "多賀線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "近江鉄道",
+      "name": "本線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "近畿日本鉄道",
+      "name": "けいはんな線",
+      "grade": "subway",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "subway": 67
+      },
+      "examples": [
+        43008088,
+        43008089,
+        43008090
+      ]
+    },
+    {
+      "operator": "近畿日本鉄道",
+      "name": "京都線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 155
+      },
+      "examples": [
+        27211402,
+        30430661,
+        30430663
+      ]
+    },
+    {
+      "operator": "近畿日本鉄道",
+      "name": "信貴線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 13
+      },
+      "examples": [
+        159764359,
+        159764360,
+        159808302
+      ]
+    },
+    {
+      "operator": "近畿日本鉄道",
+      "name": "南大阪線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 153
+      },
+      "examples": [
+        160344018,
+        160344024,
+        160734663
+      ]
+    },
+    {
+      "operator": "近畿日本鉄道",
+      "name": "吉野線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 91
+      },
+      "examples": [
+        35264692,
+        35264693,
+        35264694
+      ]
+    },
+    {
+      "operator": "近畿日本鉄道",
+      "name": "名古屋線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 575
+      },
+      "examples": [
+        24459409,
+        24459410,
+        24459411
+      ]
+    },
+    {
+      "operator": "近畿日本鉄道",
+      "name": "大阪線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 478
+      },
+      "examples": [
+        30164098,
+        30431021,
+        30431022
+      ]
+    },
+    {
+      "operator": "近畿日本鉄道",
+      "name": "天理線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 24
+      },
+      "examples": [
+        30432120,
+        30432121,
+        30432122
+      ]
+    },
+    {
+      "operator": "近畿日本鉄道",
+      "name": "奈良線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 129
+      },
+      "examples": [
+        30431837,
+        30431839,
+        30431840
+      ]
+    },
+    {
+      "operator": "近畿日本鉄道",
+      "name": "山田線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 152
+      },
+      "examples": [
+        30164099,
+        30164100,
+        182012918
+      ]
+    },
+    {
+      "operator": "近畿日本鉄道",
+      "name": "御所線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 43
+      },
+      "examples": [
+        167572094,
+        295212282,
+        295212283
+      ]
+    },
+    {
+      "operator": "近畿日本鉄道",
+      "name": "志摩線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 81
+      },
+      "examples": [
+        30183580,
+        30183581,
+        30183582
+      ]
+    },
+    {
+      "operator": "近畿日本鉄道",
+      "name": "橿原線",
+      "grade": "unclassified",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 9,
+        "main": 116
+      },
+      "examples": [
+        30432013,
+        30432014,
+        30432016
+      ]
+    },
+    {
+      "operator": "近畿日本鉄道",
+      "name": "湯の山線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 40
+      },
+      "examples": [
+        35478226,
+        249677554,
+        249677558
+      ]
+    },
+    {
+      "operator": "近畿日本鉄道",
+      "name": "生駒線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 57
+      },
+      "examples": [
+        30432322,
+        30432325,
+        30432326
+      ]
+    },
+    {
+      "operator": "近畿日本鉄道",
+      "name": "生駒鋼索線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "近畿日本鉄道",
+      "name": "田原本線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 50
+      },
+      "examples": [
+        30432193,
+        30432194,
+        30432195
+      ]
+    },
+    {
+      "operator": "近畿日本鉄道",
+      "name": "西信貴鋼索線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "近畿日本鉄道",
+      "name": "道明寺線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 11
+      },
+      "examples": [
+        109924690,
+        109924693,
+        109924694
+      ]
+    },
+    {
+      "operator": "近畿日本鉄道",
+      "name": "鈴鹿線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 17
+      },
+      "examples": [
+        26404809,
+        628724173,
+        629181069
+      ]
+    },
+    {
+      "operator": "近畿日本鉄道",
+      "name": "長野線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 46
+      },
+      "examples": [
+        35478389,
+        384372339,
+        384372343
+      ]
+    },
+    {
+      "operator": "近畿日本鉄道",
+      "name": "難波線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 7
+      },
+      "examples": [
+        38096117,
+        358213291,
+        705712392
+      ]
+    },
+    {
+      "operator": "近畿日本鉄道",
+      "name": "鳥羽線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 83
+      },
+      "examples": [
+        30183574,
+        30183575,
+        30183576
+      ]
+    },
+    {
+      "operator": "道南いさりび鉄道",
+      "name": "道南いさりび鉄道線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 106
+      },
+      "examples": [
+        24371201,
+        24371361,
+        24371373
+      ]
+    },
+    {
+      "operator": "遠州鉄道",
+      "name": "鉄道線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "野岩鉄道",
+      "name": "会津鬼怒川線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "銚子電気鉄道",
+      "name": "銚子電気鉄道線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 9
+      },
+      "examples": [
+        199907708,
+        199907711,
+        199907717
+      ]
+    },
+    {
+      "operator": "錦川鉄道",
+      "name": "錦川清流線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "長崎電気軌道",
+      "name": "大浦支線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "長崎電気軌道",
+      "name": "本線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "長崎電気軌道",
+      "name": "桜町支線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "長崎電気軌道",
+      "name": "蛍茶屋支線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "長崎電気軌道",
+      "name": "赤迫支線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "長良川鉄道",
+      "name": "越美南線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "長野電鉄",
+      "name": "長野線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "関東鉄道",
+      "name": "常総線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 128
+      },
+      "examples": [
+        38342031,
+        152945353,
+        250925554
+      ]
+    },
+    {
+      "operator": "関東鉄道",
+      "name": "竜ヶ崎線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "阪堺電気軌道",
+      "name": "上町線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "阪堺電気軌道",
+      "name": "阪堺線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "阪急電鉄",
+      "name": "京都線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 544
+      },
+      "examples": [
+        30415657,
+        30415658,
+        30415659
+      ]
+    },
+    {
+      "operator": "阪急電鉄",
+      "name": "今津線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 76
+      },
+      "examples": [
+        31153300,
+        31153301,
+        31153302
+      ]
+    },
+    {
+      "operator": "阪急電鉄",
+      "name": "伊丹線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 17
+      },
+      "examples": [
+        41811138,
+        157654657,
+        203063076
+      ]
+    },
+    {
+      "operator": "阪急電鉄",
+      "name": "千里線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 123,
+        "subway": 2
+      },
+      "examples": [
+        83249565,
+        83249567,
+        83249572
+      ]
+    },
+    {
+      "operator": "阪急電鉄",
+      "name": "宝塚線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 135
+      },
+      "examples": [
+        31128225,
+        31128228,
+        31128229
+      ]
+    },
+    {
+      "operator": "阪急電鉄",
+      "name": "嵐山線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 36
+      },
+      "examples": [
+        30415895,
+        30415898,
+        347902806
+      ]
+    },
+    {
+      "operator": "阪急電鉄",
+      "name": "甲陽線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 23
+      },
+      "examples": [
+        41812519,
+        539880962,
+        539880963
+      ]
+    },
+    {
+      "operator": "阪急電鉄",
+      "name": "神戸線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 357
+      },
+      "examples": [
+        31146440,
+        31146441,
+        31146444
+      ]
+    },
+    {
+      "operator": "阪急電鉄",
+      "name": "神戸高速線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 3
+      },
+      "examples": [
+        382245460,
+        924834873,
+        924834874
+      ]
+    },
+    {
+      "operator": "阪急電鉄",
+      "name": "箕面線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 13
+      },
+      "examples": [
+        81084398,
+        156916778,
+        156916779
+      ]
+    },
+    {
+      "operator": "阪神電気鉄道",
+      "name": "本線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 314
+      },
+      "examples": [
+        31146497,
+        31146502,
+        31146503
+      ]
+    },
+    {
+      "operator": "阪神電気鉄道",
+      "name": "武庫川線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 9
+      },
+      "examples": [
+        31146565,
+        31146566,
+        31146567
+      ]
+    },
+    {
+      "operator": "阪神電気鉄道",
+      "name": "神戸高速線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "阪神電気鉄道",
+      "name": "阪神なんば線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 102
+      },
+      "examples": [
+        31220020,
+        31220024,
+        31220034
+      ]
+    },
+    {
+      "operator": "阿佐海岸鉄道",
+      "name": "阿佐東線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "阿武隈急行",
+      "name": "阿武隈急行線",
+      "grade": "branch",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "branch": 245
+      },
+      "examples": [
+        24299964,
+        24299965,
+        24299967
+      ]
+    },
+    {
+      "operator": "青い森鉄道",
+      "name": "青い森鉄道線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 275
+      },
+      "examples": [
+        24353793,
+        24353794,
+        24353795
+      ]
+    },
+    {
+      "operator": "静岡鉄道",
+      "name": "静岡清水線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "鞍馬寺",
+      "name": "鞍馬山鋼索鉄道",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "養老鉄道",
+      "name": "養老線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "首都圏新都市鉄道",
+      "name": "常磐新線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "高尾登山電鉄",
+      "name": "高尾鋼索線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "高松琴平電気鉄道",
+      "name": "志度線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "高松琴平電気鉄道",
+      "name": "琴平線",
+      "grade": "main",
+      "basis": "OSM 同名/同运营方标签归并",
+      "counts": {
+        "main": 5
+      },
+      "examples": [
+        148693243,
+        148693245,
+        886964969
+      ]
+    },
+    {
+      "operator": "高松琴平電気鉄道",
+      "name": "長尾線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "鹿児島市",
+      "name": "唐湊線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "鹿児島市",
+      "name": "第一期線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "鹿児島市",
+      "name": "第二期線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "鹿児島市",
+      "name": "谷山線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "鹿島臨海鉄道",
+      "name": "大洗鹿島線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    },
+    {
+      "operator": "黒部峡谷鉄道",
+      "name": "本線",
+      "grade": "unclassified",
+      "basis": "缺少可靠等级标签",
+      "counts": {},
+      "examples": []
+    }
+  ]
+}
