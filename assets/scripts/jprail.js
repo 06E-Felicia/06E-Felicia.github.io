@@ -69,6 +69,7 @@ function setupMap() {
  infra=L.tileLayer('https://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png',{subdomains:'abc',pane:'railInfrastructure',minZoom:6,maxNativeZoom:19,maxZoom:18,attribution:'<a href="https://www.openrailwaymap.org/">OpenRailwayMap</a> · © <a href="https://www.openstreetmap.org/copyright">OSM</a>'});
  infra.on('tileerror',()=>{if($('infrastructure').checked)toast('在线设施瓦片未能加载，本地线路仍可使用。');});
  $('infrastructure').addEventListener('change',syncInfrastructure);
+ map.on('zoomend',syncInfrastructure);
  $('resetView').addEventListener('click',()=>map.fitBounds(NATIONAL,{padding:[12,12],animate:false}));
  for(const id of ['railGrade','railOperator'])$(id).addEventListener('change',()=>{renderSelection();renderDetail();updateURL();fitDisplayed();});
  $('clearRailFilters').onclick=()=>{$('railGrade').value='';$('railOperator').value='';renderSelection();renderDetail();updateURL();};
@@ -80,8 +81,12 @@ function syncInfrastructure() {
  if(filtered)$('infrastructure').checked=false;
  const detailed=!filtered&&$('infrastructure').checked;
  if(detailed)infra.addTo(map);else if(map.hasLayer(infra))map.removeLayer(infra);
- for(const layer of state.layers.values())layer.setStyle(f=>({...railStyle(f),opacity:detailed?0:1}));
- $('infrastructureHint').textContent=filtered?'筛选中：仅显示匹配线路':'原图含货运、站场、专用与停用设施';
+ const showDetailed=detailed&&map.getZoom()>=6;
+ for(const layer of state.layers.values()) {
+  if(showDetailed&&map.hasLayer(layer))map.removeLayer(layer);
+  else if(!showDetailed&&!map.hasLayer(layer))layer.addTo(map);
+ }
+ $('infrastructureHint').textContent=filtered?'筛选中：仅显示匹配线路':detailed&&!showDetailed?'放大地图以显示详细设施':'原图含货运、站场、专用与停用设施';
 }
 function fitDisplayed() {const layer=state.layers.values().next().value;if(layer?.getBounds().isValid())map.fitBounds(layer.getBounds(),{padding:[25,25],maxZoom:12,animate:false});}
 function renderList() {

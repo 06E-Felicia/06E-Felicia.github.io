@@ -14,7 +14,7 @@ Pass 为单选，选择另一张后替换原选择；只渲染其匹配范围。
 
 线路按 OpenRailwayMap 标准颜色绘制：高速红 `#ff0c00`，主干橙 `#ff8100`，支线黄绿 `#c4b600`，工业/专用棕 `#87491d`，地铁蓝 `#0300c3`，轻轨绿 `#00bd14`，路面电车粉 `#d877b8`。未分类深灰。高亮不使用 Pass 专属颜色，不叠加全网参考线。
 
-在线详细设施原图是 [OpenRailwayMap 标准瓦片](https://wiki.openstreetmap.org/wiki/OpenRailwayMap/API)，按当前视野加载、不批量下载，仅在无 Pass、无线路筛选时可开启。筛选时关闭并禁用该图层，防止不匹配的线路透出。原图设施完整性和运营状态依赖 OSM 实际收录及更新，地图版权归 OpenStreetMap 贡献者，适用 [ODbL](https://www.openstreetmap.org/copyright)。
+在线详细设施原图是 [OpenRailwayMap 标准瓦片](https://wiki.openstreetmap.org/wiki/OpenRailwayMap/API)，按当前视野加载、不批量下载，仅在无 Pass、无线路筛选时可开启。全国视野保留客运参考线，放大至 6 级以上时由设施原图替换，避免低缩放级别无瓦片而空白。筛选时关闭并禁用该图层，防止不匹配的线路透出。原图设施完整性和运营状态依赖 OSM 实际收录及更新，地图版权归 OpenStreetMap 贡献者，适用 [ODbL](https://www.openstreetmap.org/copyright)。
 
 ## Pass 范围精度
 

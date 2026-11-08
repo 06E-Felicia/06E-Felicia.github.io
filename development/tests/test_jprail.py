@@ -55,6 +55,12 @@ class BrowserTests(unittest.TestCase):
                     empty=page.evaluate('JPRail.state.passes.filter(p=>!JPRail.coverageFeatures(JPRail.state.network,p).length).map(p=>p.id)')
                     self.assertEqual(empty,[],'every selectable product must produce a visible route overlay')
                     self.assertTrue(page.evaluate("['highspeed','main','branch'].every(g=>JPRail.state.network.features.some(f=>JPRail.gradeOf(f)===g))"))
+                    # At country zoom the infrastructure server has no tiles;
+                    # retain the atlas until a detailed zoom can replace it.
+                    page.locator('#infrastructure').check()
+                    self.assertTrue(page.evaluate('JPRail.map.hasLayer([...JPRail.state.layers.values()][0])'))
+                    page.evaluate('() => {JPRail.map.setZoom(8,{animate:false});}')
+                    self.assertFalse(page.evaluate('JPRail.map.hasLayer([...JPRail.state.layers.values()][0])'))
                     # A pass replaces the entire visible route layer. Switching
                     # passes must not retain the previous pass or the full map.
                     page.locator('[data-pass="japan"]').click()
