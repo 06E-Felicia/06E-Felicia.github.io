@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#163f43">
 <meta name="description" content="探索日本铁路设施与外国游客铁路 Pass，在地图上对照适用范围、有效期及乘车限制。">
-<title>JPRail · 日本铁路与 Pass 地图</title>
+<title>日本铁道pass地图 · JPRail</title>
 <link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css">
 <link rel="stylesheet" href="assets/styles/jprail.css">
 <script defer src="assets/vendor/leaflet/leaflet.js"></script>
@@ -34,7 +34,7 @@
     <div class="map-toolbar">
       <div class="map-heading"><span class="eyebrow">THE RAILWAY ATLAS</span><h2>日本铁路全景</h2></div>
       <div class="station-search"><label class="sr-only" for="stationSearch">查找日本车站</label><input id="stationSearch" type="search" placeholder="定位车站，如 东京 / 京都" autocomplete="off"><div id="stationResults" class="station-results"></div></div>
-      <button class="small-button" id="resetView" type="button">回到全国</button>
+      <button class="small-button" id="resetView" type="button">本土全景</button>
     </div>
     <div class="rail-filter-bar" aria-label="地图线路筛选">
       <label>线路等级<select id="railGrade"><option value="">全部等级</option></select></label>
@@ -47,9 +47,9 @@
       <div class="map-layer-controls"><label><input type="checkbox" id="infrastructure"> 详细设施原图（联网）</label><span id="infrastructureHint">在线原图含全网设施</span></div>
       <div id="mapState" class="map-state" role="status">正在载入全国铁路…</div>
       <details class="rail-legend"><summary><i style="--rail:#ff0c00"></i><i style="--rail:#ff8100"></i><i style="--rail:#c4b600"></i>线路等级图例</summary><div class="legend-grid"><span><i style="--rail:#ff0c00"></i>高速铁路 / 新干线</span><span><i style="--rail:#ff8100"></i>主干线（main）</span><span><i style="--rail:#c4b600"></i>支线（branch）</span><span><i style="--rail:#87491d"></i>工业 / 专用线</span><span><i style="--rail:#343c39"></i>未分类 / 其他</span><span><i style="--rail:#0300c3"></i>地铁</span><span><i style="--rail:#00bd14"></i>轻轨</span><span><i style="--rail:#d877b8"></i>路面电车</span><span><i class="disused" style="--rail:#70584d"></i>停用 / 废弃（仅原图）</span></div><p>沿用 OpenRailwayMap 配色。筛选图按 OSM 命名线路标签归并等级，非逐股道分类；缺标签或冲突时单列未分类。</p><a href="https://www.openrailwaymap.org/" target="_blank" rel="noopener">查看原图与完整图例 ↗</a></details>
-      <div class="map-note"><span class="map-cross" aria-hidden="true">＋</span><div><strong>只看与你有关的线路</strong><span>选择 Pass 或筛选等级、运营方，地图会隐藏其余线路。</span></div></div>
     </div>
     <div class="selection-bar"><div id="selectedPasses" class="selected-passes"><span>选择一张 Pass，或按等级 / 运营方筛选</span></div><button id="clearSelection" type="button" hidden>清除选择</button></div>
+    <p class="station-density"><span id="stationDensity">站名：主要枢纽</span><span>放大逐步显示更多站名，近距离显示全部</span></p>
     <p class="precision-note"><i aria-hidden="true"></i>颜色表示线路等级。选择 Pass 或筛选后仅显示匹配线路；Pass 区间仍为示意，乘车条件请核对详情。</p>
   </section>
   <aside id="detailPanel" class="detail-panel" aria-label="所选 Pass 详情">

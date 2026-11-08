@@ -1,3 +1,4 @@
+import {createStationLabels} from './jprail-stations.js';
 const $ = id => document.getElementById(id);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const GRADES = {
@@ -7,9 +8,9 @@ const GRADES = {
  unclassified:{label:'未分类 / 其他',color:'#343c39'}
 };
 const JR_OPERATORS = {'北海道旅客鉄道':'JR 北海道','東日本旅客鉄道':'JR 东日本','東海旅客鉄道':'JR 东海','西日本旅客鉄道':'JR 西日本','四国旅客鉄道':'JR 四国','九州旅客鉄道':'JR 九州'};
-const NATIONAL = [[30.0,128.0],[45.7,146.1]];
-const state = {passes:[],network:null,stations:[],selected:null,active:null,layers:new Map(),displayed:[]};
-let map, infra, stationMarker, toastTimer;
+const NATIONAL = [[30.7,129.35],[45.65,145.95]];
+const state = {passes:[],network:null,stations:[],selected:null,active:null,layers:new Map(),displayed:[],stationPool:[],stationLabels:{count:0,names:[],mode:"主要枢纽"}};
+let map, infra, stationMarker, stationLabels, toastTimer, homeView=true;
 function toast(message) { $('toast').textContent=message; $('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,4500); }
 function duration(p) { return p.durations.map(v=>typeof v==='number'?`${v} 日`:v).join(' / '); }
 function currentDateJST() { return new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date()); }
@@ -64,17 +65,48 @@ function linePopup(f,selected=false) {
  return `<strong>${esc(f.properties.name)}</strong><br>${esc(f.properties.operator)}<br><small>${esc((GRADES[gradeOf(f)]||GRADES.unclassified).label)}</small>${selected?'<br><small>Pass 范围示意；请核对产品区间与列车限制。</small>':''}`;
 }
 function setupMap() {
- map=L.map('map',{preferCanvas:true,zoomAnimation:false,minZoom:4,maxZoom:18,maxBounds:[[18,118],[50,156]],maxBoundsViscosity:.4}).fitBounds(NATIONAL,{padding:[12,12]});
- for(const [name,z] of [['railLand',150],['railRoutes',350],['railInfrastructure',300]])map.createPane(name).style.zIndex=z;
+ map=L.map('map',{preferCanvas:true,zoomAnimation:false,zoomSnap:.25,zoomDelta:.5,scrollWheelZoom:false,inertiaMaxSpeed:850,inertiaDeceleration:2200,minZoom:4,maxZoom:18,maxBounds:[[22,119],[49,156.3]],maxBoundsViscosity:.8}).fitBounds(NATIONAL,{padding:[12,12]});
+ for(const [name,z] of [['railLand',150],['railRoutes',350],['railInfrastructure',300],['railStations',450]])map.createPane(name).style.zIndex=z;
  infra=L.tileLayer('https://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png',{subdomains:'abc',pane:'railInfrastructure',minZoom:6,maxNativeZoom:19,maxZoom:18,attribution:'<a href="https://www.openrailwaymap.org/">OpenRailwayMap</a> · © <a href="https://www.openstreetmap.org/copyright">OSM</a>'});
  infra.on('tileerror',()=>{if($('infrastructure').checked)toast('在线设施瓦片未能加载，本地线路仍可使用。');});
  $('infrastructure').addEventListener('change',syncInfrastructure);
  map.on('zoomend',syncInfrastructure);
- $('resetView').addEventListener('click',()=>map.fitBounds(NATIONAL,{padding:[12,12],animate:false}));
+ $('resetView').addEventListener('click',fitHome);
+ map.on('dragstart zoomstart',()=>homeView=false);
+ const observer=new ResizeObserver(()=>{map.invalidateSize({pan:false});if(homeView)fitHome();});observer.observe($('map'));
+ setupGentleZoom();
+ stationLabels=createStationLabels(map,()=>state.stationPool,summary=>{state.stationLabels=summary;$('stationDensity').textContent=`站名：${summary.mode} · ${summary.count} 站`;});
+ fitHome();
  for(const id of ['railGrade','railOperator'])$(id).addEventListener('change',()=>{renderSelection();renderDetail();updateURL();fitDisplayed();});
  $('clearRailFilters').onclick=()=>{$('railGrade').value='';$('railOperator').value='';renderSelection();renderDetail();updateURL();};
  map.attributionControl.addAttribution('<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N02-2025.html">N02-25（加工）</a> · © <a href="https://www.openstreetmap.org/copyright">OSM</a> · <a href="https://www.naturalearthdata.com/">Natural Earth</a>');
 }
+
+function fitHome() {map.fitBounds(NATIONAL,{padding:[8,8],animate:false});homeView=true;}
+function setupGentleZoom() {
+ let delta=0,timer,anchor;
+ map.getContainer().addEventListener('wheel',event=>{
+  event.preventDefault();
+  const pixels=event.deltaY*(event.deltaMode===1?16:event.deltaMode===2?map.getSize().y:1);
+  delta=Math.max(-120,Math.min(120,delta+pixels));anchor=map.mouseEventToContainerPoint(event);
+  if(timer)return;
+  timer=setTimeout(()=>{
+   timer=null;const step=Math.round((-delta/240)/.25)*.25;
+   if(!step)return;delta=0;
+   map.setZoomAround(anchor,map.getZoom()+Math.max(-.5,Math.min(.5,step)),{animate:false});
+  },90);
+ },{passive:false});
+}
+function refreshStationPool() {
+ const routes=new Map();for(const f of state.displayed){const p=f.properties;routes.set(p.operator+'|'+p.name,p);}
+ const pass=state.passes.find(p=>p.id===state.selected);
+ state.stationPool=state.stations.filter(s=>{
+  const p=routes.get(s[3]+'|'+s[4]);if(!p)return false;
+  return !pass||pass.selectors.some(a=>a.operators.includes(p.operator)&&(!a.kinds||a.kinds.includes(p.kind))&&(!a.lines||a.lines.some(n=>p.name.includes(n)))&&(!a.exclude||!a.exclude.some(n=>p.name.includes(n)))&&(!a.bbox||(s[2]>=a.bbox[0]&&s[2]<=a.bbox[2]&&s[1]>=a.bbox[1]&&s[1]<=a.bbox[3])));
+ });
+ stationLabels?.schedule();
+}
+
 function syncInfrastructure() {
  const filtered=Boolean(state.selected||$('railGrade').value||$('railOperator').value);
  $('infrastructure').disabled=filtered;
@@ -107,7 +139,7 @@ function renderSelection() {
  for(const layer of state.layers.values())map.removeLayer(layer);state.layers.clear();
  if(!state.network)return;
  const features=(pass?coverageFeatures(state.network,pass):state.network.features).filter(f=>matchesRailFilters(f,grade,operator));
- state.displayed=features;
+ state.displayed=features;refreshStationPool();
  const layer=L.geoJSON({type:'FeatureCollection',features},{pane:'railRoutes',style:railStyle,onEachFeature:(f,l)=>l.bindPopup(linePopup(f,Boolean(pass)))}).addTo(map);
  state.layers.set(pass?.id||'filtered',layer);syncInfrastructure();
  const title=pass?pass.name:'全国客运铁路';
@@ -121,12 +153,17 @@ function showPass(id,fit=true) {
  state.selected=id;state.active=id;renderSelection();renderList();renderDetail();updateURL();if(fit)fitPass(id);
 }
 function removePass(id) {state.selected=null;state.active=null;renderSelection();renderList();renderDetail();updateURL();}
+function renderPrice(p) {
+ const price=p.price;if(!price)return '';
+ const rows=price.variants.map(v=>`<tr><td>${esc(typeof v.duration==='number'?v.duration+' 日':v.duration)}</td><td>${v.amountJPY===null?'无现行售价':'¥'+v.amountJPY.toLocaleString('ja-JP')}</td></tr>`).join('');
+ return `<section class="price-section" aria-label="成人日元票价"><h3>${price.historical?'历史票价':'成人票价'} · 普通车厢 · JPY</h3><table aria-label="各有效时长票价"><tbody>${rows}</tbody></table><p>${esc(price.note)}</p><a href="${esc(price.source)}" target="_blank" rel="noopener">官方票价 ↗</a>${price.channelSource?` · <a href="${esc(price.channelSource)}" target="_blank" rel="noopener">渠道价差 ↗</a>`:''}<p>票价核查 ${esc(price.checked)} · 以购买时官方售价为准</p></section>`;
+}
 function renderDetail() {
  const p=state.passes.find(p=>p.id===state.active);
  $('detailPanel').classList.toggle('has-selection',Boolean(p));
  if(!p){$('passDetail').innerHTML='<div class="detail-empty"><span class="big-rail">↝</span><span class="eyebrow">PICK A PASS</span><h2>让票券范围<br>在地图上展开</h2><p>从左侧选择一张周游券，查看可乘线路、有效时间和需要另外付费的列车。</p></div>';return;}
  const routes=state.layers.get(p.id)?.getLayers().length||0;
- $('passDetail').innerHTML=`<div class="detail-top"><span class="eyebrow">${esc(p.issuer)}</span><button id="closeDetail" type="button" aria-label="收起详情">×</button></div><h2>${esc(p.name)}</h2><p class="detail-en">${esc(p.en)}</p><div class="detail-duration"><span class="duration-value">${esc(duration(p))}</span><span class="duration-copy">${p.continuous?'连续使用':'可非连续使用'}<br>时间以日本当地为准</span></div><span class="precision-tag">范围示意 · 非精确票券适用图</span>${p.status==='ended'?'<p class="ended-note">此产品已停售或当季已结束，请勿将历史资料当作当前可购票券。</p>':''}<div class="route-count">地图匹配 ${routes} 个运营商 / 线路组 · <button class="detail-fit" type="button" id="fitPass">定位范围</button> · <button class="detail-fit" type="button" id="removePass">移除</button></div><section class="detail-section"><h3>可乘铁路范围</h3><p>${esc(p.scope)}</p>${p.note?`<p>${esc(p.note)}</p>`:''}</section><section class="detail-section"><h3>适用列车</h3><p>${esc(p.trains)}</p></section>${p.exceptions.length?`<section class="detail-section restriction-box"><h3>乘车前，留意这些限制</h3><ul>${p.exceptions.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>`:''}<section class="detail-section"><h3>销售与使用时间</h3><dl class="detail-period"><div><dt>销售 / 兑换</dt><dd>${esc(p.sales)}</dd></div><div><dt>使用期间</dt><dd>${esc(p.use)}</dd></div><div><dt>购买资格</dt><dd>${esc(p.eligibility)}</dd></div></dl></section><section class="detail-section"><h3>估算有效期</h3><div class="date-check"><label class="sr-only" for="startDate">起始日期</label><input type="date" id="startDate" value="${currentDateJST()}"><label class="sr-only" for="durationChoice">有效时长</label><select id="durationChoice">${p.durations.map((d,i)=>`<option value="${i}">${esc(typeof d==='number'?d+' 日':d)}</option>`).join('')}</select></div><p class="date-result" id="dateResult"></p><p style="font-size:9px;color:#6d7c78">仅计算日历有效期，不代表有票或符合购买资格。</p></section><section class="detail-section"><h3>附带权益</h3><p>${esc(p.extras)}</p></section><a class="official-link" href="${esc(p.source)}" target="_blank" rel="noopener">官方产品与范围图 ↗</a><p class="detail-sources">来源核查：${esc(p.checked)}</p>`;
+ $('passDetail').innerHTML=`<div class="detail-top"><span class="eyebrow">${esc(p.issuer)}</span><button id="closeDetail" type="button" aria-label="收起详情">×</button></div><h2>${esc(p.name)}</h2><p class="detail-en">${esc(p.en)}</p><div class="detail-duration"><span class="duration-value">${esc(duration(p))}</span><span class="duration-copy">${p.continuous?'连续使用':'可非连续使用'}<br>时间以日本当地为准</span></div>${renderPrice(p)}<span class="precision-tag">范围示意 · 非精确票券适用图</span>${p.status==='ended'?'<p class="ended-note">此产品已停售或当季已结束，请勿将历史资料当作当前可购票券。</p>':''}<div class="route-count">地图匹配 ${routes} 个运营商 / 线路组 · <button class="detail-fit" type="button" id="fitPass">定位范围</button> · <button class="detail-fit" type="button" id="removePass">移除</button></div><section class="detail-section"><h3>可乘铁路范围</h3><p>${esc(p.scope)}</p>${p.note?`<p>${esc(p.note)}</p>`:''}</section><section class="detail-section"><h3>适用列车</h3><p>${esc(p.trains)}</p></section>${p.exceptions.length?`<section class="detail-section restriction-box"><h3>乘车前，留意这些限制</h3><ul>${p.exceptions.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>`:''}<section class="detail-section"><h3>销售与使用时间</h3><dl class="detail-period"><div><dt>销售 / 兑换</dt><dd>${esc(p.sales)}</dd></div><div><dt>使用期间</dt><dd>${esc(p.use)}</dd></div><div><dt>购买资格</dt><dd>${esc(p.eligibility)}</dd></div></dl></section><section class="detail-section"><h3>估算有效期</h3><div class="date-check"><label class="sr-only" for="startDate">起始日期</label><input type="date" id="startDate" value="${currentDateJST()}"><label class="sr-only" for="durationChoice">有效时长</label><select id="durationChoice">${p.durations.map((d,i)=>`<option value="${i}">${esc(typeof d==='number'?d+' 日':d)}</option>`).join('')}</select></div><p class="date-result" id="dateResult"></p><p style="font-size:9px;color:#6d7c78">仅计算日历有效期，不代表有票或符合购买资格。</p></section><section class="detail-section"><h3>附带权益</h3><p>${esc(p.extras)}</p></section><a class="official-link" href="${esc(p.source)}" target="_blank" rel="noopener">官方产品与范围图 ↗</a><p class="detail-sources">来源核查：${esc(p.checked)}</p>`;
  $('closeDetail').onclick=()=>{state.active=null;renderDetail();};
  $('fitPass').onclick=()=>fitPass(p.id);$('removePass').onclick=()=>removePass(p.id);
  $('startDate').onchange=()=>renderDate(p);$('durationChoice').onchange=()=>renderDate(p);renderDate(p);
@@ -138,6 +175,7 @@ function renderDate(p) {
  if(!p.continuous){$('dateResult').textContent=`有效期内任选 ${d} 日；终止日期须核对票面。`;return;}
  const date=new Date(start+'T12:00:00Z');date.setUTCDate(date.getUTCDate()+d-1);const end=date.toISOString().slice(0,10);
  $('dateResult').textContent=`${start} — ${end}（日本时间）${p.use.includes('03:00')?'；结束时刻按次日 02:59 计算':''}`;
+ if(p.activationEnd&&start>p.activationEnd)$('dateResult').textContent+='，超出已记录启用截止日。';
  if(p.useEnd&&end>p.useEnd)$('dateResult').textContent+='，超出已记录使用截止日。';
 }
 function setupStationSearch() {
@@ -184,7 +222,7 @@ async function start() {
   window.JPRail={state,map,coverageFeatures,gradeOf,railStyle,matchesRailFilters};
 
  } catch(e) {$('passList').innerHTML='<p class="no-results">数据加载失败，请刷新页面或检查本地文件是否完整。</p>';$('resultCount').textContent='目录读取失败';$('mapState').textContent='铁路数据加载失败；在线设施图仍可浏览';console.error('JPRail data load:',e);}
- try{state.stations=await json('assets/data/jprail/stations.json');}catch{$('stationSearch').placeholder='车站数据暂不可用';}
+ try{state.stations=await json('assets/data/jprail/stations.json');refreshStationPool();}catch{$('stationSearch').placeholder='车站数据暂不可用';}
  setupStationSearch();
 }
 

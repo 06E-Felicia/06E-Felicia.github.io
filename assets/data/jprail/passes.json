@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "checked": "2026-11-08",
   "scope": "外国游客用铁路pass；部分外国护照产品也允许在日外国人使用。纯地铁/巴士券、普通单程票、面向所有人的一日券不收录。",
   "coverageNote": "目录依据列出的运营商公开产品页整理；各官网不存在统一全国完整目录，新增或渠道限定产品可能尚未收录。未公布或未核实的日期明确标示，不推定为全年。",
@@ -52,7 +52,29 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "第三部门通行特例未逐段绘制；地图并非所有可乘权益的完整清单。",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://japanrailpass.net/en/purchase/price/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 7,
+            "amountJPY": 50000
+          },
+          {
+            "duration": 14,
+            "amountJPY": 80000
+          },
+          {
+            "duration": 21,
+            "amountJPY": 100000
+          }
+        ],
+        "note": "表列官网在线售价。海外指定代理交换券：7 日 ¥53,000、14 日 ¥84,000、21 日 ¥105,000；当地货币结算受汇率影响。"
+      }
     },
     {
       "id": "hokkaido",
@@ -95,7 +117,29 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.jrhokkaido.co.jp/global/english/ticket/railpass/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 5,
+            "amountJPY": 22000
+          },
+          {
+            "duration": 7,
+            "amountJPY": 28000
+          },
+          {
+            "duration": 10,
+            "amountJPY": 37000
+          }
+        ],
+        "note": "表列预购价。指定车站现场购买的 5/7/10 日款分别为 ¥23,000 / ¥29,000 / ¥38,000。"
+      }
     },
     {
       "id": "noboribetsu",
@@ -143,7 +187,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.jrhokkaido.co.jp/global/english/ticket/railpass/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 4,
+            "amountJPY": 10000
+          }
+        ],
+        "note": "表列预购价；指定车站现场购买 ¥11,000。"
+      }
     },
     {
       "id": "furano",
@@ -192,7 +250,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.jrhokkaido.co.jp/global/english/ticket/railpass/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 4,
+            "amountJPY": 11000
+          }
+        ],
+        "note": "表列预购价；指定车站现场购买 ¥12,000。"
+      }
     },
     {
       "id": "east",
@@ -255,7 +327,25 @@
       "useEnd": null,
       "note": "2026-03-14 新产品，旧东北/长野新潟两款不再作为在售票券。",
       "precision": "schematic",
-      "eligibilitySource": "https://www.jreast.co.jp/en/multi/pass/eastpass_terms.html"
+      "eligibilitySource": "https://www.jreast.co.jp/en/multi/pass/eastpass_terms.html",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.jreast.co.jp/en/multi/pass/eastpass.html",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 5,
+            "amountJPY": 35000
+          },
+          {
+            "duration": 10,
+            "amountJPY": 50000
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "tokyo-wide",
@@ -309,7 +399,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.jreast.co.jp/en/multi/pass/tokyowidepass.html",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 3,
+            "amountJPY": 16000
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "east-hokkaido",
@@ -368,7 +472,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.jreast.co.jp/en/multi/pass/easthokkaido.html",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 6,
+            "amountJPY": 40000
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "tohoku-hokkaido",
@@ -430,7 +548,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.jreast.co.jp/en/multi/pass/tohokuhokkaido.html",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 6,
+            "amountJPY": 32000
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "sendai",
@@ -492,7 +624,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "不等于面向所有人的两日仙台 Marugoto Pass。",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://sendaitravelpass.jp/1day/en/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 1,
+            "amountJPY": 1420
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "kansai-mini",
@@ -541,7 +687,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "第三部门通行与山阳/北陆新干线具体起讫可能未精确表达。",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansaimini/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 3,
+            "amountJPY": 3000
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "kansai-wide",
@@ -589,7 +749,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "第三部门通行与山阳/北陆新干线具体起讫可能未精确表达。",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai_wide/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 5,
+            "amountJPY": 12000
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "kansai-hiroshima",
@@ -634,7 +808,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "第三部门通行与山阳/北陆新干线具体起讫可能未精确表达。",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai_hiroshima/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 5,
+            "amountJPY": 17000
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "kansai-sanin",
@@ -679,7 +867,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "第三部门通行与山阳/北陆新干线具体起讫可能未精确表达。",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai_sanin/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 7,
+            "amountJPY": 18000
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "kansai-hokuriku",
@@ -728,7 +930,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "第三部门通行与山阳/北陆新干线具体起讫可能未精确表达。",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai_hokuriku/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 7,
+            "amountJPY": 19000
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "tottori-matsue",
@@ -776,7 +992,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "第三部门通行与山阳/北陆新干线具体起讫可能未精确表达。",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/tottorimatsue/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 3,
+            "amountJPY": 4000
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "sanyo-sanin",
@@ -821,7 +1051,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "第三部门通行与山阳/北陆新干线具体起讫可能未精确表达。",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/sanyo_sanin/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 7,
+            "amountJPY": 23000
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "hiroshima-yamaguchi",
@@ -866,7 +1110,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "第三部门通行与山阳/北陆新干线具体起讫可能未精确表达。",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/hiroshima_yamaguchi/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 5,
+            "amountJPY": 15000
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "kansai-excursion",
@@ -914,7 +1172,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "与 5 日关西广域券为不同产品；具体使用/发售期须核对该渠道与官方条款。",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.westjr.co.jp/global/en/ticket/pass/kansai_wide_excursion/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 3,
+            "amountJPY": 12000
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "okayama-hiroshima-yamaguchi",
@@ -959,7 +1231,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "第三部门通行与山阳/北陆新干线具体起讫可能未精确表达。",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/okayama_hiroshima_yamaguchi/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 5,
+            "amountJPY": 17000
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "hokuriku",
@@ -1003,7 +1289,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "第三部门通行与山阳/北陆新干线具体起讫可能未精确表达。",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/hokuriku/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 4,
+            "amountJPY": 7000
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "west-all",
@@ -1043,7 +1343,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "第三部门通行与山阳/北陆新干线具体起讫可能未精确表达。",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/all/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 7,
+            "amountJPY": 26000
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "hokuriku-arch",
@@ -1107,7 +1421,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/other/hokuriku-arch-pass/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 7,
+            "amountJPY": 35000
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "setouchi",
@@ -1154,7 +1482,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/other/setouchi/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 7,
+            "amountJPY": 22000
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "sanyo-kyushu",
@@ -1204,7 +1546,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/other/ssnk/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 7,
+            "amountJPY": 26000
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "takayama",
@@ -1260,7 +1616,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://touristpass.jp/en/takayama_hokuriku/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 5,
+            "amountJPY": 19800
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "alpine",
@@ -1325,7 +1695,21 @@
       "salesEnd": "2026-11-06",
       "useEnd": "2026-11-10",
       "note": "2026 年季节销售已结束；现有票券仍受 11 月 10 日使用截止日限制。",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://touristpass.jp/en/alpine/",
+        "historical": true,
+        "variants": [
+          {
+            "duration": 5,
+            "amountJPY": 24500
+          }
+        ],
+        "note": "2026 季销售已于 11 月 6 日结束，表列当季售价；已购票使用期限至 11 月 10 日。"
+      }
     },
     {
       "id": "ise",
@@ -1386,7 +1770,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://touristpass.jp/en/ise_kumano/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 5,
+            "amountJPY": 16500
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "fuji-shizuoka",
@@ -1448,7 +1846,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://touristpass.jp/en/fuji_shizuoka/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 3,
+            "amountJPY": 6500
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "kyushu",
@@ -1488,7 +1900,30 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.jrkyushu.co.jp/english/railpass/railpass.html",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 3,
+            "amountJPY": 22000
+          },
+          {
+            "duration": 5,
+            "amountJPY": 24000
+          },
+          {
+            "duration": 7,
+            "amountJPY": 26000
+          }
+        ],
+        "note": "表列海外代理／JR 九州窗口常规价。官网专用 Online Booking 当前限时价：3 日 ¥21,000、5 日 ¥23,000、7 日 ¥25,000；优惠结束日未明示。",
+        "channelSource": "https://www.jrkyushu.co.jp/english/kyushurailpass/"
+      }
     },
     {
       "id": "north-kyushu",
@@ -1533,7 +1968,26 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.jrkyushu.co.jp/english/railpass/railpass.html",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 3,
+            "amountJPY": 15000
+          },
+          {
+            "duration": 5,
+            "amountJPY": 17000
+          }
+        ],
+        "note": "表列海外代理／JR 九州窗口常规价。官网专用 Online Booking 当前限时价：3 日 ¥14,000、5 日 ¥16,000；优惠结束日未明示。",
+        "channelSource": "https://www.jrkyushu.co.jp/english/kyushurailpass/"
+      }
     },
     {
       "id": "south-kyushu",
@@ -1577,7 +2031,22 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.jrkyushu.co.jp/english/railpass/railpass.html",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 3,
+            "amountJPY": 12000
+          }
+        ],
+        "note": "表列海外代理／JR 九州窗口常规价。官网专用 Online Booking 当前限时价 ¥11,000；优惠结束日未明示。",
+        "channelSource": "https://www.jrkyushu.co.jp/english/kyushurailpass/"
+      }
     },
     {
       "id": "kyushu-mobile",
@@ -1623,7 +2092,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.jrkyushu.co.jp/english/railpass/mobilepass.html",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 2,
+            "amountJPY": 3500
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "shikoku",
@@ -1666,7 +2149,25 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://shikoku-railwaytrip.com/news/pdf/20260806_en_japan-rail-passes.pdf",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 3,
+            "amountJPY": 12000
+          },
+          {
+            "duration": 7,
+            "amountJPY": 20000
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "greater-tokyo",
@@ -1712,7 +2213,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://greater-tokyo-pass.jp/en/ticket/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 5,
+            "amountJPY": 6500
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "kintetsu1",
@@ -1755,7 +2270,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.kintetsu.co.jp/foreign/english/ticket/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 1,
+            "amountJPY": 1900
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "kintetsu2",
@@ -1798,7 +2327,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.kintetsu.co.jp/foreign/english/ticket/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 2,
+            "amountJPY": 3700
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "kintetsu5",
@@ -1837,7 +2380,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.kintetsu.co.jp/foreign/english/ticket/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 5,
+            "amountJPY": 4900
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "kintetsu5plus",
@@ -1876,7 +2433,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.kintetsu.co.jp/foreign/english/ticket/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 5,
+            "amountJPY": 6700
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "nikko-all",
@@ -1924,7 +2495,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.tobu.co.jp/en/ticket/nikko/all.html",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 4,
+            "amountJPY": 8000
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "nikko-heritage",
@@ -1958,7 +2543,7 @@
           ]
         }
       ],
-      "source": "https://www.tobu.co.jp/en/ticket/nikko/world.html",
+      "source": "https://www.tobu.co.jp/en/ticket/nikko/city.html",
       "checked": "2026-11-08",
       "trains": "普通、快速等；特急和 SL 须另购相应票。",
       "exceptions": [
@@ -1972,7 +2557,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.tobu.co.jp/en/ticket/nikko/city.html",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 2,
+            "amountJPY": 3000
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "kawagoe",
@@ -2019,7 +2618,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.tobu.co.jp/en/ticket/kawagoe/premium.html",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 1,
+            "amountJPY": 1200
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "seibu",
@@ -2057,7 +2670,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.seiburailway.jp/en/ticket/seibu1daypass/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 1,
+            "amountJPY": 1500
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "seibu-nagatoro",
@@ -2106,7 +2733,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.seiburailway.jp/en/ticket/seibu1daypass/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 1,
+            "amountJPY": 2000
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "hakone-kamakura",
@@ -2143,7 +2784,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.odakyu.jp/english/passes/hakone_kamakura/",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 3,
+            "amountJPY": 8520
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "keihan-osaka",
@@ -2183,7 +2838,25 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/kyoto-osaka.html",
+        "historical": false,
+        "variants": [
+          {
+            "duration": "1 日",
+            "amountJPY": 1650
+          },
+          {
+            "duration": "24 小时",
+            "amountJPY": 1850
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "keihan-kyoto",
@@ -2229,7 +2902,25 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/kyoto-osaka.html",
+        "historical": false,
+        "variants": [
+          {
+            "duration": "1 日",
+            "amountJPY": 1100
+          },
+          {
+            "duration": "24 小时",
+            "amountJPY": 1300
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "keihan-kurama",
@@ -2273,7 +2964,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/eizan-railway.html",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 1,
+            "amountJPY": 2100
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "keihan-metro",
@@ -2312,7 +3017,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/osaka-subway.html",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 1,
+            "amountJPY": 2160
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "keihan-otsu",
@@ -2351,7 +3070,21 @@
       "salesEnd": "2027-03-31",
       "useEnd": "2027-04-30",
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/otsu.html",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 1,
+            "amountJPY": 800
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "keihan-hirakata",
@@ -2390,7 +3123,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/hirakata-park.html",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 1,
+            "amountJPY": 2200
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "kansai-old",
@@ -2437,11 +3184,37 @@
       "salesEnd": "2026-09-30",
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai/",
+        "historical": true,
+        "variants": [
+          {
+            "duration": 1,
+            "amountJPY": 2800
+          },
+          {
+            "duration": 2,
+            "amountJPY": 4800
+          },
+          {
+            "duration": 3,
+            "amountJPY": 5800
+          },
+          {
+            "duration": 4,
+            "amountJPY": 7000
+          }
+        ],
+        "note": "已停售，表列官方保留页面的历史售价，不代表当前可购买。"
+      }
     },
     {
       "id": "kansai-lite",
-      "name": "关西铁路周游券 LITE（季节已结束）",
+      "name": "关西铁路周游券 LITE",
       "en": "KANSAI RAILWAY PASS LITE",
       "issuer": "关西私铁联合",
       "regions": [
@@ -2486,14 +3259,33 @@
         "不含 JR、京都市营地铁、岚电、京阪大津线及巴士。"
       ],
       "extras": "参与地铁权益不作高亮。",
-      "sales": "2026-03-25 至 2026-09-30。",
-      "use": "须 09-30 前启用；2 日款至 10-01，3 日款至 10-02。",
+      "sales": "2026-10-01 至 2027-03-31；线上发售。",
+      "use": "购买后 3 个月内且须 2027-03-31 前启用；2 日款最晚用至 04-01，3 日款最晚用至 04-02；交通日为 03:00 至次日 02:59。",
       "eligibility": "外国护照及短期滞在资格；领取时出示护照原件。",
-      "status": "ended",
-      "salesEnd": "2026-09-30",
-      "useEnd": "2026-10-02",
+      "status": "current",
+      "salesEnd": "2027-03-31",
+      "useEnd": "2027-04-02",
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "activationEnd": "2027-03-31",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.surutto.com/kansai_rwpl/en/krp.html",
+        "historical": false,
+        "variants": [
+          {
+            "duration": 2,
+            "amountJPY": 5200
+          },
+          {
+            "duration": 3,
+            "amountJPY": 6500
+          }
+        ],
+        "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
+      }
     },
     {
       "id": "nankai-old",
@@ -2530,7 +3322,21 @@
       "salesEnd": null,
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://www.nankai.co.jp/en_railway/ticket/web-nankaiallline2daypass/",
+        "historical": true,
+        "variants": [
+          {
+            "duration": 2,
+            "amountJPY": null
+          }
+        ],
+        "note": "已停售；当前官方页面未提供可核实的售价，不显示为零元。"
+      }
     },
     {
       "id": "kagawa-old",
@@ -2576,7 +3382,21 @@
       "salesEnd": "2026-09-30",
       "useEnd": null,
       "note": "",
-      "precision": "schematic"
+      "precision": "schematic",
+      "price": {
+        "currency": "JPY",
+        "audience": "成人 · 普通车厢",
+        "checked": "2026-11-08",
+        "source": "https://shikoku-railwaytrip.com/news/pdf/20260806_en_japan-rail-passes.pdf",
+        "historical": true,
+        "variants": [
+          {
+            "duration": 2,
+            "amountJPY": null
+          }
+        ],
+        "note": "已停售；官方停售通知未提供该券售价，不显示为零元。"
+      }
     }
   ]
 }

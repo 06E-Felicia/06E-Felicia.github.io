@@ -29,6 +29,11 @@ class CatalogueTests(unittest.TestCase):
                     self.assertTrue(p[field])
                 self.assertEqual(p['precision'],'schematic')
                 self.assertTrue(p['selectors'])
+                self.assertEqual(p['price']['currency'],'JPY')
+                self.assertEqual([v['duration'] for v in p['price']['variants']],p['durations'])
+                self.assertTrue(p['price']['source'].startswith('https://'))
+                if p['status']=='current':
+                    self.assertTrue(all(isinstance(v['amountJPY'],int) and v['amountJPY']>0 for v in p['price']['variants']))
                 for selector in p['selectors']:
                     self.assertTrue(set(selector['operators'])<=operators)
                     if 'bbox' in selector:
@@ -52,6 +57,16 @@ class BrowserTests(unittest.TestCase):
                     page=context.new_page();errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
                     page.goto(base+'/JPRail.html')
                     page.wait_for_function('window.JPRail?.state.stations.length>0')
+                    page.wait_for_function('JPRail.state.stationLabels.count>0')
+                    self.assertEqual(page.evaluate('JPRail.state.stationLabels.mode'),'主要枢纽')
+                    initial=page.evaluate('JPRail.map.getZoom()')
+                    self.assertGreater(initial,4)
+                    box=page.locator('#map').bounding_box()
+                    page.mouse.move(box['x']+box['width']/2,box['y']+box['height']/2)
+                    page.mouse.wheel(0,-700)
+                    page.wait_for_function('(z)=>JPRail.map.getZoom()>z',arg=initial)
+                    self.assertLessEqual(page.evaluate('JPRail.map.getZoom()')-initial,.5)
+                    page.locator('#resetView').click()
                     empty=page.evaluate('JPRail.state.passes.filter(p=>!JPRail.coverageFeatures(JPRail.state.network,p).length).map(p=>p.id)')
                     self.assertEqual(empty,[],'every selectable product must produce a visible route overlay')
                     self.assertTrue(page.evaluate("['highspeed','main','branch'].every(g=>JPRail.state.network.features.some(f=>JPRail.gradeOf(f)===g))"))
@@ -64,6 +79,9 @@ class BrowserTests(unittest.TestCase):
                     # A pass replaces the entire visible route layer. Switching
                     # passes must not retain the previous pass or the full map.
                     page.locator('[data-pass="japan"]').click()
+                    self.assertIn('¥50,000',page.locator('.price-section').inner_text())
+                    self.assertIn('¥100,000',page.locator('.price-section').inner_text())
+                    self.assertIn('¥53,000',page.locator('.price-section').inner_text())
                     page.locator('[data-pass="hokkaido"]').click()
                     self.assertEqual(page.evaluate('JPRail.state.selected'),'hokkaido')
                     self.assertEqual(page.locator('.pass-card[aria-pressed="true"]').count(),1)
@@ -93,9 +111,16 @@ class BrowserTests(unittest.TestCase):
                     self.assertTrue(page.evaluate("JPRail.state.displayed.every(f=>['近畿日本鉄道','伊賀鉄道'].includes(f.properties.operator))"))
                     page.locator('#closeDetail').click();self.assertIsNone(page.evaluate('JPRail.state.active'))
                     page.locator('#passSearch').fill('');page.locator('#showEnded').check()
-                    page.locator('[data-pass="kansai-lite"]').click();self.assertIn('历史票券',page.locator('#dateResult').inner_text())
+                    page.locator('[data-pass="kansai-old"]').click();self.assertIn('历史票券',page.locator('#dateResult').inner_text())
                     page.locator('#stationSearch').fill('京都');page.wait_for_selector('[data-station]')
                     page.locator('[data-station]').first.click();page.wait_for_function('JPRail.map.getZoom()===13')
+                    page.wait_for_function('JPRail.state.stationLabels.mode==="区域车站"')
+                    page.evaluate('() => {JPRail.map.setZoom(16,{animate:false});}')
+                    page.wait_for_function('JPRail.state.stationLabels.mode==="当前视野全部车站"')
+                    self.assertTrue(page.evaluate('''() => {
+                      const map=JPRail.map,size=map.getSize(),shown=new Set(JPRail.state.stationLabels.names);
+                      return JPRail.state.stationPool.every(s=>{const p=map.latLngToContainerPoint([s[1],s[2]]);return p.x<0||p.y<0||p.x>size.x||p.y>size.y||shown.has(s[0]);});
+                    }'''))
                     page.locator('#closeDetail').click()
                     page.locator('.rail-legend summary').click();self.assertIn('主干线',page.locator('.rail-legend').inner_text())
                     for width in (320,390,768,1100):
