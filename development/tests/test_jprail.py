@@ -14,11 +14,18 @@ class CatalogueTests(unittest.TestCase):
     def test_sources_and_geometry_selectors_are_consistent(self):
         data=json.loads((ROOT/'assets/data/jprail/passes.json').read_text())
         network=json.loads((ROOT/'assets/data/jprail/network.geojson').read_text())
+        detail=json.loads((ROOT/'assets/data/jprail/network-detail.geojson').read_text())
+        self.assertEqual(len(detail['features']),len(network['features']))
+        def nara_points(atlas):
+            f=next(f for f in atlas['features'] if f['properties']['operator']=='近畿日本鉄道' and f['properties']['name']=='奈良線')
+            return sum(map(len,f['geometry']['coordinates']))
+        self.assertGreater(nara_points(detail),4*nara_points(network))
         operators={f['properties']['operator'] for f in network['features']}
         # JR and Seibu both have a Yamaguchi Line. Never borrow the private
         # railway's light-rail tag merely because a line name matches.
         yamaguchi=next(f for f in network['features'] if f['properties']['operator']=='西日本旅客鉄道' and f['properties']['name']=='山口線')
         self.assertNotIn(yamaguchi['properties']['grade'],('light_rail','tram','subway'))
+        station_names={s[0] for s in json.loads((ROOT/'assets/data/jprail/stations.json').read_text())}
         ids=[p['id'] for p in data['passes']]
         self.assertEqual(len(ids),len(set(ids)))
         self.assertGreater(len(operators),100)
@@ -29,6 +36,9 @@ class CatalogueTests(unittest.TestCase):
                     self.assertTrue(p[field])
                 self.assertEqual(p['precision'],'schematic')
                 self.assertTrue(p['selectors'])
+                self.assertTrue(p['stationPins']['source'].startswith('https://'))
+                self.assertTrue(p['stationPins']['stations'])
+                self.assertTrue(all(x['name'] in station_names for x in p['stationPins']['stations']))
                 self.assertEqual(p['price']['currency'],'JPY')
                 self.assertEqual([v['duration'] for v in p['price']['variants']],p['durations'])
                 self.assertTrue(p['price']['source'].startswith('https://'))
@@ -65,8 +75,9 @@ class BrowserTests(unittest.TestCase):
                     page.mouse.move(box['x']+box['width']/2,box['y']+box['height']/2)
                     page.mouse.wheel(0,-700)
                     page.wait_for_function('(z)=>JPRail.map.getZoom()>z',arg=initial)
+                    page.wait_for_function('JPRail.camera.whenIdle()')
                     self.assertLessEqual(page.evaluate('JPRail.map.getZoom()')-initial,.5)
-                    page.locator('#resetView').click()
+                    page.locator('#resetView').click();page.wait_for_function('JPRail.camera.whenIdle()')
                     empty=page.evaluate('JPRail.state.passes.filter(p=>!JPRail.coverageFeatures(JPRail.state.network,p).length).map(p=>p.id)')
                     self.assertEqual(empty,[],'every selectable product must produce a visible route overlay')
                     self.assertTrue(page.evaluate("['highspeed','main','branch'].every(g=>JPRail.state.network.features.some(f=>JPRail.gradeOf(f)===g))"))
@@ -105,6 +116,23 @@ class BrowserTests(unittest.TestCase):
                     self.assertEqual(page.evaluate('[...JPRail.state.layers.values()][0].getLayers().length'),0)
                     page.locator('#clearRailFilters').click()
                     page.locator('#passSearch').fill('近铁');self.assertEqual(page.locator('.pass-card').count(),4)
+                    page.locator('[data-pass="kintetsu1"]').click();page.wait_for_function('JPRail.camera.whenIdle()')
+                    page.wait_for_function('JPRail.state.detailStatus==="detail"')
+                    self.assertEqual(len(page.evaluate('JPRail.state.pinnedStations')),8)
+                    for zoom in (4,7,11,16):
+                        page.evaluate('(z)=>{JPRail.map.setZoom(z,{animate:false});}',zoom)
+                        page.wait_for_function('JPRail.camera.whenIdle()')
+                        expected='detail' if zoom>=10 else 'overview'
+                        self.assertEqual(page.evaluate('JPRail.state.detailStatus'),expected)
+                        self.assertTrue(page.evaluate('(detail)=>JPRail.state.network===(detail?JPRail.state.detailNetwork:JPRail.state.overviewNetwork)',zoom>=10))
+                        self.assertTrue(page.evaluate('(detail)=>[...JPRail.state.layers.values()][0].getLayers().every(l=>l.options.smoothFactor===(detail?.15:1))',zoom>=10))
+                        page.wait_for_function('''() => {const shown=new Set(JPRail.state.stationLabels.pinnedNames),b=JPRail.map.getBounds();return JPRail.state.pinnedStations.filter(p=>b.contains([p.station[1],p.station[2]])).every(p=>shown.has(p.name));}''')
+                    self.assertTrue(page.evaluate('''() => {
+                        const p=JPRail.state.passes.find(p=>p.id==='kintetsu1');
+                        const points=fs=>fs.filter(f=>f.properties.name==='奈良線').reduce((n,f)=>n+f.geometry.coordinates.reduce((a,c)=>a+c.length,0),0);
+                        return points(p.routeFeatures)>4*points(p.overviewRouteFeatures);
+                    }'''))
+                    self.assertFalse(page.evaluate("JPRail.state.displayed.some(f=>f.properties.name==='生駒線')"))
                     page.locator('[data-pass="kintetsu5"]').click()
                     page.locator('#startDate').fill('2026-12-30');page.locator('#startDate').dispatch_event('change')
                     self.assertIn('2027-01-03',page.locator('#dateResult').inner_text())
