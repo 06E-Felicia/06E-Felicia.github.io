@@ -8,11 +8,11 @@
 <title>日本铁道pass地图 · JPRail</title>
 <link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css">
 <link rel="stylesheet" href="assets/vendor/maplibre/maplibre-gl.css">
-<link rel="stylesheet" href="assets/styles/jprail.css?v=20261109">
+<link rel="stylesheet" href="assets/styles/jprail.css?v=20261109c">
 <script defer src="assets/vendor/leaflet/leaflet.js"></script>
 <script defer src="assets/vendor/maplibre/maplibre-gl.js"></script>
 <script defer src="assets/vendor/maplibre-leaflet/leaflet-maplibre-gl.js"></script>
-<script type="module" src="assets/scripts/jprail.js?v=20261109"></script>
+<script type="module" src="assets/scripts/jprail.js?v=20261109c"></script>
 </head>
 <body>
 <header class="masthead">
@@ -56,8 +56,8 @@
     <p class="station-density"><span id="stationDensity">站名：主要枢纽</span><span id="lineDetailStatus">线路：全国概览</span><span>放大逐步显示更多站名，近距离显示全部</span></p>
     <p class="precision-note"><i aria-hidden="true"></i>颜色表示线路等级。选择 Pass 或筛选后仅显示匹配线路；Pass 区间仍为示意，乘车条件请核对详情。</p>
   </section>
-  <aside id="detailPanel" class="detail-panel" aria-label="所选 Pass 详情">
-    <div id="passDetail" class="pass-detail"><div class="detail-empty"><span class="big-rail">↝</span><span class="eyebrow">PICK A PASS</span><h2>让票券范围<br>在地图上展开</h2><p>从左侧选择一张周游券，查看可乘线路、有效时间和需要另外付费的列车。</p><div class="empty-steps"><span>01 选择 Pass</span><span>02 对照线路</span><span>03 核对官方规则</span></div></div></div>
+  <aside id="detailPanel" class="detail-panel" aria-label="所选 Pass 详情" hidden>
+    <div id="passDetail" class="pass-detail"></div>
   </aside>
 </main>
 <footer class="page-foot"><span>JPRail · 一张地图，读懂日本铁路。</span><span>地理数据：<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N02-2025.html" target="_blank" rel="noopener">国土交通省 N02</a> · <a href="https://www.openrailwaymap.org/" target="_blank" rel="noopener">OpenRailwayMap</a> / <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OSM</a></span></footer>
