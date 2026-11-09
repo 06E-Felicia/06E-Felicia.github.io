@@ -1,7 +1,16 @@
 // A real white street basemap. Its local style omits rail/transit symbols so
 // pass filtering never leaves unrelated railway lines visible underneath.
 export function createStreetMap(map,onStatus) {
- let layer,gl,timeout,generation=0,tiles=0,status='loading';
+ let layer,gl,timeout,resizeFrame=0,generation=0,tiles=0,status='loading';
+ // The bridge changes its div/transform after a panel resize. Explicitly
+ // synchronize the public GL camera and repaint after it, so a correct
+ // projection cannot leave the previously painted coastline on screen.
+ const resizeGL=()=>{cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(()=>{
+  resizeFrame=0;if(!gl)return;gl.resize();const center=map.getCenter();
+  gl.jumpTo({center:[center.lng,center.lat],zoom:map.getZoom()-1});gl.triggerRepaint();
+ });};
+ map.on('resize moveend',resizeGL);
+ map.once('unload',()=>{cancelAnimationFrame(resizeFrame);map.off('resize moveend',resizeGL);clearTimeout(timeout);});
  const statusEl=document.getElementById('basemapStatus'),retry=document.getElementById('retryBasemap');
  const report=(next,message)=>{
   status=next;statusEl.textContent=message;retry.hidden=next==='ready'||next==='loading';
@@ -16,8 +25,10 @@ export function createStreetMap(map,onStatus) {
    const response=await fetch('assets/data/jprail/streets-style.json',{cache:'no-cache'});if(!response.ok)throw new Error('底图样式读取失败');
    const style=await response.json();if(attempt!==generation)return;
    maplibregl.setWorkerCount(1);
-   layer=L.maplibreGL({style,pane:'railBase',padding:.15,updateInterval:32,interactive:false,renderWorldCopies:false,fadeDuration:0,localIdeographFontFamily:'Hiragino Kaku Gothic ProN, PingFang SC, sans-serif',attributionControl:false}).addTo(map);
-   layer.getContainer().style.opacity='0';gl=layer.getMaplibreMap();
+   // The padded overview crosses 180E. Allow the GL world to wrap rather
+   // than clamping its centre away from Leaflet's Japan view.
+   layer=L.maplibreGL({style,pane:'railBase',padding:.15,updateInterval:32,interactive:false,renderWorldCopies:true,fadeDuration:0,localIdeographFontFamily:'Hiragino Kaku Gothic ProN, PingFang SC, sans-serif',attributionControl:false}).addTo(map);
+   layer.getContainer().style.opacity='0';gl=layer.getMaplibreMap();resizeGL();
    const ready=()=>{
     if(attempt!==generation||status==='ready')return;
     const rendered=gl.queryRenderedFeatures({layers:['water','landuse_residential','highway_minor','highway_major_inner']}).length;

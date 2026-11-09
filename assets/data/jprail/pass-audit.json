@@ -1,0 +1,1291 @@
+{
+  "checked": "2026-11-10",
+  "method": "逐券查阅官方产品、使用范围图及列车／通过条款；只用来源白名单标记边界，不从公司接续或绘图裁切反推。",
+  "records": [
+    {
+      "id": "japan",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://japanrailpass.net/en/use/conditions-for-use/"
+      ],
+      "finding": "JR 六社内部交接不是票券边界；补入四项第三部门通过特例，Nozomi/Mizuho 是列车限制。",
+      "boundaries": [],
+      "notBoundaries": [
+        "東京",
+        "新大阪",
+        "博多",
+        "上越妙高",
+        "猪谷",
+        "南小谷",
+        "米原",
+        "新宮"
+      ],
+      "issues": []
+    },
+    {
+      "id": "hokkaido",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.jrhokkaido.co.jp/global/english/ticket/railpass/",
+        "https://www.jrhokkaido.co.jp/global/images/ticket/railpass/e-rail04.png",
+        "https://www.jrhokkaido.co.jp/CM/Info/press/pdf/20260318_KO_rumoi.pdf"
+      ],
+      "finding": "不含北海道新干线、道南渔火铁道；留萌线已于 2026-04-01 废止。",
+      "boundaries": [],
+      "notBoundaries": [
+        "新函館北斗",
+        "札幌",
+        "旭川"
+      ],
+      "issues": []
+    },
+    {
+      "id": "noboribetsu",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.jrhokkaido.co.jp/global/english/ticket/railpass/",
+        "https://www.jrhokkaido.co.jp/global/images/ticket/railpass/e-rail02.png"
+      ],
+      "finding": "按官方每个分支起讫站逐段定位，排除图示不可用目的地；未用矩形边缘作为边界。",
+      "boundaries": [
+        "小樽",
+        "北海道医療大学",
+        "岩見沢",
+        "新千歳空港",
+        "登別"
+      ],
+      "notBoundaries": [
+        "札幌",
+        "南千歳",
+        "白石"
+      ],
+      "issues": []
+    },
+    {
+      "id": "furano",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.jrhokkaido.co.jp/global/english/ticket/railpass/",
+        "https://www.jrhokkaido.co.jp/global/images/ticket/railpass/e-rail03.png"
+      ],
+      "finding": "按官方每个分支起讫站逐段定位，排除图示不可用目的地；未用矩形边缘作为边界。",
+      "boundaries": [
+        "小樽",
+        "新千歳空港",
+        "旭川",
+        "富良野"
+      ],
+      "notBoundaries": [
+        "札幌",
+        "滝川",
+        "美瑛"
+      ],
+      "issues": []
+    },
+    {
+      "id": "east",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.jreast.co.jp/en/multi/pass/eastpass.html",
+        "https://asset.japan.travel/image/upload/v1771574289/pdf/JR_East_20260220.pdf"
+      ],
+      "finding": "2026 新版全 JR 东日本加列明七家私铁／第三部门；补上东武直通区间，新干线／普通线公司边界按线路说明。",
+      "boundaries": [
+        "新青森",
+        "上越妙高",
+        "南小谷",
+        "熱海",
+        "塩尻",
+        "伊東",
+        "直江津",
+        "新井",
+        "東武日光",
+        "鬼怒川温泉"
+      ],
+      "notBoundaries": [
+        "東京",
+        "仙台",
+        "盛岡"
+      ],
+      "issues": []
+    },
+    {
+      "id": "tokyo-wide",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.jreast.co.jp/en/multi/pass/tokyowidepass.html",
+        "https://www.jreast.co.jp/multi/pass/tokyowidepass_terms.html",
+        "https://asset.japan.travel/image/upload/v1771574289/pdf/JR_East_20260220.pdf"
+      ],
+      "finding": "补 New Shuttle 与东武区间；西至小渊泽／小诸，HSR 佐久平，北至黑矶／那须盐原／日立／常陆大子；没有大宫整站边界。",
+      "boundaries": [
+        "小淵沢",
+        "越後湯沢",
+        "黒磯",
+        "日立",
+        "常陸大子",
+        "佐久平",
+        "那須塩原",
+        "鉄道博物館",
+        "東武日光",
+        "鬼怒川温泉"
+      ],
+      "notBoundaries": [
+        "大宮",
+        "伊東",
+        "甲府",
+        "宇都宮"
+      ],
+      "issues": []
+    },
+    {
+      "id": "east-hokkaido",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "partial",
+      "sources": [
+        "https://www.jreast.co.jp/en/multi/pass/easthokkaido.html",
+        "https://www.jreast.co.jp/multi/pass/easthokkaido_terms.html",
+        "https://asset.japan.travel/image/upload/v1771574289/pdf/JR_East_20260220.pdf"
+      ],
+      "finding": "删除错误的全 JR 东日本范围与长野／热海／大月标注；按官方主图与东京近郊插图拆分。",
+      "boundaries": [
+        "東武日光",
+        "鬼怒川温泉"
+      ],
+      "notBoundaries": [],
+      "issues": [
+        "南北海道示意图未列札幌东侧函馆线逐站边界；地图接入千岁线需经白石，不能据此宣称白石是已核实票券边界。",
+        "新潟西南支线与东京近郊插图之间的详细可用站表未获取，当前线路范围仍需进一步核实，不能据图推定全券无漏线。",
+        "该券东京近郊范围不是东京广域券；已移除房总全线等无依据高亮，尚待取得可读的完整逐站边界表。"
+      ]
+    },
+    {
+      "id": "tohoku-hokkaido",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "partial",
+      "sources": [
+        "https://www.jreast.co.jp/en/multi/pass/tohokuhokkaido.html",
+        "https://www.jreast.co.jp/multi/pass/tohokuhokkaido_terms.html",
+        "https://asset.japan.travel/image/upload/v1771574289/pdf/JR_East_20260220.pdf"
+      ],
+      "finding": "纠正此前东北部分矩形漏线；边界是白坂、勿来、村上、小国、德泽、只见、矢祭山及新白河，不是县界。",
+      "boundaries": [
+        "白坂",
+        "勿来",
+        "村上",
+        "小国",
+        "徳沢",
+        "只見",
+        "矢祭山",
+        "新白河"
+      ],
+      "notBoundaries": [],
+      "issues": [
+        "南北海道示意图未列札幌东侧函馆线逐站边界；地图接入千岁线需经白石，不能据此宣称白石是已核实票券边界。"
+      ]
+    },
+    {
+      "id": "sendai",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://sendaitravelpass.jp/1day/en/",
+        "https://sendaitravelpass.jp/images/sendaiareapass_map.png"
+      ],
+      "finding": "JR 四方向、仙台机场线、阿武隈槻木—阿武隈；新干线与地铁未高亮。",
+      "boundaries": [
+        "白石",
+        "松島",
+        "山寺",
+        "松島海岸",
+        "あぶくま"
+      ],
+      "notBoundaries": [
+        "仙台",
+        "槻木"
+      ],
+      "issues": []
+    },
+    {
+      "id": "kansai-mini",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansaimini/",
+        "https://www.westjr.co.jp/travel-information/en/assets/img/tickets-passes/jrwest-rail-pass/kansaimini_map.jpg"
+      ],
+      "finding": "不含任何新干线；Haruka 等特急另购料金。范围按山科／舞子／宝塚／保津峡／木津而非城市矩形。",
+      "boundaries": [
+        "山科",
+        "舞子",
+        "宝塚",
+        "保津峡",
+        "木津",
+        "日根野"
+      ],
+      "notBoundaries": [
+        "大阪",
+        "京都",
+        "神戸",
+        "奈良"
+      ],
+      "issues": []
+    },
+    {
+      "id": "kansai-wide",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai_wide/",
+        "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/detail.html?shnId=125000343&keyword=%E3%82%A8%E3%83%AA%E3%82%A2%E3%83%91%E3%82%B9",
+        "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20251029185510024&newwindow=true"
+      ],
+      "finding": "HSR 新大阪—冈山；由良、津山、总社、仓敷、柘植、米原、新宫；含智头、丹铁、和歌山电铁和高松方向。",
+      "boundaries": [
+        "米原",
+        "柘植",
+        "由良",
+        "津山",
+        "総社",
+        "倉敷",
+        "敦賀",
+        "新宮",
+        "新大阪",
+        "岡山",
+        "宇多津"
+      ],
+      "notBoundaries": [
+        "城崎温泉",
+        "天橋立"
+      ],
+      "issues": []
+    },
+    {
+      "id": "kansai-hiroshima",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai_hiroshima/",
+        "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/detail.html?shnId=123000473&keyword=%E3%82%A8%E3%83%AA%E3%82%A2%E3%83%91%E3%82%B9",
+        "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20240930132917632&newwindow=true"
+      ],
+      "finding": "HSR 新大阪—广岛；在来线至岩国／三次／府中／鸟取；不把广岛站误作所有线路边界。",
+      "boundaries": [
+        "米原",
+        "柘植",
+        "鳥取",
+        "津山",
+        "総社",
+        "岩国",
+        "府中",
+        "三次",
+        "敦賀",
+        "新宮",
+        "新大阪",
+        "広島",
+        "宇多津"
+      ],
+      "notBoundaries": [
+        "城崎温泉"
+      ],
+      "issues": []
+    },
+    {
+      "id": "kansai-sanin",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai_sanin/",
+        "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/detail.html?shnId=124000015&keyword=%E3%82%A8%E3%83%AA%E3%82%A2%E3%83%91%E3%82%B9",
+        "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20240123162111667&newwindow=true"
+      ],
+      "finding": "不含高松／新宫；伯备、木次、因美、智头及丹铁按官方全区段，山口线至津和野。",
+      "boundaries": [
+        "米原",
+        "柘植",
+        "萩",
+        "津和野",
+        "備後落合",
+        "津山",
+        "倉敷",
+        "敦賀",
+        "和歌山",
+        "新大阪",
+        "岡山"
+      ],
+      "notBoundaries": [
+        "鳥取",
+        "松江",
+        "出雲市",
+        "城崎温泉"
+      ],
+      "issues": []
+    },
+    {
+      "id": "kansai-hokuriku",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai_hokuriku/",
+        "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/detail.html?shnId=124000066&keyword=%E3%82%A8%E3%83%AA%E3%82%A2%E3%83%91%E3%82%B9",
+        "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20240123184022761&newwindow=true"
+      ],
+      "finding": "HSR 到上越妙高；不含高松、智头急行；猪谷／南小谷／新宫是真正局界边界，敦贺是内部换乘。",
+      "boundaries": [
+        "米原",
+        "柘植",
+        "鳥取",
+        "津山",
+        "総社",
+        "倉敷",
+        "新宮",
+        "南小谷",
+        "猪谷",
+        "上越妙高",
+        "新大阪",
+        "岡山",
+        "児島"
+      ],
+      "notBoundaries": [
+        "敦賀",
+        "富山",
+        "高岡",
+        "金沢"
+      ],
+      "issues": []
+    },
+    {
+      "id": "tottori-matsue",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/tottorimatsue/",
+        "https://www.westjr.co.jp/travel-information/en/assets/img/tickets-passes/jrwest-rail-pass/tottorimatsue_map.jpg"
+      ],
+      "finding": "山阴东滨—出云市，木次至木次、伯备至根雨、因美至郡家和境线。",
+      "boundaries": [
+        "東浜",
+        "出雲市",
+        "木次",
+        "根雨",
+        "郡家"
+      ],
+      "notBoundaries": [
+        "米子",
+        "松江",
+        "鳥取",
+        "伯耆大山",
+        "宍道"
+      ],
+      "issues": []
+    },
+    {
+      "id": "sanyo-sanin",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/sanyo_sanin/",
+        "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/detail.html?shnId=123000474&keyword=%E3%82%A8%E3%83%AA%E3%82%A2%E3%83%91%E3%82%B9",
+        "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20240930125447620&newwindow=true"
+      ],
+      "finding": "含高松、智头、丹铁；不含博多南、北陆新干线、纪势和歌山以南；公司交接只标本券外缘。",
+      "boundaries": [
+        "米原",
+        "柘植",
+        "敦賀",
+        "和歌山",
+        "新大阪",
+        "博多",
+        "下関",
+        "宇多津"
+      ],
+      "notBoundaries": [
+        "岡山",
+        "広島",
+        "鳥取"
+      ],
+      "issues": []
+    },
+    {
+      "id": "hiroshima-yamaguchi",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/hiroshima_yamaguchi/",
+        "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/detail.html?shnId=125000089&keyword=%E3%82%A8%E3%83%AA%E3%82%A2%E3%83%91%E3%82%B9",
+        "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20240930123357617&newwindow=true"
+      ],
+      "finding": "山阳 HSR 博多—三原，在来线东至尾道；山阴至益田、艺备至三次，逐一分开地图边界。",
+      "boundaries": [
+        "益田",
+        "三次",
+        "尾道",
+        "博多",
+        "三原",
+        "下関"
+      ],
+      "notBoundaries": [
+        "広島",
+        "新山口"
+      ],
+      "issues": []
+    },
+    {
+      "id": "kansai-excursion",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.westjr.co.jp/global/en/ticket/pass/kansai_wide_excursion/",
+        "https://www.westjr.co.jp/global/en/ticket/pass/kansai_wide_excursion/images/kansai_wide_map.jpg"
+      ],
+      "finding": "独立读取游览券范围图，铁路区间与广域版一致；3 日、非日本护照不限签证类型。",
+      "boundaries": [
+        "米原",
+        "柘植",
+        "由良",
+        "津山",
+        "総社",
+        "倉敷",
+        "敦賀",
+        "新宮",
+        "新大阪",
+        "岡山",
+        "宇多津"
+      ],
+      "notBoundaries": [],
+      "issues": []
+    },
+    {
+      "id": "okayama-hiroshima-yamaguchi",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/okayama_hiroshima_yamaguchi/",
+        "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/detail.html?shnId=125000088&keyword=%E3%82%A8%E3%83%AA%E3%82%A2%E3%83%91%E3%82%B9",
+        "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20250131114227936&newwindow=true"
+      ],
+      "finding": "山阳 HSR 博多—岡山，在来线东至岡山；山阴至益田、艺备至三次，逐一分开地图边界。",
+      "boundaries": [
+        "益田",
+        "三次",
+        "岡山",
+        "府中",
+        "総社",
+        "津山",
+        "博多",
+        "下関",
+        "宇多津"
+      ],
+      "notBoundaries": [
+        "広島",
+        "新山口",
+        "三原"
+      ],
+      "issues": []
+    },
+    {
+      "id": "hokuriku",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/hokuriku/",
+        "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/detail.html?shnId=125000081&keyword=%E3%82%A8%E3%83%AA%E3%82%A2%E3%83%91%E3%82%B9",
+        "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20240123192508774&newwindow=true"
+      ],
+      "finding": "新干线止于黑部宇奈月温泉；补齐越前铁路、万叶线和富山市内电车；不延长至上越妙高。",
+      "boundaries": [
+        "敦賀",
+        "黒部宇奈月温泉",
+        "小浜",
+        "九頭竜湖",
+        "和倉温泉",
+        "氷見",
+        "城端",
+        "猪谷"
+      ],
+      "notBoundaries": [
+        "富山",
+        "高岡",
+        "金沢",
+        "越前花堂",
+        "福井"
+      ],
+      "issues": []
+    },
+    {
+      "id": "west-all",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/all/",
+        "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/detail.html?shnId=124000071",
+        "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20240930115204607"
+      ],
+      "finding": "JR 西日本全区域加指定私铁；博多南与山阳、北陆分开；米原、龟山等局界使用官方网络外缘白名单。",
+      "boundaries": [
+        "上越妙高",
+        "南小谷",
+        "猪谷",
+        "米原",
+        "亀山",
+        "新宮",
+        "下関",
+        "児島",
+        "新大阪",
+        "博多"
+      ],
+      "notBoundaries": [
+        "敦賀",
+        "富山",
+        "金沢"
+      ],
+      "issues": []
+    },
+    {
+      "id": "hokuriku-arch",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.westjr.co.jp/travel-information/en/tickets-passes/other/hokuriku-arch-pass/",
+        "https://www.westjr.co.jp/travel-information/en/assets/img/tickets-passes/other/hokuriku_arch_map_02.jpg",
+        "https://asset.japan.travel/image/upload/v1771574289/pdf/JR_East_20260220.pdf",
+        "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/detail.html?shnId=126000196",
+        "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20260128091929024"
+      ],
+      "finding": "以 2026-03-14 起版详细日文附图核实东京全支线：中央东线至盐尻并含辰野路径、筱之井线、八高八王子—高丽川、川越大宫—高丽川、羽泽横滨国大与京阪短支线；山阴线止龟冈而非园部。上越妙高／敦贺为内部衔接，不作整券边界。",
+      "boundaries": [
+        "舞子",
+        "三田",
+        "木津",
+        "日根野",
+        "米原",
+        "高麗川",
+        "取手",
+        "千葉",
+        "蘇我",
+        "大船",
+        "猪谷",
+        "南小谷",
+        "亀岡",
+        "塩尻"
+      ],
+      "notBoundaries": [
+        "上越妙高",
+        "敦賀",
+        "長野",
+        "富山"
+      ],
+      "issues": []
+    },
+    {
+      "id": "setouchi",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.westjr.co.jp/travel-information/en/tickets-passes/other/setouchi/",
+        "https://www.westjr.co.jp/travel-information/en/assets/img/tickets-passes/other/setouchi_map.jpg"
+      ],
+      "finding": "濑户内独立范围：四国至伊予大洲／琴平／栗林；京都至龟冈；不把广域区域框内山阴／北陆等线路混入。",
+      "boundaries": [
+        "新大阪",
+        "博多",
+        "下関",
+        "京都",
+        "亀岡",
+        "木津",
+        "日根野",
+        "総社",
+        "山口",
+        "伊予大洲",
+        "琴平",
+        "栗林"
+      ],
+      "notBoundaries": [
+        "広島",
+        "松山",
+        "児島",
+        "宇多津"
+      ],
+      "issues": []
+    },
+    {
+      "id": "sanyo-kyushu",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.westjr.co.jp/travel-information/en/tickets-passes/other/ssnk/",
+        "https://www.westjr.co.jp/travel-information/en/assets/img/tickets-passes/other/ssnk_map.jpg"
+      ],
+      "finding": "山阳／山阴加北九州逐段；下关、博多为券内衔接，非边界；北九州 HSR 至熊本，在来线至宇土／大分。",
+      "boundaries": [
+        "米原",
+        "柘植",
+        "敦賀",
+        "和歌山",
+        "新大阪",
+        "宇多津",
+        "熊本",
+        "宇土",
+        "大分"
+      ],
+      "notBoundaries": [
+        "下関",
+        "博多",
+        "小倉",
+        "岡山"
+      ],
+      "issues": []
+    },
+    {
+      "id": "takayama",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://touristpass.jp/en/takayama_hokuriku/",
+        "https://touristpass.jp/assets/img/takayama_hokuriku/routemap_en.jpg"
+      ],
+      "finding": "高山全线含 JR 东海与西日本两段；北陆 HSR 敦贺—富山；大阪市内短支线独立补齐，不含东海道新干线。",
+      "boundaries": [
+        "名古屋",
+        "富山",
+        "日根野"
+      ],
+      "notBoundaries": [
+        "猪谷",
+        "敦賀",
+        "大阪",
+        "京都",
+        "高山"
+      ],
+      "issues": []
+    },
+    {
+      "id": "alpine",
+      "checked": "2026-11-10",
+      "version": "2026-04-15 至 2026-11-10 使用季（2026-11-06 停售）",
+      "status": "verified",
+      "sources": [
+        "https://touristpass.jp/en/alpine/",
+        "https://touristpass.jp/assets/img/alpine/routemap_en.jpg"
+      ],
+      "finding": "对应 2026-04-15—11-10 使用版；名古屋—富山与松本／信浓大町—名古屋，含富山地方铁道和钢索线；非铁路路段只文字说明。",
+      "boundaries": [
+        "名古屋",
+        "信濃大町",
+        "電鉄富山"
+      ],
+      "notBoundaries": [
+        "猪谷",
+        "塩尻",
+        "松本",
+        "富山"
+      ],
+      "issues": []
+    },
+    {
+      "id": "ise",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://touristpass.jp/en/ise_kumano/",
+        "https://touristpass.jp/assets/img/ise_kumano/routemap_en.jpg"
+      ],
+      "finding": "纪势线两家公司全行程、关西线大阪—名古屋、参宫、伊势铁道、贵志川线；不含奈良线／和歌山线。",
+      "boundaries": [
+        "名古屋"
+      ],
+      "notBoundaries": [
+        "新宮",
+        "亀山",
+        "伊勢市",
+        "大阪"
+      ],
+      "issues": []
+    },
+    {
+      "id": "fuji-shizuoka",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://touristpass.jp/en/fuji_shizuoka/",
+        "https://touristpass.jp/assets/img/fuji_shizuoka/routemap_en.jpg"
+      ],
+      "finding": "东海道热海—丰桥、御殿场沼津—松田、身延富士—下部温泉、骏豆三岛—修善寺；新干线完全不含。",
+      "boundaries": [
+        "熱海",
+        "豊橋",
+        "松田",
+        "下部温泉"
+      ],
+      "notBoundaries": [
+        "静岡",
+        "浜松"
+      ],
+      "issues": []
+    },
+    {
+      "id": "kyushu",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.jrkyushu.co.jp/english/railpass/railpass.html",
+        "https://www.jrkyushu.co.jp/lang/assets/img/railpass/common/img_all-kyushu.png",
+        "https://www.jrkyushu.co.jp/english/pdf/railpass_guidebook.pdf"
+      ],
+      "finding": "JR 九州全线至下关，含西九州 HSR；小仓—博多山阳 HSR 不属于 JR 九州，不用博多／小仓两个大站推导全站不可乘。",
+      "boundaries": [
+        "下関",
+        "博多"
+      ],
+      "notBoundaries": [
+        "小倉",
+        "熊本",
+        "大分"
+      ],
+      "issues": []
+    },
+    {
+      "id": "north-kyushu",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.jrkyushu.co.jp/english/railpass/railpass.html",
+        "https://www.jrkyushu.co.jp/lang/assets/img/railpass/common/img_northern-kyushu.png"
+      ],
+      "finding": "HSR 至熊本；在来线为宇土接三角支线、日丰止大分，完整包含丰肥线，不用南纬矩形截掉阿苏段。",
+      "boundaries": [
+        "博多",
+        "熊本",
+        "宇土",
+        "大分",
+        "下関"
+      ],
+      "notBoundaries": [
+        "三角",
+        "長崎"
+      ],
+      "issues": []
+    },
+    {
+      "id": "south-kyushu",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.jrkyushu.co.jp/english/railpass/railpass.html",
+        "https://www.jrkyushu.co.jp/lang/assets/img/railpass/common/img_southern-kyushu.png"
+      ],
+      "finding": "大分／熊本以南含三角及丰肥；鹿儿岛本线八代—川内属于第三部门，不造直线连接；肥萨线停运是运营状态。",
+      "boundaries": [
+        "熊本",
+        "大分",
+        "八代",
+        "川内"
+      ],
+      "notBoundaries": [
+        "鹿児島中央",
+        "宮崎",
+        "三角"
+      ],
+      "issues": []
+    },
+    {
+      "id": "kyushu-mobile",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "partial",
+      "sources": [
+        "https://www.jrkyushu.co.jp/english/railpass/mobilepass.html",
+        "https://www.jrkyushu.co.jp/lang/assets/img/railpass/mobile/img_fukuoka.png"
+      ],
+      "finding": "大牟田、行桥方向至图示边缘；不是只到久留米；仅自由席，不含任何新干线。",
+      "boundaries": [
+        "大牟田",
+        "行橋",
+        "唐津",
+        "田川後藤寺",
+        "姪浜"
+      ],
+      "notBoundaries": [
+        "久留米",
+        "博多",
+        "小倉"
+      ],
+      "issues": [
+        "手机版简图标为唐津，未找到西唐津是否包含的明确逐站条款，唐津端点暂按简图，尚不能宣称已完全核实。"
+      ]
+    },
+    {
+      "id": "shikoku",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://shikoku-railwaytrip.com/news/pdf/20260806_en_japan-rail-passes.pdf"
+      ],
+      "finding": "2026-10-01 新版：3／7 日，移除小豆岛船／巴士；铁路按新版列明的五家公司，Sunrise Seto 不含。",
+      "boundaries": [
+        "児島"
+      ],
+      "notBoundaries": [
+        "高松",
+        "徳島",
+        "阿波海南"
+      ],
+      "issues": []
+    },
+    {
+      "id": "greater-tokyo",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://greater-tokyo-pass.jp/en/",
+        "https://greater-tokyo-pass.jp/en/rosen/index.html",
+        "https://greater-tokyo-pass.jp/assets/images/rosen/line.pdf"
+      ],
+      "finding": "移除误含江之电，补百合海鸥；地铁／巴士仅文字权益；成田 Sky Access 不误当北总线全线自由乘车。",
+      "boundaries": [
+        "新藤原",
+        "小田原"
+      ],
+      "notBoundaries": [
+        "新宿",
+        "渋谷",
+        "横浜"
+      ],
+      "issues": []
+    },
+    {
+      "id": "kintetsu1",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.kintetsu.co.jp/foreign/english/ticket/krp_1day.html"
+      ],
+      "finding": "四组指定区间；奈良线不借用地名矩形，生驹线不在一日券范围。",
+      "boundaries": [
+        "筒井",
+        "長田",
+        "生駒",
+        "大阪難波"
+      ],
+      "notBoundaries": [
+        "大和西大寺",
+        "大和八木"
+      ],
+      "issues": []
+    },
+    {
+      "id": "kintetsu2",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.kintetsu.co.jp/foreign/english/ticket/krp_2day.html",
+        "https://www.kintetsu.co.jp/foreign/guidebook/english/pdf/krp_2day_2020_english.pdf"
+      ],
+      "finding": "大阪／奈良／京都全区域，东端三本松；补齐京阪奈缆车与短支线，非矩形包含名张。",
+      "boundaries": [
+        "三本松",
+        "大阪難波",
+        "長田"
+      ],
+      "notBoundaries": [
+        "大和八木",
+        "生駒"
+      ],
+      "issues": []
+    },
+    {
+      "id": "kintetsu5",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.kintetsu.co.jp/foreign/english/ticket/krp_5day.html"
+      ],
+      "finding": "近铁／伊贺全铁路含缆车；plus 额外权益是巴士，不扩大铁路范围。",
+      "boundaries": [
+        "大阪難波",
+        "長田"
+      ],
+      "notBoundaries": [
+        "伊賀神戸",
+        "大和八木",
+        "生駒"
+      ],
+      "issues": []
+    },
+    {
+      "id": "kintetsu5plus",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.kintetsu.co.jp/foreign/english/ticket/krp_5dayplus.html"
+      ],
+      "finding": "近铁／伊贺全铁路含缆车；plus 额外权益是巴士，不扩大铁路范围。",
+      "boundaries": [
+        "大阪難波",
+        "長田"
+      ],
+      "notBoundaries": [
+        "伊賀神戸",
+        "大和八木",
+        "生駒"
+      ],
+      "issues": []
+    },
+    {
+      "id": "nikko-all",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.tobu.co.jp/en/ticket/nikko/all.html"
+      ],
+      "finding": "两券铁路区间相同，巴士权益和天数不同；下今市是使用次数切换点，不是可乘铁路外边界。",
+      "boundaries": [
+        "浅草",
+        "東武日光",
+        "新藤原"
+      ],
+      "notBoundaries": [
+        "下今市"
+      ],
+      "issues": []
+    },
+    {
+      "id": "nikko-heritage",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.tobu.co.jp/en/ticket/nikko/city.html"
+      ],
+      "finding": "两券铁路区间相同，巴士权益和天数不同；下今市是使用次数切换点，不是可乘铁路外边界。",
+      "boundaries": [
+        "浅草",
+        "東武日光",
+        "新藤原"
+      ],
+      "notBoundaries": [
+        "下今市"
+      ],
+      "issues": []
+    },
+    {
+      "id": "kawagoe",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.tobu.co.jp/en/ticket/kawagoe/premium.html"
+      ],
+      "finding": "川越是不限次区间切换点，不能误作外边界；实际范围东上本线池袋—川越市。",
+      "boundaries": [
+        "池袋",
+        "川越市"
+      ],
+      "notBoundaries": [
+        "川越"
+      ],
+      "issues": []
+    },
+    {
+      "id": "seibu",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.seiburailway.jp/en/ticket/seibu1daypass/"
+      ],
+      "finding": "不得把被排除的武藏境、是政标为券内边界。",
+      "boundaries": [
+        "小竹向原"
+      ],
+      "notBoundaries": [
+        "所沢",
+        "飯能"
+      ],
+      "issues": []
+    },
+    {
+      "id": "seibu-nagatoro",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.seiburailway.jp/en/ticket/seibu1daypass/"
+      ],
+      "finding": "长瀞是范围内车站，北侧真正边界是野上。",
+      "boundaries": [
+        "小竹向原",
+        "野上"
+      ],
+      "notBoundaries": [
+        "長瀞",
+        "御花畑",
+        "西武秩父"
+      ],
+      "issues": []
+    },
+    {
+      "id": "hakone-kamakura",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.odakyu.jp/english/passes/hakone_kamakura/",
+        "https://odakyu-global.com/passes/hakone-kamakura-pass/"
+      ],
+      "finding": "小田原、箱根汤本、强罗是范围内换乘，不应作为整券外边界；Romancecar 须另购特急票。",
+      "boundaries": [],
+      "notBoundaries": [
+        "小田原",
+        "箱根湯本",
+        "強羅",
+        "藤沢"
+      ],
+      "issues": []
+    },
+    {
+      "id": "keihan-osaka",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/kyoto-osaka.html",
+        "https://www.keihan.co.jp/travel/en/pdf/trains/passes-for-visitors-to-japan/Kyoto_Osaka_Validarea.pdf"
+      ],
+      "finding": "本线系全区域含宇治、交野、男山缆车，不含大津；地铁／巴士和园区权益仅文字说明。",
+      "boundaries": [],
+      "notBoundaries": [
+        "京橋",
+        "三条",
+        "石清水八幡宮"
+      ],
+      "issues": []
+    },
+    {
+      "id": "keihan-kyoto",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/kyoto-osaka.html",
+        "https://www.keihan.co.jp/travel/en/pdf/trains/passes-for-visitors-to-japan/Kyoto_Validarea.pdf"
+      ],
+      "finding": "石清水八幡宫—三条加鸭东、宇治、男山缆车；不再以京都矩形截断本线。",
+      "boundaries": [
+        "石清水八幡宮"
+      ],
+      "notBoundaries": [
+        "三条",
+        "中書島",
+        "ケーブル八幡宮口"
+      ],
+      "issues": []
+    },
+    {
+      "id": "keihan-kurama",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/eizan-railway.html",
+        "https://www.keihan.co.jp/travel/en/pdf/trains/passes-for-visitors-to-japan/Validarea_Eizanrailway.pdf"
+      ],
+      "finding": "京阪本线系全区域加叡山两线；不含叡山缆车。",
+      "boundaries": [],
+      "notBoundaries": [
+        "出町柳",
+        "三条",
+        "京橋"
+      ],
+      "issues": []
+    },
+    {
+      "id": "keihan-metro",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/osaka-subway.html",
+        "https://www.keihan.co.jp/travel/en/pdf/trains/passes-for-visitors-to-japan/Validarea_OsakaSubway.pdf"
+      ],
+      "finding": "本线系全区域含宇治、交野、男山缆车，不含大津；地铁／巴士和园区权益仅文字说明。",
+      "boundaries": [],
+      "notBoundaries": [
+        "三条",
+        "京橋"
+      ],
+      "issues": []
+    },
+    {
+      "id": "keihan-otsu",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/otsu.html",
+        "https://www.keihan.co.jp/travel/en/pdf/trains/passes-for-visitors-to-japan/Validarea_Otsu.pdf"
+      ],
+      "finding": "只含京津／石山坂本两线，区别于其他京阪观光券。",
+      "boundaries": [
+        "御陵"
+      ],
+      "notBoundaries": [
+        "びわ湖浜大津"
+      ],
+      "issues": []
+    },
+    {
+      "id": "keihan-hirakata",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/hirakata-park.html",
+        "https://www.keihan.co.jp/travel/en/pdf/trains/passes-for-visitors-to-japan/Validarea_Hirakatapark.pdf"
+      ],
+      "finding": "本线系全区域含宇治、交野、男山缆车，不含大津；地铁／巴士和园区权益仅文字说明。",
+      "boundaries": [],
+      "notBoundaries": [
+        "枚方公園",
+        "三条",
+        "京橋"
+      ],
+      "issues": []
+    },
+    {
+      "id": "kansai-old",
+      "checked": "2026-11-10",
+      "version": "截至 2026-09-30 停售的旧关西地区券（保留官方旧范围图）",
+      "status": "verified",
+      "sources": [
+        "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai/",
+        "https://www.westjr.co.jp/travel-information/en/assets/img/tickets-passes/jrwest-rail-pass/kansai_map.jpg"
+      ],
+      "finding": "历史券 JR 支线逐段到日吉／篠山口／伊贺上野等；另含指定一日京阪／阪急，不含任何新干线。",
+      "boundaries": [
+        "上郡",
+        "播州赤穂",
+        "本竜野",
+        "篠山口",
+        "日吉",
+        "伊賀上野",
+        "米原",
+        "敦賀",
+        "和歌山",
+        "石清水八幡宮"
+      ],
+      "notBoundaries": [
+        "姫路",
+        "京都",
+        "大阪",
+        "奈良"
+      ],
+      "issues": []
+    },
+    {
+      "id": "kansai-lite",
+      "checked": "2026-11-10",
+      "version": "2026-11-10 现行条款",
+      "status": "verified",
+      "sources": [
+        "https://www.surutto.com/kansai_rwpl/en/krp.html",
+        "https://www.surutto.com/kansai_rwpl/assets/pdf/areamap2026_en.pdf"
+      ],
+      "finding": "补叡山、阪堺、单轨、神户新交通；近铁按指定边界及排除支线；神户高速以实际运营公司的轨迹表示。",
+      "boundaries": [
+        "青山町",
+        "壺阪山"
+      ],
+      "notBoundaries": [
+        "大阪難波",
+        "京都",
+        "関西空港"
+      ],
+      "issues": []
+    },
+    {
+      "id": "nankai-old",
+      "checked": "2026-11-10",
+      "version": "历史南海全线 2 日版；最终销售日及泉北合并前后版本未证实",
+      "status": "partial",
+      "sources": [
+        "https://www.nankai.co.jp/en_railway/ticket/web-nankaiallline2daypass/",
+        "https://his-travel.co.id/nankai-all-line-pass/"
+      ],
+      "finding": "官方页面明确停售、全南海线含机场线；任意两日，指定席特急另付费。",
+      "boundaries": [],
+      "notBoundaries": [
+        "中百舌鳥",
+        "極楽橋"
+      ],
+      "issues": [
+        "发行方遗留页未写停售日或泉北并入前后的版本日期；按销售方明确排除泉北的历史范围绘制，仍缺发行方带日期的完整历史条款。"
+      ]
+    },
+    {
+      "id": "kagawa-old",
+      "checked": "2026-11-10",
+      "version": "截至 2026-09-30 停售的香川迷你 2 日版",
+      "status": "verified",
+      "sources": [
+        "https://shikoku-railwaytrip.com/news/pdf/202304_pricechange_en.pdf",
+        "https://shikoku-railwaytrip.com/news/pdf/20260806_en_japan-rail-passes.pdf"
+      ],
+      "finding": "历史 2 日券：高松至观音寺／琴平／引田加琴电全线；2026-09-30 停售，不含本四备赞线去儿岛。",
+      "boundaries": [
+        "観音寺",
+        "琴平",
+        "引田"
+      ],
+      "notBoundaries": [
+        "多度津",
+        "志度",
+        "川原町"
+      ],
+      "issues": []
+    }
+  ]
+}

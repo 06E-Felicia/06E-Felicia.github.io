@@ -27,16 +27,22 @@ def build(source, target):
     import re
     text=re.sub(r'-?\d+\.\d{5,}',lambda m:format(float(m[0]),'.5f').rstrip('0').rstrip('.'),text)
     (target/'network.geojson').write_text(text)
+    result=build_stations(source,target)
+    print(f'{len(features)} operator/line groups, {len(result)} station entries; network {len(text.encode()):,} bytes')
+
+def build_stations(source,target):
     stations=json.loads(next(source.glob('*Station.geojson')).read_text())
     result=[];seen=set()
     for f in stations['features']:
         p=f['properties'];c=shape(f['geometry']).centroid
-        key=(p['N02_005'],round(c.x,3),round(c.y,3))
+        # Preserve operator and line identities at shared stations. Dropping
+        # these previously lost shinkansen labels and chose wrong boundaries.
+        key=(p['N02_005'],p['N02_004'],p['N02_003'],round(c.x,5),round(c.y,5))
         if key in seen:continue
         seen.add(key)
         result.append([p['N02_005'],round(c.y,5),round(c.x,5),p['N02_004'],p['N02_003']])
     (target/'stations.json').write_text(json.dumps(result,ensure_ascii=False,separators=(',',':')))
-    print(f'{len(features)} operator/line groups, {len(result)} station entries; network {len(text.encode()):,} bytes')
+    return result
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('source',type=Path);p.add_argument('--output',type=Path,default=ROOT/'assets/data/jprail');a=p.parse_args();build(a.source,a.output)
+    p=argparse.ArgumentParser();p.add_argument('source',type=Path);p.add_argument('--output',type=Path,default=ROOT/'assets/data/jprail');p.add_argument('--stations-only',action='store_true');a=p.parse_args();(build_stations if a.stations_only else build)(a.source,a.output)

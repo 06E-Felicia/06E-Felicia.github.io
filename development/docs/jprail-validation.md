@@ -1,16 +1,108 @@
-# JPRail 当前验证摘要
+# JPRail 当前核验摘要
 
-日期：2026-11-10（UTC+8）。本次修复缩放手感、票券边界标识和桌面底部空白，并保留已成功上线的 Pages 发布修复。
+核对日期：2026-11-10（Asia/Shanghai）。本次为 02:10 定时任务的一次执行，基于最新 `origin/main` 的隔离工作树，覆盖替换此前的局部验证摘要。
 
-- 缩放：按钮每次 0.25 级（原 0.5），滚轮单次手势 0.05–0.2 级；收集首段事件并忽略同一手势的惯性尾部，不积压额外缩放动画。提前预留 Leaflet 延后一帧启动的动画，避免把待启动动画误判为空闲；系统减少动态效果设置仍有效。
-- 边界：官方边界／起讫站加粗、加大站名并加绿色圆圈；以 JR 公司局界为范围端点时用蓝色虚圈，详情、悬浮和弹窗说明公司关系。站名本身不追加“界”字。N02 派生 14 个 JR 公司接口，只有票券实际覆盖一侧时才标注；不把运营方筛选变成票券边界，不把矩形裁切点冒充局界。
-- 北陆：按 [JR 西日本官方范围](https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/hokuriku/) 核对，北陆地区券新干线为敦贺—黑部宇奈月温泉。改用官方起讫站绘制 7 条 JR 区段及 3 条第三部门条件通过区段，避免旧矩形裁切在非边界位置突然终止；保留中途下车等限制。[关西・北陆券](https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai_hokuriku/) 的新干线则精确到上越妙高并提示公司局界。其余未核实的票券范围仍为示意。
-- 桌面：使用整屏视口布局，桌面外层固定为视口，移除工作区 1100 px 高度上限；选中票券时长详情也不产生外层空白，目录、详情在栏内滚动，页脚贴合底部。窄屏保留原来的页面滚动和详情浮层。
-- 本地回归：`PYTHONDONTWRITEBYTECODE=1 /opt/anaconda3/bin/python3.12 development/tests/test_jprail.py`，2 项测试通过（11.020 秒）。覆盖单击仅一次缩放、双击仅两次点击、带惯性尾部的滚轮仅一次动画、北陆两券终点、局界圆圈、全国券内部边界不误标、660/1440/1800 高度无底部空白，以及原有价格、日期、筛选、精细轨迹、站名与移动布局。
-- 发布保护：基于最新主分支，保留 `bfe9c85` 的默认分支检出、推送失败后 fetch/rebase 重试，以及任务 40 分钟／Pages 30 分钟时限；不回写本地旧版工作流。
+54 张产品均逐券查阅来源并实际选择绘图检查，其中 **50 张范围／主要使用条款来源核验完成，4 张仍有证据缺口**。绘图检查通过不等于尚未证实的官方适用范围也正确；不能据此宣称全目录无错标、无漏标或零错误。票价继续使用详情中标注的原有核查日期（2026-11-08），本次不宣称重新核实全部票价。线路几何仍来自 N02-25，属于适用范围示意，未验证每条轨道的实时营运状态。
 
-视觉：1800×1200 联网加载街道底图，北陆地区券边界圆圈和加粗站名正常，上越妙高公司局界虚圈正常；1200 与 1800 高度下文档高度等于视口、页脚贴底，无 JavaScript 页面异常。正式审核图已覆盖为本次北陆地图。
+## 修正内容
 
-部署：待本次功能提交发布后，覆盖记录实际 Actions 和线上检查结果。
+- 滚轮改为一个连续目标和一个 RAF，按输入增量累计，而不是把整段手势锁成一次。100 CSS px 约 0.125 级，按钮／键盘每次 0.25 级；保留小幅惯性输入与反向操作。删除首段收集、尾部丢弃和离散动画排队，输入停止后不再跳到另一档。慢滚、快滚、持续滚、反向、惯性尾部、pixel／line／page deltaMode、上下限、双击按钮、键盘和系统减少动态效果均有回归。
+- 只按每券官方范围白名单标注票券边界。删除“只显示公司接口一侧就自动推定为边界”的逻辑，分开粗圈适用边界、蓝色虚圈真实公司边界、细圈物理铁路端点和文字限制；站名本身没有“界／限／关”等后缀。同站涉及多条线路时在说明中写明具体限制，避免把某一线路边界解释成所有线路都止于该站。
+- 官方命名起讫区间替代所有票券矩形裁切。补全漏掉的私铁、短支线和真正端点，删去超范围区间。北陆地区券新干线为敦贺—黑部宇奈月温泉，关西・北陆券为敦贺—上越妙高，两券独立核对。北陆拱型券另取得 2026 详细日文附图，纠正龟冈／园部及中央东线、筱之井线、东京短支线范围。
+- 概览和精细范围使用同一详细拓扑生成，只简化坐标，不更换所选通路；保留实际平行线路、砂原路径、予赞海岸与内子路径。没有人为直线补接、放大范围框或跨不相连设施造线。缆车、非铁路交通或不同实际设施之间的换乘距离保留，不冒充绘图断线。
+- 站点去重保留运营方和线路身份，从 9,482 条增至 10,234 条，解决共享站丢失新干线／第三部门身份及定位错误。站名避开控件、其他常驻名称和线路白底遮挡；普通站名只在附近排布，避免被远移到别处并产生蜘蛛状引线。精细图按有重叠端点的原始坐标段做视野索引，省去视野外投影；标签避让仅做亚像素碰撞简化，实际轨迹不降精度。区域视图提前疏开普通站名，近距离仍显示全部。缩放过程中同步变换，在长手势中刷新绘图视野，并扩大真实 Canvas 绘制余量，消除缩小过程中曾出现的约 34 px 边缘空洞（回归逐帧检查实际 Canvas 的覆盖范围）。
+- 修复详情栏改变宽度后 MapLibre 底图可能保留旧绘制视图的问题：同步底图视口、公开相机 API 并主动重绘，防止海岸线与铁路错位。允许带 padding 的 GL 视图跨日期变更线，避免全国缩小时 GL 自动夹紧中心而产生约 69 px 的错位。除投影对齐外，联网截图还检查金泽车站实际落在陆地，涵盖三种桌面宽度及详情关闭／重开。
+- 保留路线略加粗、按等级着色、单券选择、等级／运营方筛选、未选券时收起详情和桌面整屏布局。
 
-一张正式审核图覆盖保存为 `development/docs/jprail-map-review.png`；其他截图、探测脚本和发布工作树在本任务独有系统临时目录内，结束时清理。既有 N02 线路与站点、54 款目录及 2026-11-08 票价核查日期保留，不声称重新核实全目录价格。
+## 自动与真实绘图检查
+
+最终本地联合回归：5 项测试通过（323.149 秒）。54 张逐一选择，合计 **2,218 个实际视图、686 个关键站配置访问、344,899 个实际绘制铁路采样点**。
+
+每券检查全国、区域、近距离视图；对每个运营方／线路组定位到真实铁路坐标并读取实际 Canvas 截图像素，检查覆盖层中线路确实可见（至少 96% 的采样邻域存在预期线路颜色）；逐个关键站近距离访问，并检查视野内常驻边界名称未被控件／其他关键站名遮住。逐券操作等级、全部实际运营方、拖动、详情关闭／重开。无 JavaScript 页面异常。图层层级、视野保留、概览／精细端点和站点集合相同另有检查。这些是有限的实际视图／像素检查，不是对无限缩放位置的穷举证明。
+
+另以真实 Chrome 原生鼠标 wheel、模拟触控板连续输入和在线 OpenFreeMap 瓦片检查：100 px 输入改变 0.125 级；持续 40 次 × 30 px 输入改变 1.5 级，60 Hz 环境帧时长中位／P95 为 16.7／16.8 ms，输入结束稳定后额外变化 0。全国模式东京精细图的同类手势，本机采样 P95 从约 83 ms 降至约 33 ms（中位 16.7 ms）；重场景仍可出现短暂帧延迟，未声称所有硬件均固定 60 fps。桌面 660／1440／1800 高度无外层底部空白，窄屏滚动／详情保留。最终正式审核图覆盖保存为 [jprail-map-review.png](jprail-map-review.png)。
+
+复用回归命令（环境中需 Playwright、Chrome、Pillow；构建几何另需 Shapely、networkx）：
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python -m unittest development.tests.test_jprail development.tests.test_jprail_audit -v
+```
+
+## 仍未完成的具体项
+
+- **东日本・南北海道周游券** (`east-hokkaido`)：南北海道示意图未列札幌东侧函馆线逐站边界；地图接入千岁线需经白石，不能据此宣称白石是已核实票券边界。；新潟西南支线与东京近郊插图之间的详细可用站表未获取，当前线路范围仍需进一步核实，不能据图推定全券无漏线。；该券东京近郊范围不是东京广域券；已移除房总全线等无依据高亮，尚待取得可读的完整逐站边界表。 页面已显示“范围待核”，详情提前列出证据缺口。
+
+- **东北・南北海道周游券** (`tohoku-hokkaido`)：南北海道示意图未列札幌东侧函馆线逐站边界；地图接入千岁线需经白石，不能据此宣称白石是已核实票券边界。 页面已显示“范围待核”，详情提前列出证据缺口。
+
+- **福冈广域手机周游券** (`kyushu-mobile`)：手机版简图标为唐津，未找到西唐津是否包含的明确逐站条款，唐津端点暂按简图，尚不能宣称已完全核实。 页面已显示“范围待核”，详情提前列出证据缺口。
+
+- **南海全线 2 日券（停售）** (`nankai-old`)：发行方遗留页未写停售日或泉北并入前后的版本日期；按销售方明确排除泉北的历史范围绘制，仍缺发行方带日期的完整历史条款。 页面已显示“范围待核”，详情提前列出证据缺口。
+
+## 逐券来源记录
+
+下表每张产品均对应独立核对记录，完整的边界白名单、明确排除的内部站、来源、版本、日期和未完成事项保存在生产数据 [pass-audit.json](../../assets/data/jprail/pass-audit.json)。核对日期全部为 2026-11-10。“完成”指对应产品版本的范围／主要限制来源核验，地图并非官方精确票券图。南海历史券补充的 HIS 销售方材料不能替代发行方带日期的历史条款，因此仍列待核。
+
+| 产品 | 版本 | 状态 | 官方依据／核对发现 |
+| --- | --- | --- | --- |
+| 日本全国铁路周游券 | 2026-11-10 现行条款 | 完成 | JR 六社内部交接不是票券边界；补入四项第三部门通过特例，Nozomi/Mizuho 是列车限制。 [来源1](https://japanrailpass.net/en/use/conditions-for-use/) |
+| 北海道铁路周游券 | 2026-11-10 现行条款 | 完成 | 不含北海道新干线、道南渔火铁道；留萌线已于 2026-04-01 废止。 [来源1](https://www.jrhokkaido.co.jp/global/english/ticket/railpass/) · [来源2](https://www.jrhokkaido.co.jp/global/images/ticket/railpass/e-rail04.png) · [来源3](https://www.jrhokkaido.co.jp/CM/Info/press/pdf/20260318_KO_rumoi.pdf) |
+| 札幌－登别区域周游券 | 2026-11-10 现行条款 | 完成 | 按官方每个分支起讫站逐段定位，排除图示不可用目的地；未用矩形边缘作为边界。 [来源1](https://www.jrhokkaido.co.jp/global/english/ticket/railpass/) · [来源2](https://www.jrhokkaido.co.jp/global/images/ticket/railpass/e-rail02.png) |
+| 札幌－富良野区域周游券 | 2026-11-10 现行条款 | 完成 | 按官方每个分支起讫站逐段定位，排除图示不可用目的地；未用矩形边缘作为边界。 [来源1](https://www.jrhokkaido.co.jp/global/english/ticket/railpass/) · [来源2](https://www.jrhokkaido.co.jp/global/images/ticket/railpass/e-rail03.png) |
+| JR 东日本铁路周游券 | 2026-11-10 现行条款 | 完成 | 2026 新版全 JR 东日本加列明七家私铁／第三部门；补上东武直通区间，新干线／普通线公司边界按线路说明。 [来源1](https://www.jreast.co.jp/en/multi/pass/eastpass.html) · [来源2](https://asset.japan.travel/image/upload/v1771574289/pdf/JR_East_20260220.pdf) |
+| 东京广域周游券 | 2026-11-10 现行条款 | 完成 | 补 New Shuttle 与东武区间；西至小渊泽／小诸，HSR 佐久平，北至黑矶／那须盐原／日立／常陆大子；没有大宫整站边界。 [来源1](https://www.jreast.co.jp/en/multi/pass/tokyowidepass.html) · [来源2](https://www.jreast.co.jp/multi/pass/tokyowidepass_terms.html) · [来源3](https://asset.japan.travel/image/upload/v1771574289/pdf/JR_East_20260220.pdf) |
+| 东日本・南北海道周游券 | 2026-11-10 现行条款 | **待核** | 删除错误的全 JR 东日本范围与长野／热海／大月标注；按官方主图与东京近郊插图拆分。 [来源1](https://www.jreast.co.jp/en/multi/pass/easthokkaido.html) · [来源2](https://www.jreast.co.jp/multi/pass/easthokkaido_terms.html) · [来源3](https://asset.japan.travel/image/upload/v1771574289/pdf/JR_East_20260220.pdf) |
+| 东北・南北海道周游券 | 2026-11-10 现行条款 | **待核** | 纠正此前东北部分矩形漏线；边界是白坂、勿来、村上、小国、德泽、只见、矢祭山及新白河，不是县界。 [来源1](https://www.jreast.co.jp/en/multi/pass/tohokuhokkaido.html) · [来源2](https://www.jreast.co.jp/multi/pass/tohokuhokkaido_terms.html) · [来源3](https://asset.japan.travel/image/upload/v1771574289/pdf/JR_East_20260220.pdf) |
+| 仙台区域周游券 | 2026-11-10 现行条款 | 完成 | JR 四方向、仙台机场线、阿武隈槻木—阿武隈；新干线与地铁未高亮。 [来源1](https://sendaitravelpass.jp/1day/en/) · [来源2](https://sendaitravelpass.jp/images/sendaiareapass_map.png) |
+| 关西迷你周游券 | 2026-11-10 现行条款 | 完成 | 不含任何新干线；Haruka 等特急另购料金。范围按山科／舞子／宝塚／保津峡／木津而非城市矩形。 [来源1](https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansaimini/) · [来源2](https://www.westjr.co.jp/travel-information/en/assets/img/tickets-passes/jrwest-rail-pass/kansaimini_map.jpg) |
+| 关西广域周游券 | 2026-11-10 现行条款 | 完成 | HSR 新大阪—冈山；由良、津山、总社、仓敷、柘植、米原、新宫；含智头、丹铁、和歌山电铁和高松方向。 [来源1](https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai_wide/) · [来源2](https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/detail.html?shnId=125000343&keyword=%E3%82%A8%E3%83%AA%E3%82%A2%E3%83%91%E3%82%B9) · [来源3](https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20251029185510024&newwindow=true) |
+| 关西・广岛周游券 | 2026-11-10 现行条款 | 完成 | HSR 新大阪—广岛；在来线至岩国／三次／府中／鸟取；不把广岛站误作所有线路边界。 [来源1](https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai_hiroshima/) · [来源2](https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/detail.html?shnId=123000473&keyword=%E3%82%A8%E3%83%AA%E3%82%A2%E3%83%91%E3%82%B9) · [来源3](https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20240930132917632&newwindow=true) |
+| 关西・山阴周游券 | 2026-11-10 现行条款 | 完成 | 不含高松／新宫；伯备、木次、因美、智头及丹铁按官方全区段，山口线至津和野。 [来源1](https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai_sanin/) · [来源2](https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/detail.html?shnId=124000015&keyword=%E3%82%A8%E3%83%AA%E3%82%A2%E3%83%91%E3%82%B9) · [来源3](https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20240123162111667&newwindow=true) |
+| 关西・北陆周游券 | 2026-11-10 现行条款 | 完成 | HSR 到上越妙高；不含高松、智头急行；猪谷／南小谷／新宫是真正局界边界，敦贺是内部换乘。 [来源1](https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai_hokuriku/) · [来源2](https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/detail.html?shnId=124000066&keyword=%E3%82%A8%E3%83%AA%E3%82%A2%E3%83%91%E3%82%B9) · [来源3](https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20240123184022761&newwindow=true) |
+| 鸟取・松江周游券 | 2026-11-10 现行条款 | 完成 | 山阴东滨—出云市，木次至木次、伯备至根雨、因美至郡家和境线。 [来源1](https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/tottorimatsue/) · [来源2](https://www.westjr.co.jp/travel-information/en/assets/img/tickets-passes/jrwest-rail-pass/tottorimatsue_map.jpg) |
+| 山阳・山阴周游券 | 2026-11-10 现行条款 | 完成 | 含高松、智头、丹铁；不含博多南、北陆新干线、纪势和歌山以南；公司交接只标本券外缘。 [来源1](https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/sanyo_sanin/) · [来源2](https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/detail.html?shnId=123000474&keyword=%E3%82%A8%E3%83%AA%E3%82%A2%E3%83%91%E3%82%B9) · [来源3](https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20240930125447620&newwindow=true) |
+| 广岛・山口周游券 | 2026-11-10 现行条款 | 完成 | 山阳 HSR 博多—三原，在来线东至尾道；山阴至益田、艺备至三次，逐一分开地图边界。 [来源1](https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/hiroshima_yamaguchi/) · [来源2](https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/detail.html?shnId=125000089&keyword=%E3%82%A8%E3%83%AA%E3%82%A2%E3%83%91%E3%82%B9) · [来源3](https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20240930123357617&newwindow=true) |
+| 关西广域游览周游券 | 2026-11-10 现行条款 | 完成 | 独立读取游览券范围图，铁路区间与广域版一致；3 日、非日本护照不限签证类型。 [来源1](https://www.westjr.co.jp/global/en/ticket/pass/kansai_wide_excursion/) · [来源2](https://www.westjr.co.jp/global/en/ticket/pass/kansai_wide_excursion/images/kansai_wide_map.jpg) |
+| 冈山・广岛・山口周游券 | 2026-11-10 现行条款 | 完成 | 山阳 HSR 博多—岡山，在来线东至岡山；山阴至益田、艺备至三次，逐一分开地图边界。 [来源1](https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/okayama_hiroshima_yamaguchi/) · [来源2](https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/detail.html?shnId=125000088&keyword=%E3%82%A8%E3%83%AA%E3%82%A2%E3%83%91%E3%82%B9) · [来源3](https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20250131114227936&newwindow=true) |
+| 北陆地区周游券 | 2026-11-10 现行条款 | 完成 | 新干线止于黑部宇奈月温泉；补齐越前铁路、万叶线和富山市内电车；不延长至上越妙高。 [来源1](https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/hokuriku/) · [来源2](https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/detail.html?shnId=125000081&keyword=%E3%82%A8%E3%83%AA%E3%82%A2%E3%83%91%E3%82%B9) · [来源3](https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20240123192508774&newwindow=true) |
+| JR 西日本全地区周游券 | 2026-11-10 现行条款 | 完成 | JR 西日本全区域加指定私铁；博多南与山阳、北陆分开；米原、龟山等局界使用官方网络外缘白名单。 [来源1](https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/all/) · [来源2](https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/detail.html?shnId=124000071) · [来源3](https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20240930115204607) |
+| 北陆拱型铁路周游券 | 2026-11-10 现行条款 | 完成 | 以 2026-03-14 起版详细日文附图核实东京全支线：中央东线至盐尻并含辰野路径、筱之井线、八高八王子—高丽川、川越大宫—高丽川、羽泽横滨国大与京阪短支线；山阴线止龟冈而非园部。上越妙高／敦贺为内部衔接，不作整券边界。 [来源1](https://www.westjr.co.jp/travel-information/en/tickets-passes/other/hokuriku-arch-pass/) · [来源2](https://www.westjr.co.jp/travel-information/en/assets/img/tickets-passes/other/hokuriku_arch_map_02.jpg) · [来源3](https://asset.japan.travel/image/upload/v1771574289/pdf/JR_East_20260220.pdf) · [来源4](https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/detail.html?shnId=126000196) · [来源5](https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20260128091929024) |
+| 濑户内地区周游券 | 2026-11-10 现行条款 | 完成 | 濑户内独立范围：四国至伊予大洲／琴平／栗林；京都至龟冈；不把广域区域框内山阴／北陆等线路混入。 [来源1](https://www.westjr.co.jp/travel-information/en/tickets-passes/other/setouchi/) · [来源2](https://www.westjr.co.jp/travel-information/en/assets/img/tickets-passes/other/setouchi_map.jpg) |
+| 山阳・山阴・北部九州周游券 | 2026-11-10 现行条款 | 完成 | 山阳／山阴加北九州逐段；下关、博多为券内衔接，非边界；北九州 HSR 至熊本，在来线至宇土／大分。 [来源1](https://www.westjr.co.jp/travel-information/en/tickets-passes/other/ssnk/) · [来源2](https://www.westjr.co.jp/travel-information/en/assets/img/tickets-passes/other/ssnk_map.jpg) |
+| 高山・北陆地区周游券 | 2026-11-10 现行条款 | 完成 | 高山全线含 JR 东海与西日本两段；北陆 HSR 敦贺—富山；大阪市内短支线独立补齐，不含东海道新干线。 [来源1](https://touristpass.jp/en/takayama_hokuriku/) · [来源2](https://touristpass.jp/assets/img/takayama_hokuriku/routemap_en.jpg) |
+| 立山黑部・高山・松本地区周游券 | 2026-04-15 至 2026-11-10 使用季（2026-11-06 停售） | 完成 | 对应 2026-04-15—11-10 使用版；名古屋—富山与松本／信浓大町—名古屋，含富山地方铁道和钢索线；非铁路路段只文字说明。 [来源1](https://touristpass.jp/en/alpine/) · [来源2](https://touristpass.jp/assets/img/alpine/routemap_en.jpg) |
+| 伊势・熊野・和歌山地区周游券 | 2026-11-10 现行条款 | 完成 | 纪势线两家公司全行程、关西线大阪—名古屋、参宫、伊势铁道、贵志川线；不含奈良线／和歌山线。 [来源1](https://touristpass.jp/en/ise_kumano/) · [来源2](https://touristpass.jp/assets/img/ise_kumano/routemap_en.jpg) |
+| 富士山・静冈地区迷你周游券 | 2026-11-10 现行条款 | 完成 | 东海道热海—丰桥、御殿场沼津—松田、身延富士—下部温泉、骏豆三岛—修善寺；新干线完全不含。 [来源1](https://touristpass.jp/en/fuji_shizuoka/) · [来源2](https://touristpass.jp/assets/img/fuji_shizuoka/routemap_en.jpg) |
+| 全九州铁路周游券 | 2026-11-10 现行条款 | 完成 | JR 九州全线至下关，含西九州 HSR；小仓—博多山阳 HSR 不属于 JR 九州，不用博多／小仓两个大站推导全站不可乘。 [来源1](https://www.jrkyushu.co.jp/english/railpass/railpass.html) · [来源2](https://www.jrkyushu.co.jp/lang/assets/img/railpass/common/img_all-kyushu.png) · [来源3](https://www.jrkyushu.co.jp/english/pdf/railpass_guidebook.pdf) |
+| 北部九州铁路周游券 | 2026-11-10 现行条款 | 完成 | HSR 至熊本；在来线为宇土接三角支线、日丰止大分，完整包含丰肥线，不用南纬矩形截掉阿苏段。 [来源1](https://www.jrkyushu.co.jp/english/railpass/railpass.html) · [来源2](https://www.jrkyushu.co.jp/lang/assets/img/railpass/common/img_northern-kyushu.png) |
+| 南部九州铁路周游券 | 2026-11-10 现行条款 | 完成 | 大分／熊本以南含三角及丰肥；鹿儿岛本线八代—川内属于第三部门，不造直线连接；肥萨线停运是运营状态。 [来源1](https://www.jrkyushu.co.jp/english/railpass/railpass.html) · [来源2](https://www.jrkyushu.co.jp/lang/assets/img/railpass/common/img_southern-kyushu.png) |
+| 福冈广域手机周游券 | 2026-11-10 现行条款 | **待核** | 大牟田、行桥方向至图示边缘；不是只到久留米；仅自由席，不含任何新干线。 [来源1](https://www.jrkyushu.co.jp/english/railpass/mobilepass.html) · [来源2](https://www.jrkyushu.co.jp/lang/assets/img/railpass/mobile/img_fukuoka.png) |
+| 四国铁路周游券 | 2026-11-10 现行条款 | 完成 | 2026-10-01 新版：3／7 日，移除小豆岛船／巴士；铁路按新版列明的五家公司，Sunrise Seto 不含。 [来源1](https://shikoku-railwaytrip.com/news/pdf/20260806_en_japan-rail-passes.pdf) |
+| 大东京周游券 | 2026-11-10 现行条款 | 完成 | 移除误含江之电，补百合海鸥；地铁／巴士仅文字权益；成田 Sky Access 不误当北总线全线自由乘车。 [来源1](https://greater-tokyo-pass.jp/en/) · [来源2](https://greater-tokyo-pass.jp/en/rosen/index.html) · [来源3](https://greater-tokyo-pass.jp/assets/images/rosen/line.pdf) |
+| 近铁铁路周游券 1 日 | 2026-11-10 现行条款 | 完成 | 四组指定区间；奈良线不借用地名矩形，生驹线不在一日券范围。 [来源1](https://www.kintetsu.co.jp/foreign/english/ticket/krp_1day.html) |
+| 近铁铁路周游券 2 日 | 2026-11-10 现行条款 | 完成 | 大阪／奈良／京都全区域，东端三本松；补齐京阪奈缆车与短支线，非矩形包含名张。 [来源1](https://www.kintetsu.co.jp/foreign/english/ticket/krp_2day.html) · [来源2](https://www.kintetsu.co.jp/foreign/guidebook/english/pdf/krp_2day_2020_english.pdf) |
+| 近铁铁路周游券 5 日 | 2026-11-10 现行条款 | 完成 | 近铁／伊贺全铁路含缆车；plus 额外权益是巴士，不扩大铁路范围。 [来源1](https://www.kintetsu.co.jp/foreign/english/ticket/krp_5day.html) |
+| 近铁铁路周游券 5 日 plus | 2026-11-10 现行条款 | 完成 | 近铁／伊贺全铁路含缆车；plus 额外权益是巴士，不扩大铁路范围。 [来源1](https://www.kintetsu.co.jp/foreign/english/ticket/krp_5dayplus.html) |
+| 日光全地区周游券 | 2026-11-10 现行条款 | 完成 | 两券铁路区间相同，巴士权益和天数不同；下今市是使用次数切换点，不是可乘铁路外边界。 [来源1](https://www.tobu.co.jp/en/ticket/nikko/all.html) |
+| 日光世界遗产地区周游券 | 2026-11-10 现行条款 | 完成 | 两券铁路区间相同，巴士权益和天数不同；下今市是使用次数切换点，不是可乘铁路外边界。 [来源1](https://www.tobu.co.jp/en/ticket/nikko/city.html) |
+| 川越优惠周游券 Premium | 2026-11-10 现行条款 | 完成 | 川越是不限次区间切换点，不能误作外边界；实际范围东上本线池袋—川越市。 [来源1](https://www.tobu.co.jp/en/ticket/kawagoe/premium.html) |
+| 西武一日券 | 2026-11-10 现行条款 | 完成 | 不得把被排除的武藏境、是政标为券内边界。 [来源1](https://www.seiburailway.jp/en/ticket/seibu1daypass/) |
+| 西武一日券＋长瀞 | 2026-11-10 现行条款 | 完成 | 长瀞是范围内车站，北侧真正边界是野上。 [来源1](https://www.seiburailway.jp/en/ticket/seibu1daypass/) |
+| 箱根・镰仓周游券 | 2026-11-10 现行条款 | 完成 | 小田原、箱根汤本、强罗是范围内换乘，不应作为整券外边界；Romancecar 须另购特急票。 [来源1](https://www.odakyu.jp/english/passes/hakone_kamakura/) · [来源2](https://odakyu-global.com/passes/hakone-kamakura-pass/) |
+| 京阪京都・大阪观光券 | 2026-11-10 现行条款 | 完成 | 本线系全区域含宇治、交野、男山缆车，不含大津；地铁／巴士和园区权益仅文字说明。 [来源1](https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/kyoto-osaka.html) · [来源2](https://www.keihan.co.jp/travel/en/pdf/trains/passes-for-visitors-to-japan/Kyoto_Osaka_Validarea.pdf) |
+| 京阪京都观光券 | 2026-11-10 现行条款 | 完成 | 石清水八幡宫—三条加鸭东、宇治、男山缆车；不再以京都矩形截断本线。 [来源1](https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/kyoto-osaka.html) · [来源2](https://www.keihan.co.jp/travel/en/pdf/trains/passes-for-visitors-to-japan/Kyoto_Validarea.pdf) |
+| 京阪京都・大阪＋鞍马贵船观光券 | 2026-11-10 现行条款 | 完成 | 京阪本线系全区域加叡山两线；不含叡山缆车。 [来源1](https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/eizan-railway.html) · [来源2](https://www.keihan.co.jp/travel/en/pdf/trains/passes-for-visitors-to-japan/Validarea_Eizanrailway.pdf) |
+| 京阪京都・大阪观光券（大阪 Metro 版） | 2026-11-10 现行条款 | 完成 | 本线系全区域含宇治、交野、男山缆车，不含大津；地铁／巴士和园区权益仅文字说明。 [来源1](https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/osaka-subway.html) · [来源2](https://www.keihan.co.jp/travel/en/pdf/trains/passes-for-visitors-to-japan/Validarea_OsakaSubway.pdf) |
+| 京阪大津观光券 | 2026-11-10 现行条款 | 完成 | 只含京津／石山坂本两线，区别于其他京阪观光券。 [来源1](https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/otsu.html) · [来源2](https://www.keihan.co.jp/travel/en/pdf/trains/passes-for-visitors-to-japan/Validarea_Otsu.pdf) |
+| 京阪京都・大阪观光券（枚方公园版） | 2026-11-10 现行条款 | 完成 | 本线系全区域含宇治、交野、男山缆车，不含大津；地铁／巴士和园区权益仅文字说明。 [来源1](https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/hirakata-park.html) · [来源2](https://www.keihan.co.jp/travel/en/pdf/trains/passes-for-visitors-to-japan/Validarea_Hirakatapark.pdf) |
+| 关西地区周游券（停售） | 截至 2026-09-30 停售的旧关西地区券（保留官方旧范围图） | 完成 | 历史券 JR 支线逐段到日吉／篠山口／伊贺上野等；另含指定一日京阪／阪急，不含任何新干线。 [来源1](https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai/) · [来源2](https://www.westjr.co.jp/travel-information/en/assets/img/tickets-passes/jrwest-rail-pass/kansai_map.jpg) |
+| 关西铁路周游券 LITE | 2026-11-10 现行条款 | 完成 | 补叡山、阪堺、单轨、神户新交通；近铁按指定边界及排除支线；神户高速以实际运营公司的轨迹表示。 [来源1](https://www.surutto.com/kansai_rwpl/en/krp.html) · [来源2](https://www.surutto.com/kansai_rwpl/assets/pdf/areamap2026_en.pdf) |
+| 南海全线 2 日券（停售） | 历史南海全线 2 日版；最终销售日及泉北合并前后版本未证实 | **待核** | 官方页面明确停售、全南海线含机场线；任意两日，指定席特急另付费。 [来源1](https://www.nankai.co.jp/en_railway/ticket/web-nankaiallline2daypass/) · [来源2](https://his-travel.co.id/nankai-all-line-pass/) |
+| 香川迷你铁路・渡轮券（停售） | 截至 2026-09-30 停售的香川迷你 2 日版 | 完成 | 历史 2 日券：高松至观音寺／琴平／引田加琴电全线；2026-09-30 停售，不含本四备赞线去儿岛。 [来源1](https://shikoku-railwaytrip.com/news/pdf/202304_pricechange_en.pdf) · [来源2](https://shikoku-railwaytrip.com/news/pdf/20260806_en_japan-rail-passes.pdf) |
+
+## 发布与清理
+
+未修改任何工作流，保留 `bfe9c85` 的默认分支检出、fetch/rebase 推送重试、任务 40 分钟与 Pages 30 分钟时限；不强推，不回写陈旧工作流。先基于最新主分支提交本任务文件，推送后确认 Actions 发布步骤和实际 Pages 文件，不能把推送成功等同于上线。
+
+部署记录：等待本次功能提交发布后覆盖。此前 `b08ac3b` / Actions 42653355538 的局部通过不作为本次全目录结论。
+
+原始下载、PDF 展开、临时依赖、截图草稿、浏览器配置与机器检查 JSON 全在本任务独有系统临时目录，任务结束清理。仅保留生产数据／代码、复用测试、本摘要和一张正式审核图；没有生成完整模拟或回放，也未删除用户正式数据、其他任务文件或根目录 trash/。

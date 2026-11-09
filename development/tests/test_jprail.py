@@ -128,7 +128,7 @@ class BrowserTests(unittest.TestCase):
                     page.get_by_role('button',name='放大',exact=True).dblclick()
                     page.wait_for_function('JPRail.camera.whenIdle()');page.wait_for_timeout(300)
                     self.assertAlmostEqual(page.evaluate('JPRail.map.getZoom()'),initial+.75,places=6)
-                    self.assertEqual(page.evaluate('zoomEvents'),{'start':2,'end':2})
+                    self.assertEqual(page.evaluate('zoomEvents'),{'start':1,'end':1})
                     wheel_start=page.evaluate('JPRail.map.getZoom()');page.evaluate('zoomEvents={start:0,end:0}')
                     page.evaluate('''() => new Promise(resolve=>{
                       const el=document.getElementById('map'),b=el.getBoundingClientRect();
@@ -195,12 +195,12 @@ class BrowserTests(unittest.TestCase):
                     self.assertFalse(page.evaluate('JPRail.state.pinnedStations.some(p=>p.name==="上越妙高")'))
                     self.assertTrue(page.evaluate('["高山線","小浜線","IRいしかわ鉄道線"].every(n=>JPRail.state.displayed.some(f=>f.properties.name===n))'))
                     self.assertTrue(page.evaluate('JPRail.state.stationPool.some(s=>s[0]==="黒部宇奈月温泉")'))
-                    self.assertTrue(page.evaluate('''() => {const p=JPRail.state.passes.find(p=>p.id==='hokuriku');return !p.routeOverridesOnly&&p.routeFeatures.filter(f=>f.properties.grade==='highspeed').every(f=>(f.geometry.type==='LineString'?f.geometry.coordinates:f.geometry.coordinates.flat()).every(c=>c[0]<137.6));}'''))
-                    self.assertTrue(page.evaluate('JPRail.state.boundaryMarkers.getLayers().every(l=>l.options.radius>=6)'))
+                    self.assertTrue(page.evaluate('''() => {const p=JPRail.state.passes.find(p=>p.id==='hokuriku');return p.routeOverridesOnly&&p.routeFeatures.filter(f=>f.properties.grade==='highspeed').every(f=>(f.geometry.type==='LineString'?f.geometry.coordinates:f.geometry.coordinates.flat()).every(c=>c[0]<137.6));}'''))
+                    self.assertTrue(page.evaluate('JPRail.state.boundaryMarkers.getLayers().every(l=>l.options.radius>=4)&&JPRail.state.boundaryMarkers.getLayers().some(l=>l.options.radius>=6)'))
                     page.locator('[data-pass="kansai-hokuriku"]').click();page.wait_for_function('JPRail.camera.whenIdle()')
                     self.assertTrue(page.evaluate('JPRail.state.pinnedStations.some(p=>p.name==="上越妙高"&&p.boundaryKind==="company")'))
                     page.wait_for_function('JPRail.state.stationLabels.companyNames.includes("上越妙高")')
-                    self.assertIn('运营公司局界',page.locator('.company-boundary-note').inner_text())
+                    self.assertIn('本券止于公司局界',page.locator('.company-boundary-note').inner_text())
                     page.locator('[data-pass="west-all"]').click()
                     self.assertTrue(page.evaluate('["上越妙高","南小谷","米原","猪谷","新宮"].every(n=>JPRail.state.pinnedStations.some(p=>p.name===n&&p.boundaryKind==="company"))'))
                     page.locator('[data-pass="japan"]').click()
@@ -211,7 +211,7 @@ class BrowserTests(unittest.TestCase):
                     page.locator('[data-pass="kintetsu1"]').click();page.wait_for_function('JPRail.camera.whenIdle()')
                     self.assertTrue(page.evaluate('JPRail.state.pinnedStations.every(p=>JPRail.map.getBounds().contains([p.station[1],p.station[2]]))'))
                     page.wait_for_function('JPRail.state.detailStatus==="detail"')
-                    self.assertEqual(len(page.evaluate('JPRail.state.pinnedStations')),8)
+                    self.assertEqual(len(page.evaluate('JPRail.state.pinnedStations')),9)
                     for zoom in (4,7,11,16):
                         page.evaluate('(z)=>{JPRail.map.setZoom(z,{animate:false});}',zoom)
                         page.wait_for_function('JPRail.camera.whenIdle()')
@@ -224,7 +224,7 @@ class BrowserTests(unittest.TestCase):
                     self.assertEqual(page.locator('[data-boundary="近鉄奈良"]').inner_text(),'近鉄奈良')
                     self.assertTrue(page.evaluate('''() => {
                         const p=JPRail.state.passes.find(p=>p.id==='kintetsu1');
-                        const points=fs=>fs.filter(f=>f.properties.name==='奈良線').reduce((n,f)=>n+f.geometry.coordinates.reduce((a,c)=>a+c.length,0),0);
+                        const points=fs=>fs.filter(f=>f.properties.name==='奈良線').reduce((n,f)=>n+(f.geometry.type==='LineString'?f.geometry.coordinates.length:f.geometry.coordinates.reduce((a,c)=>a+c.length,0)),0);
                         return points(p.routeFeatures)>4*points(p.overviewRouteFeatures);
                     }'''))
                     self.assertFalse(page.evaluate("JPRail.state.displayed.some(f=>f.properties.name==='生駒線')"))
