@@ -90,6 +90,9 @@ class BrowserTests(unittest.TestCase):
                     context=browser.new_context(viewport={'width':1440,'height':960})
                     context.route('**/*',lambda r:r.continue_() if urlsplit(r.request.url).hostname==urlsplit(base).hostname else r.abort())
                     page=context.new_page();errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
+                    if os.environ.get('JPRAIL_BROWSER_TIMEOUT_MS'):
+                        page.set_default_timeout(int(os.environ['JPRAIL_BROWSER_TIMEOUT_MS']))
+                        page.set_default_navigation_timeout(int(os.environ['JPRAIL_BROWSER_TIMEOUT_MS']))
                     page.goto(base+'/JPRail.html')
                     page.wait_for_function('window.JPRail?.state.stations.length>0')
                     page.wait_for_function('JPRail.state.stationLabels.count>0')
