@@ -21,6 +21,8 @@ class CatalogueTests(unittest.TestCase):
             f=next(f for f in atlas['features'] if f['properties']['operator']=='近畿日本鉄道' and f['properties']['name']=='奈良線')
             return sum(map(len,f['geometry']['coordinates']))
         self.assertGreater(nara_points(detail),4*nara_points(network))
+        boundaries=json.loads((ROOT/'assets/data/jprail/company-boundaries.json').read_text())['boundaries']
+        self.assertTrue({'上越妙高','南小谷','米原','猪谷','新宮','熱海','亀山'}<={b['name'] for b in boundaries})
         operators={f['properties']['operator'] for f in network['features']}
         # JR and Seibu both have a Yamaguchi Line. Never borrow the private
         # railway's light-rail tag merely because a line name matches.
@@ -65,7 +67,7 @@ class BrowserTests(unittest.TestCase):
         finally:
             page.evaluate('JPRail.map.getPane("railStations").style.visibility=""')
         mask=Image.new('1',rails.size,1);draw=ImageDraw.Draw(mask)
-        points=page.evaluate('JPRail.state.stationPool.map(s=>{const p=JPRail.map.latLngToContainerPoint([s[1],s[2]]);return [p.x,p.y]})')
+        points=page.evaluate('[...JPRail.state.stationPool,...JPRail.state.pinnedStations.map(p=>p.station)].map(s=>{const p=JPRail.map.latLngToContainerPoint([s[1],s[2]]);return [p.x,p.y]})')
         for x,y in points:draw.ellipse((x-7,y-7,x+7,y+7),fill=0)
         total=lost=0
         for before,after,visible in zip(rails.getdata(),shown.getdata(),mask.getdata()):
@@ -117,6 +119,28 @@ class BrowserTests(unittest.TestCase):
                     self.assertEqual(page.evaluate('JPRail.state.stationLabels.mode'),'主要枢纽')
                     initial=page.evaluate('JPRail.map.getZoom()')
                     self.assertGreater(initial,4)
+                    page.evaluate('''() => {window.zoomEvents={start:0,end:0};JPRail.map.on('zoomstart',()=>zoomEvents.start++);JPRail.map.on('zoomend',()=>zoomEvents.end++);}''')
+                    page.get_by_role('button',name='放大',exact=True).click()
+                    page.wait_for_function('JPRail.camera.whenIdle()');page.wait_for_timeout(300)
+                    self.assertAlmostEqual(page.evaluate('JPRail.map.getZoom()'),initial+.25,places=6)
+                    self.assertEqual(page.evaluate('zoomEvents'),{'start':1,'end':1})
+                    page.evaluate('zoomEvents={start:0,end:0}')
+                    page.get_by_role('button',name='放大',exact=True).dblclick()
+                    page.wait_for_function('JPRail.camera.whenIdle()');page.wait_for_timeout(300)
+                    self.assertAlmostEqual(page.evaluate('JPRail.map.getZoom()'),initial+.75,places=6)
+                    self.assertEqual(page.evaluate('zoomEvents'),{'start':2,'end':2})
+                    wheel_start=page.evaluate('JPRail.map.getZoom()');page.evaluate('zoomEvents={start:0,end:0}')
+                    page.evaluate('''() => new Promise(resolve=>{
+                      const el=document.getElementById('map'),b=el.getBoundingClientRect();
+                      const fire=()=>el.dispatchEvent(new WheelEvent('wheel',{deltaY:-20,clientX:b.x+b.width/2,clientY:b.y+b.height/2,bubbles:true,cancelable:true}));
+                      fire();for(const t of [10,25,70,100,135])setTimeout(fire,t);setTimeout(resolve,150);
+                    })''')
+                    page.wait_for_function('JPRail.camera.whenIdle()');page.wait_for_timeout(300)
+                    self.assertGreater(page.evaluate('JPRail.map.getZoom()'),wheel_start)
+                    self.assertLessEqual(page.evaluate('JPRail.map.getZoom()')-wheel_start,.200001)
+                    self.assertEqual(page.evaluate('zoomEvents'),{'start':1,'end':1})
+                    page.locator('#resetView').click();page.wait_for_function('JPRail.camera.whenIdle()')
+                    initial=page.evaluate('JPRail.map.getZoom()')
                     box=page.locator('#map').bounding_box()
                     page.mouse.move(box['x']+box['width']/2,box['y']+box['height']/2)
                     page.mouse.wheel(0,-700)
@@ -166,6 +190,23 @@ class BrowserTests(unittest.TestCase):
                     self.assertEqual(page.evaluate('JPRail.state.displayed.length'),0)
                     self.assertEqual(page.evaluate('[...JPRail.state.layers.values()][0].getLayers().length'),0)
                     page.locator('#clearRailFilters').click()
+                    page.locator('[data-pass="hokuriku"]').click();page.wait_for_function('JPRail.camera.whenIdle()')
+                    page.wait_for_function('JPRail.state.stationLabels.boundaryNames.includes("黒部宇奈月温泉")')
+                    self.assertFalse(page.evaluate('JPRail.state.pinnedStations.some(p=>p.name==="上越妙高")'))
+                    self.assertTrue(page.evaluate('["高山線","小浜線","IRいしかわ鉄道線"].every(n=>JPRail.state.displayed.some(f=>f.properties.name===n))'))
+                    self.assertTrue(page.evaluate('JPRail.state.stationPool.some(s=>s[0]==="黒部宇奈月温泉")'))
+                    self.assertTrue(page.evaluate('''() => {const p=JPRail.state.passes.find(p=>p.id==='hokuriku');return !p.routeOverridesOnly&&p.routeFeatures.filter(f=>f.properties.grade==='highspeed').every(f=>(f.geometry.type==='LineString'?f.geometry.coordinates:f.geometry.coordinates.flat()).every(c=>c[0]<137.6));}'''))
+                    self.assertTrue(page.evaluate('JPRail.state.boundaryMarkers.getLayers().every(l=>l.options.radius>=6)'))
+                    page.locator('[data-pass="kansai-hokuriku"]').click();page.wait_for_function('JPRail.camera.whenIdle()')
+                    self.assertTrue(page.evaluate('JPRail.state.pinnedStations.some(p=>p.name==="上越妙高"&&p.boundaryKind==="company")'))
+                    page.wait_for_function('JPRail.state.stationLabels.companyNames.includes("上越妙高")')
+                    self.assertIn('运营公司局界',page.locator('.company-boundary-note').inner_text())
+                    page.locator('[data-pass="west-all"]').click()
+                    self.assertTrue(page.evaluate('["上越妙高","南小谷","米原","猪谷","新宮"].every(n=>JPRail.state.pinnedStations.some(p=>p.name===n&&p.boundaryKind==="company"))'))
+                    page.locator('[data-pass="japan"]').click()
+                    page.locator('#railOperator').select_option('西日本旅客鉄道')
+                    self.assertFalse(page.evaluate('JPRail.state.pinnedStations.some(p=>p.boundaryKind==="company")'),'filtering an internal JR company must not turn it into a pass boundary')
+                    page.locator('#clearSelection').click();page.locator('#clearRailFilters').click()
                     page.locator('#passSearch').fill('近铁');self.assertEqual(page.locator('.pass-card').count(),4)
                     page.locator('[data-pass="kintetsu1"]').click();page.wait_for_function('JPRail.camera.whenIdle()')
                     self.assertTrue(page.evaluate('JPRail.state.pinnedStations.every(p=>JPRail.map.getBounds().contains([p.station[1],p.station[2]]))'))
@@ -218,6 +259,13 @@ class BrowserTests(unittest.TestCase):
                       return JPRail.state.stationPool.every(s=>{const p=map.latLngToContainerPoint([s[1],s[2]]);return p.x<0||p.y<0||p.x>size.x||p.y>size.y||shown.has(s[0]);});
                     }'''))
                     page.locator('#closeDetail').click()
+                    page.locator('[data-pass="hokuriku"]').click()
+                    for width,height in [(1440,660),(1800,1440),(1800,1800)]:
+                        page.set_viewport_size({'width':width,'height':height})
+                        page.wait_for_function('Math.abs(JPRail.map.getSize().x-document.getElementById("map").clientWidth)<1')
+                        self.assertLessEqual(page.evaluate('document.documentElement.scrollHeight-innerHeight'),1)
+                        self.assertAlmostEqual(page.locator('.page-foot').bounding_box()['y']+page.locator('.page-foot').bounding_box()['height'],height,delta=1)
+                        if height==1800:self.assertGreater(page.locator('#map').bounding_box()['height'],1100)
                     page.locator('.rail-legend summary').click();self.assertIn('主干线',page.locator('.rail-legend').inner_text())
                     for width in (320,390,768,1100):
                         page.set_viewport_size({'width':width,'height':844})

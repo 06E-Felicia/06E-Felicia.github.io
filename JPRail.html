@@ -8,11 +8,11 @@
 <title>日本铁道pass地图 · JPRail</title>
 <link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css">
 <link rel="stylesheet" href="assets/vendor/maplibre/maplibre-gl.css">
-<link rel="stylesheet" href="assets/styles/jprail.css?v=20261109d">
+<link rel="stylesheet" href="assets/styles/jprail.css?v=20261110">
 <script defer src="assets/vendor/leaflet/leaflet.js"></script>
 <script defer src="assets/vendor/maplibre/maplibre-gl.js"></script>
 <script defer src="assets/vendor/maplibre-leaflet/leaflet-maplibre-gl.js"></script>
-<script type="module" src="assets/scripts/jprail.js?v=20261109d"></script>
+<script type="module" src="assets/scripts/jprail.js?v=20261110"></script>
 </head>
 <body>
 <header class="masthead">
@@ -50,7 +50,7 @@
       <div class="map-layer-controls"><label><input type="checkbox" id="infrastructure"> 详细设施原图（联网）</label><span id="infrastructureHint">在线原图含全网设施</span></div>
       <div class="basemap-status"><span id="basemapStatus" role="status">白色街道底图载入中…</span><button id="retryBasemap" type="button" hidden>重试底图</button></div>
       <div id="mapState" class="map-state" role="status">正在载入全国铁路…</div>
-      <details class="rail-legend"><summary><i style="--rail:#ff0c00"></i><i style="--rail:#ff8100"></i><i style="--rail:#c4b600"></i>线路等级图例</summary><div class="legend-grid"><span><i style="--rail:#ff0c00"></i>高速铁路 / 新干线</span><span><i style="--rail:#ff8100"></i>主干线（main）</span><span><i style="--rail:#c4b600"></i>支线（branch）</span><span><i style="--rail:#87491d"></i>工业 / 专用线</span><span><i style="--rail:#343c39"></i>未分类 / 其他</span><span><i style="--rail:#0300c3"></i>地铁</span><span><i style="--rail:#00bd14"></i>轻轨</span><span><i style="--rail:#d877b8"></i>路面电车</span><span><i class="disused" style="--rail:#70584d"></i>停用 / 废弃（仅原图）</span></div><p>沿用 OpenRailwayMap 配色。筛选图按 OSM 命名线路标签归并等级，非逐股道分类；缺标签或冲突时单列未分类。</p><a href="https://www.openrailwaymap.org/" target="_blank" rel="noopener">查看原图与完整图例 ↗</a></details>
+      <details class="rail-legend"><summary><i style="--rail:#ff0c00"></i><i style="--rail:#ff8100"></i><i style="--rail:#c4b600"></i>线路等级图例</summary><div class="legend-grid"><span><i style="--rail:#ff0c00"></i>高速铁路 / 新干线</span><span><i style="--rail:#ff8100"></i>主干线（main）</span><span><i style="--rail:#c4b600"></i>支线（branch）</span><span><i style="--rail:#87491d"></i>工业 / 专用线</span><span><i style="--rail:#343c39"></i>未分类 / 其他</span><span><i style="--rail:#0300c3"></i>地铁</span><span><i style="--rail:#00bd14"></i>轻轨</span><span><i style="--rail:#d877b8"></i>路面电车</span><span><b class="boundary-swatch"></b>周游券边界／起讫站</span><span><b class="boundary-swatch company"></b>运营公司局界</span><span><i class="disused" style="--rail:#70584d"></i>停用 / 废弃（仅原图）</span></div><p>沿用 OpenRailwayMap 配色。筛选图按 OSM 命名线路标签归并等级，非逐股道分类；缺标签或冲突时单列未分类。</p><a href="https://www.openrailwaymap.org/" target="_blank" rel="noopener">查看原图与完整图例 ↗</a></details>
     </div>
     <div class="selection-bar"><div id="selectedPasses" class="selected-passes"><span>选择一张 Pass，或按等级 / 运营方筛选</span></div><button id="clearSelection" type="button" hidden>清除选择</button></div>
     <p class="station-density"><span id="stationDensity">站名：主要枢纽</span><span id="lineDetailStatus">线路：全国概览</span><span>放大逐步显示更多站名，近距离显示全部</span></p>

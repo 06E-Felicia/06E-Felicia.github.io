@@ -57,15 +57,15 @@ export function createStationLabels(map,getStations,onRender,getPins=()=>[],getR
    L.DomUtil.setPosition(canvas,map.containerPointToLayerPoint([0,0]));
    this.anchor=map.containerPointToLatLng([0,0]);this.drawZoom=z;
    const ctx=canvas.getContext('2d');ctx.scale(ratio,ratio);ctx.textBaseline='middle';ctx.lineJoin='round';
-   const occupied=new Map(),names=[],texts=[],pinnedNames=[],dots=new Set(),crossesRail=railCollisionIndex(map,getRails());
+   const occupied=new Map(),names=[],texts=[],pinnedNames=[],boundaryNames=[],companyNames=[],dots=new Set(),crossesRail=railCollisionIndex(map,getRails());
    const overlap=box=>cells(box).some(k=>(occupied.get(k)||[]).some(b=>box[0]<b[2]&&box[2]>b[0]&&box[1]<b[3]&&box[3]>b[1]));
    for(const {s,hub,pin} of this.items) {
     if(!pin&&z<7&&!hub)continue;
     if(s[1]<bounds.getSouth()||s[1]>bounds.getNorth()||s[2]<bounds.getWest()||s[2]>bounds.getEast())continue;
     const point=map.latLngToContainerPoint([s[1],s[2]]),key=s[0]+'|'+Math.round(point.x/8)+'|'+Math.round(point.y/8);if(dots.has(key))continue;dots.add(key);
-    const text=s[0]+(pin?.role==='restriction'?' 限':''),font=hub?12:11;
-    ctx.font=`${hub?600:400} ${font}px -apple-system, "PingFang SC", sans-serif`;
-    const widthKey=font+'|'+text;if(!this.widths.has(widthKey))this.widths.set(widthKey,ctx.measureText(text).width);
+    const text=s[0]+(pin?.role==='restriction'?' 限':''),font=pin?.role==='boundary'?13:hub?12:11,weight=pin?.role==='boundary'?750:hub?600:400;
+    ctx.font=`${weight} ${font}px -apple-system, "PingFang SC", sans-serif`;
+    const widthKey=weight+'|'+font+'|'+text;if(!this.widths.has(widthKey))this.widths.set(widthKey,ctx.measureText(text).width);
     const w=this.widths.get(widthKey),space=pin?3:z<9?14:z<12?8:3;
     let x=point.x+6,y=point.y,box,best,score=Infinity;
     const positions=[0,-16,16,-28,28,-44,44,...(pin?[-60,60]:[])].flatMap(d=>[[6,d],[-w-8,d],[-w/2,d||-16]]);
@@ -78,7 +78,7 @@ export function createStationLabels(map,getStations,onRender,getPins=()=>[],getR
     [x,y,box]=best;
     if(!pin&&!all&&overlap(box))continue;
     for(const k of cells(box)){if(!occupied.has(k))occupied.set(k,[]);occupied.get(k).push(box);}
-    const color=pin?.role==='restriction'?'#986321':pin?'#126958':hub?'#143b40':'#405859';
+    const color=pin?.boundaryKind==='company'?'#116979':pin?.role==='restriction'?'#986321':pin?'#126958':hub?'#143b40':'#405859';
     if(pin||Math.abs(y-point.y)>20) {
      ctx.beginPath();ctx.moveTo(point.x,point.y);ctx.lineTo(Math.max(x,Math.min(x+w,point.x)),y);ctx.strokeStyle=color;ctx.lineWidth=.8;ctx.stroke();
     }
@@ -87,9 +87,9 @@ export function createStationLabels(map,getStations,onRender,getPins=()=>[],getR
     }
     ctx.beginPath();ctx.arc(point.x,point.y,pin?3.4:hub?2.6:1.8,0,Math.PI*2);ctx.fillStyle='#fffefa';ctx.fill();ctx.lineWidth=pin?1.5:1;ctx.strokeStyle=color;ctx.stroke();
     ctx.lineWidth=3.5;ctx.strokeStyle='#fffefa';ctx.strokeText(text,x,y);ctx.fillStyle=color;ctx.fillText(text,x,y);
-    names.push(s[0]);texts.push(text);if(pin)pinnedNames.push(s[0]);
+    names.push(s[0]);texts.push(text);if(pin)pinnedNames.push(s[0]);if(pin?.role==='boundary')boundaryNames.push(s[0]);if(pin?.boundaryKind==='company')companyNames.push(s[0]);
    }
-   onRender({count:names.length,names,texts,pinnedNames,sortBuilds:this.sortBuilds,renderMs:performance.now()-started,mode:all?'当前视野全部车站':z<7?'主要枢纽':'区域车站'});
+   onRender({count:names.length,names,texts,pinnedNames,boundaryNames,companyNames,sortBuilds:this.sortBuilds,renderMs:performance.now()-started,mode:all?'当前视野全部车站':z<7?'主要枢纽':'区域车站'});
   }
  });
  return new Labels().addTo(map);

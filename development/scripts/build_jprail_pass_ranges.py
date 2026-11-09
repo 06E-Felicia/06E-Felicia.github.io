@@ -18,9 +18,10 @@ def build(network_path=DATA/'network.geojson',output_path=DATA/'pass-ranges.json
     stations=json.loads((DATA/'stations.json').read_text())
     result={}
     for p in passes:
-        if not p.get('railSections'):continue
+        sections=p.get('railSections') or p.get('railOverrides')
+        if not sections:continue
         selected=defaultdict(list);props={}
-        for section in p['railSections']:
+        for section in sections:
             op,name,a,b=section
             f=next(f for f in atlas['features'] if f['properties']['operator']==op and f['properties']['name']==name)
             g=nx.Graph()
@@ -53,7 +54,7 @@ def build(network_path=DATA/'network.geojson',output_path=DATA/'pass-ranges.json
                 if (s[3],s[4])!=key:continue
                 from shapely.geometry import Point
                 if geom.distance(Point(s[2],s[1]))<.0018:station_keys.append('|'.join([s[3],s[4],s[0]]))
-        result[p['id']]={'features':features,'stationKeys':station_keys,'source':p['stationPins']['source'],'method':'N02 线网内按官方列明起讫站取路径，非区域框裁切'}
+        result[p['id']]={'partial':bool(p.get('railOverrides')),'features':features,'stationKeys':station_keys,'source':p['stationPins']['source'],'method':'N02 线网内按官方列明起讫站取路径，非区域框裁切'}
     output_path.write_text(json.dumps(result,ensure_ascii=False,separators=(',',':'))+'\n')
     print({k:len(v['features']) for k,v in result.items()})
 
