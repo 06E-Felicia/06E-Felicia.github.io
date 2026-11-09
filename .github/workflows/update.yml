@@ -45,7 +45,8 @@ jobs:
       (github.event.workflow_run.head_repository.full_name == github.repository &&
        (github.event.workflow_run.conclusion == 'success' || github.event.workflow_run.conclusion == 'failure'))
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    # Page deployment may need longer than the data update and artifact upload.
+    timeout-minutes: 40
     permissions:
       contents: write # 必须开启写入权限
       actions: read # 恢复最近一次模拟结果，避免天气部署覆盖模拟数据。
@@ -97,6 +98,9 @@ jobs:
       - name: 检出代码
         if: steps.frequency.outputs.run == 'true'
         uses: actions/checkout@v4
+        with:
+          # A rerun of an old push must start from the current default branch.
+          ref: ${{ github.event.repository.default_branch }}
 
       - name: 安装 Python
         if: steps.frequency.outputs.run == 'true'
@@ -145,8 +149,17 @@ jobs:
             echo "No changes to commit"
             exit 0
           fi
-          git commit -m "Auto Update: $(date -u +'%Y-%m-%dT%H:%M:%SZ')" || exit 0
-          git push origin HEAD:${{ github.ref_name }}
+          git commit -m "Auto Update: $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          for attempt in 1 2 3; do
+            if git push origin HEAD:"$DEFAULT_BRANCH"; then exit 0; fi
+            git fetch origin "$DEFAULT_BRANCH"
+            # Never overwrite a concurrent config edit: a conflict fails the job.
+            git rebase FETCH_HEAD || exit 1
+          done
+          echo '::error::天气数据提交未能推送，请检查远端更新与权限'
+          exit 1
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
 
       # Repository Settings > Pages > Source must be GitHub Actions.
       # Do not also enable branch-source publishing: it races this deployment.
@@ -171,3 +184,5 @@ jobs:
         if: steps.frequency.outputs.run == 'true'
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          timeout: 1800000

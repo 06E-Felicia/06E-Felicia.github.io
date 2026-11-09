@@ -83,6 +83,7 @@ jobs:
   publish:
     needs: calculate
     runs-on: ubuntu-latest
+    timeout-minutes: 40
     # Same deployment lock as weather update, without blocking weather while
     # the computationally expensive model is running.
     concurrency:
@@ -110,3 +111,5 @@ jobs:
           path: '.'
       - uses: actions/deploy-pages@v4
         id: deployment
+        with:
+          timeout: 1800000
