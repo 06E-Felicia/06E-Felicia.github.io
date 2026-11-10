@@ -8,11 +8,11 @@
 <title>日本铁道pass地图 · JPRail</title>
 <link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css">
 <link rel="stylesheet" href="assets/vendor/maplibre/maplibre-gl.css">
-<link rel="stylesheet" href="assets/styles/jprail.css?v=20261110-audit1">
+<link rel="stylesheet" href="assets/styles/jprail.css?v=20261110-touch2">
 <script defer src="assets/vendor/leaflet/leaflet.js"></script>
 <script defer src="assets/vendor/maplibre/maplibre-gl.js"></script>
 <script defer src="assets/vendor/maplibre-leaflet/leaflet-maplibre-gl.js"></script>
-<script type="module" src="assets/scripts/jprail.js?v=20261110-audit1"></script>
+<script type="module" src="assets/scripts/jprail.js?v=20261110-touch2"></script>
 </head>
 <body>
 <header class="masthead">
@@ -54,7 +54,7 @@
     </div>
     <div class="selection-bar"><div id="selectedPasses" class="selected-passes"><span>选择一张 Pass，或按等级 / 运营方筛选</span></div><button id="clearSelection" type="button" hidden>清除选择</button></div>
     <p class="station-density"><span id="stationDensity">站名：主要枢纽</span><span id="lineDetailStatus">线路：全国概览</span><span>放大逐步显示更多站名，近距离显示全部</span></p>
-    <p class="precision-note"><i aria-hidden="true"></i>颜色表示线路等级。选择 Pass 或筛选后仅显示匹配线路；Pass 区间仍为示意，乘车条件请核对详情。</p>
+    <p class="precision-note"><i aria-hidden="true"></i>线路按等级着色；Pass 范围为示意，乘车限制见详情。</p>
   </section>
   <aside id="detailPanel" class="detail-panel" aria-label="所选 Pass 详情" hidden>
     <div id="passDetail" class="pass-detail"></div>

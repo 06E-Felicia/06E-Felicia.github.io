@@ -36,16 +36,41 @@ export function createCamera(map) {
   if(!frame)frame=requestAnimationFrame(tick);
  }
  const el=map.getContainer();
+ // Desktop Safari exposes native scale events; Chromium encodes a trackpad
+ // pinch as ctrl+wheel. Select one path so a pinch cannot be applied twice.
+ const nativePinch='ongesturestart' in window&&navigator.maxTouchPoints===0&&matchMedia('(pointer:fine)').matches;
+ let gestureScale=null;
+ const blocked=event=>event.target.closest('.leaflet-control, .leaflet-popup');
+ const pointFor=event=>Number.isFinite(event.clientX)&&Number.isFinite(event.clientY)?map.mouseEventToContainerPoint(event):map.getSize().divideBy(2);
  function wheel(event) {
-  if(event.target.closest('.leaflet-control, .leaflet-popup'))return;
+  if(blocked(event))return;
   event.preventDefault();event.stopPropagation();
+  if(nativePinch&&event.ctrlKey)return;
   const unit=event.deltaMode===1?16:event.deltaMode===2?map.getSize().y:1;
-  // 100 CSS pixels = .125 levels. Small inertial deltas remain small: there
-  // is no minimum step, rounding on release, gesture lock or delayed replay.
+  // A pinch gets eight times the wheel gain. Ordinary scrolling retains its
+  // small step, with no minimum delta, release snap or delayed replay.
   const pixels=Math.max(-160,Math.min(160,event.deltaY*unit));
-  zoomBy(-pixels/800,map.mouseEventToContainerPoint(event));
+  zoomBy(-pixels/(event.ctrlKey?100:800),pointFor(event));
  }
  el.addEventListener('wheel',wheel,{passive:false});
+ function gestureStart(event) {
+  if(!nativePinch||blocked(event))return;
+  event.preventDefault();event.stopPropagation();gestureScale=1;
+ }
+ function gestureChange(event) {
+  if(gestureScale===null||!Number.isFinite(event.scale)||event.scale<=0)return;
+  event.preventDefault();event.stopPropagation();
+  zoomBy(Math.log2(event.scale/gestureScale),pointFor(event));gestureScale=event.scale;
+ }
+ function gestureEnd(event) {
+  if(gestureScale===null)return;
+  event.preventDefault();event.stopPropagation();gestureScale=null;
+ }
+ if(nativePinch){
+  el.addEventListener('gesturestart',gestureStart,{passive:false});
+  el.addEventListener('gesturechange',gestureChange,{passive:false});
+  el.addEventListener('gestureend',gestureEnd,{passive:false});
+ }
  function key(event) {
   if(event.altKey||event.ctrlKey||event.metaKey||/^(INPUT|SELECT|TEXTAREA|BUTTON)$/.test(event.target.tagName))return;
   const delta=['+','=','Add'].includes(event.key)?.25:['-','_','Subtract'].includes(event.key)?-.25:0;
@@ -69,7 +94,7 @@ export function createCamera(map) {
   }
  });
  const buttons=new Buttons().addTo(map);
- map.once('unload',()=>{finish();el.removeEventListener('wheel',wheel);el.removeEventListener('keydown',key,true);map.off('dblclick',dblclick);map.off('dragstart zoomstart',external);buttons.remove();});
+ map.once('unload',()=>{finish();el.removeEventListener('wheel',wheel);el.removeEventListener('gesturestart',gestureStart);el.removeEventListener('gesturechange',gestureChange);el.removeEventListener('gestureend',gestureEnd);el.removeEventListener('keydown',key,true);map.off('dblclick',dblclick);map.off('dragstart zoomstart',external);buttons.remove();});
  const apply=view=>{finish();view();target=map.getZoom();};
  return {fitBounds:(bounds,options={})=>apply(()=>map.fitBounds(bounds,{...options,animate:false})),setView:(point,zoom,after)=>apply(()=>{map.setView(point,zoom,{animate:false});after?.();}),zoomBy,whenIdle:()=>!moving&&!frame};
 }

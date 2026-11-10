@@ -1,7 +1,7 @@
-import {createStationLabels} from './jprail-stations.js?v=20261110-audit1';
-import {createCamera} from './jprail-camera.js?v=20261110-audit1';
-import {createStreetMap} from './jprail-basemap.js?v=20261110-audit1';
-import {officialStationPins} from './jprail-boundaries.js?v=20261110-audit1';
+import {createStationLabels} from './jprail-stations.js?v=20261110-touch2';
+import {createCamera} from './jprail-camera.js?v=20261110-touch2';
+import {createStreetMap} from './jprail-basemap.js?v=20261110-touch2';
+import {officialStationPins} from './jprail-boundaries.js?v=20261110-touch2';
 const $ = id => document.getElementById(id);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const GRADES = {
@@ -230,6 +230,9 @@ function renderSelection() {
 function fitPass(id) {fitDisplayed();if(!state.displayed.length)toast('当前 Pass 与筛选条件没有匹配线路。');}
 function showPass(id,fit=true) {
  homeView=false;state.selected=id;state.active=id;renderSelection();renderList();renderDetail();updateURL();if(fit)fitPass(id);
+ if(fit&&matchMedia('(max-width:960px)').matches)requestAnimationFrame(()=>{
+  if(state.selected===id&&state.active===id)$('map').closest('.map-frame').scrollIntoView({block:'start',behavior:'auto'});
+ });
 }
 function removePass(id) {state.selected=null;state.active=null;renderSelection();renderList();renderDetail();updateURL();}
 function renderPinnedStops(p) {
