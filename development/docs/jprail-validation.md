@@ -13,7 +13,7 @@
 PYTHONDONTWRITEBYTECODE=1 python -m unittest development.tests.test_jprail_touch_layout development.tests.test_jprail -v
 ```
 
-本次部署：待提交后确认 Actions 与实际 Pages 文件。保留已有发布重试和真实 30 分钟步骤／40 分钟任务时限。
+本次代码提交：`456ed9a`。首次 [Actions 42737337378](https://github.com/06E-Felicia/06E-Felicia.github.io/actions/runs/42737337378) 构建／制品上传完成，但三次 Pages 尝试停在 `deployment_queued`／`syncing_files`，30 分钟发布步骤到期，整次运行 30 分 44 秒后失败。线上仍为旧版，不能视为部署完成。现以最新主分支重新发布；保留已有发布重试和真实 30 分钟步骤／40 分钟任务时限。同时在使用说明中补充捏合与手机详情位置，并纠正仍提及旧版矩形裁切的过时说明。
 
 ## 已有范围审查与发布记录（上一轮，本次未重新逐券核实官方条款）
 
