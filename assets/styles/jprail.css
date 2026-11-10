@@ -50,3 +50,6 @@
  .detail-panel .detail-top button{min-width:36px;min-height:36px}
  .map-section{scroll-margin-top:0}
 }
+
+/* Color legend follows the selected coverage; long company lists scroll inside it. */
+.rail-color-items{max-height:min(210px,28vh);overflow:auto;overscroll-behavior:contain;scrollbar-width:thin}.rail-color-items[hidden]{display:none}.boundary-legend{border-top:1px solid #d3ddcf;padding-top:9px}.precision-note i{border-color:#ff8100}@media(max-width:960px){.rail-color-items{max-height:120px}}

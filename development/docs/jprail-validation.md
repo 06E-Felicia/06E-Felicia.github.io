@@ -1,11 +1,164 @@
 # JPRail 当前验证摘要
 
-## 本次：触控板捏合与响应式布局（2026-11-10）
+## 本轮：公司配色与 JR 普速橙黄色（2026-11-10）
+
+已在本地应用：JR 六家公司的普速线路统一采用原“本线”橙黄色 `#FF8100`，新干线保留红色 `#FF0C00`。颜色函数同时用于全国参考线、选择 Pass 后的范围线和两档精度，不再让等级筛选把颜色改回旧等级色；线路等级筛选本身继续有效。普通线／新干线的 3／4 px 线宽、单券选择、缩放与手机详情布局保留。
+
+112 家非 JR 普通铁路主体均已有带来源的实际绘制色：93 家沿用已整理的官网标识参考色，19 家补齐线路图、铁路服务页、官方象征色近似或第三方参考色。**没有黑白占位或无颜色的普通铁路公司条目**。这不表示所有 HEX 都是公司发布的唯一官方 RGB 规范，也不表示已穷尽当前数据之外的日本所有铁路公司。
+
+19 家替代方案中：北陆铁道、富山地方铁道、铫子电铁使用其他全国铁路地图的私铁红色类别；天龙滨名湖、鹿岛临海使用第三部门黄绿色类别。这五家的 HEX 是本页选择的屏幕参考值，未复制第三方地图几何。青い森采用注明第三方来源的 `#2CBADC`，ひたちなか采用 Jorudan 湊线售票路线图的 `#FF9933`。原官方标识证据缺口没有被改写成“已取得官方 CI 规范”。
+
+范围只涉及普通铁路与新干线。地铁、路面电车、单轨、新交通系统和钢索缆车不新增公司配色；无公司筛选时保留原有设施／票券显示。混合公司按具体线路排除，例如东急世田谷线、西武山口线、富山港线及市内轨道、伊予市内线、丰桥东田本线、近铁けいはんな／钢索、南海和小田急箱根钢索等。公司名含“高速”、线路有地下区间、窄轨或普通黏着式山岳铁路本身不是排除依据。JR 东海交通事业的城北线按独立非六家 JR 运营主体，采用其标志橙色。
+
+运营方下拉合并源数据别名“三国芦原線”至えちぜん鉄道，只列六家 JR 与 112 家普通铁路主体；只改显示／过滤身份，不改原线路几何、源运营方字段或票券选择器。选择公司后排除其非普通铁路线路；空交集保留空图和提示。图例仅列当前匹配颜色，长列表在图例内滚动；展开图例时重排站名以避让。点击线路可访问配色来源。详细设施原图仍使用 OpenRailwayMap 自身的等级配色，设施原图与本页公司图例分开说明。
+
+### 当前验证
+
+- 逐一选择 **54 张 Pass**（含历史），逐一筛选 **118 个运营方**（六家 JR 加 112 家非 JR），合计 **226 个视图、13,699 个实际铁路像素采样点**。核对真实 Leaflet 图层颜色、概览／精细显示、图例集合、单选替换、空交集、等级筛选与站名／图层位置；没有页面脚本异常。
+- 颜色／模式回归检查同名的 JR 与西武山口线、普通铁路与钢索线、东叶高速与地铁、公司别名及全部运营方颜色覆盖；地铁／单轨／新交通等主体不进入公司配色目录。
+- 联网底图检查通过；正式审核图等待当前视野瓦片完全载入并重绘后保存，不用“曾经 ready”的旧状态替代实际取景。审核场景为北陆地区券，海岸、道路、城镇与铁路正确叠置，无脚本错误。
+- 保留近距离隐藏城市名的本地修改：五个行政地名层 `maxzoom:13`，对应 Leaflet 14 级及以上隐藏城市／乡镇名；道路、水域与独立车站名保留。此前真实奈良场景 13→14→16→13 级行政地名 5→0→0→5、车站名 17→9→2→17 的记录保留；本轮基本浏览器回归继续检查近距离站名。
+- `network.geojson`、`network-detail.geojson`、两档 `pass-ranges`、`passes.json` 与 `stations.json` 共六个生产数据文件的 SHA-256 与本轮起始版本相同；没有用上色改变区间或补造连接。
+
+最终本地联合回归：**10 项通过，75.783 秒**。
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python -m unittest development.tests.test_jprail_colors development.tests.test_jprail development.tests.test_jprail_touch_layout development.tests.test_jprail_audit.FareRegressions -v
+```
+
+本轮是配色与显示验证，**没有重新逐券查阅全部官方票券条款**。此前范围来源审查 50 完成／4 待核的结论仍按下方历史记录保留；不能用绘图通过抹掉原有条款证据缺口。
+
+[当前正式地图审核图](jprail-map-review.png)。下表为本轮运行时实际配色，来源与限制也保存于 `assets/data/jprail/operator-colors.json`。新增 `jprail-colors.js` 只控制颜色、运营方身份和模式范围，不负责决定票券适用区间。
+
+### 已应用的公司配色与来源
+
+| 公司 | 实际颜色 | 依据 | 来源与限制 |
+|---|---|---|---|
+| IRいしかわ鉄道 | `#00A7E3` | 官网标识参考色 | [来源](https://www.ishikawa-railway.jp/assets/img/ir_logo_2.svg)；官网公司标识 SVG 取色；未宣称为唯一企业色规范。 |
+| JR東海交通事業 | `#FF6B00` | 官网标识参考色 | [来源](https://tkj-i.co.jp/assets/images/logo.png)；城北线运营公司，属 JR 东海子公司；本表暂列独立运营主体，采用其 TKJ 标识橙，供审核。 |
+| WILLER　TRAINS | `#E60012` | 官网标识参考色 | [来源](https://trains.willer.co.jp/corporate/profile/ci/img/willer.png)；采用官网 CI 页的企业标识红，不把京都丹后铁路昵称标识或车辆颜色代作企业色。 |
+| あいの風とやま鉄道 | `#007AC6` | 官网标识参考色 | [来源](https://ainokaze.co.jp/common/images/logo.png)；多色标识，选用蓝；另含绿色。 |
+| いすみ鉄道 | `#117C3B` | 官网标识参考色 | [来源](https://isumirail.co.jp/wp-content/uploads/2024/02/shiromoji.png)；官网标识绿色；原 PNG 半透明，取实色内容，不取白色抗锯齿。 |
+| えちごトキめき鉄道 | `#3782BD` | 官方线路图参考色 | [来源](https://www.echigo-tokimeki.co.jp/img/img-line-guide.png)；官网范围图的日本海ひすいライン蓝；用于本页统一公司色，不冒充妙高はねうま等全部线路的官方统一色。 |
+| えちぜん鉄道 | `#004097` | 官网标识参考色 | [来源](https://www.echizen-tetudo.co.jp/_assets/img/logo.svg)；官网公司标识 SVG 取色；未宣称为唯一企业色规范。 |
+| くま川鉄道 | `#B08E42` | 官网标识参考色 | [来源](https://kumagawa-rail.com/wp-content/uploads/2025/06/kt-hp_logo.jpg)；官网金色标识为压缩／渐变图，#B08E42 是采用金色近似值，不是官方公布 RGB。 |
+| しなの鉄道 | `#2A519F` | 官网标识参考色 | [来源](https://www.shinanorailway.co.jp/common/img/logo_footer.gif)；多色标识，选用蓝；另含金黄。 |
+| のと鉄道 | `#00A0EA` | 官网标识参考色 | [来源](https://nototetsu.jp/wp-content/uploads/2022/09/logo.svg)；官网公司标识 SVG 取色；未宣称为唯一企业色规范。 |
+| ひたちなか海浜鉄道 | `#FF9933` | 售票路线图参考色 | [来源](https://ticket.jorudan.co.jp/hitachinaka-rail/img/routemap01.png)；Jorudan 湊线售票路线图的线路橙色；原公司标识色仍未证实，此色用于地图参考。 |
+| わたらせ渓谷鐵道 | `#651614` | 官网标识参考色 | [来源](https://www.watetsu.com/assets/img/logo.png)；官网公司标识取代表色；未查得单一官方 RGB 规范。 |
+| アイジーアールいわて銀河鉄道 | `#0F459B` | 官网标识参考色 | [来源](https://igr.jp/wp-content/themes/igr/assets/images/logo_igr.png)；官网公司标识取代表色；未查得单一官方 RGB 规范。 |
+| アルピコ交通 | `#2E3F99` | 官网标识参考色 | [来源](https://www.alpico.co.jp/traffic/files/images/header/img_logo.jpg)；官网公司标识取代表色；未查得单一官方 RGB 规范。 |
+| ハピラインふくい | `#E6378D` | 官网标识参考色 | [来源](https://www.hapi-line.co.jp/theme/default/img/common/logo/site_logo.svg)；多色标识，选用粉红；另含黄绿。 |
+| 一畑電車 | `#DC000C` | 官网标识参考色 | [来源](https://railway.ichibata.co.jp/wp-content/media/f_logo_1.svg)；采用公司字标旁的红色标志，不选橙／黄的昵称宣传字。 |
+| 三岐鉄道 | `#182D82` | 官网标识参考色 | [来源](https://sangirail.co.jp/images/images2022111617170283.jpg)；官网蓝色标识的代表色。 |
+| 三陸鉄道 | `#0075C1` | 官方象征色的屏幕近似值 | [来源](https://www.sanrikutetsudou.com/三陸鉄道の車両のご紹介・列車ご利用のご案内/)；官方列车象征色包括蓝、红、白，蓝表示三陆海洋；本页选蓝色近似值，并非公布的企业 RGB 规范。 |
+| 上信電鉄 | `#004999` | 官网铁路服务页参考色 | [来源](https://www.joshin-dentetsu.co.jp/wp/wp-content/themes/joshin-dentetsu/css/railway.css?ver=20190906)；官网 railway.css 的 .rosen_map li a 边框／文字蓝。 |
+| 上毛電気鉄道 | `#46352B` | 官网标识参考色 | [来源](https://jomorailway.com/images/common/logo.png)；官网 JOMO 标志深棕色；按原图主要棕色像素取值。 |
+| 上田電鉄 | `#E46018` | 官网标识参考色 | [来源](https://www.uedadentetsu.com/assets/themes/uedadentetsu_202003/imgs/common/header_sitetitle.png)；小尺寸 PNG 取标志橙色近似值。 |
+| 井原鉄道 | `#759A31` | 官方线路图参考色 | [来源](https://www.ibara-railway.co.jp/wp-content/themes/child/image/contents/area/rail-map.jpg)；官网井原线站点／线路图的绿色，PNG 代表色。 |
+| 京成電鉄 | `#154F9E` | 官网标识参考色 | [来源](https://www.keisei.co.jp/assets/images/common/head_logo.png)；采用 Liner Blue；另含 Liner Red。 |
+| 京浜急行電鉄 | `#004098` | 官网标识参考色 | [来源](https://www.keikyu.co.jp/company/outline.html)；官方公司概要展示蓝色 KEIKYU；#004098 是采用屏幕近似值，未取得官方 RGB 规范。 |
+| 京王電鉄 | `#0F3675` | 官网标识参考色 | [来源](https://www.keio.co.jp/assets/img/common/icon_company_logo.svg)；多色标识，选用蓝；另含京王红。 |
+| 京阪電気鉄道 | `#E95504` | 官网标识参考色 | [来源](https://www.keihan.co.jp/app-files/img/cmn_logo01.svg)；多色标识，选用橙；另含蓝灰。仅本线系普通铁路部分。 |
+| 仙台空港鉄道 | `#0A50A1` | 官网标识参考色 | [来源](https://www.senat.co.jp/wp-content/themes/mythemes/img/rogo.png)；官网公司标识取代表色；未查得单一官方 RGB 规范。 |
+| 伊予鉄道 | `#EA6000` | 官网标识参考色 | [来源](http://www.iyotetsu.co.jp/common/img/logo.png)；兼营公司只处理高浜、横河原、郡中三条郊外铁路；不处理市内电车和巴士。 |
+| 伊勢鉄道 | `#036CE1` | 官网标识参考色 | [来源](https://isetetu.co.jp/js/header.js#inline-header-mark)；内联标志继承页面 CSS；取固定顶栏／页脚实际填色 #036CE1，不把白色版解析成默认黑。 |
+| 伊豆急行 | `#0386CE` | 官网标识参考色 | [来源](https://www.izukyu.co.jp/assets/images/common/logo.jpg)；官网公司标识取代表色；未查得单一官方 RGB 规范。 |
+| 伊豆箱根鉄道 | `#007A24` | 官网标识参考色 | [来源](http://www.izuhakone.co.jp/share/imgs/h-logo.png)；采用本公司绿色标志，不选同页的西武集团标识。 |
+| 伊賀鉄道 | `#0767B1` | 官网标识参考色 | [来源](https://www.igatetsu.co.jp/igatetsu/wp-content/themes/igatetsuwp/images/logo.png)；官网公司标识取代表色；未查得单一官方 RGB 规范。 |
+| 会津鉄道 | `#21701A` | 官网标识参考色 | [来源](https://aizutetsudo.jp/wp-content/themes/aizutetsudo/assets/images/common/logo.png)；多色标识，选用绿色；另含橙色。 |
+| 信楽高原鐵道 | `#00A779` | 官网标识参考色 | [来源](https://koka-skr.co.jp/img/footer/footerLogo.jpg)；官网公司标识取代表色；未查得单一官方 RGB 规范。 |
+| 北条鉄道 | `#8D512D` | 官网标识参考色 | [来源](http://www.hojorailway.jp/wp-content/themes/houjyostyle/images/rogo_e.png)；官网公司标识取代表色；未查得单一官方 RGB 规范。 |
+| 北総鉄道 | `#16379E` | 官网标识参考色 | [来源](https://www.hokuso-railway.co.jp/images/common/header_logo01.svg)；多色标识，选用蓝色。 |
+| 北越急行 | `#073190` | 官网标识参考色 | [来源](https://hokuhoku.co.jp/img/logo01.png)；多色标识，选用蓝；另含红。 |
+| 北陸鉄道 | `#D74739` | 其他地图分类参考色 | [来源](https://tetsudozyoho.com/tetsudomap/)；参考铁道情報館全国铁路地图图例的私铁红色类别；HEX 为本页所选屏幕近似值，不是公司官方品牌色，也未复制该地图几何或宣称逐像素复刻。 |
+| 南海電気鉄道 | `#E94E00` | 官网标识参考色 | [来源](https://www.nankai.co.jp/common/img/logo/nankai-logo.svg)；取当前官网标识朱橙；另含黄色。排除钢索线。 |
+| 南阿蘇鉄道 | `#029178` | 官网标识参考色 | [来源](https://www.mt-torokko.com/img/common/header-logo.png)；多色标识，选用青绿；另含深绿及红。 |
+| 叡山電鉄 | `#008663` | 官网标识参考色 | [来源](https://eizandensha.co.jp/files/img/common/logo_eiden.png)；官网公司标识取代表色；未查得单一官方 RGB 规范。 |
+| 名古屋臨海高速鉄道 | `#4344A3` | 官网标识参考色 | [来源](https://www.aonamiline.co.jp/sys/wp-content/themes/aonami/assets/img/common/header_logo.svg)；多色标识，选用蓝紫；另含青蓝。 |
+| 名古屋鉄道 | `#004DA0` | 官网标识参考色 | [来源](https://top.meitetsu.co.jp/img/header_identity_01.svg)；取得当前官网 SVG，修正此前 CSS 近似值 #004EA2 为实际标识蓝 #004DA0；不是车辆猩红。 |
+| 和歌山電鐵 | `#CC3518` | 官网标识参考色 | [来源](https://wakayama-dentetsu.co.jp/wp-content/uploads/logo_a-1.png)；官网公司标识取代表色；未查得单一官方 RGB 规范。 |
+| 四日市あすなろう鉄道 | `#00904C` | 官网标识参考色 | [来源](https://yar.co.jp/common/img/layout/footer/fLogo.gif)；采用公司标识绿；另含浅蓝。不因窄轨而排除，仍为普通铁路。 |
+| 土佐くろしお鉄道 | `#00B0E7` | 官网标识参考色 | [来源](https://static.wixstatic.com/media/06d37b_32b04ee8d43546e685cc9d7165fea51b%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/06d37b_32b04ee8d43546e685cc9d7165fea51b%7Emv2.png)；官网图标及官方三社合作资料交叉确认浅蓝标识；PNG 代表色。 |
+| 大井川鐵道 | `#2B3A60` | 官网铁路服务页参考色 | [来源](https://daitetsu.jp/wordpress/wp-content/themes/oigawa/style.css?20240711)；官网车站区块 .station-wrap 的边框蓝和铁路站点提示文字色；不是宣称本线／井川线统一官方线路色。 |
+| 天竜浜名湖鉄道 | `#79A833` | 其他地图分类参考色 | [来源](https://tetsudozyoho.com/tetsudomap/)；参考铁道情報館全国铁路地图图例的第三部门黄绿色类别；HEX 为本页所选屏幕近似值，不是公司官方品牌色，也未复制该地图几何或宣称逐像素复刻。 |
+| 富士山麓電気鉄道 | `#5A2200` | 官网标识参考色 | [来源](https://www.fujikyu-railway.jp/fujisanroku/images/logo_mark.png)；官网 FujiQ 标识不透明版为棕色；不取淡化透明版与白底混合后的浅色。 |
+| 富山地方鉄道 | `#D74739` | 其他地图分类参考色 | [来源](https://tetsudozyoho.com/tetsudomap/)；参考铁道情報館全国铁路地图图例的私铁红色类别；HEX 为本页所选屏幕近似值，不是公司官方品牌色，也未复制该地图几何或宣称逐像素复刻。 |
+| 小湊鐵道 | `#FF3700` | 官网铁路服务页参考色 | [来源](https://www.kominato.co.jp/wp-content/themes/html5blank-stable/common/css/station.css?mod=20230330040453)；官网车站栏目、站名标和车站菜单的朱红色。 |
+| 小田急箱根 | `#EF4A00` | 官网标识参考色 | [来源](https://www.odakyu-hakone.jp/common/img/logo.gif?20240306)；官网当前公司字标橙色；仅鉄道線，不含钢索线／索道。 |
+| 小田急電鉄 | `#004EA2` | 官网标识参考色 | [来源](https://www.odakyu.jp/common/img/logo.svg)；官网公司标识 SVG 取色；未宣称为唯一企业色规范。 |
+| 山形鉄道 | `#3B3290` | 官网标识参考色 | [来源](https://flower-liner.jp/wp/wp-content/themes/yamatetsu/img/logo.png)；官网公司标识取代表色；未查得单一官方 RGB 规范。 |
+| 山陽電気鉄道 | `#E31B13` | 官网标识参考色 | [来源](https://www.sanyo-railway.co.jp/assets/img/common/logo.svg)；官网公司标识 SVG 取色；未宣称为唯一企业色规范。 |
+| 岳南電車 | `#CF664D` | 官方线路图参考色 | [来源](https://www.gakutetsu.jp/a68089000000024f-img/rosenzu.png)；官网路線図中岳南本线的赤陶色；不取旁侧 JR 东海道线／新干线颜色。 |
+| 島原鉄道 | `#112953` | 官方车站图参考色 | [来源](https://www.shimatetsu.co.jp/storage/content-page/1CO8acYwrxoeGk4653CQQrC32Thgv5nsZ30C26XX.png)；官网諫早—島原港站点图的深蓝站点／文字色；图中另有红点，本页选深蓝作为单一显示色。 |
+| 嵯峨野観光鉄道 | `#8A2222` | 官网铁路服务页参考色 | [来源](https://www.sagano-kanko.co.jp/cms/wp-content/themes/saganokanko/assets/css/station.css?d=1769477525)；官网 station.css 的车站线路栏目／强调色深红，不把白色标志解释成无品牌色。 |
+| 平成筑豊鉄道 | `#0065B2` | 官网标识参考色 | [来源](https://www.heichiku.net/wp-content/themes/heichiku2020/assets/img/logo.png)；官网公司标识取代表色；未查得单一官方 RGB 规范。 |
+| 弘南鉄道 | `#1E9C43` | 官网标识参考色 | [来源](https://konantetsudo.jp/wp2/wp-content/uploads/tcd-w/logo.png?1794314024)；多色标识，选用绿；另含橙。 |
+| 愛知環状鉄道 | `#0058A4` | 官网标识参考色 | [来源](https://www.aikanrailway.co.jp/images/logo.svg)；官网公司标识 SVG 取色；未宣称为唯一企业色规范。 |
+| 明知鉄道 | `#E73828` | 官网铁路服务页参考色 | [来源](https://www.aketetsu.co.jp/wp-content/themes/aketetsu/style.css?ver=20260521044335)；官网铁路与车站页面标题／站名样式的红色。 |
+| 智頭急行 | `#004196` | 官网标识参考色 | [来源](https://www.chizukyu.co.jp/user/assets/img/common/logo.svg)；官网公司标识 SVG 取色；未宣称为唯一企业色规范。 |
+| 東京臨海高速鉄道 | `#00418E` | 官网标识参考色 | [来源](https://www.twr.co.jp/Portals/0/Skins/TWR/images/logo.png)；官网公司标识取代表色；未查得单一官方 RGB 规范。 |
+| 東急電鉄 | `#E83817` | 官网标识参考色 | [来源](https://www.tokyu.co.jp/#inline-logo)；取得官网内联 SVG 实值，修正此前近似值 #E60012 为 #E83817；排除世田谷线。 |
+| 東武鉄道 | `#0950A7` | 官网标识参考色 | [来源](https://www.tobu.co.jp/_assets/images/common/logo_tobu.png)；蓝色渐变标识，选代表值；并非唯一 RGB 规范。 |
+| 東葉高速鉄道 | `#5AB55C` | 官方线路图参考色 | [来源](https://www.toyokosoku.co.jp/wp/images/route_jpn_2504.png)；官网线路图的东叶高速线为绿色；不取同图东京 Metro 东西线蓝或银座线橙。 |
+| 松浦鉄道 | `#E70012` | 官网标识参考色 | [来源](https://matutetu.com/files/libs/3797/202203220939373300.png?1647909577)；官网公司标识取代表色；未查得单一官方 RGB 规范。 |
+| 樽見鉄道 | `#D0B46A` | 官网标识参考色 | [来源](https://tarumi-railway.com/images/common/logo_txt.svg)；SVG 金色实值；浅色，后续实际绘图需检查白色底图对比度。 |
+| 水島臨海鉄道 | `#007BBD` | 官网标识参考色 | [来源](https://www.mizurin.co.jp/img/logo1.png)；多色标识，选用深蓝；另含浅蓝。 |
+| 水間鉄道 | `#5AC13E` | 官网标识参考色 | [来源](https://www.suitetsu.com/image/top/logo.jpg)；官网公司标识取代表色；未查得单一官方 RGB 规范。 |
+| 江ノ島電鉄 | `#00A943` | 官网标识参考色 | [来源](http://www.enoden.co.jp/common/images/top/logo_2026_05_only.png)；公司官网沿革另明确企业绿色；虽有短距离街面段，仍纳入普通铁路。 |
+| 津軽鉄道 | `#FF6600` | 官方车站图参考色 | [来源](https://tsutetsu.com/tsutetsu/wp-content/uploads/2015/09/rosenzu-01.png)；官网线路与沿线指南的橙色站点标识；用于本页公司色，不称为官方统一线色规范。 |
+| 流鉄 | `#5D8354` | 官网标识参考色 | [来源](http://ryutetsu.jp/img/logo.png)；官网公司标识取代表色；未查得单一官方 RGB 规范。 |
+| 熊本電気鉄道 | `#750124` | 官网标识参考色 | [来源](https://www.kumamotodentetsu.co.jp/shared/img/common/head_logo.jpg)；官方页眉 CSS 标志深红代表色；不取巴士招聘、商店周年或社交图标。 |
+| 甘木鉄道 | `#CD1402` | 官网标识参考色 | [来源](https://www.amatetsu.jp/share/head_left.gif)；从官方 header.js 确认公司红色标志资源，不取 LINE 绿色；采用近似红。 |
+| 由利高原鉄道 | `#009D72` | 官网标识参考色 | [来源](https://www.obako5.com/wp-content/uploads/2022/03/topbanner.png)；采用官网主字标中的绿色近似值，不选辅助俱乐部／广告／社交网站图标。 |
+| 相模鉄道 | `#243C98` | 官网标识参考色 | [来源](https://www.sotetsu.co.jp/_nuxt/group_logo.C0rwaJfS.svg)；官方 CI 解释确认 SOTETSU 蓝／橙；取当前官方 SVG 蓝 #243C98。 |
+| 真岡鐵道 | `#003149` | 官网标识参考色 | [来源](https://www.moka-railway.co.jp/wp-content/uploads/2019/11/moka_logo.png)；官网公司标识取代表色；未查得单一官方 RGB 规范。 |
+| 神戸電鉄 | `#94283D` | 官网标识参考色 | [来源](https://www.shintetsu.co.jp/cms/wp-content/themes/original/dist/images/site_logo.webp)；小尺寸／有抗锯齿 PNG，采用标志深红近似值。 |
+| 福島交通 | `#E5001E` | 官网标识参考色 | [来源](http://www.fukushima-koutu.co.jp/images/logo-index.svg)；多色公司标识，选用红；另含绿、蓝、黄。只处理饭坂线。 |
+| 秋田内陸縦貫鉄道 | `#E60012` | 官网标识参考色 | [来源](https://www.akita-nairiku.com/images/common/header_logo.png)；官网公司标识取代表色；未查得单一官方 RGB 规范。 |
+| 秩父鉄道 | `#01479D` | 官网标识参考色 | [来源](https://www.chichibu-railway.co.jp/wp-content/themes/tpl_chichibu/images/logo.png)；官网公司标识取代表色；未查得单一官方 RGB 规范。 |
+| 紀州鉄道 | `#004599` | 官网标识参考色 | [来源](https://kitetsu.jp/cms/wp-content/uploads/job-logo.png)；官网公司标识取代表色；未查得单一官方 RGB 规范。 |
+| 肥薩おれんじ鉄道 | `#FCC800` | 官网标识参考色 | [来源](https://www.hs-orange.com/common/images/top1/ologo.svg)；官网公司标识 SVG 取色；未宣称为唯一企业色规范。 |
+| 能勢電鉄 | `#A4223E` | 官网标识参考色 | [来源](https://noseden.hankyu.co.jp/img/common/logo_j.png)；官网公司标识取代表色；未查得单一官方 RGB 规范。 |
+| 芝山鉄道 | `#DF032E` | 官网标识参考色 | [来源](https://www.sibatetu.co.jp/images/logo.png)；多色标识，选用红；另含绿。 |
+| 若桜鉄道 | `#266DB6` | 官网标识参考色 | [来源](https://wakatetsu.co.jp/wp/wp-content/themes/wakatesu/img/logo-3.svg)；官网公司标识 SVG 取色；未宣称为唯一企业色规范。 |
+| 西日本鉄道 | `#154B97` | 官网标识参考色 | [来源](https://www.nishitetsu.jp/assets/images/common/header_logo.png)；选用标识蓝；另含红、橙。只处理铁路，不处理巴士业务。 |
+| 西武鉄道 | `#3366CC` | 官网标识参考色 | [来源](https://www.seiburailway.jp/assets/images/header/logo.svg)；选用铁路公司标识蓝；另含浅蓝、绿。排除山口线新交通系统。 |
+| 豊橋鉄道 | `#F3D823` | 官网标识参考色 | [来源](https://www.toyotetsu.com/assets/img/common/logo-header.svg)；取当前 Much MORE! 公司标识黄；仅渥美线，不处理东田本线／市内线。 |
+| 近江鉄道 | `#FCCD32` | 官网标识参考色 | [来源](https://www.ohmitetudo.co.jp/assets/images/header/logo_ohmigroup_kodo.png)；取本公司集团标识黄，不选同页西武集团标识或通用列车图标；PNG 代表色。 |
+| 近畿日本鉄道 | `#0068B7` | 官网标识参考色 | [来源](https://www.kintetsu.co.jp/common/rn/image/header/header_logo.svg)；取官网 SVG 蓝；本次排除钢索及けいはんな地铁型线路部分。 |
+| 道南いさりび鉄道 | `#008CCF` | 官网标识参考色 | [来源](https://www.shr-isaribi.jp/wp-content/themes/isaribi/images/header/header_title.png)；渐变蓝标识，选中蓝代表色；另含橙黄装饰。 |
+| 遠州鉄道 | `#0081CC` | 官网标识参考色 | [来源](https://train.entetsu.co.jp/images/logo.svg)；官网公司标识 SVG 取色；未宣称为唯一企业色规范。 |
+| 野岩鉄道 | `#204581` | 官网标识参考色 | [来源](https://www.yagan.co.jp/assets/img/common/logo-yagan.svg)；官网公司字标蓝的采用近似值。 |
+| 銚子電気鉄道 | `#D74739` | 其他地图分类参考色 | [来源](https://tetsudozyoho.com/tetsudomap/)；参考铁道情報館全国铁路地图图例的私铁红色类别；HEX 为本页所选屏幕近似值，不是公司官方品牌色，也未复制该地图几何或宣称逐像素复刻。 |
+| 錦川鉄道 | `#E60010` | 官网标识参考色 | [来源](https://nishikigawa.com/wp-content/uploads/logo-white-main.png)；官网公司标识取代表色；未查得单一官方 RGB 规范。 |
+| 長良川鉄道 | `#1C499E` | 官网标识参考色 | [来源](https://www.nagatetsu.co.jp/img/common/logo.png)；官网公司标识取代表色；未查得单一官方 RGB 规范。 |
+| 長野電鉄 | `#CE000D` | 官网标识参考色 | [来源](https://www.nagaden-net.co.jp/hubfs/nagaden2024/img/logo.png)；官网公司标识取代表色；未查得单一官方 RGB 规范。 |
+| 関東鉄道 | `#1D2088` | 官网标识参考色 | [来源](https://www.kantetsu.co.jp/cms/wp-content/themes/kr/img/common/logo.svg)；官网公司标识 SVG 取色；未宣称为唯一企业色规范。 |
+| 阪急電鉄 | `#A60030` | 官网标识参考色 | [来源](https://www.hankyu.co.jp/common/img/logo.svg)；取企业标识红，不把车辆栗色冒充标识色。 |
+| 阪神電気鉄道 | `#38ACB5` | 官网标识参考色 | [来源](https://www.hanshin.co.jp/image/common/logo_taisetsu_gr.svg)；官网公司标识 SVG 取色；未宣称为唯一企业色规范。 |
+| 阿佐海岸鉄道 | `#16439F` | 官网标识参考色 | [来源](https://asatetu.com/dmv/wp-content/uploads/2021/11/logo.png)；只处理 DMV 的铁路区段，巴士区段不纳入铁路上色；选用企业标识蓝。 |
+| 阿武隈急行 | `#019EE4` | 官网标识参考色 | [来源](https://www.abukyu.co.jp/wp-content/themes/abu/dist/img/webp/common/logo.webp)；官网公司标识取代表色；未查得单一官方 RGB 规范。 |
+| 青い森鉄道 | `#2CBADC` | 其他路线资料参考色 | [来源](https://w.atwiki.jp/traininformation/pages/1786.html)；铁道情報wiki 的青い森铁道线明确列出 #2CBADC；属于第三方参考，官方 CI 标志色仍未证实。 |
+| 静岡鉄道 | `#E40038` | 官网标识参考色 | [来源](https://train.shizutetsu.co.jp/wp-content/themes/shizutetsu/images/head-logo.svg)；多色标识，选用红；另含浅蓝。 |
+| 養老鉄道 | `#009944` | 官网标识参考色 | [来源](https://www.yororailway.co.jp/wp-content/themes/yororailway/img/webp/logo.webp)；多色标识，选用绿；另含黄绿。 |
+| 首都圏新都市鉄道 | `#003B83` | 官网标识参考色 | [来源](https://www.mir.co.jp/common/img/hdr_logo01.png)；官网公司标识取代表色；未查得单一官方 RGB 规范。 |
+| 高松琴平電気鉄道 | `#1D2089` | 官网标识参考色 | [来源](https://www.kotoden.co.jp/image/kotodengrouprogo.jpg)；取ことでん公司集团标识深蓝，不取带颜色的“电车”导航按钮。 |
+| 鹿島臨海鉄道 | `#79A833` | 其他地图分类参考色 | [来源](https://tetsudozyoho.com/tetsudomap/)；参考铁道情報館全国铁路地图图例的第三部门黄绿色类别；HEX 为本页所选屏幕近似值，不是公司官方品牌色，也未复制该地图几何或宣称逐像素复刻。 |
+| 黒部峡谷鉄道 | `#EE7700` | 官网标识参考色 | [来源](https://www.kurotetu.co.jp/img/logo_top_sp.png)；普通黏着式窄轨铁路，不是钢索缆车；取官网铁路标识橙。 |
+
+### 发布与产物管理
+
+用户最新指示已授权上传本轮修改（取代此前“暂不上传”）。从最新 `origin/main` 建立隔离工作树，只整理本任务文件；保留已有默认分支检出、fetch/rebase 推送重试、40 分钟任务、30 分钟 Pages 步骤与三次有界重试。不回写主工作区陈旧工作流、不强推。3 项发布保护回归通过（0.032 秒），隔离工作树中两份工作流和发布重试 Action 均未修改。发布结果在确认 Actions 和实际 Pages 后覆盖补全。
+
+本轮临时官网下载、失败下载片段、截图草稿、运行日志与浏览器检查统计均放在唯一系统临时目录；任务完成后清理。只保留生产代码／颜色数据、可复用测试、本摘要和一张正式审核图；不删除正式数据、其他任务文件或根目录 `trash/`。
+
+## 已发布历史：触控板捏合与响应式布局（2026-11-10）
 
 - 用户确认 Mac 操作为双指捏合。Chromium 的 Ctrl+wheel 捏合单独使用 8 倍于普通滚轮的级别增量，保留连续目标／单 RAF、反向、小增量和上下限；普通滚轮仍为 100 px = 0.125 级。桌面 Safari 原生 gesture 事件按相邻 scale 比例处理，并选择单一输入路径，防止同一手势又被 wheel 重复执行。手机原有触摸缩放继续由 Leaflet 处理。
 - 桌面顶栏 108→68 px，筛选条 73→42 px，页脚 42→26 px；站名与线路颜色说明收紧。1680×1050、选中北陆券的同一场景中，地图高度约 625→794 px，增加约 169 px。
 - 手机／窄屏（≤960 px）详情改为地图下方的普通文档区域，独立滚动且可收起；选择 Pass 后回到地图顶部。取消固定底部浮层，地图保持原高度。961–1180 px 的桌面详情也使用独立列，不再浮在地图之上。
-- 联网 Chrome 检查白色底图正常；390×844 手机地图约 414 px 高，详情从其下方开始，未覆盖地图。当前正式审核图更新为 [手机实测图](jprail-map-review.png)。
+- 联网 Chrome 检查白色底图正常；390×844 手机地图约 414 px 高，详情从其下方开始，未覆盖地图。当时保存过手机实测审核图；按单图管理要求，现已由上方当前配色审核图覆盖。
 
 验证：本次 6 项浏览器／数据回归通过（24.887 秒）；覆盖普通滚轮与捏合增量、连续／反向／惯性、停止后无额外跳变、原生 Chromium 合成捏合、Safari 事件路径去重，以及桌面 961／1100／1440／1680 和窄屏 320／390／768／844／960 的布局、横屏、详情开关、地图命中与无横向溢出。Chromium 原生 1.5 倍捏合输入实际改变约 0.405 级，输入逐个取消浏览器默认行为，页面自身未被缩放。Safari 使用事件能力模拟回归，没有宣称完成物理触控板人工验收。
 

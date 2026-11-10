@@ -172,10 +172,10 @@ class RenderedCatalogue(unittest.TestCase):
                             seen.add(key);page.evaluate('(s)=>JPRail.camera.setView([s[1],s[2]],15)',s);page.wait_for_function('JPRail.camera.whenIdle()');self.check_labels(page);self.check_rendered_layers(page);views+=1
                         # Exercise each grade and each actual operator, including
                         # genuine empty intersections, without inventing edges.
-                        operators=page.evaluate('[...new Set(JPRail.state.passCoverage.map(f=>f.properties.operator))]')
+                        operators=page.evaluate('[...new Set(JPRail.state.passCoverage.filter(JPRail.railColors.isRailway).map(f=>JPRail.railColors.operatorOf(f.properties.operator)))]')
                         for op in operators:
                             page.locator('#railOperator').select_option(op)
-                            self.assertTrue(page.evaluate('(op)=>JPRail.state.displayed.every(f=>f.properties.operator===op)',op))
+                            self.assertTrue(page.evaluate('(op)=>JPRail.state.displayed.every(f=>JPRail.railColors.isRailway(f)&&JPRail.railColors.operatorOf(f.properties.operator)===op)',op))
                         page.locator('#railOperator').select_option('')
                         for grade in ['highspeed','main','branch']:
                             page.locator('#railGrade').select_option(grade);self.assertTrue(page.evaluate('(g)=>JPRail.state.displayed.every(f=>JPRail.gradeOf(f)===g)',grade))

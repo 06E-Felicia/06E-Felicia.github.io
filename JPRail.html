@@ -8,11 +8,11 @@
 <title>日本铁道pass地图 · JPRail</title>
 <link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css">
 <link rel="stylesheet" href="assets/vendor/maplibre/maplibre-gl.css">
-<link rel="stylesheet" href="assets/styles/jprail.css?v=20261110-touch2">
+<link rel="stylesheet" href="assets/styles/jprail.css?v=20261110-colors1">
 <script defer src="assets/vendor/leaflet/leaflet.js"></script>
 <script defer src="assets/vendor/maplibre/maplibre-gl.js"></script>
 <script defer src="assets/vendor/maplibre-leaflet/leaflet-maplibre-gl.js"></script>
-<script type="module" src="assets/scripts/jprail.js?v=20261110-touch2"></script>
+<script type="module" src="assets/scripts/jprail.js?v=20261110-colors1"></script>
 </head>
 <body>
 <header class="masthead">
@@ -50,11 +50,11 @@
       <div class="map-layer-controls"><label><input type="checkbox" id="infrastructure"> 详细设施原图（联网）</label><span id="infrastructureHint">在线原图含全网设施</span></div>
       <div class="basemap-status"><span id="basemapStatus" role="status">白色街道底图载入中…</span><button id="retryBasemap" type="button" hidden>重试底图</button></div>
       <div id="mapState" class="map-state" role="status">正在载入全国铁路…</div>
-      <details class="rail-legend"><summary><i style="--rail:#ff0c00"></i><i style="--rail:#ff8100"></i><i style="--rail:#c4b600"></i>线路等级图例</summary><div class="legend-grid"><span><i style="--rail:#ff0c00"></i>高速铁路 / 新干线</span><span><i style="--rail:#ff8100"></i>主干线（main）</span><span><i style="--rail:#c4b600"></i>支线（branch）</span><span><i style="--rail:#87491d"></i>工业 / 专用线</span><span><i style="--rail:#343c39"></i>未分类 / 其他</span><span><i style="--rail:#0300c3"></i>地铁</span><span><i style="--rail:#00bd14"></i>轻轨</span><span><i style="--rail:#d877b8"></i>路面电车</span><span><b class="boundary-swatch"></b>指定线路适用边界</span><span><b class="boundary-swatch company"></b>本券止于公司局界</span><span><b class="boundary-swatch terminus"></b>已含铁路端点</span><span><i class="disused" style="--rail:#70584d"></i>停用 / 废弃（仅原图）</span></div><p>沿用 OpenRailwayMap 配色。筛选图按 OSM 命名线路标签归并等级，非逐股道分类；缺标签或冲突时单列未分类。</p><a href="https://www.openrailwaymap.org/" target="_blank" rel="noopener">查看原图与完整图例 ↗</a></details>
+      <details class="rail-legend"><summary><i style="--rail:#ff0c00"></i><i style="--rail:#ff8100"></i>线路颜色图例</summary><div id="railLegendItems" class="legend-grid rail-color-items"></div><div class="legend-grid boundary-legend"><span><b class="boundary-swatch"></b>指定线路适用边界</span><span><b class="boundary-swatch company"></b>本券止于公司局界</span><span><b class="boundary-swatch terminus"></b>已含铁路端点</span></div><p id="railLegendNote">JR 普速橙黄色，新干线红色，私铁按运营方着色。</p><a href="assets/data/jprail/operator-colors.json" target="_blank" rel="noopener">配色参考与来源 ↗</a><a href="https://www.openrailwaymap.org/" target="_blank" rel="noopener">设施原图与完整等级图例 ↗</a></details>
     </div>
     <div class="selection-bar"><div id="selectedPasses" class="selected-passes"><span>选择一张 Pass，或按等级 / 运营方筛选</span></div><button id="clearSelection" type="button" hidden>清除选择</button></div>
     <p class="station-density"><span id="stationDensity">站名：主要枢纽</span><span id="lineDetailStatus">线路：全国概览</span><span>放大逐步显示更多站名，近距离显示全部</span></p>
-    <p class="precision-note"><i aria-hidden="true"></i>线路按等级着色；Pass 范围为示意，乘车限制见详情。</p>
+    <p class="precision-note"><i aria-hidden="true"></i>JR 普速橙黄色 · 新干线红色 · 私铁按运营方着色；Pass 范围为示意。</p>
   </section>
   <aside id="detailPanel" class="detail-panel" aria-label="所选 Pass 详情" hidden>
     <div id="passDetail" class="pass-detail"></div>
@@ -62,7 +62,7 @@
 </main>
 <footer class="page-foot"><span>JPRail · 一张地图，读懂日本铁路。</span><span>地理数据：<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N02-2025.html" target="_blank" rel="noopener">国土交通省 N02</a> · <a href="https://www.openrailwaymap.org/" target="_blank" rel="noopener">OpenRailwayMap</a> / <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OSM</a></span></footer>
 <div id="toast" role="status" class="toast" hidden></div>
-<dialog id="aboutDialog" aria-labelledby="aboutTitle"><button id="closeAbout" class="dialog-close" type="button" aria-label="关闭说明">×</button><span class="eyebrow">ABOUT THIS ATLAS</span><h2 id="aboutTitle">数据、范围与使用方式</h2><p>本页收录外国游客用铁路 Pass。纯地铁、纯巴士券、普通单程票，以及不限制购买身份的普通一日券不在目录范围内。部分外国护照产品也允许在日外国人购买，资格以每款说明为准。</p><p>客运参考线与车站来自国土交通省 2025 年底 N02 数据，已简化以便浏览。详细铁路设施在线加载 OpenRailwayMap，包含其已收录的货运、专用线、车辆基地与停用线。新建、停运或缺失设施可能存在更新延迟。</p><p><strong>高亮属于范围示意。</strong>适用区间按所列来源匹配至参考线路，位置与轨迹仍有示意误差；未核实条目另行标明。每次仅选择一张 Pass，等级与运营方筛选可进一步收窄其结果。地理上连通，不表示可以持该 Pass 连续乘车；新干线、特急、付费座席、直通第三部门与进出次数另有条件。</p><p id="coverageNote"></p><p>电脑可用滚轮小幅缩放，Mac 触控板可用双指捏合缩放。手机选择 Pass 后，详情位于地图下方，可单独滚动或关闭。</p><p>页面采用不含铁路的地理底图，选择或筛选时不会透出不适用线路。详细设施原图仅在无选择、无筛选时可开启。筛选图的等级由 OSM 运营方与命名线路标签归并，缺标签或存在冲突时不推定等级，并非逐股道分类，也不是 JR 票价制度的干线/地方交通线。</p><p><a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N02-2025.html" target="_blank" rel="noopener">国土数值信息（CC BY 4.0，已加工） ↗</a><br><a href="https://download.geofabrik.de/asia/japan.html" target="_blank" rel="noopener">OSM 等级标签来源（Geofabrik Japan） ↗</a><br><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OSM 数据版权与 ODbL ↗</a><br><a href="https://www.naturalearthdata.com/about/terms-of-use/" target="_blank" rel="noopener">Natural Earth 地理轮廓（公有领域） ↗</a></p></dialog>
+<dialog id="aboutDialog" aria-labelledby="aboutTitle"><button id="closeAbout" class="dialog-close" type="button" aria-label="关闭说明">×</button><span class="eyebrow">ABOUT THIS ATLAS</span><h2 id="aboutTitle">数据、范围与使用方式</h2><p>本页收录外国游客用铁路 Pass。纯地铁、纯巴士券、普通单程票，以及不限制购买身份的普通一日券不在目录范围内。部分外国护照产品也允许在日外国人购买，资格以每款说明为准。</p><p>客运参考线与车站来自国土交通省 2025 年底 N02 数据，已简化以便浏览。详细铁路设施在线加载 OpenRailwayMap，包含其已收录的货运、专用线、车辆基地与停用线。新建、停运或缺失设施可能存在更新延迟。</p><p><strong>高亮属于范围示意。</strong>适用区间按所列来源匹配至参考线路，位置与轨迹仍有示意误差；未核实条目另行标明。每次仅选择一张 Pass，等级与运营方筛选可进一步收窄其结果。地理上连通，不表示可以持该 Pass 连续乘车；新干线、特急、付费座席、直通第三部门与进出次数另有条件。</p><p id="coverageNote"></p><p>电脑可用滚轮小幅缩放，Mac 触控板可用双指捏合缩放。手机选择 Pass 后，详情位于地图下方，可单独滚动或关闭。</p><p>普通铁路采用本页整理的公司配色：JR 普速橙黄色、新干线红色，私铁参考公司标识；黑白标识公司另采用官方线路图、铁路服务页或注明来源的地图参考色，非统一官方色值规范。公司筛选只针对普通铁路和新干线；地铁、路面电车、单轨、新交通系统和钢索缆车保留原显示方式，不新增公司配色。页面采用不含铁路的地理底图，选择或筛选时不会透出不适用线路。详细设施原图仅在无选择、无筛选时可开启。筛选图的等级由 OSM 运营方与命名线路标签归并，缺标签或存在冲突时不推定等级，并非逐股道分类，也不是 JR 票价制度的干线/地方交通线。</p><p><a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N02-2025.html" target="_blank" rel="noopener">国土数值信息（CC BY 4.0，已加工） ↗</a><br><a href="https://download.geofabrik.de/asia/japan.html" target="_blank" rel="noopener">OSM 等级标签来源（Geofabrik Japan） ↗</a><br><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OSM 数据版权与 ODbL ↗</a><br><a href="https://www.naturalearthdata.com/about/terms-of-use/" target="_blank" rel="noopener">Natural Earth 地理轮廓（公有领域） ↗</a></p></dialog>
 <noscript><p class="noscript">请启用 JavaScript 以使用交互地图。<a href="https://www.openrailwaymap.org/">前往 OpenRailwayMap</a></p></noscript>
 </body>
 </html>

@@ -69,10 +69,11 @@ class BrowserTests(unittest.TestCase):
         mask=Image.new('1',rails.size,1);draw=ImageDraw.Draw(mask)
         points=page.evaluate('[...JPRail.state.stationPool,...JPRail.state.pinnedStations.map(p=>p.station)].map(s=>{const p=JPRail.map.latLngToContainerPoint([s[1],s[2]]);return [p.x,p.y]})')
         for x,y in points:draw.ellipse((x-7,y-7,x+7,y+7),fill=0)
+        colors=page.evaluate('[...new Set([...JPRail.state.layers.values()].flatMap(l=>l.getLayers().map(p=>p.options.color)))]')
+        colors=[tuple(bytes.fromhex(c[1:])) for c in colors]
         total=lost=0
         for before,after,visible in zip(rails.getdata(),shown.getdata(),mask.getdata()):
-            r,g,b=before
-            if visible and r>240 and 110<g<145 and b<15:
+            if visible and any(max(abs(a-b) for a,b in zip(before,c))<4 for c in colors):
                 total+=1
                 if sum(abs(a-b) for a,b in zip(before,after))>60:lost+=1
         self.assertGreater(total,200)
@@ -179,7 +180,7 @@ class BrowserTests(unittest.TestCase):
                     page.locator('#railOperator').select_option('東日本旅客鉄道')
                     self.assertGreater(page.evaluate('JPRail.state.displayed.length'),0)
                     self.assertTrue(page.evaluate("JPRail.state.displayed.every(f=>f.properties.operator==='東日本旅客鉄道')"))
-                    for grade,color in (('main','#ff8100'),('branch','#c4b600')):
+                    for grade,color in (('main','#FF8100'),('branch','#FF8100')):
                         page.locator('#railGrade').select_option(grade)
                         self.assertGreater(page.evaluate('JPRail.state.displayed.length'),0)
                         self.assertTrue(page.evaluate('(g)=>JPRail.state.displayed.every(f=>JPRail.gradeOf(f)===g)',grade))
@@ -266,7 +267,7 @@ class BrowserTests(unittest.TestCase):
                         self.assertLessEqual(page.evaluate('document.documentElement.scrollHeight-innerHeight'),1)
                         self.assertAlmostEqual(page.locator('.page-foot').bounding_box()['y']+page.locator('.page-foot').bounding_box()['height'],height,delta=1)
                         if height==1800:self.assertGreater(page.locator('#map').bounding_box()['height'],1100)
-                    page.locator('.rail-legend summary').click();self.assertIn('主干线',page.locator('.rail-legend').inner_text())
+                    page.locator('.rail-legend summary').click();self.assertIn('JR 普速线路',page.locator('.rail-legend').inner_text())
                     for width in (320,390,768,1100):
                         page.set_viewport_size({'width':width,'height':844})
                         self.assertFalse(page.evaluate('document.documentElement.scrollWidth>innerWidth+1'))

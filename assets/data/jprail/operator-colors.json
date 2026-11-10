@@ -1,0 +1,904 @@
+{
+  "version": "2026-11-10",
+  "scope": "普通铁路与新干线；地铁、路面电车、单轨、新交通、钢索缆车不新增公司配色。",
+  "jr": {
+    "color": "#FF8100",
+    "basis": "本页统一配色（用户指定）"
+  },
+  "shinkansen": {
+    "color": "#FF0C00",
+    "basis": "本页统一配色（用户指定）"
+  },
+  "aliases": {
+    "三国芦原線": "えちぜん鉄道"
+  },
+  "excludedOperators": [
+    "こうべ未来都市機構",
+    "とさでん交通",
+    "ゆりかもめ",
+    "ラクテンチ",
+    "一般社団法人札幌市交通事業振興公社",
+    "一般財団法人青函トンネル記念館",
+    "万葉線",
+    "丹後海陸交通",
+    "京福電気鉄道",
+    "京都市",
+    "仙台市",
+    "函館市",
+    "北九州高速鉄道",
+    "北大阪急行電鉄",
+    "十国峠",
+    "千葉都市モノレール",
+    "名古屋ガイドウェイバス",
+    "名古屋市",
+    "四国ケーブル",
+    "埼玉新都市交通",
+    "埼玉高速鉄道",
+    "多摩都市モノレール",
+    "大山観光電鉄",
+    "大阪モノレール",
+    "大阪市高速電気軌道",
+    "宇都宮ライトレール",
+    "山万",
+    "岡山電気軌道",
+    "広島電鉄",
+    "広島高速交通",
+    "御岳登山鉄道",
+    "愛知高速交通",
+    "札幌市",
+    "東京モノレール",
+    "東京地下鉄",
+    "東京都",
+    "横浜シーサイドライン",
+    "横浜市",
+    "横浜高速鉄道",
+    "比叡山鉄道",
+    "沖縄都市モノレール",
+    "湘南モノレール",
+    "熊本市",
+    "皿倉登山鉄道",
+    "神戸六甲鉄道",
+    "神戸市",
+    "神戸新交通",
+    "福井鉄道",
+    "福岡市",
+    "立山黒部貫光",
+    "筑波観光鉄道",
+    "筑豊電気鉄道",
+    "舞浜リゾートライン",
+    "長崎電気軌道",
+    "阪堺電気軌道",
+    "鞍馬寺",
+    "高尾登山電鉄",
+    "鹿児島市"
+  ],
+  "excludedLines": {
+    "京阪電気鉄道": [
+      "京津線",
+      "石山坂本線",
+      "鋼索線"
+    ],
+    "富山地方鉄道": [
+      "呉羽線",
+      "安野屋線",
+      "富山港線",
+      "富山都心線",
+      "富山駅南北接続線",
+      "支線"
+    ],
+    "伊予鉄道": [
+      "城北線",
+      "城南線",
+      "大手町線",
+      "本町線",
+      "花園線",
+      "連絡線"
+    ],
+    "豊橋鉄道": [
+      "東田本線"
+    ],
+    "東急電鉄": [
+      "世田谷線"
+    ],
+    "西武鉄道": [
+      "山口線"
+    ],
+    "近畿日本鉄道": [
+      "けいはんな線",
+      "生駒鋼索線",
+      "西信貴鋼索線"
+    ],
+    "南海電気鉄道": [
+      "鋼索線"
+    ],
+    "小田急箱根": [
+      "鋼索線"
+    ]
+  },
+  "operators": {
+    "IRいしかわ鉄道": {
+      "color": "#00A7E3",
+      "basis": "官网标识参考色",
+      "source": "https://www.ishikawa-railway.jp/assets/img/ir_logo_2.svg",
+      "note": "官网公司标识 SVG 取色；未宣称为唯一企业色规范。",
+      "checked": "2026-11-10"
+    },
+    "JR東海交通事業": {
+      "color": "#FF6B00",
+      "basis": "官网标识参考色",
+      "source": "https://tkj-i.co.jp/assets/images/logo.png",
+      "note": "城北线运营公司，属 JR 东海子公司；本表暂列独立运营主体，拟用其 TKJ 标识橙，供审核。",
+      "checked": "2026-11-10"
+    },
+    "WILLER　TRAINS": {
+      "color": "#E60012",
+      "basis": "官网标识参考色",
+      "source": "https://trains.willer.co.jp/corporate/profile/ci/img/willer.png",
+      "note": "采用官网 CI 页的企业标识红，不把京都丹后铁路昵称标识或车辆颜色代作企业色。",
+      "checked": "2026-11-10"
+    },
+    "あいの風とやま鉄道": {
+      "color": "#007AC6",
+      "basis": "官网标识参考色",
+      "source": "https://ainokaze.co.jp/common/images/logo.png",
+      "note": "多色标识，拟选蓝；另含绿色。",
+      "checked": "2026-11-10"
+    },
+    "いすみ鉄道": {
+      "color": "#117C3B",
+      "basis": "官网标识参考色",
+      "source": "https://isumirail.co.jp/wp-content/uploads/2024/02/shiromoji.png",
+      "note": "官网标识绿色；原 PNG 半透明，取实色内容，不取白色抗锯齿。",
+      "checked": "2026-11-10"
+    },
+    "えちごトキめき鉄道": {
+      "color": "#3782BD",
+      "basis": "官方线路图参考色",
+      "source": "https://www.echigo-tokimeki.co.jp/img/img-line-guide.png",
+      "note": "官网范围图的日本海ひすいライン蓝；用于本页统一公司色，不冒充妙高はねうま等全部线路的官方统一色。",
+      "checked": "2026-11-10"
+    },
+    "えちぜん鉄道": {
+      "color": "#004097",
+      "basis": "官网标识参考色",
+      "source": "https://www.echizen-tetudo.co.jp/_assets/img/logo.svg",
+      "note": "官网公司标识 SVG 取色；未宣称为唯一企业色规范。",
+      "checked": "2026-11-10"
+    },
+    "くま川鉄道": {
+      "color": "#B08E42",
+      "basis": "官网标识参考色",
+      "source": "https://kumagawa-rail.com/wp-content/uploads/2025/06/kt-hp_logo.jpg",
+      "note": "官网金色标识为压缩／渐变图，#B08E42 是拟用金色近似值，不是官方公布 RGB。",
+      "checked": "2026-11-10"
+    },
+    "しなの鉄道": {
+      "color": "#2A519F",
+      "basis": "官网标识参考色",
+      "source": "https://www.shinanorailway.co.jp/common/img/logo_footer.gif",
+      "note": "多色标识，拟选蓝；另含金黄。",
+      "checked": "2026-11-10"
+    },
+    "のと鉄道": {
+      "color": "#00A0EA",
+      "basis": "官网标识参考色",
+      "source": "https://nototetsu.jp/wp-content/uploads/2022/09/logo.svg",
+      "note": "官网公司标识 SVG 取色；未宣称为唯一企业色规范。",
+      "checked": "2026-11-10"
+    },
+    "ひたちなか海浜鉄道": {
+      "color": "#FF9933",
+      "basis": "售票路线图参考色",
+      "source": "https://ticket.jorudan.co.jp/hitachinaka-rail/img/routemap01.png",
+      "note": "Jorudan 湊线售票路线图的线路橙色；原公司标识色仍未证实，此色用于地图参考。",
+      "checked": "2026-11-10"
+    },
+    "わたらせ渓谷鐵道": {
+      "color": "#651614",
+      "basis": "官网标识参考色",
+      "source": "https://www.watetsu.com/assets/img/logo.png",
+      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "アイジーアールいわて銀河鉄道": {
+      "color": "#0F459B",
+      "basis": "官网标识参考色",
+      "source": "https://igr.jp/wp-content/themes/igr/assets/images/logo_igr.png",
+      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "アルピコ交通": {
+      "color": "#2E3F99",
+      "basis": "官网标识参考色",
+      "source": "https://www.alpico.co.jp/traffic/files/images/header/img_logo.jpg",
+      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "ハピラインふくい": {
+      "color": "#E6378D",
+      "basis": "官网标识参考色",
+      "source": "https://www.hapi-line.co.jp/theme/default/img/common/logo/site_logo.svg",
+      "note": "多色标识，拟选粉红；另含黄绿。",
+      "checked": "2026-11-10"
+    },
+    "一畑電車": {
+      "color": "#DC000C",
+      "basis": "官网标识参考色",
+      "source": "https://railway.ichibata.co.jp/wp-content/media/f_logo_1.svg",
+      "note": "采用公司字标旁的红色标志，不选橙／黄的昵称宣传字。",
+      "checked": "2026-11-10"
+    },
+    "三岐鉄道": {
+      "color": "#182D82",
+      "basis": "官网标识参考色",
+      "source": "https://sangirail.co.jp/images/images2022111617170283.jpg",
+      "note": "官网蓝色标识的代表色。",
+      "checked": "2026-11-10"
+    },
+    "三陸鉄道": {
+      "color": "#0075C1",
+      "basis": "官方象征色的屏幕近似值",
+      "source": "https://www.sanrikutetsudou.com/三陸鉄道の車両のご紹介・列車ご利用のご案内/",
+      "note": "官方列车象征色包括蓝、红、白，蓝表示三陆海洋；本页选蓝色近似值，并非公布的企业 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "上信電鉄": {
+      "color": "#004999",
+      "basis": "官网铁路服务页参考色",
+      "source": "https://www.joshin-dentetsu.co.jp/wp/wp-content/themes/joshin-dentetsu/css/railway.css?ver=20190906",
+      "note": "官网 railway.css 的 .rosen_map li a 边框／文字蓝。",
+      "checked": "2026-11-10"
+    },
+    "上毛電気鉄道": {
+      "color": "#46352B",
+      "basis": "官网标识参考色",
+      "source": "https://jomorailway.com/images/common/logo.png",
+      "note": "官网 JOMO 标志深棕色；按原图主要棕色像素取值。",
+      "checked": "2026-11-10"
+    },
+    "上田電鉄": {
+      "color": "#E46018",
+      "basis": "官网标识参考色",
+      "source": "https://www.uedadentetsu.com/assets/themes/uedadentetsu_202003/imgs/common/header_sitetitle.png",
+      "note": "小尺寸 PNG 取标志橙色近似值。",
+      "checked": "2026-11-10"
+    },
+    "井原鉄道": {
+      "color": "#759A31",
+      "basis": "官方线路图参考色",
+      "source": "https://www.ibara-railway.co.jp/wp-content/themes/child/image/contents/area/rail-map.jpg",
+      "note": "官网井原线站点／线路图的绿色，PNG 代表色。",
+      "checked": "2026-11-10"
+    },
+    "京成電鉄": {
+      "color": "#154F9E",
+      "basis": "官网标识参考色",
+      "source": "https://www.keisei.co.jp/assets/images/common/head_logo.png",
+      "note": "采用 Liner Blue；另含 Liner Red。",
+      "checked": "2026-11-10"
+    },
+    "京浜急行電鉄": {
+      "color": "#004098",
+      "basis": "官网标识参考色",
+      "source": "https://www.keikyu.co.jp/company/outline.html",
+      "note": "官方公司概要展示蓝色 KEIKYU；#004098 是拟用屏幕近似值，未取得官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "京王電鉄": {
+      "color": "#0F3675",
+      "basis": "官网标识参考色",
+      "source": "https://www.keio.co.jp/assets/img/common/icon_company_logo.svg",
+      "note": "多色标识，拟选蓝；另含京王红。",
+      "checked": "2026-11-10"
+    },
+    "京阪電気鉄道": {
+      "color": "#E95504",
+      "basis": "官网标识参考色",
+      "source": "https://www.keihan.co.jp/app-files/img/cmn_logo01.svg",
+      "note": "多色标识，拟选橙；另含蓝灰。仅本线系普通铁路部分。",
+      "checked": "2026-11-10"
+    },
+    "仙台空港鉄道": {
+      "color": "#0A50A1",
+      "basis": "官网标识参考色",
+      "source": "https://www.senat.co.jp/wp-content/themes/mythemes/img/rogo.png",
+      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "伊予鉄道": {
+      "color": "#EA6000",
+      "basis": "官网标识参考色",
+      "source": "http://www.iyotetsu.co.jp/common/img/logo.png",
+      "note": "兼营公司只处理高浜、横河原、郡中三条郊外铁路；不处理市内电车和巴士。",
+      "checked": "2026-11-10"
+    },
+    "伊勢鉄道": {
+      "color": "#036CE1",
+      "basis": "官网标识参考色",
+      "source": "https://isetetu.co.jp/js/header.js#inline-header-mark",
+      "note": "内联标志继承页面 CSS；取固定顶栏／页脚实际填色 #036CE1，不把白色版解析成默认黑。",
+      "checked": "2026-11-10"
+    },
+    "伊豆急行": {
+      "color": "#0386CE",
+      "basis": "官网标识参考色",
+      "source": "https://www.izukyu.co.jp/assets/images/common/logo.jpg",
+      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "伊豆箱根鉄道": {
+      "color": "#007A24",
+      "basis": "官网标识参考色",
+      "source": "http://www.izuhakone.co.jp/share/imgs/h-logo.png",
+      "note": "采用本公司绿色标志，不选同页的西武集团标识。",
+      "checked": "2026-11-10"
+    },
+    "伊賀鉄道": {
+      "color": "#0767B1",
+      "basis": "官网标识参考色",
+      "source": "https://www.igatetsu.co.jp/igatetsu/wp-content/themes/igatetsuwp/images/logo.png",
+      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "会津鉄道": {
+      "color": "#21701A",
+      "basis": "官网标识参考色",
+      "source": "https://aizutetsudo.jp/wp-content/themes/aizutetsudo/assets/images/common/logo.png",
+      "note": "多色标识，拟选绿色；另含橙色。",
+      "checked": "2026-11-10"
+    },
+    "信楽高原鐵道": {
+      "color": "#00A779",
+      "basis": "官网标识参考色",
+      "source": "https://koka-skr.co.jp/img/footer/footerLogo.jpg",
+      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "北条鉄道": {
+      "color": "#8D512D",
+      "basis": "官网标识参考色",
+      "source": "http://www.hojorailway.jp/wp-content/themes/houjyostyle/images/rogo_e.png",
+      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "北総鉄道": {
+      "color": "#16379E",
+      "basis": "官网标识参考色",
+      "source": "https://www.hokuso-railway.co.jp/images/common/header_logo01.svg",
+      "note": "多色标识，拟选蓝色。",
+      "checked": "2026-11-10"
+    },
+    "北越急行": {
+      "color": "#073190",
+      "basis": "官网标识参考色",
+      "source": "https://hokuhoku.co.jp/img/logo01.png",
+      "note": "多色标识，拟选蓝；另含红。",
+      "checked": "2026-11-10"
+    },
+    "北陸鉄道": {
+      "color": "#D74739",
+      "basis": "其他地图分类参考色",
+      "source": "https://tetsudozyoho.com/tetsudomap/",
+      "note": "参考铁道情報館全国铁路地图图例的私铁红色类别；HEX 为本页所选屏幕近似值，不是公司官方品牌色，也未复制该地图几何或宣称逐像素复刻。",
+      "checked": "2026-11-10"
+    },
+    "南海電気鉄道": {
+      "color": "#E94E00",
+      "basis": "官网标识参考色",
+      "source": "https://www.nankai.co.jp/common/img/logo/nankai-logo.svg",
+      "note": "取当前官网标识朱橙；另含黄色。排除钢索线。",
+      "checked": "2026-11-10"
+    },
+    "南阿蘇鉄道": {
+      "color": "#029178",
+      "basis": "官网标识参考色",
+      "source": "https://www.mt-torokko.com/img/common/header-logo.png",
+      "note": "多色标识，拟选青绿；另含深绿及红。",
+      "checked": "2026-11-10"
+    },
+    "叡山電鉄": {
+      "color": "#008663",
+      "basis": "官网标识参考色",
+      "source": "https://eizandensha.co.jp/files/img/common/logo_eiden.png",
+      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "名古屋臨海高速鉄道": {
+      "color": "#4344A3",
+      "basis": "官网标识参考色",
+      "source": "https://www.aonamiline.co.jp/sys/wp-content/themes/aonami/assets/img/common/header_logo.svg",
+      "note": "多色标识，拟选蓝紫；另含青蓝。",
+      "checked": "2026-11-10"
+    },
+    "名古屋鉄道": {
+      "color": "#004DA0",
+      "basis": "官网标识参考色",
+      "source": "https://top.meitetsu.co.jp/img/header_identity_01.svg",
+      "note": "取得当前官网 SVG，修正此前 CSS 近似值 #004EA2 为实际标识蓝 #004DA0；不是车辆猩红。",
+      "checked": "2026-11-10"
+    },
+    "和歌山電鐵": {
+      "color": "#CC3518",
+      "basis": "官网标识参考色",
+      "source": "https://wakayama-dentetsu.co.jp/wp-content/uploads/logo_a-1.png",
+      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "四日市あすなろう鉄道": {
+      "color": "#00904C",
+      "basis": "官网标识参考色",
+      "source": "https://yar.co.jp/common/img/layout/footer/fLogo.gif",
+      "note": "采用公司标识绿；另含浅蓝。不因窄轨而排除，仍为普通铁路。",
+      "checked": "2026-11-10"
+    },
+    "土佐くろしお鉄道": {
+      "color": "#00B0E7",
+      "basis": "官网标识参考色",
+      "source": "https://static.wixstatic.com/media/06d37b_32b04ee8d43546e685cc9d7165fea51b%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/06d37b_32b04ee8d43546e685cc9d7165fea51b%7Emv2.png",
+      "note": "官网图标及官方三社合作资料交叉确认浅蓝标识；PNG 代表色。",
+      "checked": "2026-11-10"
+    },
+    "大井川鐵道": {
+      "color": "#2B3A60",
+      "basis": "官网铁路服务页参考色",
+      "source": "https://daitetsu.jp/wordpress/wp-content/themes/oigawa/style.css?20240711",
+      "note": "官网车站区块 .station-wrap 的边框蓝和铁路站点提示文字色；不是宣称本线／井川线统一官方线路色。",
+      "checked": "2026-11-10"
+    },
+    "天竜浜名湖鉄道": {
+      "color": "#79A833",
+      "basis": "其他地图分类参考色",
+      "source": "https://tetsudozyoho.com/tetsudomap/",
+      "note": "参考铁道情報館全国铁路地图图例的第三部门黄绿色类别；HEX 为本页所选屏幕近似值，不是公司官方品牌色，也未复制该地图几何或宣称逐像素复刻。",
+      "checked": "2026-11-10"
+    },
+    "富士山麓電気鉄道": {
+      "color": "#5A2200",
+      "basis": "官网标识参考色",
+      "source": "https://www.fujikyu-railway.jp/fujisanroku/images/logo_mark.png",
+      "note": "官网 FujiQ 标识不透明版为棕色；不取淡化透明版与白底混合后的浅色。",
+      "checked": "2026-11-10"
+    },
+    "富山地方鉄道": {
+      "color": "#D74739",
+      "basis": "其他地图分类参考色",
+      "source": "https://tetsudozyoho.com/tetsudomap/",
+      "note": "参考铁道情報館全国铁路地图图例的私铁红色类别；HEX 为本页所选屏幕近似值，不是公司官方品牌色，也未复制该地图几何或宣称逐像素复刻。",
+      "checked": "2026-11-10"
+    },
+    "小湊鐵道": {
+      "color": "#FF3700",
+      "basis": "官网铁路服务页参考色",
+      "source": "https://www.kominato.co.jp/wp-content/themes/html5blank-stable/common/css/station.css?mod=20230330040453",
+      "note": "官网车站栏目、站名标和车站菜单的朱红色。",
+      "checked": "2026-11-10"
+    },
+    "小田急箱根": {
+      "color": "#EF4A00",
+      "basis": "官网标识参考色",
+      "source": "https://www.odakyu-hakone.jp/common/img/logo.gif?20240306",
+      "note": "官网当前公司字标橙色；仅鉄道線，不含钢索线／索道。",
+      "checked": "2026-11-10"
+    },
+    "小田急電鉄": {
+      "color": "#004EA2",
+      "basis": "官网标识参考色",
+      "source": "https://www.odakyu.jp/common/img/logo.svg",
+      "note": "官网公司标识 SVG 取色；未宣称为唯一企业色规范。",
+      "checked": "2026-11-10"
+    },
+    "山形鉄道": {
+      "color": "#3B3290",
+      "basis": "官网标识参考色",
+      "source": "https://flower-liner.jp/wp/wp-content/themes/yamatetsu/img/logo.png",
+      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "山陽電気鉄道": {
+      "color": "#E31B13",
+      "basis": "官网标识参考色",
+      "source": "https://www.sanyo-railway.co.jp/assets/img/common/logo.svg",
+      "note": "官网公司标识 SVG 取色；未宣称为唯一企业色规范。",
+      "checked": "2026-11-10"
+    },
+    "岳南電車": {
+      "color": "#CF664D",
+      "basis": "官方线路图参考色",
+      "source": "https://www.gakutetsu.jp/a68089000000024f-img/rosenzu.png",
+      "note": "官网路線図中岳南本线的赤陶色；不取旁侧 JR 东海道线／新干线颜色。",
+      "checked": "2026-11-10"
+    },
+    "島原鉄道": {
+      "color": "#112953",
+      "basis": "官方车站图参考色",
+      "source": "https://www.shimatetsu.co.jp/storage/content-page/1CO8acYwrxoeGk4653CQQrC32Thgv5nsZ30C26XX.png",
+      "note": "官网諫早—島原港站点图的深蓝站点／文字色；图中另有红点，本页选深蓝作为单一显示色。",
+      "checked": "2026-11-10"
+    },
+    "嵯峨野観光鉄道": {
+      "color": "#8A2222",
+      "basis": "官网铁路服务页参考色",
+      "source": "https://www.sagano-kanko.co.jp/cms/wp-content/themes/saganokanko/assets/css/station.css?d=1769477525",
+      "note": "官网 station.css 的车站线路栏目／强调色深红，不把白色标志解释成无品牌色。",
+      "checked": "2026-11-10"
+    },
+    "平成筑豊鉄道": {
+      "color": "#0065B2",
+      "basis": "官网标识参考色",
+      "source": "https://www.heichiku.net/wp-content/themes/heichiku2020/assets/img/logo.png",
+      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "弘南鉄道": {
+      "color": "#1E9C43",
+      "basis": "官网标识参考色",
+      "source": "https://konantetsudo.jp/wp2/wp-content/uploads/tcd-w/logo.png?1794314024",
+      "note": "多色标识，拟选绿；另含橙。",
+      "checked": "2026-11-10"
+    },
+    "愛知環状鉄道": {
+      "color": "#0058A4",
+      "basis": "官网标识参考色",
+      "source": "https://www.aikanrailway.co.jp/images/logo.svg",
+      "note": "官网公司标识 SVG 取色；未宣称为唯一企业色规范。",
+      "checked": "2026-11-10"
+    },
+    "明知鉄道": {
+      "color": "#E73828",
+      "basis": "官网铁路服务页参考色",
+      "source": "https://www.aketetsu.co.jp/wp-content/themes/aketetsu/style.css?ver=20260521044335",
+      "note": "官网铁路与车站页面标题／站名样式的红色。",
+      "checked": "2026-11-10"
+    },
+    "智頭急行": {
+      "color": "#004196",
+      "basis": "官网标识参考色",
+      "source": "https://www.chizukyu.co.jp/user/assets/img/common/logo.svg",
+      "note": "官网公司标识 SVG 取色；未宣称为唯一企业色规范。",
+      "checked": "2026-11-10"
+    },
+    "東京臨海高速鉄道": {
+      "color": "#00418E",
+      "basis": "官网标识参考色",
+      "source": "https://www.twr.co.jp/Portals/0/Skins/TWR/images/logo.png",
+      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "東急電鉄": {
+      "color": "#E83817",
+      "basis": "官网标识参考色",
+      "source": "https://www.tokyu.co.jp/#inline-logo",
+      "note": "取得官网内联 SVG 实值，修正此前近似值 #E60012 为 #E83817；排除世田谷线。",
+      "checked": "2026-11-10"
+    },
+    "東武鉄道": {
+      "color": "#0950A7",
+      "basis": "官网标识参考色",
+      "source": "https://www.tobu.co.jp/_assets/images/common/logo_tobu.png",
+      "note": "蓝色渐变标识，选代表值；并非唯一 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "東葉高速鉄道": {
+      "color": "#5AB55C",
+      "basis": "官方线路图参考色",
+      "source": "https://www.toyokosoku.co.jp/wp/images/route_jpn_2504.png",
+      "note": "官网线路图的东叶高速线为绿色；不取同图东京 Metro 东西线蓝或银座线橙。",
+      "checked": "2026-11-10"
+    },
+    "松浦鉄道": {
+      "color": "#E70012",
+      "basis": "官网标识参考色",
+      "source": "https://matutetu.com/files/libs/3797/202203220939373300.png?1647909577",
+      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "樽見鉄道": {
+      "color": "#D0B46A",
+      "basis": "官网标识参考色",
+      "source": "https://tarumi-railway.com/images/common/logo_txt.svg",
+      "note": "SVG 金色实值；浅色，后续实际绘图需检查白色底图对比度。",
+      "checked": "2026-11-10"
+    },
+    "水島臨海鉄道": {
+      "color": "#007BBD",
+      "basis": "官网标识参考色",
+      "source": "https://www.mizurin.co.jp/img/logo1.png",
+      "note": "多色标识，拟选深蓝；另含浅蓝。",
+      "checked": "2026-11-10"
+    },
+    "水間鉄道": {
+      "color": "#5AC13E",
+      "basis": "官网标识参考色",
+      "source": "https://www.suitetsu.com/image/top/logo.jpg",
+      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "江ノ島電鉄": {
+      "color": "#00A943",
+      "basis": "官网标识参考色",
+      "source": "http://www.enoden.co.jp/common/images/top/logo_2026_05_only.png",
+      "note": "公司官网沿革另明确企业绿色；虽有短距离街面段，仍纳入普通铁路。",
+      "checked": "2026-11-10"
+    },
+    "津軽鉄道": {
+      "color": "#FF6600",
+      "basis": "官方车站图参考色",
+      "source": "https://tsutetsu.com/tsutetsu/wp-content/uploads/2015/09/rosenzu-01.png",
+      "note": "官网线路与沿线指南的橙色站点标识；用于本页公司色，不称为官方统一线色规范。",
+      "checked": "2026-11-10"
+    },
+    "流鉄": {
+      "color": "#5D8354",
+      "basis": "官网标识参考色",
+      "source": "http://ryutetsu.jp/img/logo.png",
+      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "熊本電気鉄道": {
+      "color": "#750124",
+      "basis": "官网标识参考色",
+      "source": "https://www.kumamotodentetsu.co.jp/shared/img/common/head_logo.jpg",
+      "note": "官方页眉 CSS 标志深红代表色；不取巴士招聘、商店周年或社交图标。",
+      "checked": "2026-11-10"
+    },
+    "甘木鉄道": {
+      "color": "#CD1402",
+      "basis": "官网标识参考色",
+      "source": "https://www.amatetsu.jp/share/head_left.gif",
+      "note": "从官方 header.js 确认公司红色标志资源，不取 LINE 绿色；拟用近似红。",
+      "checked": "2026-11-10"
+    },
+    "由利高原鉄道": {
+      "color": "#009D72",
+      "basis": "官网标识参考色",
+      "source": "https://www.obako5.com/wp-content/uploads/2022/03/topbanner.png",
+      "note": "采用官网主字标中的绿色近似值，不选辅助俱乐部／广告／社交网站图标。",
+      "checked": "2026-11-10"
+    },
+    "相模鉄道": {
+      "color": "#243C98",
+      "basis": "官网标识参考色",
+      "source": "https://www.sotetsu.co.jp/_nuxt/group_logo.C0rwaJfS.svg",
+      "note": "官方 CI 解释确认 SOTETSU 蓝／橙；取当前官方 SVG 蓝 #243C98。",
+      "checked": "2026-11-10"
+    },
+    "真岡鐵道": {
+      "color": "#003149",
+      "basis": "官网标识参考色",
+      "source": "https://www.moka-railway.co.jp/wp-content/uploads/2019/11/moka_logo.png",
+      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "神戸電鉄": {
+      "color": "#94283D",
+      "basis": "官网标识参考色",
+      "source": "https://www.shintetsu.co.jp/cms/wp-content/themes/original/dist/images/site_logo.webp",
+      "note": "小尺寸／有抗锯齿 PNG，拟用标志深红近似值。",
+      "checked": "2026-11-10"
+    },
+    "福島交通": {
+      "color": "#E5001E",
+      "basis": "官网标识参考色",
+      "source": "http://www.fukushima-koutu.co.jp/images/logo-index.svg",
+      "note": "多色公司标识，拟选红；另含绿、蓝、黄。只处理饭坂线。",
+      "checked": "2026-11-10"
+    },
+    "秋田内陸縦貫鉄道": {
+      "color": "#E60012",
+      "basis": "官网标识参考色",
+      "source": "https://www.akita-nairiku.com/images/common/header_logo.png",
+      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "秩父鉄道": {
+      "color": "#01479D",
+      "basis": "官网标识参考色",
+      "source": "https://www.chichibu-railway.co.jp/wp-content/themes/tpl_chichibu/images/logo.png",
+      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "紀州鉄道": {
+      "color": "#004599",
+      "basis": "官网标识参考色",
+      "source": "https://kitetsu.jp/cms/wp-content/uploads/job-logo.png",
+      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "肥薩おれんじ鉄道": {
+      "color": "#FCC800",
+      "basis": "官网标识参考色",
+      "source": "https://www.hs-orange.com/common/images/top1/ologo.svg",
+      "note": "官网公司标识 SVG 取色；未宣称为唯一企业色规范。",
+      "checked": "2026-11-10"
+    },
+    "能勢電鉄": {
+      "color": "#A4223E",
+      "basis": "官网标识参考色",
+      "source": "https://noseden.hankyu.co.jp/img/common/logo_j.png",
+      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "芝山鉄道": {
+      "color": "#DF032E",
+      "basis": "官网标识参考色",
+      "source": "https://www.sibatetu.co.jp/images/logo.png",
+      "note": "多色标识，拟选红；另含绿。",
+      "checked": "2026-11-10"
+    },
+    "若桜鉄道": {
+      "color": "#266DB6",
+      "basis": "官网标识参考色",
+      "source": "https://wakatetsu.co.jp/wp/wp-content/themes/wakatesu/img/logo-3.svg",
+      "note": "官网公司标识 SVG 取色；未宣称为唯一企业色规范。",
+      "checked": "2026-11-10"
+    },
+    "西日本鉄道": {
+      "color": "#154B97",
+      "basis": "官网标识参考色",
+      "source": "https://www.nishitetsu.jp/assets/images/common/header_logo.png",
+      "note": "拟选标识蓝；另含红、橙。只处理铁路，不处理巴士业务。",
+      "checked": "2026-11-10"
+    },
+    "西武鉄道": {
+      "color": "#3366CC",
+      "basis": "官网标识参考色",
+      "source": "https://www.seiburailway.jp/assets/images/header/logo.svg",
+      "note": "拟选铁路公司标识蓝；另含浅蓝、绿。排除山口线新交通系统。",
+      "checked": "2026-11-10"
+    },
+    "豊橋鉄道": {
+      "color": "#F3D823",
+      "basis": "官网标识参考色",
+      "source": "https://www.toyotetsu.com/assets/img/common/logo-header.svg",
+      "note": "取当前 Much MORE! 公司标识黄；仅渥美线，不处理东田本线／市内线。",
+      "checked": "2026-11-10"
+    },
+    "近江鉄道": {
+      "color": "#FCCD32",
+      "basis": "官网标识参考色",
+      "source": "https://www.ohmitetudo.co.jp/assets/images/header/logo_ohmigroup_kodo.png",
+      "note": "取本公司集团标识黄，不选同页西武集团标识或通用列车图标；PNG 代表色。",
+      "checked": "2026-11-10"
+    },
+    "近畿日本鉄道": {
+      "color": "#0068B7",
+      "basis": "官网标识参考色",
+      "source": "https://www.kintetsu.co.jp/common/rn/image/header/header_logo.svg",
+      "note": "取官网 SVG 蓝；本次排除钢索及けいはんな地铁型线路部分。",
+      "checked": "2026-11-10"
+    },
+    "道南いさりび鉄道": {
+      "color": "#008CCF",
+      "basis": "官网标识参考色",
+      "source": "https://www.shr-isaribi.jp/wp-content/themes/isaribi/images/header/header_title.png",
+      "note": "渐变蓝标识，选中蓝代表色；另含橙黄装饰。",
+      "checked": "2026-11-10"
+    },
+    "遠州鉄道": {
+      "color": "#0081CC",
+      "basis": "官网标识参考色",
+      "source": "https://train.entetsu.co.jp/images/logo.svg",
+      "note": "官网公司标识 SVG 取色；未宣称为唯一企业色规范。",
+      "checked": "2026-11-10"
+    },
+    "野岩鉄道": {
+      "color": "#204581",
+      "basis": "官网标识参考色",
+      "source": "https://www.yagan.co.jp/assets/img/common/logo-yagan.svg",
+      "note": "官网公司字标蓝的拟用近似值。",
+      "checked": "2026-11-10"
+    },
+    "銚子電気鉄道": {
+      "color": "#D74739",
+      "basis": "其他地图分类参考色",
+      "source": "https://tetsudozyoho.com/tetsudomap/",
+      "note": "参考铁道情報館全国铁路地图图例的私铁红色类别；HEX 为本页所选屏幕近似值，不是公司官方品牌色，也未复制该地图几何或宣称逐像素复刻。",
+      "checked": "2026-11-10"
+    },
+    "錦川鉄道": {
+      "color": "#E60010",
+      "basis": "官网标识参考色",
+      "source": "https://nishikigawa.com/wp-content/uploads/logo-white-main.png",
+      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "長良川鉄道": {
+      "color": "#1C499E",
+      "basis": "官网标识参考色",
+      "source": "https://www.nagatetsu.co.jp/img/common/logo.png",
+      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "長野電鉄": {
+      "color": "#CE000D",
+      "basis": "官网标识参考色",
+      "source": "https://www.nagaden-net.co.jp/hubfs/nagaden2024/img/logo.png",
+      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "関東鉄道": {
+      "color": "#1D2088",
+      "basis": "官网标识参考色",
+      "source": "https://www.kantetsu.co.jp/cms/wp-content/themes/kr/img/common/logo.svg",
+      "note": "官网公司标识 SVG 取色；未宣称为唯一企业色规范。",
+      "checked": "2026-11-10"
+    },
+    "阪急電鉄": {
+      "color": "#A60030",
+      "basis": "官网标识参考色",
+      "source": "https://www.hankyu.co.jp/common/img/logo.svg",
+      "note": "取企业标识红，不把车辆栗色冒充标识色。",
+      "checked": "2026-11-10"
+    },
+    "阪神電気鉄道": {
+      "color": "#38ACB5",
+      "basis": "官网标识参考色",
+      "source": "https://www.hanshin.co.jp/image/common/logo_taisetsu_gr.svg",
+      "note": "官网公司标识 SVG 取色；未宣称为唯一企业色规范。",
+      "checked": "2026-11-10"
+    },
+    "阿佐海岸鉄道": {
+      "color": "#16439F",
+      "basis": "官网标识参考色",
+      "source": "https://asatetu.com/dmv/wp-content/uploads/2021/11/logo.png",
+      "note": "只处理 DMV 的铁路区段，巴士区段不纳入铁路上色；拟选企业标识蓝。",
+      "checked": "2026-11-10"
+    },
+    "阿武隈急行": {
+      "color": "#019EE4",
+      "basis": "官网标识参考色",
+      "source": "https://www.abukyu.co.jp/wp-content/themes/abu/dist/img/webp/common/logo.webp",
+      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "青い森鉄道": {
+      "color": "#2CBADC",
+      "basis": "其他路线资料参考色",
+      "source": "https://w.atwiki.jp/traininformation/pages/1786.html",
+      "note": "铁道情報wiki 的青い森铁道线明确列出 #2CBADC；属于第三方参考，官方 CI 标志色仍未证实。",
+      "checked": "2026-11-10"
+    },
+    "静岡鉄道": {
+      "color": "#E40038",
+      "basis": "官网标识参考色",
+      "source": "https://train.shizutetsu.co.jp/wp-content/themes/shizutetsu/images/head-logo.svg",
+      "note": "多色标识，拟选红；另含浅蓝。",
+      "checked": "2026-11-10"
+    },
+    "養老鉄道": {
+      "color": "#009944",
+      "basis": "官网标识参考色",
+      "source": "https://www.yororailway.co.jp/wp-content/themes/yororailway/img/webp/logo.webp",
+      "note": "多色标识，拟选绿；另含黄绿。",
+      "checked": "2026-11-10"
+    },
+    "首都圏新都市鉄道": {
+      "color": "#003B83",
+      "basis": "官网标识参考色",
+      "source": "https://www.mir.co.jp/common/img/hdr_logo01.png",
+      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10"
+    },
+    "高松琴平電気鉄道": {
+      "color": "#1D2089",
+      "basis": "官网标识参考色",
+      "source": "https://www.kotoden.co.jp/image/kotodengrouprogo.jpg",
+      "note": "取ことでん公司集团标识深蓝，不取带颜色的“电车”导航按钮。",
+      "checked": "2026-11-10"
+    },
+    "鹿島臨海鉄道": {
+      "color": "#79A833",
+      "basis": "其他地图分类参考色",
+      "source": "https://tetsudozyoho.com/tetsudomap/",
+      "note": "参考铁道情報館全国铁路地图图例的第三部门黄绿色类别；HEX 为本页所选屏幕近似值，不是公司官方品牌色，也未复制该地图几何或宣称逐像素复刻。",
+      "checked": "2026-11-10"
+    },
+    "黒部峡谷鉄道": {
+      "color": "#EE7700",
+      "basis": "官网标识参考色",
+      "source": "https://www.kurotetu.co.jp/img/logo_top_sp.png",
+      "note": "普通黏着式窄轨铁路，不是钢索缆车；取官网铁路标识橙。",
+      "checked": "2026-11-10"
+    }
+  }
+}
