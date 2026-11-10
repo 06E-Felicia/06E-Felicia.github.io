@@ -13,7 +13,13 @@
 PYTHONDONTWRITEBYTECODE=1 python -m unittest development.tests.test_jprail_touch_layout development.tests.test_jprail -v
 ```
 
-本次代码提交：`456ed9a`。首次 [Actions 42737337378](https://github.com/06E-Felicia/06E-Felicia.github.io/actions/runs/42737337378) 构建／制品上传完成，但三次 Pages 尝试停在 `deployment_queued`／`syncing_files`，30 分钟发布步骤到期，整次运行 30 分 44 秒后失败。线上仍为旧版，不能视为部署完成。现以最新主分支重新发布；保留已有发布重试和真实 30 分钟步骤／40 分钟任务时限。同时在使用说明中补充捏合与手机详情位置，并纠正仍提及旧版矩形裁切的过时说明。
+本次代码提交：`456ed9a`；发布与使用说明提交：`4bf6424`。首次 [Actions 42737337378](https://github.com/06E-Felicia/06E-Felicia.github.io/actions/runs/42737337378) 的构建／制品上传完成，但 Pages 在 `deployment_queued`／`syncing_files` 超时，整次运行 30 分 44 秒后失败。最新主分支的第二次 [Actions 42741902694](https://github.com/06E-Felicia/06E-Felicia.github.io/actions/runs/42741902694) 已成功，任务耗时 11 分 10 秒，GitHub Pages 部署状态于北京时间 2026-11-10 10:30:15 确认为 `success`。保留默认分支检出、推送 fetch/rebase 重试、三次 Pages 尝试及真实 30 分钟步骤／40 分钟任务时限；本次未回写工作流。
+
+上线验收：6 个实际 Pages 文件（HTML、camera／主脚本、CSS、报告与审核图）的 SHA-256 均与 `4bf6424` 一致。随后对真实线上页面执行本轮 4 项浏览器回归，48.209 秒全部通过。另在在线 1680×1050 与 390×844 场景检查真实白色底图均为 `ready`，无页面脚本错误；桌面地图 794.234 px 高、详情为独立右列，手机地图 413.547 px 高、详情起点在地图底部下方。补充使用说明中的捏合／手机详情位置，纠正旧版矩形裁切说明。当前摘要的部署结果以本段为准；下方范围审查属于上一轮，未借本次布局验收扩大其结论。
+
+```sh
+JPRAIL_BASE_URL=https://06e-felicia.github.io JPRAIL_LIVE_BASEMAP=1 PYTHONDONTWRITEBYTECODE=1 python -m unittest development.tests.test_jprail_touch_layout -v
+```
 
 ## 已有范围审查与发布记录（上一轮，本次未重新逐券核实官方条款）
 
