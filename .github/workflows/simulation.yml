@@ -100,7 +100,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }}
+          ref: ${{ github.event.repository.default_branch }}
       - uses: actions/download-artifact@v4
         with:
           name: simulation-results
@@ -109,7 +109,6 @@ jobs:
       - uses: actions/upload-pages-artifact@v4
         with:
           path: '.'
-      - uses: actions/deploy-pages@v4
+      - uses: ./.github/actions/deploy-pages-with-retry
+        timeout-minutes: 30
         id: deployment
-        with:
-          timeout: 1800000

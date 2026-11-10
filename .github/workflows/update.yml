@@ -183,6 +183,5 @@ jobs:
       - name: 发布最新天气数据到网站
         if: steps.frequency.outputs.run == 'true'
         id: deployment
-        uses: actions/deploy-pages@v4
-        with:
-          timeout: 1800000
+        uses: ./.github/actions/deploy-pages-with-retry
+        timeout-minutes: 30

@@ -1,0 +1,38 @@
+name: Deploy Pages with bounded retries
+description: Retry transient Pages failures within a thirty-minute attempt budget.
+outputs:
+  page_url:
+    description: URL returned by the successful deployment.
+    value: ${{ steps.third.outputs.page_url || steps.second.outputs.page_url || steps.first.outputs.page_url }}
+runs:
+  using: composite
+  steps:
+    # GitHub Pages and deploy-pages both cap a single attempt at ten minutes.
+    # A larger timeout input is clamped to that cap; retry the same artifact instead.
+    - name: Deploy Pages (attempt 1 of 3)
+      id: first
+      continue-on-error: true
+      uses: actions/deploy-pages@v4
+      with:
+        timeout: 600000
+    - name: Allow the failed deployment to settle
+      if: steps.first.outcome == 'failure'
+      shell: bash
+      run: sleep 15
+    - name: Deploy Pages (attempt 2 of 3)
+      id: second
+      if: steps.first.outcome == 'failure'
+      continue-on-error: true
+      uses: actions/deploy-pages@v4
+      with:
+        timeout: 600000
+    - name: Allow the second failed deployment to settle
+      if: steps.first.outcome == 'failure' && steps.second.outcome == 'failure'
+      shell: bash
+      run: sleep 15
+    - name: Deploy Pages (attempt 3 of 3)
+      id: third
+      if: steps.first.outcome == 'failure' && steps.second.outcome == 'failure'
+      uses: actions/deploy-pages@v4
+      with:
+        timeout: 600000

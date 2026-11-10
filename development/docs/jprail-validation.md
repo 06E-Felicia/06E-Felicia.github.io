@@ -101,7 +101,11 @@ PYTHONDONTWRITEBYTECODE=1 python -m unittest development.tests.test_jprail devel
 
 ## 发布与清理
 
-未修改任何工作流，保留 `bfe9c85` 的默认分支检出、fetch/rebase 推送重试、任务 40 分钟与 Pages 30 分钟时限；不强推，不回写陈旧工作流。先基于最新主分支提交本任务文件，推送后确认 Actions 发布步骤和实际 Pages 文件，不能把推送成功等同于上线。
+保留 `bfe9c85` 的默认分支检出、fetch/rebase 推送重试及发布任务 40 分钟保护；不强推，不回写主工作区的陈旧工作流。初次功能提交 `0f15fa6` 的 [Actions 42692795852](https://github.com/06E-Felicia/06E-Felicia.github.io/actions/runs/42692795852) 在部署阶段超时，官方注释明确指出 `1800000` 被压回 `600000`。GitHub Pages [单次部署上限为 10 分钟](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits)，[deploy-pages@v4 源码也限制为 600000](https://github.com/actions/deploy-pages/blob/v4/src/internal/deployment.js)。
+
+修复两个发布入口：外层步骤设置真实的 `timeout-minutes: 30`；内部对同一上传产物最多尝试三次，每次 10 分钟，失败后短暂等待再试，成功后立即停止，第三次失败仍使任务失败。保留 40 分钟任务时限，并统一发布检出默认分支。3 项工作流回归通过，覆盖首次／第二次／第三次成功、全部失败、取消不重试、平台单次上限、实际外层时限及检出／推送保护。此配置提供有界重试，无法保证 GitHub 服务永不超时。
+
+随后定时 [Actions 42729353640](https://github.com/06E-Felicia/06E-Felicia.github.io/actions/runs/42729353640) 已成功发布包含本功能的版本；12 个修改前端／数据文件指纹一致。已在线再次逐券完成 54 张、108 个视图、11,212 个铁路像素采样点检查，无页面异常，原生 100 px 滚轮为 0.125 级，停止后额外变化为 0。
 
 部署记录：等待本次功能提交发布后覆盖。此前 `b08ac3b` / Actions 42653355538 的局部通过不作为本次全目录结论。
 
