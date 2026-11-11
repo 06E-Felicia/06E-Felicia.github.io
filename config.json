@@ -129,7 +129,7 @@
     "THUNDER_ALERT_CONFIG": {
         "enabled": false,
         "status": "source_error",
-        "generated_at": "2026-11-11T16:29:38+08:00",
+        "generated_at": "2026-11-11T22:50:20+08:00",
         "settings": {
             "default_mode": "auto",
             "speed_kmh": 50,
