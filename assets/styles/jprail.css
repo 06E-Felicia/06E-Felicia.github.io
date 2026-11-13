@@ -54,3 +54,5 @@
 /* Color legend follows the selected coverage; long company lists scroll inside it. */
 .rail-color-items{max-height:min(210px,28vh);overflow:auto;overscroll-behavior:contain;scrollbar-width:thin}.rail-color-items[hidden]{display:none}.boundary-legend{border-top:1px solid #d3ddcf;padding-top:9px}.precision-note i{border-color:#ff8100}@media(max-width:960px){.rail-color-items{max-height:120px}}
 .major-station-swatch{display:inline-block;position:relative;width:13px;height:13px;border:1.7px solid #143b40;border-radius:50%;background:#fffefa;flex:none}.major-station-swatch:after{content:'';position:absolute;inset:2px;border:1.2px solid #143b40;border-radius:50%}
+
+.company-junction-swatch{display:inline-block;width:11px;height:11px;border:1.5px solid #116979;transform:rotate(45deg);flex:none;margin:1px}.boundary-stations button.junction{border-color:#116979;color:#116979}

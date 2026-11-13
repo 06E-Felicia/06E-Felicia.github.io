@@ -6,9 +6,11 @@ from pathlib import Path
 import tempfile
 import threading
 import unittest
+from unittest.mock import patch
 from urllib.error import HTTPError
 from urllib.request import urlopen
 from simulation.preview import ROOT, HEALTH, PreviewHandler, bind_preview, check_assets, existing_preview
+from simulation.preview import main
 
 
 class PreviewTests(unittest.TestCase):
@@ -28,6 +30,14 @@ class PreviewTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as root:
             with self.assertRaisesRegex(RuntimeError, '项目文件不完整'):
                 check_assets(Path(root))
+
+    def test_home_launcher_opens_home_without_simulator_asset_requirements(self):
+        with patch('sys.argv', ['preview', '--page', 'index.html']), \
+             patch('simulation.preview.check_assets', side_effect=AssertionError('home must not depend on simulator assets')), \
+             patch('simulation.preview.bind_preview', return_value=(None, self.port)), \
+             patch('simulation.preview.webbrowser.open') as opened:
+            main()
+            opened.assert_called_once_with(self.base + '/index.html')
 
     def test_loopback_and_same_project_reuse(self):
         self.assertEqual(self.server.server_address[0], '127.0.0.1')

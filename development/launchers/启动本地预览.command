@@ -5,7 +5,7 @@ if ! command -v python3 >/dev/null 2>&1; then
   read -r '?按回车关闭…'
   exit 1
 fi
-python3 -m simulation.preview
+python3 -m simulation.preview --page index.html
 if (( $? != 0 )); then
   read -r '?预览启动失败，请保留上方错误信息。按回车关闭…'
 fi

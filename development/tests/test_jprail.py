@@ -12,6 +12,20 @@ from urllib.parse import urlsplit
 ROOT=Path(__file__).resolve().parents[2]
 
 class CatalogueTests(unittest.TestCase):
+    def test_seishun18_order_and_official_through_intervals(self):
+        products=json.loads((ROOT/'assets/data/jprail/passes.json').read_text())['passes']
+        self.assertEqual([p['id'] for p in products[:2]],['japan','seishun18'])
+        p=products[1];self.assertEqual(p['durations'],[3,5]);self.assertTrue(p['continuous'])
+        self.assertEqual([v['amountJPY'] for v in p['price']['variants']],[10000,12050])
+        self.assertTrue(all(s['kinds']==['2'] for s in p['selectors']))
+        self.assertIn('海峡線',p['selectors'][0]['exclude'])
+        self.assertEqual(p['railOverrides'],[
+            ['青い森鉄道','青い森鉄道線','青森','八戸'],
+            ['IRいしかわ鉄道','IRいしかわ鉄道線','津幡','倶利伽羅'],
+            ['あいの風とやま鉄道','あいの風とやま鉄道線','倶利伽羅','富山'],
+            ['ハピラインふくい','ハピラインふくい線','敦賀','越前花堂']])
+        self.assertFalse(any(x['role']=='boundary' for x in p['stationPins']['stations']))
+
     def test_sources_and_geometry_selectors_are_consistent(self):
         data=json.loads((ROOT/'assets/data/jprail/passes.json').read_text())
         network=json.loads((ROOT/'assets/data/jprail/network.geojson').read_text())

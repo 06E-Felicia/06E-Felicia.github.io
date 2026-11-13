@@ -25,6 +25,29 @@
       "issues": []
     },
     {
+      "id": "seishun18",
+      "checked": "2026-11-13",
+      "version": "2026春夏冬版，冬季11/27开售",
+      "status": "verified",
+      "sources": [
+        "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/detail.html?shnId=126000037",
+        "https://www.jrhokkaido.co.jp/CM/Otoku/007255/",
+        "https://www.jreast.co.jp/press/2025/20260205_ho02.pdf"
+      ],
+      "finding": "基础范围为JR普通／快速列车，不含新干线、海峡货运线或道南铁路；四项第三部门通过特例按官方命名区间独立提取。限制站不当作全国券外边界。",
+      "boundaries": [],
+      "notBoundaries": [
+        "東京",
+        "新大阪",
+        "博多",
+        "米原",
+        "倶利伽羅",
+        "富山",
+        "敦賀"
+      ],
+      "issues": []
+    },
+    {
       "id": "hokkaido",
       "checked": "2026-11-10",
       "version": "2026-11-10 现行条款",

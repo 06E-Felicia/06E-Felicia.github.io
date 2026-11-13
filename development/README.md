@@ -2,7 +2,7 @@
 
 网站入口和运行资源位于项目根目录与 `assets/`。本目录集中保留可复用的本地工具。
 
-- `launchers/`：macOS 双击启动器。打开 [启动放假模拟器.command](launchers/启动放假模拟器.command) 会从项目根目录启动本机服务器；移动整个项目后仍可使用。
+- `launchers/`：macOS 双击启动器，含 [启动本地预览.command](launchers/启动本地预览.command) 和 [启动放假模拟器.command](launchers/启动放假模拟器.command)。“启动本地预览”会打开网站首页；“启动放假模拟器”打开对应模拟器。启动器会定位到项目根目录，移动整个项目后仍可使用。
 - `scripts/`：地形准备、短程统计、回放生成与读取工具。
 - `tests/`：物理与页面回归测试；`results/` 保留当前小型验证摘要。
 - `tools/vacation-wasm/`：数值内核源码与构建脚本。

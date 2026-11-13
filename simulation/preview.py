@@ -110,17 +110,21 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--port', type=int, default=8765)
     parser.add_argument('--no-open', action='store_true')
+    parser.add_argument('--page', choices=('index.html', 'simulator.html'), default='simulator.html', help='Page to open after starting the server')
     parser.add_argument('--check', action='store_true', help='Only verify bundled runtime assets')
     args = parser.parse_args()
     if not 1 <= args.port <= 65535:
         parser.error('端口须为 1–65535')
-    check_assets()
+    if args.check or args.page == 'simulator.html':
+        check_assets()
+    elif not (ROOT / args.page).is_file():
+        raise RuntimeError('项目首页文件缺失：' + args.page)
     if args.check:
         print('PASS 本地运行时、科学包、地形及站表齐全')
         return
     server, port = bind_preview(args.port)
-    url = 'http://127.0.0.1:%d/simulator.html' % port
-    print('StormSim 本地预览：' + url, flush=True)
+    url = 'http://127.0.0.1:%d/%s' % (port, args.page)
+    print('本地预览：' + url, flush=True)
     print('保持此终端窗口打开；结束预览按 Control+C。仅监听本机，不对外开放。', flush=True)
     if not args.no_open:
         webbrowser.open(url)

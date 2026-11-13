@@ -75,6 +75,43 @@ class TouchAndLayout(unittest.TestCase):
         page.wait_for_function('JPRail.camera.whenIdle()')
         page.evaluate('()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))')
 
+    def test_seikan_shared_track_company_interfaces_and_seishun18(self):
+        context,page=self.page(viewport={'width':1440,'height':960})
+        try:
+            self.load(page)
+            self.assertEqual(page.locator('.pass-card').evaluate_all('(xs)=>xs.slice(0,2).map(x=>x.dataset.pass)'),['japan','seishun18'])
+            self.assertEqual(page.evaluate('JPRail.state.companyStations.length'),14)
+            self.assertEqual(page.evaluate('JPRail.state.pinnedStations.length'),0)
+            page.locator('#infrastructure').check()
+            for z in [8,10.5,13]:
+                page.evaluate('(z)=>JPRail.camera.setView([41.3,140.4],z)',z);self.settle(page)
+                if z>=10:page.wait_for_function('JPRail.state.detailStatus==="detail"')
+                self.assertTrue(page.evaluate('JPRail.map.hasLayer(JPRail.state.seikanOverlay)'))
+                rows=page.evaluate('JPRail.state.seikanOverlay.getLayers().map(l=>[l.feature.properties.name,l.options.color,l.options.weight])')
+                self.assertTrue(rows)
+                self.assertTrue(all(n=='海峡線' and c.lower()=='#ff0c00' and w==4 for n,c,w in rows),rows)
+                self.assertEqual(page.evaluate("JPRail.gradeOf({properties:{operator:'北海道旅客鉄道',name:'海峡線',kind:'2',grade:'main'}})"),'highspeed')
+            page.locator('#resetView').click();self.settle(page)
+            page.locator('[data-pass="japan"]').click();self.settle(page)
+            self.assertEqual(page.evaluate('JPRail.state.companyStations.length'),14)
+            self.assertFalse(page.evaluate("JPRail.state.pinnedStations.some(p=>p.name==='熱海'&&p.role==='boundary')"))
+            page.locator('[data-junction="熱海"]').click();self.settle(page)
+            self.assertTrue(page.evaluate("JPRail.state.stationLabels.pinSymbols.some(p=>p.name==='熱海'&&p.junction)"))
+            self.assertNotIn('熱海',page.evaluate('JPRail.state.stationLabels.boundaryNames'))
+            page.locator('[data-pass="kintetsu1"]').click();self.settle(page)
+            self.assertEqual(page.evaluate('JPRail.state.companyStations.length'),0)
+            page.locator('[data-pass="seishun18"]').click();self.settle(page)
+            self.assertFalse(page.evaluate("JPRail.state.displayed.some(f=>f.properties.kind==='1'||f.properties.name==='海峡線'||f.properties.operator==='道南いさりび鉄道')"))
+            self.assertIn('熱海',page.evaluate('JPRail.state.companyStations.map(p=>p.name)'))
+            self.assertNotIn('東京',page.evaluate('JPRail.state.companyStations.map(p=>p.name)'),'Tokyo interface in this atlas is Shinkansen only')
+            self.assertIn('¥10,000',page.locator('.price-section').inner_text())
+            self.assertIn('¥12,050',page.locator('.price-section').inner_text())
+            page.locator('#startDate').fill('2026-11-13');page.locator('#startDate').dispatch_event('change')
+            self.assertIn('不在已公布季节',page.locator('#dateResult').inner_text())
+            page.locator('#startDate').fill('2026-12-11');page.locator('#startDate').dispatch_event('change')
+            self.assertNotIn('不在已公布季节',page.locator('#dateResult').inner_text())
+        finally:context.close()
+
     def test_all_lines_clears_map_filters_and_restores_initial_view(self):
         for width,height in [(1440,900),(390,844)]:
             with self.subTest(viewport=(width,height)):
@@ -100,7 +137,7 @@ class TouchAndLayout(unittest.TestCase):
                     self.assertFalse(page.locator('#infrastructure').is_disabled())
                     self.assertFalse(page.locator('#infrastructure').is_checked())
                     self.assertEqual(page.evaluate('JPRail.state.pinnedStations.length'),0)
-                    self.assertEqual(page.evaluate('JPRail.state.boundaryMarkers.getLayers().length'),0)
+                    self.assertEqual(page.evaluate('JPRail.state.boundaryMarkers.getLayers().length'),page.evaluate('JPRail.state.companyStations.length'))
                     self.assertTrue(page.evaluate('''()=>['pass','passes','grade','operator'].every(k=>!new URL(location.href).searchParams.has(k))'''))
                     self.assertEqual(page.evaluate("JPRail.state.displayed.map(f=>f.properties.operator+'|'+f.properties.name).sort()"),initial['routes'])
                     self.assertEqual(page.evaluate('JPRail.map.getSize()'),initial['size'])

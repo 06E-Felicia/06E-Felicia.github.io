@@ -1,8 +1,8 @@
-import {createStationLabels} from './jprail-stations.js?v=20261113-hubs3';
+import {createStationLabels} from './jprail-stations.js?v=20261113-seikan18';
 import {createCamera} from './jprail-camera.js?v=20261110-touch2';
 import {createStreetMap} from './jprail-basemap.js?v=20261110-touch2';
-import {officialStationPins} from './jprail-boundaries.js?v=20261110-touch2';
-import {createRailColors,JR_OPERATORS} from './jprail-colors.js?v=20261110-colors1';
+import {officialStationPins,companyStationPins,stationAnnotations} from './jprail-boundaries.js?v=20261113-seikan18';
+import {createRailColors,JR_OPERATORS,isSeikanShared} from './jprail-colors.js?v=20261113-seikan18';
 const $ = id => document.getElementById(id);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const GRADES = {
@@ -12,13 +12,13 @@ const GRADES = {
  unclassified:{label:'未分类 / 其他',color:'#343c39'}
 };
 const NATIONAL = [[30.7,129.35],[45.65,145.95]];
-const state = {passes:[],network:null,overviewNetwork:null,detailNetwork:null,detailStatus:"overview",stations:[],boundaryMarkers:null,selected:null,active:null,layers:new Map(),passCoverage:[],displayed:[],paintFeatures:[],stationPool:[],pinnedStations:[],basemap:{status:"loading",tiles:0},stationLabels:{count:0,names:[],mode:"主要枢纽"}};
-let map, infra, railRenderer, stationMarker, stationLabels, camera, streets, toastTimer, detailPromise, renderedBounds, railColors, homeView=true;
+const state = {passes:[],network:null,overviewNetwork:null,detailNetwork:null,detailStatus:"overview",stations:[],boundaryMarkers:null,companyBoundaries:[],companyStations:[],annotationStations:[],selected:null,active:null,layers:new Map(),passCoverage:[],displayed:[],paintFeatures:[],stationPool:[],pinnedStations:[],basemap:{status:"loading",tiles:0},stationLabels:{count:0,names:[],mode:"主要枢纽"}};
+let map, infra, railRenderer, stationMarker, stationLabels, camera, streets, toastTimer, detailPromise, renderedBounds, railColors, seikanOverlay, seikanFeatures, homeView=true;
 const geometryBounds=new WeakMap();
 function toast(message) { $('toast').textContent=message; $('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,4500); }
 function duration(p) { return p.durations.map(v=>typeof v==='number'?`${v} 日`:v).join(' / '); }
 function currentDateJST() { return new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date()); }
-export function gradeOf(feature) {return feature.properties.grade || (feature.properties.kind==='1'?'highspeed':'unclassified');}
+export function gradeOf(feature) {return isSeikanShared(feature)?'highspeed':feature.properties.grade || (feature.properties.kind==='1'?'highspeed':'unclassified');}
 export function railColorInfo(feature) {
  const themed=railColors?.forFeature(feature);
  if(themed)return themed;
@@ -116,7 +116,7 @@ function setupMap() {
  const observer=new ResizeObserver(()=>{map.invalidateSize({pan:false});if(homeView)fitHome();});observer.observe($('map'));
  camera=createCamera(map);
  streets=createStreetMap(map,summary=>{state.basemap=summary;});
- stationLabels=createStationLabels(map,()=>state.stationPool,summary=>{state.stationLabels=summary;$('stationDensity').textContent=`站名：${summary.mode} · ${summary.count} 站${summary.pinnedNames.length?' · 常驻 '+summary.pinnedNames.length+' 站':''}`;},()=>state.pinnedStations,()=>state.paintFeatures);
+ stationLabels=createStationLabels(map,()=>state.stationPool,summary=>{state.stationLabels=summary;$('stationDensity').textContent=`站名：${summary.mode} · ${summary.count} 站${summary.pinnedNames.length?' · 常驻 '+summary.pinnedNames.length+' 站':''}`;},()=>state.annotationStations,()=>state.paintFeatures);
  $('map').closest('.map-frame').querySelector('.rail-legend').addEventListener('toggle',()=>stationLabels.schedule());
  fitHome();
  for(const id of ['railGrade','railOperator'])$(id).addEventListener('change',()=>{renderSelection();renderDetail();updateURL();fitDisplayed();});
@@ -139,13 +139,15 @@ function refreshStationPool() {
  const routes=new Map();for(const f of state.displayed){const p=f.properties;routes.set(p.operator+'|'+p.name,p);}
  const pass=state.passes.find(p=>p.id===state.selected);
  state.pinnedStations=officialStationPins(pass,state.stations);
+ state.companyStations=companyStationPins(state.companyBoundaries,state.displayed,state.stations);
+ state.annotationStations=stationAnnotations(state.pinnedStations,state.companyStations);
  state.boundaryMarkers.clearLayers();
- for(const pin of state.pinnedStations.filter(pin=>['boundary','terminus'].includes(pin.role))){
+ for(const pin of state.annotationStations.filter(pin=>['boundary','terminus'].includes(pin.role)||pin.companyJunction)){
   const boundary=pin.role==='boundary',company=pin.boundaryKind==='company';
   // Visual inner/outer rings share the station canvas and its zoom transform.
   // This transparent target only supplies the existing tooltip and popup.
-  L.circleMarker([pin.station[1],pin.station[2]],{pane:'railBoundaries',radius:boundary?6.5:4.5,stroke:false,fill:true,fillOpacity:0})
-   .bindTooltip(`${esc(pin.name)} · ${company?'本券止于公司局界':boundary?'指定线路适用边界':'已含铁路端点'}`)
+  L.circleMarker([pin.station[1],pin.station[2]],{pane:'railBoundaries',radius:pin.companyJunction?8.5:boundary?6.5:4.5,stroke:false,fill:true,fillOpacity:0})
+   .bindTooltip(`${esc(pin.name)} · ${company?'本券止于公司局界':boundary?'指定线路适用边界':pin.companyJunction?'JR 公司运营局界（不等于票券边界）':'已含铁路端点'}`)
    .bindPopup(`<strong>${esc(pin.name)}</strong><br>${esc(pin.note)}`).addTo(state.boundaryMarkers);
  }
  state.stationPool=state.stations.filter(s=>{
@@ -170,18 +172,30 @@ function syncInfrastructure() {
   if(showDetailed&&map.hasLayer(layer))map.removeLayer(layer);
   else if(!showDetailed&&!map.hasLayer(layer))layer.addTo(map);
  }
+ // The external raster may classify the shared three-rail corridor as a
+ // conventional line. Paint the source Seikan geometry above that raster,
+ // using the same detailed vertices and Shinkansen display policy as the atlas.
+ if(showDetailed&&state.paintFeatures.length) {
+  if(seikanFeatures!==state.paintFeatures){
+   if(seikanOverlay)map.removeLayer(seikanOverlay);
+   seikanFeatures=state.paintFeatures;
+   seikanOverlay=L.geoJSON({type:'FeatureCollection',features:state.paintFeatures.filter(isSeikanShared)},{pane:'railRoutes',renderer:railRenderer,style:railStyle,interactive:false,smoothFactor:state.detailStatus==='detail'?.15:1});
+  }
+  seikanOverlay?.addTo(map);
+ } else if(seikanOverlay&&map.hasLayer(seikanOverlay))map.removeLayer(seikanOverlay);
+ state.seikanOverlay=seikanOverlay;
  $('infrastructureHint').textContent=filtered?'筛选中：仅显示匹配线路':detailed&&!showDetailed?'放大地图以显示详细设施':'原图含货运、站场、专用与停用设施';
  // The optional raster has its own grade palette and cannot inherit our
  // company colors. Do not show a company legend for that separate layer.
  $('railLegendItems').hidden=showDetailed;
- $('railLegendNote').textContent=showDetailed?'当前显示 OpenRailwayMap 设施原图，请使用其完整等级图例。':'仅列出当前匹配线路。JR 普速橙黄色、新干线红色；私铁采用品牌参考或地图辨识调整色。概览双圈表示主要站，颜色不表示乘车权限。';
+ $('railLegendNote').textContent=showDetailed?'当前显示 OpenRailwayMap 设施原图；青函共用区间统一叠绘为新干线红色。其余设施请使用原图等级图例。':'仅列出当前匹配线路。JR 普速橙黄色、新干线红色；私铁采用品牌参考或地图辨识调整色。蓝色菱形是运营局界，不代表票券边界。';
 }
 function fitDisplayed() {const bounds=L.latLngBounds([]);for(const f of state.displayed)bounds.extend(featureBounds(f));if(bounds.isValid()){for(const pin of state.pinnedStations)bounds.extend([pin.station[1],pin.station[2]]);camera.fitBounds(bounds,{padding:[36,50],maxZoom:12});}}
 function renderList() {
   const q=$('passSearch').value.trim().toLocaleLowerCase(),region=$('regionFilter').value,group=$('operatorFilter').value;
   const list=state.passes.filter(p=>(!q||[p.name,p.en,p.issuer,p.scope,...p.regions].join(' ').toLocaleLowerCase().includes(q))&&(!region||p.regions.includes(region))&&(!group||p.group===group)&&($('showEnded').checked||p.status==='current'));
   $('resultCount').textContent=`${list.length} 种匹配票券`;
-  $('passList').innerHTML=list.length?list.map(p=>`<button type="button" class="pass-card ${state.selected===p.id?'selected':''}" data-pass="${p.id}" aria-pressed="${state.selected===p.id}" style="--pass-color:#26746c"><span class="card-top"><span>${esc(p.issuer)}</span>${p.status==='ended'?'<span class="badge">已停售 / 已结束</span>':''}${p.audit?.status==='partial'?'<span class="badge">范围待核</span>':''}</span><h3>${esc(p.name)}</h3><p class="english">${esc(p.en)}</p><span class="card-bottom"><strong>${esc(duration(p))}</strong><span>${esc(p.regions.slice(0,2).join(' · '))} <span class="card-arrow">↗</span></span></span></button>`).join(''):'<p class="no-results">没有匹配的票券。可试试地区、运营商或勾选历史票券。</p>';
+  $('passList').innerHTML=list.length?list.map(p=>`<button type="button" class="pass-card ${state.selected===p.id?'selected':''}" data-pass="${p.id}" aria-pressed="${state.selected===p.id}" style="--pass-color:#26746c"><span class="card-top"><span>${esc(p.issuer)}</span>${p.status==='ended'?'<span class="badge">已停售 / 已结束</span>':''}${p.domestic?'<span class="badge">不限国籍</span>':''}${p.audit?.status==='partial'?'<span class="badge">范围待核</span>':''}</span><h3>${esc(p.name)}</h3><p class="english">${esc(p.en)}</p><span class="card-bottom"><strong>${esc(duration(p))}</strong><span>${esc(p.regions.slice(0,2).join(' · '))} <span class="card-arrow">↗</span></span></span></button>`).join(''):'<p class="no-results">没有匹配的票券。可试试地区、运营商或勾选历史票券。</p>';
 }
 function updateURL() {
  const url=new URL(location.href);url.searchParams.delete('passes');
@@ -229,7 +243,7 @@ function renderRoutes(force=false) {
 }
 async function updateDetailLevel() {
  if(!state.network)return;
- const wanted=map.getZoom()>=10&&!$('infrastructure').checked;
+ const wanted=map.getZoom()>=10;
  if(wanted&&!state.detailNetwork) {
   $('lineDetailStatus').textContent='精细线路载入中…';
   if(!detailPromise)detailPromise=Promise.all([json('assets/data/jprail/network-detail.geojson'),json('assets/data/jprail/pass-ranges-detail.json')]).then(([network,ranges])=>{
@@ -239,7 +253,7 @@ async function updateDetailLevel() {
   await detailPromise;
   if(!state.detailNetwork)return;
  }
- const useDetail=map.getZoom()>=10&&!$('infrastructure').checked&&Boolean(state.detailNetwork),next=useDetail?'detail':'overview';
+ const useDetail=map.getZoom()>=10&&Boolean(state.detailNetwork),next=useDetail?'detail':'overview';
  $('lineDetailStatus').textContent=useDetail?'线路：原始精细轨迹':'线路：全国概览';
  if(state.detailStatus===next)return;
  state.detailStatus=next;state.network=useDetail?state.detailNetwork:state.overviewNetwork;
@@ -274,6 +288,10 @@ function renderPinnedStops(p) {
  const pins=info.stations,company=pins.filter(pin=>pin.boundaryKind==='company');
  return `<section class="detail-section"><h3>适用边界与铁路端点</h3><div class="boundary-stations">${pins.map(pin=>`<button type="button" data-boundary="${esc(pin.name)}" title="${esc(pin.note)}" class="${pin.role} ${pin.boundaryKind||''}">${esc(pin.name)}</button>`).join('')}</div>${company.length?`<p class="company-boundary-note">本券止于公司局界：${esc(company.map(pin=>pin.name).join('、'))}。蓝色虚圈只用于官方范围确认的外缘；内部接续不作边界。</p>`:''}<p style="font-size:10px;margin-top:8px">粗圆圈：指定线路适用边界；细圆圈：已含铁路端点。限制与通过条件见车站提示。站名始终显示；同站其他线路的范围可能不同。</p><a href="${esc(info.source)}" target="_blank" rel="noopener" style="font-size:10px">官方范围来源 ↗</a></section>`;
 }
+function renderCompanyStops() {
+ if(!state.companyStations.length)return '';
+ return `<section class="detail-section"><h3>图示 JR 运营局界</h3><div class="boundary-stations">${state.companyStations.map(p=>`<button type="button" class="junction" data-junction="${esc(p.name)}" title="${esc(p.note)}">${esc(p.name)}</button>`).join('')}</div><p style="font-size:10px">蓝色菱形表示图示线路的公司运营交接点。全国图与跨局 Pass 同样显示；它本身不表示票券边界。</p></section>`;
+}
 function renderAudit(p) {
  const audit=p.audit;if(!audit)return '';
  return `<section class="detail-section ${audit.status==='partial'?'restriction-box':''}"><h3>范围核对 · ${esc(audit.checked)}</h3><p>${audit.status==='partial'?'尚有未核实项目，不能将当前高亮视作完整可乘清单。':'已按官方产品与使用范围资料逐券整理。'}</p>${audit.issues.length?`<ul>${audit.issues.map(i=>`<li>${esc(i)}</li>`).join('')}</ul>`:''}<a href="assets/data/jprail/pass-audit.json" target="_blank" rel="noopener">逐券来源与核对记录 ↗</a></section>`;
@@ -293,9 +311,10 @@ function renderDetail() {
  if(changed)map.invalidateSize({pan:false});
  if(!p){$('passDetail').innerHTML='';return;}
  const routes=state.displayed.length;
- $('passDetail').innerHTML=`<div class="detail-top"><span class="eyebrow">${esc(p.issuer)}</span><button id="closeDetail" type="button" aria-label="收起详情">×</button></div><h2>${esc(p.name)}</h2><p class="detail-en">${esc(p.en)}</p><div class="detail-duration"><span class="duration-value">${esc(duration(p))}</span><span class="duration-copy">${p.continuous?'连续使用':'可非连续使用'}<br>时间以日本当地为准</span></div>${renderAudit(p)}${renderPrice(p)}<span class="precision-tag">范围示意 · 非精确票券适用图</span>${p.status==='ended'?'<p class="ended-note">此产品已停售或当季已结束，请勿将历史资料当作当前可购票券。</p>':''}<div class="route-count">地图匹配 ${routes} 个运营商 / 线路组 · <button class="detail-fit" type="button" id="fitPass">定位范围</button> · <button class="detail-fit" type="button" id="removePass">移除</button></div>${renderPinnedStops(p)}<section class="detail-section"><h3>可乘铁路范围</h3><p>${esc(p.scope)}</p>${p.note?`<p>${esc(p.note)}</p>`:''}</section><section class="detail-section"><h3>适用列车</h3><p>${esc(p.trains)}</p></section>${p.exceptions.length?`<section class="detail-section restriction-box"><h3>乘车前，留意这些限制</h3><ul>${p.exceptions.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>`:''}<section class="detail-section"><h3>销售与使用时间</h3><dl class="detail-period"><div><dt>销售 / 兑换</dt><dd>${esc(p.sales)}</dd></div><div><dt>使用期间</dt><dd>${esc(p.use)}</dd></div><div><dt>购买资格</dt><dd>${esc(p.eligibility)}</dd></div></dl></section><section class="detail-section"><h3>估算有效期</h3><div class="date-check"><label class="sr-only" for="startDate">起始日期</label><input type="date" id="startDate" value="${currentDateJST()}"><label class="sr-only" for="durationChoice">有效时长</label><select id="durationChoice">${p.durations.map((d,i)=>`<option value="${i}">${esc(typeof d==='number'?d+' 日':d)}</option>`).join('')}</select></div><p class="date-result" id="dateResult"></p><p style="font-size:9px;color:#6d7c78">仅计算日历有效期，不代表有票或符合购买资格。</p></section><section class="detail-section"><h3>附带权益</h3><p>${esc(p.extras)}</p></section><a class="official-link" href="${esc(p.source)}" target="_blank" rel="noopener">官方产品与范围图 ↗</a><p class="detail-sources">来源核查：${esc(p.checked)}</p>`;
+ $('passDetail').innerHTML=`<div class="detail-top"><span class="eyebrow">${esc(p.issuer)}</span><button id="closeDetail" type="button" aria-label="收起详情">×</button></div><h2>${esc(p.name)}</h2><p class="detail-en">${esc(p.en)}</p><div class="detail-duration"><span class="duration-value">${esc(duration(p))}</span><span class="duration-copy">${p.continuous?'连续使用':'可非连续使用'}<br>时间以日本当地为准</span></div>${renderAudit(p)}${renderPrice(p)}<span class="precision-tag">范围示意 · 非精确票券适用图</span>${p.status==='ended'?'<p class="ended-note">此产品已停售或当季已结束，请勿将历史资料当作当前可购票券。</p>':''}<div class="route-count">地图匹配 ${routes} 个运营商 / 线路组 · <button class="detail-fit" type="button" id="fitPass">定位范围</button> · <button class="detail-fit" type="button" id="removePass">移除</button></div>${renderPinnedStops(p)}${renderCompanyStops()}<section class="detail-section"><h3>可乘铁路范围</h3><p>${esc(p.scope)}</p>${p.note?`<p>${esc(p.note)}</p>`:''}</section><section class="detail-section"><h3>适用列车</h3><p>${esc(p.trains)}</p></section>${p.exceptions.length?`<section class="detail-section restriction-box"><h3>乘车前，留意这些限制</h3><ul>${p.exceptions.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>`:''}<section class="detail-section"><h3>销售与使用时间</h3><dl class="detail-period"><div><dt>销售 / 兑换</dt><dd>${esc(p.sales)}</dd></div><div><dt>使用期间</dt><dd>${esc(p.use)}</dd></div><div><dt>购买资格</dt><dd>${esc(p.eligibility)}</dd></div></dl></section><section class="detail-section"><h3>估算有效期</h3><div class="date-check"><label class="sr-only" for="startDate">起始日期</label><input type="date" id="startDate" value="${currentDateJST()}"><label class="sr-only" for="durationChoice">有效时长</label><select id="durationChoice">${p.durations.map((d,i)=>`<option value="${i}">${esc(typeof d==='number'?d+' 日':d)}</option>`).join('')}</select></div><p class="date-result" id="dateResult"></p><p style="font-size:9px;color:#6d7c78">仅计算日历有效期，不代表有票或符合购买资格。</p></section><section class="detail-section"><h3>附带权益</h3><p>${esc(p.extras)}</p></section><a class="official-link" href="${esc(p.source)}" target="_blank" rel="noopener">官方产品与范围图 ↗</a><p class="detail-sources">来源核查：${esc(p.checked)}</p>`;
  $('passDetail').querySelectorAll('[data-boundary]').forEach(button=>button.onclick=()=>{const pin=state.pinnedStations.find(p=>p.name===button.dataset.boundary);if(!pin)return;camera.setView([pin.station[1],pin.station[2]],13,()=>{map.closePopup();L.popup().setLatLng([pin.station[1],pin.station[2]]).setContent(`<strong>${esc(pin.name)}</strong><br>${esc(pin.note)}`).openOn(map);});});
  $('closeDetail').onclick=()=>{state.active=null;renderDetail();};
+ $('passDetail').querySelectorAll('[data-junction]').forEach(button=>button.onclick=()=>{const pin=state.companyStations.find(p=>p.name===button.dataset.junction);if(pin)camera.setView([pin.station[1],pin.station[2]],13,()=>L.popup().setLatLng([pin.station[1],pin.station[2]]).setContent(`<strong>${esc(pin.name)}</strong><br>${esc(pin.note)}`).openOn(map));});
  $('fitPass').onclick=()=>fitPass(p.id);$('removePass').onclick=()=>removePass(p.id);
  $('startDate').onchange=()=>renderDate(p);$('durationChoice').onchange=()=>renderDate(p);renderDate(p);
 }
@@ -308,6 +327,7 @@ function renderDate(p) {
  $('dateResult').textContent=`${start} — ${end}（日本时间）${p.use.includes('03:00')?'；结束时刻按次日 02:59 计算':''}`;
  if(p.activationEnd&&start>p.activationEnd)$('dateResult').textContent+='，超出已记录启用截止日。';
  if(p.useEnd&&end>p.useEnd)$('dateResult').textContent+='，超出已记录使用截止日。';
+ if(p.seasons&&!p.seasons.some(s=>start>=s.start&&end<=s.end))$('dateResult').textContent+='，不在已公布季节的使用期内。';
 }
 function setupStationSearch() {
  const aliases={'东京':'東京','大阪':'大阪','京都':'京都','札幌':'札幌','横滨':'横浜','名古屋':'名古屋','广岛':'広島','福冈':'博多','新宿':'新宿','镰仓':'鎌倉'};
@@ -334,7 +354,8 @@ async function start() {
  $('clearSelection').onclick=()=>removePass(state.selected);
  $('aboutBtn').onclick=()=>$('aboutDialog').showModal();$('closeAbout').onclick=()=>$('aboutDialog').close();
  try {
-  const [catalog,network,land,ranges,palette]=await Promise.all([json('assets/data/jprail/passes.json'),json('assets/data/jprail/network.geojson'),json('assets/data/jprail/japan.geojson'),json('assets/data/jprail/pass-ranges.json'),json('assets/data/jprail/operator-colors.json')]);
+ const [catalog,network,land,ranges,palette,companies]=await Promise.all([json('assets/data/jprail/passes.json'),json('assets/data/jprail/network.geojson'),json('assets/data/jprail/japan.geojson'),json('assets/data/jprail/pass-ranges.json'),json('assets/data/jprail/operator-colors.json'),json('assets/data/jprail/company-boundaries.json')]);
+ state.companyBoundaries=companies.boundaries;
   state.palette=palette;railColors=createRailColors(palette);
   for(const pass of catalog.passes)if(ranges[pass.id]){pass.routeFeatures=pass.overviewRouteFeatures=ranges[pass.id].features;pass.routeStationKeys=pass.overviewRouteStationKeys=new Set(ranges[pass.id].stationKeys);pass.routeOverridesOnly=Boolean(ranges[pass.id].partial);pass.routeFeatureKeys=new Set(pass.routeFeatures.map(f=>f.properties.operator+'|'+f.properties.name));}
   state.passes=catalog.passes;state.network=state.overviewNetwork=network;$('coverageNote').textContent=catalog.coverageNote;

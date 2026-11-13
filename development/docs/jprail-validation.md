@@ -1,47 +1,28 @@
 # JPRail 当前验证摘要
 
-## 本轮：日本国名隐藏与城市名提前收起（2026-11-13）
+## 本轮：青函显示、独立局界、青春18、首页插画与预览入口（2026-11-13）
 
-本轮底图三个国家名层永久排除日本（ISO 代码与日／英文名称），保留其他国家标签；五个城市／乡镇标注层 `maxzoom` 从 13 降到 11，对应页面 Leaflet 12 级及以上隐藏城市名，较此前提前两级。独立车站标注逻辑不变，道路及水域名称保留。本次上传同时包含此前已完成但未上传的主要站、东京私铁辨识、全国复位及端点圆圈同步修正。
+- 保留此前已完成的本地修改：青函共用区间统一按新干线红色／4 px 显示；14 个已知 JR 运营接口独立显示局界符号，不将内部局界自动变成票券边界；青春18默认列第二位，3日 ¥10,000／5日 ¥12,050，基础券不含新干线、海峡货运线与道南铁路。原始网络、车站及公司接口数据未改。依据：[JR北海道共用区间](https://www.jrhokkaido.co.jp/corporate/shinkansen/specificity.html)、[JR西日本青春18](https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/detail.html?shnId=126000037)、[JR北海道青春18](https://www.jrhokkaido.co.jp/CM/Otoku/007255/)、[2026新闻稿](https://www.jreast.co.jp/press/2025/20260205_ho02.pdf)。
+- “启动本地预览.command”现在打开首页 index.html；模拟器启动器仍打开模拟器。首页启动不再要求先检查模拟器科学依赖；默认模块入口仍保留原模拟器行为。首页右侧介绍仅说明查询范围、价格、时间、限制与行程比较。
+- 宣传图以用户最终提供的 1448×1086 插画为准，保留人物、标题、两张票卡、列车及接触网等内容。去掉所有站名框／引线，以及西北侧俄罗斯、朝鲜等境外陆地。旧示意线路由网页当前“全部线路”的真实截图替换：597／597 线路组，未选 Pass，无等级／公司筛选，仅日本轮廓；保留站点圆圈和局界符号，不含站名、底图、控件与境外地形。线路不是生成工具重画；在浏览器中按原构图合成为一张生产 WebP，不增加页面图层、监听器或地图逻辑。
+- 最终文件：`assets/images/jprail-preview.webp`，1448×1086，335,878 字节。地图数据沿用 MLIT N02（加工）／OSM，轮廓来自 Natural Earth；宣传图不是实时轨道图，也不用于判断票券权限。生成工具原始输出保留在工具图库，项目只保留一张生产宣传图。
+- 目录55条，新增青春181条官方核对；原54条两档范围记录结构相同。本轮未重新核实原54券全部最新条款；条款证据仍为51完成／4待核。绘图回归不代替这些证据缺口的核实。
 
-低于 12 级时保留主要枢纽／区域大站的深色双圈与粗体名称；12 级及以上恢复此前普通站点圆点、主要站 600 字重和逐级增加的小站名，16 级起显示当前视野全部车站。缩小回阈值以下重新显示双圈，Pass 真边界的圆圈与常驻名称不受影响。既有主要站显示目录不变，目前人工显示名单 78 站（非客流排名或官方等级），包括东京、大阪、冈山、广岛，并补充涩谷、池袋等站。概览名称拥挤时保留符号，仍优先显示 Pass 真正边界站名称；站点符号只取当前匹配车站／已核实 Pass 关键站，同站多线路合并显示，不把主要站推定成票券边界。同名异地站用既有 N02 坐标限定，例如大阪福岛、奈良郡山、七尾线高松、近铁小仓不会误用区域枢纽符号。
+### 本轮验证
 
-“本土全景”已改为“全部线路”：清除 Pass、等级、运营方、设施原图和车站定位；关闭详情列并恢复全部全国线路，再调用与初次进入页面相同的本土取景参数。窗口调整所用的取景函数仍独立，不会顺带清除选择。用重置定位消除移动端反复复位的像素舍入偏差；按钮复位时先关闭详情栏，再按初始地图尺寸取景。
+- 从最新 origin/main 的隔离工作树测试：25项全部通过，114.965秒。覆盖本地预览入口、公司配色、全目录绘图、缩放与触控布局、票券数据及发布保护；118运营方、55券、228视图、14,082个真实铁路像素采样点；端点圆圈147帧最大相对偏移0。
+- 最终单张宣传图替换后，1440×1000、390×844、320×640浏览器检查均成功加载1448×1086图像，无横向溢出。已人工查看最终合成图；人物、票卡、标题及列车未被日本地图遮盖，站名框／引线与境外陆地已移除。
+- 青春18与青函／局界针对性回归，以及联网热海地图审核已完成；保留现有一张正式审核图 [jprail-map-review.png](jprail-map-review.png)。仅图片收尾后未重复整套地图回放。
+- 发布准备只整理本任务文件；simulation/preview.py 和首页按任务差异合入最新远端，保留其他任务变更。工作流与发布重试 Action 无修改，保留默认分支检出、fetch/rebase重试、40分钟任务及30分钟Pages时限，不强推。按用户此前要求，上传后不做Actions／线上验收，因此不据推送结果宣称部署成功。
+- 临时截图、统计及隔离工作树均位于本轮独有系统临时目录；任务收尾时停止本轮服务器并清理该目录。保留生产代码、可复用测试、本摘要和一张正式审核图，保护正式数据、其他任务文件与根目录 trash/。
 
-端点／边界的大小圈改为同一个车站 Canvas 同坐标绘制，统一缩放、平移与精度刷新；保留原半径、颜色、公司局界虚线及点击提示。原独立图层只留下不绘制的交互目标，Pass 真边界优先于概览枢纽双圈。对修改前模块的实际绘图回放中，黑部宇奈月温泉一次捏合的 17 帧最大内外圈偏移约 61.21 px；修复后的独立检查覆盖普通边界、公司局界和铁路端点，147 帧最大偏移 0，包含正反向捏合、按钮和拖动。
+### 最终插画处理提示词
 
-此前东京及近郊 11 家私铁采用本页辨识调整色，原颜色、参考口径和来源保留于颜色数据；没有把自选配色称为公司官方色。调整范围为东武、西武、京成、京王、小田急、东急、京急、相铁、临海线、筑波快线和北总。11 色两两 CIELAB ΔE76 最小由约 2.00 提升为 22.11（此指标只检查一般颜色距离，不表示所有色觉条件下都可区分）。JR 普速和新干线颜色不变，地铁等排除范围不变，票券、线路几何和边界数据未修改。
+使用内置 image_gen 编辑用户提供的原图；下方是最终底稿修订提示词。之后的实际线路截图与浏览器合成不交由生成工具重画。
 
-本轮从最新 origin/main 建立隔离工作树，仅提交 JPRail 相关文件，保留现有发布工作流。按用户要求，提交并推送完成后不检查 Actions、Pages 部署或线上页面；不将推送成功表述为部署验收成功。临时目录与隔离工作树在推送前清理，不处理其他任务文件或根目录 trash/。
-
-已在本地应用：JR 六家公司的普速线路统一采用原“本线”橙黄色 `#FF8100`，新干线保留红色 `#FF0C00`。颜色函数同时用于全国参考线、选择 Pass 后的范围线和两档精度，不再让等级筛选把颜色改回旧等级色；线路等级筛选本身继续有效。普通线／新干线的 3／4 px 线宽、单券选择、缩放与手机详情布局保留。
-
-112 家非 JR 普通铁路主体均已有实际绘制色：82 家沿用已整理的官网标识参考色，19 家采用线路图、铁路服务页、官方象征色近似或第三方参考色，11 家东京及近郊公司另用辨识显示色。**没有黑白占位或无颜色的普通铁路公司条目**。这不表示所有 HEX 都是公司发布的唯一官方 RGB 规范，也不表示已穷尽当前数据之外的日本所有铁路公司。
-
-19 家替代方案中：北陆铁道、富山地方铁道、铫子电铁使用其他全国铁路地图的私铁红色类别；天龙滨名湖、鹿岛临海使用第三部门黄绿色类别。这五家的 HEX 是本页选择的屏幕参考值，未复制第三方地图几何。青い森采用注明第三方来源的 `#2CBADC`，ひたちなか采用 Jorudan 湊线售票路线图的 `#FF9933`。原官方标识证据缺口没有被改写成“已取得官方 CI 规范”。
-
-范围只涉及普通铁路与新干线。地铁、路面电车、单轨、新交通系统和钢索缆车不新增公司配色；无公司筛选时保留原有设施／票券显示。混合公司按具体线路排除，例如东急世田谷线、西武山口线、富山港线及市内轨道、伊予市内线、丰桥东田本线、近铁けいはんな／钢索、南海和小田急箱根钢索等。公司名含“高速”、线路有地下区间、窄轨或普通黏着式山岳铁路本身不是排除依据。JR 东海交通事业的城北线按独立非六家 JR 运营主体，采用其标志橙色。
-
-运营方下拉合并源数据别名“三国芦原線”至えちぜん鉄道，只列六家 JR 与 112 家普通铁路主体；只改显示／过滤身份，不改原线路几何、源运营方字段或票券选择器。选择公司后排除其非普通铁路线路；空交集保留空图和提示。图例仅列当前匹配颜色，长列表在图例内滚动；展开图例时重排站名以避让。点击线路可访问配色来源。详细设施原图仍使用 OpenRailwayMap 自身的等级配色，设施原图与本页公司图例分开说明。
-
-### 当前验证
-
-- 逐一选择 **54 张 Pass**（含历史），逐一筛选 **118 个运营方**（六家 JR 加 112 家非 JR），合计 **226 个视图、13,699 个实际铁路像素采样点**。核对真实 Leaflet 图层颜色、概览／精细显示、图例集合、单选替换、空交集、等级筛选与站名／图层位置，并检查全部 54 券初始范围内的常驻边界名与控件避让；没有页面脚本异常。
-- 颜色／模式回归检查同名的 JR 与西武山口线、普通铁路与钢索线、东叶高速与地铁、公司别名及全部运营方颜色覆盖；地铁／单轨／新交通等主体不进入公司配色目录。
-- 东京、大阪、冈山、广岛、涩谷、池袋逐站在 9／11.99／12／16／11.99 级检查，共 30 个主要站视图；读取实际 Canvas 墨迹，确保 12 级以下双圈确实绘出且每站一次，12 级以上收起并保留站名，缩小后重新显示。有乐町小站在全国概览隐藏、近距离显示；另核对四处异地同名站未误标。
-- 本次正式审核图覆盖为北陆地区券黑部宇奈月温泉附近 12.4 级：新阈值下城市名已隐藏，票券边界圈与站名保留，按钮显示“全部线路”。等待当前视野瓦片全部载入及重绘后保存，只有一张正式图保留。
-- 本次将五个行政地名层进一步改为 `maxzoom:11`，对应 Leaflet 12 级及以上隐藏城市／乡镇名；此前 14 级阈值的奈良结果只作历史记录，不代替本次新阈值验收。提交前实际联网检查：源瓦片含 4 条日本国家名记录，渲染为 0 条；东京视图 11.75／12／14 级行政地名数量为 74／0／0，对应车站名为 220／332／131，无页面脚本异常。不重新逐券核对官方条款，推送后不作检查。
-- `network.geojson`、`network-detail.geojson`、两档 `pass-ranges`、`passes.json` 与 `stations.json` 连同 operator-colors.json 共七个生产数据文件的 SHA-256 与本轮起始版本相同；没有改变区间或补造连接。
-
-前一轮功能最终本地联合回归：**12 项通过，107.370 秒**。包括 54 券／118 运营方绘图、30 个主要站缩放视图、小站名分级、桌面与手机全国复位、147 个端点内外圈动画帧、触控／按钮／键盘既有行为及手机详情布局。新增全国复位检查曾捕获移动端中心位置的轻微舍入偏差，重置定位后同一视口初始比例尺、中心及地图尺寸均精确复原。
-
-```sh
-PYTHONDONTWRITEBYTECODE=1 python -m unittest development.tests.test_jprail_colors development.tests.test_jprail development.tests.test_jprail_touch_layout -v
+```text
+Precise compositing preparation edit of the supplied JPRail promotional image. Preserve ALL non-map content exactly: the purple-haired girl's identity, face, eyes, hair, clothing, pose and hands; camera; her booklet; both floating pass cards and every printed word on them; the JPRail logo and ALL existing headings/taglines; cherry blossoms, mountains, pagoda, train, viaduct, overhead contact wires and poles; overall palette, dimensions and composition. Change ONLY the geographical map artwork area. Remove all station-name callout boxes and their leader lines, including 新青森, 仙台, 東京, 名古屋, 新大阪, 広島 and 博多. Remove the northwest foreign mainland/coastline shapes representing Russia, China and the Korean peninsula and their boundary/road strokes. For accurate railway geometry, an exact transparent screenshot of Japan's real railway network will be overlaid afterward by the website: therefore clear the entire old Japanese map silhouette and all its old colored railway paths and station circles as well, leaving a clean seamless continuation of the existing pale blue-gray ocean/sky gradient in those map areas, with absolutely no replacement map or route invented by you. Do not remove, move, cover or change the floating pass cards that sit in front of the map. Do not alter the girl's extended hand or train where they meet the map area. No new text, no changed title, no new station names, no added dates. The result is the same original illustration with only the old geographic diagram and foreign land removed so a geographically exact label-free railway layer can be composited over it. Do not redesign the poster.
 ```
-
-本轮是配色与显示验证，**没有重新逐券查阅全部官方票券条款**。此前范围来源审查 50 完成／4 待核的结论仍按下方历史记录保留；不能用绘图通过抹掉原有条款证据缺口。
-
-[当前正式地图审核图](jprail-map-review.png)。下表为本轮运行时实际配色，来源与限制也保存于 `assets/data/jprail/operator-colors.json`。新增 `jprail-colors.js` 只控制颜色、运营方身份和模式范围，不负责决定票券适用区间。
 
 ### 已应用的公司配色与来源
 
@@ -236,6 +217,7 @@ PYTHONDONTWRITEBYTECODE=1 python -m unittest development.tests.test_jprail devel
 | 产品 | 版本 | 状态 | 官方依据／核对发现 |
 | --- | --- | --- | --- |
 | 日本全国铁路周游券 | 2026-11-10 现行条款 | 完成 | JR 六社内部交接不是票券边界；补入四项第三部门通过特例，Nozomi/Mizuho 是列车限制。 [来源1](https://japanrailpass.net/en/use/conditions-for-use/) |
+| 青春18车票 | 2026春夏冬版本，冬季11/27开售 | 完成 | 连续3／5日、基础券不含新干线；四项第三部门通过区间单独提取，接续／限制站不当作全国券边界。[JR西日本](https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/detail.html?shnId=126000037) · [JR北海道](https://www.jrhokkaido.co.jp/CM/Otoku/007255/) |
 | 北海道铁路周游券 | 2026-11-10 现行条款 | 完成 | 不含北海道新干线、道南渔火铁道；留萌线已于 2026-04-01 废止。 [来源1](https://www.jrhokkaido.co.jp/global/english/ticket/railpass/) · [来源2](https://www.jrhokkaido.co.jp/global/images/ticket/railpass/e-rail04.png) · [来源3](https://www.jrhokkaido.co.jp/CM/Info/press/pdf/20260318_KO_rumoi.pdf) |
 | 札幌－登别区域周游券 | 2026-11-10 现行条款 | 完成 | 按官方每个分支起讫站逐段定位，排除图示不可用目的地；未用矩形边缘作为边界。 [来源1](https://www.jrhokkaido.co.jp/global/english/ticket/railpass/) · [来源2](https://www.jrhokkaido.co.jp/global/images/ticket/railpass/e-rail02.png) |
 | 札幌－富良野区域周游券 | 2026-11-10 现行条款 | 完成 | 按官方每个分支起讫站逐段定位，排除图示不可用目的地；未用矩形边缘作为边界。 [来源1](https://www.jrhokkaido.co.jp/global/english/ticket/railpass/) · [来源2](https://www.jrhokkaido.co.jp/global/images/ticket/railpass/e-rail03.png) |

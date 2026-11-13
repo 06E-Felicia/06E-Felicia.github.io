@@ -1,6 +1,9 @@
 // Railway-only color policy. Keep this independent of fare-range selection:
 // applying a color must never add, remove or join a pass's geometry.
 export const JR_OPERATORS = {'北海道旅客鉄道':'JR 北海道','東日本旅客鉄道':'JR 东日本','東海旅客鉄道':'JR 东海','西日本旅客鉄道':'JR 西日本','四国旅客鉄道':'JR 四国','九州旅客鉄道':'JR 九州'};
+// The source retains the Kaikyo freight identity and kind. Only its display
+// class follows the Hokkaido Shinkansen that shares the Seikan corridor.
+export const isSeikanShared = f => f.properties.operator==='北海道旅客鉄道'&&f.properties.name==='海峡線';
 
 export function createRailColors(data) {
  const valid = value => /^#[0-9a-f]{6}$/i.test(value);
@@ -21,7 +24,7 @@ export function createRailColors(data) {
   const p=feature.properties,op=operatorOf(p.operator);
   // N02 kind 1 identifies the shinkansen. An underground segment or a
   // third-sector operator's name containing "高速" does not make a subway.
-  if (p.kind==='1') return {...data.shinkansen,id:'shinkansen',label:'新干线',operator:op};
+  if (p.kind==='1'||isSeikanShared(feature)) return {...data.shinkansen,id:'shinkansen',label:'新干线',operator:op};
   if (Object.hasOwn(JR_OPERATORS,op)) return {...data.jr,id:'jr',label:'JR 普速线路',operator:op};
   return {...data.operators[op],id:'operator:'+op,label:op,operator:op};
  };

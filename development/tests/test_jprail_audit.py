@@ -135,7 +135,7 @@ class RenderedCatalogue(unittest.TestCase):
                 context2=browser.new_context(reduced_motion='reduce');context2.route('https://**',lambda r:r.abort());p2=context2.new_page();p2.goto(f'http://127.0.0.1:{server.server_port}/JPRail.html');p2.wait_for_function('window.JPRail?.state.stations.length>0');p2.evaluate('JPRail.camera.setView([36,136],8)');p2.get_by_role('button',name='放大',exact=True).click();p2.wait_for_function('JPRail.camera.whenIdle()');self.assertEqual(p2.evaluate('JPRail.map.getZoom()'),8.25);context2.close()
                 page.locator('#showEnded').check()
                 ids=page.evaluate('JPRail.state.passes.map(p=>p.id)')
-                self.assertEqual(len(ids),54)
+                self.assertEqual(len(ids),55)
                 for id in ids:
                     with self.subTest(pass_id=id):
                         page.locator('[data-pass="'+id+'"]').click();page.wait_for_function('JPRail.camera.whenIdle()')
@@ -189,7 +189,7 @@ class RenderedCatalogue(unittest.TestCase):
                         print('rendered',id,'views',views,'samples',paint_samples,flush=True)
                         records.append({'id':id,'views':views,'operators':len(operators),'pins':info['pins'],'paintSamples':paint_samples,'sourceAudit':'partial' if info['issues'] else 'verified'})
                 self.assertEqual(errors,[])
-                self.assertEqual(len(records),54)
+                self.assertEqual(len(records),55)
                 if live:self.check_hokuriku_land(page)
                 if os.environ.get('JPRAIL_REVIEW_IMAGE'):
                     page.locator('[data-pass="hokuriku"]').click();page.wait_for_function('JPRail.camera.whenIdle()');page.wait_for_timeout(1000);page.screenshot(path=os.environ['JPRAIL_REVIEW_IMAGE'])

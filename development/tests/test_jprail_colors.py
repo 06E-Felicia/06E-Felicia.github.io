@@ -144,7 +144,7 @@ class PaletteBrowser(unittest.TestCase):
         def ordinary(op,name):return (canonical(op) in JR or canonical(op) in palette['operators']) and name not in palette['excludedLines'].get(canonical(op),[])
         def expected(op,name,kind,grade):
             if ordinary(op,name):
-                if kind=='1':return '#ff0c00'
+                if kind=='1' or (canonical(op)=='北海道旅客鉄道' and name=='海峡線'):return '#ff0c00'
                 if canonical(op) in JR:return '#ff8100'
                 return palette['operators'][canonical(op)]['color'].lower()
             return OLD.get(grade or ('highspeed' if kind=='1' else 'unclassified'),OLD['unclassified'])
@@ -172,7 +172,7 @@ class PaletteBrowser(unittest.TestCase):
                     for op,name,kind,grade,color in rows:self.assertEqual(color.lower(),expected(op,name,kind,grade),(op,name))
                     visible=page.evaluate('JPRail.state.displayed.map(f=>[f.properties.operator,f.properties.name,f.properties.kind,f.properties.grade,JPRail.railStyle(f).color])')
                     for op,name,kind,grade,color in visible:self.assertEqual(color.lower(),expected(op,name,kind,grade),(op,name))
-                    keys={('shinkansen' if kind=='1' else 'jr' if canonical(op) in JR else 'operator:'+canonical(op)) if ordinary(op,name) else 'other:'+(grade or 'unclassified') for op,name,kind,grade,_ in visible}
+                    keys={('shinkansen' if kind=='1' or (canonical(op)=='北海道旅客鉄道' and name=='海峡線') else 'jr' if canonical(op) in JR else 'operator:'+canonical(op)) if ordinary(op,name) else 'other:'+(grade or 'unclassified') for op,name,kind,grade,_ in visible}
                     self.assertEqual(set(page.evaluate('JPRail.state.colorLegend.map(i=>i.id)')),keys)
                     checks.check_rendered_layers(page)
                 options=page.locator('#railOperator option').evaluate_all('(xs)=>xs.map(x=>x.value)')
@@ -184,7 +184,7 @@ class PaletteBrowser(unittest.TestCase):
                     counts['operators']+=1;counts['views']+=1
                 page.locator('#clearRailFilters').click();page.locator('#showEnded').check()
                 ids=page.evaluate('JPRail.state.passes.map(p=>p.id)')
-                self.assertEqual(len(ids),54)
+                self.assertEqual(len(ids),55)
                 for id in ids:
                     with self.subTest(pass_id=id):
                         page.locator('[data-pass="'+id+'"]').click();settle();verify_layers();checks.check_labels(page)
