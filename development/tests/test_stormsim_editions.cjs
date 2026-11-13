@@ -8,7 +8,7 @@ const {chromium}=require('playwright');
   const context=await browser.newContext({viewport:{width:1440,height:1000}}),root=path.resolve(__dirname,'../..'),errors=[];
   await context.addInitScript(()=>{window.Worker=class{
    constructor(url){window.__worker=this;window.__workerURL=url;this.terminated=false;}
-   postMessage(message){if(message.type!=='start')return;window.__start=message;const sol=message.profile==='sol';this.onmessage({data:{type:'manifest',manifest:{schema:2,edition:message.profile,config:{seed:message.seed||20260421,month:4,grid_km:sol?28:6,hours:message.controls.hours},grid:{nominal_km:sol?28:6},frames:[]}}});}
+   postMessage(message){if(message.type!=='start')return;window.__start=message;const sol=message.profile==='sol';this.onmessage({data:{type:'manifest',manifest:{schema:2,edition:message.profile,config:{seed:message.seed||20260421,month:4,grid_km:sol?2:6,hours:message.controls.hours},grid:{nominal_km:sol?2:6},frames:[]}}});}
    terminate(){this.terminated=true;sessionStorage.setItem('test-terminated','yes');}
   };});
   await context.route('**/*',route=>{
@@ -33,7 +33,7 @@ const {chromium}=require('playwright');
   assert.doesNotMatch(await page.locator('#sol-suggestion').innerText(),/轻量|低配|低算力|较粗|想更快/);
   const link=new URL(await page.locator('#switch-to-sol').getAttribute('href'));
   assert.equal(link.pathname,'/nested/simulator-sol.html');assert.equal(link.searchParams.get('seed'),'20260421');assert.equal(link.searchParams.get('hours'),'72');
-  await page.screenshot({path:'/private/tmp/stormsim-astra-sol-suggestion.png',fullPage:true});
+  if(process.env.ASTRA_SUGGESTION_SCREENSHOT)await page.screenshot({path:process.env.ASTRA_SUGGESTION_SCREENSHOT,fullPage:true});
   await page.locator('#keep-astra').click();await progress(.6,6);assert.equal(await page.locator('#sol-suggestion').isVisible(),false,'one recommendation per run');
   assert.equal(await page.evaluate(()=>window.__worker.terminated),false,'continuing Astra must not restart/terminate it');
   await page.locator('#stop-compute').click();await start();await progress(.5,4);
@@ -43,16 +43,16 @@ const {chromium}=require('playwright');
   await page.locator('#switch-to-sol').click();await page.waitForURL('**/simulator-sol.html?*');await ready();
   assert.equal(await page.locator('h1').innerText(),'StormSim 2.5 Sol');assert.equal(await page.evaluate(()=>sessionStorage.getItem('test-terminated')),'yes');
   assert.doesNotMatch(await page.locator('body').innerText(),/轻量|低配|低算力|较 Astra 简化/);
-  assert.equal(await page.locator('#local-grid').inputValue(),'28');assert.equal(await page.locator('#frame-interval').inputValue(),'60');
+  assert.equal(await page.locator('#local-grid').inputValue(),'2');assert.equal(await page.locator('#frame-interval').inputValue(),'10');
   assert.equal(await page.locator('#station-select option').count(),32);
   await start();assert.equal(await page.evaluate(()=>window.__start.profile),'sol');assert.equal(await page.evaluate(()=>window.__start.seed),20260421);
-  assert.equal(await page.evaluate(()=>window.__workerURL),'assets/scripts/simulation-local-worker.js?v=5.15.0','Sol loads the same updated dynamics plus its initiation closure');
+  assert.equal(await page.evaluate(()=>window.__workerURL),'assets/scripts/stormsol-worker.js?v=6','Sol selects its multigrid worker');
   assert.equal(new URL(page.url()).searchParams.has('seed'),false,'refreshing must not silently reuse a transferred seed');
   await progress(.5,4);assert.equal(await page.locator('#sol-suggestion').count(),0,'Sol never prompts to switch to itself');
   await page.locator('#stop-compute').click();await start();assert.equal(await page.evaluate(()=>window.__start.seed),null,'transfer seed is used only once; later starts get fresh worker RNG');await page.locator('#stop-compute').click();
   await page.setViewportSize({width:390,height:844});await page.reload();await ready();
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
-  await page.screenshot({path:'/private/tmp/stormsim-sol-mobile.png',fullPage:true});
+  if(process.env.SOL_MOBILE_SCREENSHOT)await page.screenshot({path:process.env.SOL_MOBILE_SCREENSHOT,fullPage:true});
   for(const file of ['index.html','forecast.html','warnings.html','simulator.html','simulator-sol.html']){
    await page.goto('http://127.0.0.1:14331/nested/'+file);
    assert.ok(await page.locator('a[href*="simulator-sol.html"]:not([hidden])').count()>0,file+' must expose a Sol entry');

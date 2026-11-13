@@ -17,6 +17,8 @@ REQUIRED = (
     'simulation/core.py', 'simulation/coldpool.py', 'simulation/precipitation.py', 'simulation/synoptic.py', 'simulation/numerics.py',
     'simulation/thermo.py', 'simulation/terrain.py', 'simulation/run.py',
     'simulation/config.json', 'simulation/experiment.py', 'simulation/browser.py',
+    'assets/scripts/stormsol-model.js', 'assets/scripts/stormsol-frame.js',
+    'assets/scripts/stormsol-worker.js', 'assets/data/stormsol-terrain.u16',
     'assets/scripts/simulation-local-worker.js', 'assets/scripts/simulation-advection.js',
     'assets/scripts/simulation-v2.js', 'assets/scripts/simulation-data.js',
     'assets/scripts/simulation-frame-store.js', 'assets/styles/simulation-v2.css',

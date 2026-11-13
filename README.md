@@ -13,7 +13,7 @@
 | [warnings.html](warnings.html) | 官方预警快照与官方查询入口 |
 | [Vacation.html](Vacation.html) | 放假模拟器：暖区暴雨、列车回波、深圳模拟预警与三天作业决策游戏 |
 | [simulator.html](simulator.html) | StormSim 2.5 Astra，较精细的华南强对流过程模拟 |
-| [simulator-sol.html](simulator-sol.html) | StormSim 2.5 Sol，28 km 网格版本 |
+| [simulator-sol.html](simulator-sol.html) | StormSim 2.5 Sol，多尺度随机飑线模型 |
 | [VacationReplay.html](VacationReplay.html) | 已生成的放假模拟器离线回放查看器 |
 | [Flightdat.html](Flightdat.html) | 七机场航班精选，自动采集尝试每 10 分钟更新 |
 | [JPRail.html](JPRail.html) | 日本铁道pass地图：外国游客周游券范围、成人日元票价与分级车站名 |
@@ -90,9 +90,9 @@
 
 ## StormSim Astra / Sol
 
-StormSim 与放假模拟器使用不同的模型。Astra / Sol 在浏览器 Worker 中通过 Pyodide 运行 Python、NumPy、SciPy 内核，模拟分层风、温湿场、锋面、对流、降水、冷池与阵风。支持雷达、分层风场、MUCAPE、观测点和过程回放。
+StormSim 与放假模拟器使用不同的模型。Astra 在浏览器 Worker 中通过 Pyodide 运行 Python、NumPy、SciPy 内核，模拟分层风、温湿场、锋面、对流、降水、冷池与阵风。支持雷达、分层风场、MUCAPE、观测点和过程回放。
 
-Astra 默认 6 km 网格并提供其他分辨率选项；Sol 使用 28 km 网格以降低计算成本。两者都不需要访客配置 WRF、计算服务器或 API key。首次访问需下载运行时和地形，计算时间及存储需求随设备、网格和过程长度变化。操作、技术细节与既有核验范围见 [simulation/README.md](simulation/README.md)。
+Astra 默认使用 6 km 网格。Sol 在独立 JavaScript Worker 中用种子生成槽前环境和局地辐合，再推进单体、水汽、降水和冷池。暖区可随垂直风向切变形成前缘接力的线状飑线或离散超单体状强核。首帧算好即可播放，计算中也可回看。环境场采用 5 km 网格，地形强迫和冷池采用 2.5 km 网格，降水采用 2 km 网格，累计雨量采用 1 km 网格。主步长及回放间隔均为 10 分钟。两者都不需要访客配置 WRF、计算服务器或 API key。首次访问需下载运行时和地形，计算时间及存储需求随设备、网格和过程长度变化。操作、技术细节与既有核验范围见 [simulation/README.md](simulation/README.md)。
 
 ## 本地运行
 
@@ -123,7 +123,7 @@ macOS 双击入口集中在 [development/launchers](development/launchers)，包
 | `vacation-game.js`、`vacation-warning.js` | 作业决策、每日评分与街道模拟预警 |
 | `vacation-store.js`、`vacation-resource.js` | 本地进度、资源加载与兼容性处理 |
 | `assets/data/`、`assets/wasm/`、`assets/vendor/` | 地形、站点、数值二进制及前端依赖 |
-| `simulation/` | Astra / Sol 的 Python 模型、浏览器预览和说明 |
+| `simulation/` | Astra 的 Python 模型、历史 Sol 参考内核、浏览器预览和说明 |
 | `config.json`、`auto_update/` | 天气快照与更新程序 |
 | `flightdata/`、`feimadata/` | 保留的航班采集、快照和说明 |
 | `development/` | 启动器、可复用测试、统计工具、当前验证摘要 |

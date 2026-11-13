@@ -20,11 +20,12 @@
         for(let i=0;i<n;i++)data[i]=dv.getInt16(i*2,true);
         return {shape:s,data,scale:v.scale,offset:v.offset};
     }
-    function index(g,lon,lat){const x=(lon-g.west)/g.dlon,y=(lat-g.south)/g.dlat;return !Number.isFinite(x+y)||x<-1e-7||y<-1e-7||x>g.nx-1+1e-7||y>g.ny-1+1e-7?-1:Math.round(y)*g.nx+Math.round(x);}
-    function value(f,i,k=0){if(!f||i<0)return NaN;const n=f.shape.at(-1)*f.shape.at(-2),raw=f.data[k*n+i];return raw===undefined||raw===32767?NaN:raw*f.scale+f.offset;}
+    function inside(g,x,y){const pad=(g.cellCentered ? .5 : 0)+1e-7;return Number.isFinite(x+y)&&x>=-pad&&y>=-pad&&x<=g.nx-1+pad&&y<=g.ny-1+pad;}
+    function index(g,lon,lat){const x=(lon-g.west)/g.dlon,y=(lat-g.south)/g.dlat;return inside(g,x,y)?Math.max(0,Math.min(g.ny-1,Math.round(y)))*g.nx+Math.max(0,Math.min(g.nx-1,Math.round(x))):-1;}
+    function value(f,i,k=0){if(!f||i<0)return NaN;if(f.read)return f.read(i,k);const n=f.shape.at(-1)*f.shape.at(-2),raw=f.data[k*n+i];return raw===undefined||raw===32767?NaN:raw*f.scale+f.offset;}
     function sample(f,g,lon,lat,k=0){
         let x=(lon-g.west)/g.dlon,y=(lat-g.south)/g.dlat;
-        if(!Number.isFinite(x+y)||x<-1e-7||y<-1e-7||x>g.nx-1+1e-7||y>g.ny-1+1e-7)return NaN;
+        if(!inside(g,x,y))return NaN;
         x=Math.max(0,Math.min(x,g.nx-1));y=Math.max(0,Math.min(y,g.ny-1));
         const x0=Math.floor(x),y0=Math.floor(y),x1=Math.min(x0+1,g.nx-1),y1=Math.min(y0+1,g.ny-1),fx=x-x0,fy=y-y0;
         let sum=0,weight=0;
