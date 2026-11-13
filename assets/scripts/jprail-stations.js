@@ -1,5 +1,14 @@
 // City gateways and major interchanges, for overview labels (not a ridership ranking).
-const HUBS=new Map('東京 大阪 札幌 博多 名古屋 仙台 広島 新潟 金沢 高松 鹿児島中央 函館 釧路 旭川 新青森 青森 盛岡 秋田 山形 福島 郡山 長野 高崎 大宮 宇都宮 水戸 上野 新宿 品川 横浜 小田原 静岡 浜松 豊橋 岐阜 富山 福井 米原 京都 新大阪 神戸 三ノ宮 姫路 岡山 倉敷 福山 新山口 鳥取 松江 松山 徳島 高知 小倉 長崎 佐世保 佐賀 熊本 大分 宮崎 那覇空港'.split(' ').map((name,rank)=>[name,rank]));
+const HUBS=new Map('東京 大阪 札幌 博多 名古屋 仙台 広島 新潟 金沢 高松 鹿児島中央 函館 釧路 旭川 新青森 青森 盛岡 秋田 山形 福島 郡山 長野 高崎 大宮 宇都宮 水戸 上野 新宿 品川 横浜 小田原 静岡 浜松 豊橋 岐阜 富山 福井 米原 京都 新大阪 神戸 三ノ宮 姫路 岡山 倉敷 福山 新山口 鳥取 松江 松山 徳島 高知 小倉 長崎 佐世保 佐賀 熊本 大分 宮崎 渋谷 池袋 新橋 千葉 西船橋 船橋 柏 川崎 大船 八王子 立川 甲府 大垣 敦賀 津 大津 奈良 和歌山 久留米'.split(' ').map((name,rank)=>[name,rank]));
+// Qualify homonyms against the intended city, using the existing N02 station
+// coordinates. Osaka's Fukushima and Kyoto's Ogura are not these regional hubs.
+const HUB_CENTRES={'高松':[34.35056,134.04533],'福島':[37.75432,140.45993],'郡山':[37.39814,140.38887],'大宮':[35.90644,139.62437],'福井':[36.06219,136.22338],'神戸':[34.67922,135.17822],'松山':[33.83988,132.75099],'小倉':[33.88693,130.8833],'長崎':[32.75242,129.86869]};
+export function isMajorStation(s) {
+ const centre=HUB_CENTRES[s[0]];
+ return HUBS.has(s[0])&&(!centre||(Math.abs(s[1]-centre[0])<.02&&Math.abs(s[2]-centre[1])<.02));
+}
+const outerPin=pin=>pin&&['boundary','terminus'].includes(pin.role);
+const pinColor=pin=>pin.boundaryKind==='company'?'#116979':pin.role==='restriction'?'#986321':pin.role==='terminus'?'#405859':'#126958';
 const lineBounds=new WeakMap();
 const cells=box=>{const out=[];for(let x=Math.floor(box[0]/64);x<=Math.floor(box[2]/64);x++)for(let y=Math.floor(box[1]/64);y<=Math.floor(box[3]/64);y++)out.push(x+','+y);return out;};
 function crossesBox([ax,ay,bx,by],box) {
@@ -36,7 +45,7 @@ export function createStationLabels(map,getStations,onRender,getPins=()=>[],getR
  const Labels=L.Layer.extend({
   onAdd(m) {
    this.canvas=L.DomUtil.create('canvas','station-label-canvas leaflet-zoom-animated',m.getPane('railStations'));
-   this.canvas.setAttribute('aria-label','车站名称；视野内适用边界与重要限制站名始终显示');
+   this.canvas.setAttribute('aria-label','车站名称；概览双圈表示主要站，近距离恢复普通站点并逐步显示小站名，适用边界与重要限制站名始终显示');
    this.widths=new Map();this.sortBuilds=0;
    m.on('moveend zoomend resize',this.schedule,this);m.on('zoomanim',this.animate,this);m.on('zoom',this.followZoom,this);this.schedule();
   },
@@ -53,10 +62,10 @@ export function createStationLabels(map,getStations,onRender,getPins=()=>[],getR
    if(pool!==this.pool||pins!==this.pins) {
     this.pool=pool;this.pins=pins;this.sortBuilds++;
     const pinNames=new Set(pins.map(p=>p.station[0]));
-    this.items=[...pins.map(pin=>({s:pin.station,pin,hub:true})),...pool.filter(s=>!pinNames.has(s[0])).map(s=>({s,hub:HUBS.has(s[0]),pin:null}))]
+    this.items=[...pins.map(pin=>({s:pin.station,pin,hub:true,major:isMajorStation(pin.station)})),...pool.filter(s=>!pinNames.has(s[0])).map(s=>({s,hub:isMajorStation(s),major:isMajorStation(s),pin:null}))]
      .sort((a,b)=>({boundary:3,restriction:2,terminus:1}[b.pin?.role]||0)-({boundary:3,restriction:2,terminus:1}[a.pin?.role]||0)||Number(Boolean(b.pin))-Number(Boolean(a.pin))||Number(b.hub)-Number(a.hub)||(HUBS.get(a.s[0])??999)-(HUBS.get(b.s[0])??999)||a.s[0].localeCompare(b.s[0],'ja'));
    }
-   const size=map.getSize(),ratio=Math.min(devicePixelRatio||1,2),z=map.getZoom(),all=z>=16,bounds=map.getBounds();
+   const size=map.getSize(),ratio=Math.min(devicePixelRatio||1,2),z=map.getZoom(),all=z>=16,emphasizeHubs=z<12,bounds=map.getBounds();
    const canvas=this.canvas;canvas.width=size.x*ratio;canvas.height=size.y*ratio;canvas.style.width=size.x+'px';canvas.style.height=size.y+'px';
    L.DomUtil.setPosition(canvas,map.containerPointToLayerPoint([0,0]));
    this.anchor=map.containerPointToLatLng([0,0]);this.drawZoom=z;
@@ -64,24 +73,39 @@ export function createStationLabels(map,getStations,onRender,getPins=()=>[],getR
    const anchors=new Map(),anchorGap=z<9?28:z<12?22:12;
    const nearAnchor=p=>{const x=Math.floor(p.x/anchorGap),y=Math.floor(p.y/anchorGap);for(let i=x-1;i<=x+1;i++)for(let j=y-1;j<=y+1;j++)if((anchors.get(i+','+j)||[]).some(q=>Math.hypot(p.x-q.x,p.y-q.y)<anchorGap))return true;return false;};
    const occupied=new Map(),names=[],texts=[],pinnedNames=[],boundaryNames=[],companyNames=[],pinnedBoxes=[],dots=new Set(),crossesRail=railCollisionIndex(map,getRails());
+   // One symbol per visible station complex, even when several platforms or
+   // companies share its name. These come only from the currently allowed
+   // station pool; selecting a pass never introduces out-of-range hubs.
+   const majorStations=new Map(),majorSymbols=[],majorLabelNames=[];
+   for(const item of this.items)if(emphasizeHubs&&item.major&&!outerPin(item.pin)&&!majorStations.has(item.s[0])&&bounds.contains([item.s[1],item.s[2]])) {
+    majorStations.set(item.s[0],item);const p=map.latLngToContainerPoint([item.s[1],item.s[2]]);
+    majorSymbols.push({name:item.s[0],x:p.x,y:p.y,radius:5.4});
+   }
+   const pinSymbols=pins.filter(outerPin).filter(pin=>bounds.contains([pin.station[1],pin.station[2]])).map(pin=>{
+    const p=map.latLngToContainerPoint([pin.station[1],pin.station[2]]);
+    return {name:pin.name,x:p.x,y:p.y,role:pin.role,company:pin.boundaryKind==='company',color:pinColor(pin),radius:pin.role==='boundary'?6.5:4.5};
+   });
+   const symbolBoxes=[...majorSymbols,...pinSymbols].map(p=>[p.x-p.radius-2,p.y-p.radius-2,p.x+p.radius+2,p.y+p.radius+2]);
    const mapRect=map.getContainer().getBoundingClientRect();
    const uiBoxes=[...map.getContainer().closest('.map-frame').querySelectorAll('.leaflet-control,.map-layer-controls,.map-state,.basemap-status,.rail-legend')]
     .filter(el=>el.getClientRects().length).map(el=>{const b=el.getBoundingClientRect();return [b.left-mapRect.left-4,b.top-mapRect.top-4,b.right-mapRect.left+4,b.bottom-mapRect.top+4];});
    const intersects=(a,b)=>a[0]<b[2]&&a[2]>b[0]&&a[1]<b[3]&&a[3]>b[1];
-   const protectedOverlap=box=>uiBoxes.some(b=>intersects(box,b))||pinnedBoxes.some(p=>intersects(box,p.box));
-   for(const box of uiBoxes)for(const key of cells(box)){if(!occupied.has(key))occupied.set(key,[]);occupied.get(key).push(box);}
+   const protectedOverlap=box=>uiBoxes.some(b=>intersects(box,b))||pinnedBoxes.some(p=>intersects(box,p.box))||symbolBoxes.some(b=>intersects(box,b));
+   for(const box of [...uiBoxes,...symbolBoxes])for(const key of cells(box)){if(!occupied.has(key))occupied.set(key,[]);occupied.get(key).push(box);}
    const overlap=box=>cells(box).some(k=>(occupied.get(k)||[]).some(b=>box[0]<b[2]&&box[2]>b[0]&&box[1]<b[3]&&box[3]>b[1]));
-   for(const {s,hub,pin} of this.items) {
+   for(const item of this.items) {
+    const {s,hub,pin,major}=item,largeSymbol=emphasizeHubs&&major&&!outerPin(pin);
+    if(largeSymbol&&!pin&&majorStations.get(s[0])!==item)continue;
     if(!pin&&z<7&&!hub)continue;
     if(s[1]<bounds.getSouth()||s[1]>bounds.getNorth()||s[2]<bounds.getWest()||s[2]>bounds.getEast())continue;
     const point=map.latLngToContainerPoint([s[1],s[2]]),key=s[0]+'|'+Math.round(point.x/8)+'|'+Math.round(point.y/8);if(dots.has(key))continue;dots.add(key);
     if(!pin&&!hub&&!all&&nearAnchor(point))continue;
-    const text=s[0],font=pin?.role==='boundary'?13:hub?12:11,weight=pin?.role==='boundary'?750:pin?.role==='terminus'?650:hub?600:400;
+    const text=s[0],font=pin?.role==='boundary'?13:hub?12:11,weight=pin?.role==='boundary'?750:largeSymbol?700:pin?.role==='terminus'?650:hub?600:400;
     ctx.font=`${weight} ${font}px -apple-system, "PingFang SC", sans-serif`;
     const widthKey=weight+'|'+font+'|'+text;if(!this.widths.has(widthKey))this.widths.set(widthKey,ctx.measureText(text).width);
-    const w=this.widths.get(widthKey),space=pin?3:z<9?14:z<12?8:3;
+    const w=this.widths.get(widthKey),space=pin?3:z<9?14:z<12?8:3,gap=outerPin(pin)?12:largeSymbol?10:6;
     let x=point.x+6,y=point.y,box,best,score=Infinity;
-    const positions=[0,-16,16,-28,28,-44,44,...(pin?[-60,60,-84,84,-110,110]:[])].flatMap(d=>[[6,d],[-w-8,d],[-w/2,d||-16]]);
+    const positions=[0,-16,16,-28,28,-44,44,...(pin?[-60,60,-84,84,-110,110]:[])].flatMap(d=>[[gap,d],[-w-gap-2,d],[-w/2,d||-16]]);
     const consider=(dx,dy)=>{
      const px=Math.max(3,Math.min(size.x-w-3,point.x+dx)),py=Math.max(font/2+4,Math.min(size.y-font/2-4,point.y+dy));
      const candidate=[px-space,py-font/2-space,px+w+space,py+font/2+space];
@@ -101,19 +125,34 @@ export function createStationLabels(map,getStations,onRender,getPins=()=>[],getR
     if(!pin&&((!all&&overlap(box))||protectedOverlap(box)))continue;
     if(pin)pinnedBoxes.push({name:s[0],role:pin.role,box});
     for(const k of cells(box)){if(!occupied.has(k))occupied.set(k,[]);occupied.get(k).push(box);}
-    const color=pin?.boundaryKind==='company'?'#116979':pin?.role==='restriction'?'#986321':pin?.role==='terminus'?'#405859':pin?'#126958':hub?'#143b40':'#405859';
+    const color=pin?pinColor(pin):hub?'#143b40':'#405859';
     if(pin) {
      ctx.beginPath();ctx.moveTo(point.x,point.y);ctx.lineTo(Math.max(x,Math.min(x+w,point.x)),y);ctx.strokeStyle=color;ctx.lineWidth=.8;ctx.stroke();
     }
     if(pin&&score<1000) {
      ctx.fillStyle='#fffefa';ctx.fillRect(x-2,y-font/2-3,w+4,font+6);ctx.strokeStyle=color;ctx.strokeRect(x-2,y-font/2-3,w+4,font+6);
     }
-    ctx.beginPath();ctx.arc(point.x,point.y,pin?3.4:hub?2.6:1.8,0,Math.PI*2);ctx.fillStyle='#fffefa';ctx.fill();ctx.lineWidth=pin?1.5:1;ctx.strokeStyle=color;ctx.stroke();
+    if(!largeSymbol&&!outerPin(pin)){ctx.beginPath();ctx.arc(point.x,point.y,pin?3.4:hub?2.6:1.8,0,Math.PI*2);ctx.fillStyle='#fffefa';ctx.fill();ctx.lineWidth=pin?1.5:1;ctx.strokeStyle=color;ctx.stroke();}
     if(score<1000){ctx.lineWidth=3.5;ctx.strokeStyle='#fffefa';ctx.strokeText(text,x,y);}ctx.fillStyle=color;ctx.fillText(text,x,y);
     const anchorKey=Math.floor(point.x/anchorGap)+','+Math.floor(point.y/anchorGap);if(!anchors.has(anchorKey))anchors.set(anchorKey,[]);anchors.get(anchorKey).push(point);
-    names.push(s[0]);texts.push(text);if(pin)pinnedNames.push(s[0]);if(pin?.role==='boundary')boundaryNames.push(s[0]);if(pin?.boundaryKind==='company')companyNames.push(s[0]);
+    names.push(s[0]);texts.push(text);if(major)majorLabelNames.push(s[0]);if(pin)pinnedNames.push(s[0]);if(pin?.role==='boundary')boundaryNames.push(s[0]);if(pin?.boundaryKind==='company')companyNames.push(s[0]);
    }
-   onRender({count:names.length,names,texts,pinnedNames,boundaryNames,companyNames,pinnedBoxes,uiBoxes,sortBuilds:this.sortBuilds,renderMs:performance.now()-started,mode:all?'当前视野全部车站':z<7?'主要枢纽':'区域车站'});
+   // Paint symbols even if a crowded overview has no room for their labels.
+   // The outer/inner dark rings differ from a pass boundary's green ring;
+   // actual boundary pins and their always-visible names keep their priority.
+   for(const p of majorSymbols) {
+    ctx.beginPath();ctx.arc(p.x,p.y,p.radius,0,Math.PI*2);ctx.fillStyle='#fffefa';ctx.fill();ctx.strokeStyle='#143b40';ctx.lineWidth=1.7;ctx.stroke();
+    ctx.beginPath();ctx.arc(p.x,p.y,2.5,0,Math.PI*2);ctx.lineWidth=1.2;ctx.stroke();
+   }
+   // A single coordinate, paint and transform keeps both rings concentric
+   // throughout wheel, pinch, button zooms and drags, including fractional zoom.
+   for(const p of pinSymbols) {
+    ctx.save();ctx.strokeStyle=p.color;ctx.fillStyle='#fffefa';
+    ctx.beginPath();ctx.arc(p.x,p.y,3.4,0,Math.PI*2);ctx.fill();ctx.lineWidth=1.5;ctx.stroke();
+    ctx.setLineDash(p.company?[3,2]:[]);ctx.lineWidth=p.role==='boundary'?2.2:1.5;
+    ctx.beginPath();ctx.arc(p.x,p.y,p.radius,0,Math.PI*2);ctx.stroke();ctx.restore();
+   }
+   onRender({count:names.length,names,texts,pinnedNames,boundaryNames,companyNames,pinnedBoxes,uiBoxes,pinSymbols,majorNames:majorSymbols.map(p=>p.name),majorSymbols,majorLabelNames,sortBuilds:this.sortBuilds,renderMs:performance.now()-started,mode:all?'当前视野全部车站':z<7?'主要枢纽':'区域车站'});
   }
  });
  return new Labels().addTo(map);

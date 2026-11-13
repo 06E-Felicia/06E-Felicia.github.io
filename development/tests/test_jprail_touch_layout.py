@@ -11,6 +11,39 @@ import unittest
 from urllib.parse import urlsplit
 ROOT=Path(__file__).resolve().parents[2]
 
+# Track painted circle centres and their real DOM canvas transforms. This
+# catches independently transformed outer/inner rings during an animation.
+RING_INK_PROBE=r'''(() => {
+ for(const key of ['width','height']) {
+  const d=Object.getOwnPropertyDescriptor(HTMLCanvasElement.prototype,key);
+  Object.defineProperty(HTMLCanvasElement.prototype,key,{...d,set(v){this.circleInk=[];d.set.call(this,v);}});
+ }
+ const p=CanvasRenderingContext2D.prototype,arc=p.arc,begin=p.beginPath,stroke=p.stroke,clear=p.clearRect;
+ p.clearRect=function(...a){this.canvas.circleInk=[];return clear.apply(this,a);};
+ p.beginPath=function(...a){this.circlePath=[];return begin.apply(this,a);};
+ p.arc=function(x,y,r,...a){const t=this.getTransform();(this.circlePath||=[]).push({x:t.a*x+t.c*y+t.e,y:t.b*x+t.d*y+t.f,r});return arc.call(this,x,y,r,...a);};
+ p.stroke=function(...a){if(this.globalAlpha>0)(this.canvas.circleInk||=[]).push(...(this.circlePath||[]));return stroke.apply(this,a);};
+})();'''
+
+RING_FRAMES=r'''({station,radius,delta})=>new Promise(resolve=>{
+ const frames=[],deadline=performance.now()+2500;
+ const sample=()=>{
+  const m=JPRail.map,b=m.getContainer().getBoundingClientRect(),p=m.latLngToContainerPoint([station[1],station[2]]),ref={x:b.x+p.x,y:b.y+p.y};
+  const dots=[...m.getContainer().querySelectorAll('canvas')].flatMap(c=>{
+   const box=c.getBoundingClientRect();
+   return (c.circleInk||[]).map(d=>({x:box.x+d.x*box.width/c.width,y:box.y+d.y*box.height/c.height,r:d.r,c}));
+  });
+  const near=(r,point)=>dots.filter(d=>Math.abs(d.r-r)<.01||Math.abs(d.r-Math.round(r))<.01).sort((a,b)=>Math.hypot(a.x-point.x,a.y-point.y)-Math.hypot(b.x-point.x,b.y-point.y))[0];
+  const outer=near(radius,ref),inner=outer&&near(3.4,outer);
+  if(outer&&inner)frames.push({drift:Math.hypot(outer.x-inner.x,outer.y-inner.y),positionError:Math.hypot(outer.x-ref.x,outer.y-ref.y),sameCanvas:outer.c===inner.c});
+  if(performance.now()<deadline&&(!JPRail.camera.whenIdle()||frames.length<3))requestAnimationFrame(sample);
+  else resolve(frames);
+ };
+ const b=JPRail.map.getContainer().getBoundingClientRect();
+ document.getElementById('map').dispatchEvent(new WheelEvent('wheel',{ctrlKey:true,deltaY:delta,clientX:b.x+b.width*.55,clientY:b.y+b.height*.45,bubbles:true,cancelable:true}));
+ requestAnimationFrame(sample);
+})'''
+
 @unittest.skipUnless(importlib.util.find_spec('playwright'),'Playwright required')
 class TouchAndLayout(unittest.TestCase):
     @classmethod
@@ -41,6 +74,74 @@ class TouchAndLayout(unittest.TestCase):
     def settle(self,page):
         page.wait_for_function('JPRail.camera.whenIdle()')
         page.evaluate('()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))')
+
+    def test_all_lines_clears_map_filters_and_restores_initial_view(self):
+        for width,height in [(1440,900),(390,844)]:
+            with self.subTest(viewport=(width,height)):
+                context,page=self.page(viewport={'width':width,'height':height})
+                try:
+                    self.load(page)
+                    initial=page.evaluate('''()=>({zoom:JPRail.map.getZoom(),center:JPRail.map.getCenter(),size:JPRail.map.getSize(),routes:JPRail.state.displayed.map(f=>f.properties.operator+'|'+f.properties.name).sort()})''')
+                    self.assertEqual(page.locator('#resetView').inner_text(),'全部线路')
+                    page.locator('[data-pass="japan"]').click();self.settle(page)
+                    page.locator('#railGrade').select_option('branch')
+                    page.locator('#railOperator').select_option('京王電鉄');self.settle(page)
+                    page.locator('#stationSearch').fill('京都')
+                    page.locator('[data-station]').first.click();self.settle(page)
+                    page.evaluate('JPRail.camera.zoomBy(.25)')
+                    page.locator('#resetView').click();self.settle(page)
+                    self.assertIsNone(page.evaluate('JPRail.state.selected'))
+                    self.assertIsNone(page.evaluate('JPRail.state.active'))
+                    self.assertFalse(page.locator('#detailPanel').is_visible())
+                    self.assertEqual(page.locator('#railGrade').input_value(),'')
+                    self.assertEqual(page.locator('#railOperator').input_value(),'')
+                    self.assertEqual(page.locator('#stationSearch').input_value(),'')
+                    self.assertEqual(page.locator('.leaflet-popup').count(),0)
+                    self.assertFalse(page.locator('#infrastructure').is_disabled())
+                    self.assertFalse(page.locator('#infrastructure').is_checked())
+                    self.assertEqual(page.evaluate('JPRail.state.pinnedStations.length'),0)
+                    self.assertEqual(page.evaluate('JPRail.state.boundaryMarkers.getLayers().length'),0)
+                    self.assertTrue(page.evaluate('''()=>['pass','passes','grade','operator'].every(k=>!new URL(location.href).searchParams.has(k))'''))
+                    self.assertEqual(page.evaluate("JPRail.state.displayed.map(f=>f.properties.operator+'|'+f.properties.name).sort()"),initial['routes'])
+                    self.assertEqual(page.evaluate('JPRail.map.getSize()'),initial['size'])
+                    self.assertAlmostEqual(page.evaluate('JPRail.map.getZoom()'),initial['zoom'],places=6)
+                    for key in ['lat','lng']:
+                        self.assertAlmostEqual(page.evaluate('JPRail.map.getCenter()')[key],initial['center'][key],places=6)
+                    # Reset also switches an explicitly enabled facility map
+                    # back to the initial ordinary route layer, without a late zoom.
+                    page.locator('#infrastructure').check()
+                    page.locator('#resetView').click();self.settle(page)
+                    self.assertFalse(page.locator('#infrastructure').is_checked())
+                    page.wait_for_timeout(250)
+                    self.assertAlmostEqual(page.evaluate('JPRail.map.getZoom()'),initial['zoom'],places=6)
+                finally:context.close()
+
+    def test_endpoint_rings_stay_concentric_during_zoom_and_pan(self):
+        context,page=self.page(viewport={'width':1440,'height':960})
+        try:
+            page.add_init_script(RING_INK_PROBE)
+            self.load(page,'?pass=hokuriku')
+            total=0;largest=0
+            for name in ['黒部宇奈月温泉','猪谷','三国港']:
+                pin=page.evaluate('(n)=>JPRail.state.pinnedStations.find(p=>p.name===n)',name)
+                radius=6.5 if pin['role']=='boundary' else 4.5
+                page.evaluate('(s)=>JPRail.camera.setView([s[1],s[2]],11)',pin['station']);self.settle(page)
+                for delta in [-140,100,-80]:
+                    frames=page.evaluate(RING_FRAMES,{'station':pin['station'],'radius':radius,'delta':delta})
+                    self.assertGreaterEqual(len(frames),3,(name,delta))
+                    self.assertTrue(all(f['sameCanvas'] for f in frames),(name,delta,'rings must share their real paint transform'))
+                    drift=max(f['drift'] for f in frames);largest=max(largest,drift);total+=len(frames)
+                    self.assertLess(drift,.5,(name,delta))
+                    self.assertLess(max(f['positionError'] for f in frames),2.5,(name,delta))
+                # The standard button and a real drag preserve the same pairing.
+                page.get_by_role('button',name='放大',exact=True).click();self.settle(page)
+                b=page.locator('#map').bounding_box();x=b['x']+b['width']/2;y=b['y']+b['height']/2
+                page.mouse.move(x,y);page.mouse.down();page.mouse.move(x+25,y+20,steps=5);page.mouse.up();self.settle(page)
+                frames=page.evaluate(RING_FRAMES,{'station':pin['station'],'radius':radius,'delta':0})
+                self.assertTrue(frames);self.assertLess(max(f['drift'] for f in frames),.5)
+            self.assertTrue(page.evaluate('JPRail.state.boundaryMarkers.getLayers().every(l=>l.options.stroke===false&&l.options.fillOpacity===0)'))
+            print('endpoint ring frames:',total,'max offset:',round(largest,6),flush=True)
+        finally:context.close()
 
     def test_chromium_pinch_has_larger_gain_without_replaying_input(self):
         context,page=self.page(viewport={'width':1440,'height':900})

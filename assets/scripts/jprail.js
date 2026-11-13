@@ -1,4 +1,4 @@
-import {createStationLabels} from './jprail-stations.js?v=20261110-touch2';
+import {createStationLabels} from './jprail-stations.js?v=20261113-hubs3';
 import {createCamera} from './jprail-camera.js?v=20261110-touch2';
 import {createStreetMap} from './jprail-basemap.js?v=20261110-touch2';
 import {officialStationPins} from './jprail-boundaries.js?v=20261110-touch2';
@@ -87,7 +87,7 @@ function renderColorLegend(features) {
  });
  state.colorLegend=sorted;
  $('railLegendItems').innerHTML=sorted.map(info=>`<span title="${esc(info.basis)}"><i style="--rail:${info.color}"></i>${esc(info.label)}</span>`).join('')||'<span>当前筛选没有匹配线路</span>';
- $('railLegendNote').textContent=$('infrastructure').checked?'设施原图使用 OpenRailwayMap 自身等级配色。':'仅列出当前匹配线路。JR 普速橙黄色、新干线红色；私铁采用公司标识或注明来源的替代参考色。颜色不表示乘车权限。';
+ $('railLegendNote').textContent=$('infrastructure').checked?'设施原图使用 OpenRailwayMap 自身等级配色。':'仅列出当前匹配线路。JR 普速橙黄色、新干线红色；私铁采用品牌参考或地图辨识调整色。概览双圈表示主要站，颜色不表示乘车权限。';
 }
 function setupMap() {
  map=L.map('map',{preferCanvas:true,zoomAnimation:true,zoomAnimationThreshold:4,zoomControl:false,zoomSnap:0,zoomDelta:.25,scrollWheelZoom:false,inertiaMaxSpeed:850,inertiaDeceleration:2200,minZoom:4,maxZoom:18,maxBounds:[[22,119],[49,156.3]],maxBoundsViscosity:.8}).fitBounds(NATIONAL,{padding:[12,12]});
@@ -111,7 +111,7 @@ function setupMap() {
   stationLabels?.schedule();
  }});
  map.on('moveend',()=>{if(state.network&&state.detailStatus==='detail')renderRoutes();});
- $('resetView').addEventListener('click',fitHome);
+ $('resetView').addEventListener('click',showAllLines);
  map.on('dragstart zoomstart',()=>homeView=false);
  const observer=new ResizeObserver(()=>{map.invalidateSize({pan:false});if(homeView)fitHome();});observer.observe($('map'));
  camera=createCamera(map);
@@ -124,7 +124,17 @@ function setupMap() {
  map.attributionControl.addAttribution('<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N02-2025.html">N02-25（加工）</a> · © <a href="https://www.openstreetmap.org/copyright">OSM</a> · <a href="https://www.naturalearthdata.com/">Natural Earth</a>');
 }
 
-function fitHome() {camera.fitBounds(NATIONAL,{padding:[8,8]});homeView=true;}
+function fitHome() {camera.fitBounds(NATIONAL,{padding:[8,8],reset:true});homeView=true;}
+function showAllLines() {
+ state.selected=null;state.active=null;
+ $('railGrade').value='';$('railOperator').value='';$('infrastructure').checked=false;
+ map.closePopup();if(stationMarker){map.removeLayer(stationMarker);stationMarker=null;}
+ $('stationSearch').value='';$('stationResults').innerHTML='';
+ renderSelection();renderList();renderDetail();updateURL();
+ // Close the detail column before reusing the same fit as the initial view.
+ // Keep resize-driven home fitting separate so it never clears a selection.
+ fitHome();
+}
 function refreshStationPool() {
  const routes=new Map();for(const f of state.displayed){const p=f.properties;routes.set(p.operator+'|'+p.name,p);}
  const pass=state.passes.find(p=>p.id===state.selected);
@@ -132,8 +142,9 @@ function refreshStationPool() {
  state.boundaryMarkers.clearLayers();
  for(const pin of state.pinnedStations.filter(pin=>['boundary','terminus'].includes(pin.role))){
   const boundary=pin.role==='boundary',company=pin.boundaryKind==='company';
-  const color=company?'#116979':boundary?'#126958':'#405859';
-  L.circleMarker([pin.station[1],pin.station[2]],{pane:'railBoundaries',radius:boundary?6.5:4.5,color,weight:boundary?2.2:1.5,fill:false,dashArray:company?'3 2':null})
+  // Visual inner/outer rings share the station canvas and its zoom transform.
+  // This transparent target only supplies the existing tooltip and popup.
+  L.circleMarker([pin.station[1],pin.station[2]],{pane:'railBoundaries',radius:boundary?6.5:4.5,stroke:false,fill:true,fillOpacity:0})
    .bindTooltip(`${esc(pin.name)} · ${company?'本券止于公司局界':boundary?'指定线路适用边界':'已含铁路端点'}`)
    .bindPopup(`<strong>${esc(pin.name)}</strong><br>${esc(pin.note)}`).addTo(state.boundaryMarkers);
  }
@@ -163,7 +174,7 @@ function syncInfrastructure() {
  // The optional raster has its own grade palette and cannot inherit our
  // company colors. Do not show a company legend for that separate layer.
  $('railLegendItems').hidden=showDetailed;
- $('railLegendNote').textContent=showDetailed?'当前显示 OpenRailwayMap 设施原图，请使用其完整等级图例。':'仅列出当前匹配线路。JR 普速橙黄色、新干线红色；私铁采用公司标识或注明来源的替代参考色。颜色不表示乘车权限。';
+ $('railLegendNote').textContent=showDetailed?'当前显示 OpenRailwayMap 设施原图，请使用其完整等级图例。':'仅列出当前匹配线路。JR 普速橙黄色、新干线红色；私铁采用品牌参考或地图辨识调整色。概览双圈表示主要站，颜色不表示乘车权限。';
 }
 function fitDisplayed() {const bounds=L.latLngBounds([]);for(const f of state.displayed)bounds.extend(featureBounds(f));if(bounds.isValid()){for(const pin of state.pinnedStations)bounds.extend([pin.station[1],pin.station[2]]);camera.fitBounds(bounds,{padding:[36,50],maxZoom:12});}}
 function renderList() {

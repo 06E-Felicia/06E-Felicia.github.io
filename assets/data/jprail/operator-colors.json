@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-10",
+  "version": "2026-11-13",
   "scope": "普通铁路与新干线；地铁、路面电车、单轨、新交通、钢索缆车不新增公司配色。",
   "jr": {
     "color": "#FF8100",
@@ -271,25 +271,34 @@
       "checked": "2026-11-10"
     },
     "京成電鉄": {
-      "color": "#154F9E",
-      "basis": "官网标识参考色",
+      "color": "#77499C",
+      "basis": "地图辨识配色（本页调整）",
       "source": "https://www.keisei.co.jp/assets/images/common/head_logo.png",
-      "note": "采用 Liner Blue；另含 Liner Red。",
-      "checked": "2026-11-10"
+      "note": "为区分东京及近郊相邻私铁而选用的本页显示色，并非公司官方色；原参考色 #154F9E。采用 Liner Blue；另含 Liner Red。",
+      "checked": "2026-11-10",
+      "referenceColor": "#154F9E",
+      "referenceBasis": "官网标识参考色",
+      "adjusted": "2026-11-13"
     },
     "京浜急行電鉄": {
-      "color": "#004098",
-      "basis": "官网标识参考色",
+      "color": "#9D273C",
+      "basis": "地图辨识配色（本页调整）",
       "source": "https://www.keikyu.co.jp/company/outline.html",
-      "note": "官方公司概要展示蓝色 KEIKYU；#004098 是拟用屏幕近似值，未取得官方 RGB 规范。",
-      "checked": "2026-11-10"
+      "note": "为区分东京及近郊相邻私铁而选用的本页显示色，并非公司官方色；原参考色 #004098。官方公司概要展示蓝色 KEIKYU；#004098 是拟用屏幕近似值，未取得官方 RGB 规范。",
+      "checked": "2026-11-10",
+      "referenceColor": "#004098",
+      "referenceBasis": "官网标识参考色",
+      "adjusted": "2026-11-13"
     },
     "京王電鉄": {
-      "color": "#0F3675",
-      "basis": "官网标识参考色",
+      "color": "#C3428A",
+      "basis": "地图辨识配色（本页调整）",
       "source": "https://www.keio.co.jp/assets/img/common/icon_company_logo.svg",
-      "note": "多色标识，拟选蓝；另含京王红。",
-      "checked": "2026-11-10"
+      "note": "为区分东京及近郊相邻私铁而选用的本页显示色，并非公司官方色；原参考色 #0F3675。多色标识，拟选蓝；另含京王红。",
+      "checked": "2026-11-10",
+      "referenceColor": "#0F3675",
+      "referenceBasis": "官网标识参考色",
+      "adjusted": "2026-11-13"
     },
     "京阪電気鉄道": {
       "color": "#E95504",
@@ -362,11 +371,14 @@
       "checked": "2026-11-10"
     },
     "北総鉄道": {
-      "color": "#16379E",
-      "basis": "官网标识参考色",
+      "color": "#6B819E",
+      "basis": "地图辨识配色（本页调整）",
       "source": "https://www.hokuso-railway.co.jp/images/common/header_logo01.svg",
-      "note": "多色标识，拟选蓝色。",
-      "checked": "2026-11-10"
+      "note": "为区分东京及近郊相邻私铁而选用的本页显示色，并非公司官方色；原参考色 #16379E。多色标识，拟选蓝色。",
+      "checked": "2026-11-10",
+      "referenceColor": "#16379E",
+      "referenceBasis": "官网标识参考色",
+      "adjusted": "2026-11-13"
     },
     "北越急行": {
       "color": "#073190",
@@ -481,11 +493,14 @@
       "checked": "2026-11-10"
     },
     "小田急電鉄": {
-      "color": "#004EA2",
-      "basis": "官网标识参考色",
+      "color": "#009CA7",
+      "basis": "地图辨识配色（本页调整）",
       "source": "https://www.odakyu.jp/common/img/logo.svg",
-      "note": "官网公司标识 SVG 取色；未宣称为唯一企业色规范。",
-      "checked": "2026-11-10"
+      "note": "为区分东京及近郊相邻私铁而选用的本页显示色，并非公司官方色；原参考色 #004EA2。官网公司标识 SVG 取色；未宣称为唯一企业色规范。",
+      "checked": "2026-11-10",
+      "referenceColor": "#004EA2",
+      "referenceBasis": "官网标识参考色",
+      "adjusted": "2026-11-13"
     },
     "山形鉄道": {
       "color": "#3B3290",
@@ -558,25 +573,34 @@
       "checked": "2026-11-10"
     },
     "東京臨海高速鉄道": {
-      "color": "#00418E",
-      "basis": "官网标识参考色",
+      "color": "#205A48",
+      "basis": "地图辨识配色（本页调整）",
       "source": "https://www.twr.co.jp/Portals/0/Skins/TWR/images/logo.png",
-      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
-      "checked": "2026-11-10"
+      "note": "为区分东京及近郊相邻私铁而选用的本页显示色，并非公司官方色；原参考色 #00418E。官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10",
+      "referenceColor": "#00418E",
+      "referenceBasis": "官网标识参考色",
+      "adjusted": "2026-11-13"
     },
     "東急電鉄": {
-      "color": "#E83817",
-      "basis": "官网标识参考色",
+      "color": "#D65026",
+      "basis": "地图辨识配色（本页调整）",
       "source": "https://www.tokyu.co.jp/#inline-logo",
-      "note": "取得官网内联 SVG 实值，修正此前近似值 #E60012 为 #E83817；排除世田谷线。",
-      "checked": "2026-11-10"
+      "note": "为区分东京及近郊相邻私铁而选用的本页显示色，并非公司官方色；原参考色 #E83817。取得官网内联 SVG 实值，修正此前近似值 #E60012 为 #E83817；排除世田谷线。",
+      "checked": "2026-11-10",
+      "referenceColor": "#E83817",
+      "referenceBasis": "官网标识参考色",
+      "adjusted": "2026-11-13"
     },
     "東武鉄道": {
-      "color": "#0950A7",
-      "basis": "官网标识参考色",
+      "color": "#1D77B4",
+      "basis": "地图辨识配色（本页调整）",
       "source": "https://www.tobu.co.jp/_assets/images/common/logo_tobu.png",
-      "note": "蓝色渐变标识，选代表值；并非唯一 RGB 规范。",
-      "checked": "2026-11-10"
+      "note": "为区分东京及近郊相邻私铁而选用的本页显示色，并非公司官方色；原参考色 #0950A7。蓝色渐变标识，选代表值；并非唯一 RGB 规范。",
+      "checked": "2026-11-10",
+      "referenceColor": "#0950A7",
+      "referenceBasis": "官网标识参考色",
+      "adjusted": "2026-11-13"
     },
     "東葉高速鉄道": {
       "color": "#5AB55C",
@@ -656,11 +680,14 @@
       "checked": "2026-11-10"
     },
     "相模鉄道": {
-      "color": "#243C98",
-      "basis": "官网标识参考色",
+      "color": "#303B77",
+      "basis": "地图辨识配色（本页调整）",
       "source": "https://www.sotetsu.co.jp/_nuxt/group_logo.C0rwaJfS.svg",
-      "note": "官方 CI 解释确认 SOTETSU 蓝／橙；取当前官方 SVG 蓝 #243C98。",
-      "checked": "2026-11-10"
+      "note": "为区分东京及近郊相邻私铁而选用的本页显示色，并非公司官方色；原参考色 #243C98。官方 CI 解释确认 SOTETSU 蓝／橙；取当前官方 SVG 蓝 #243C98。",
+      "checked": "2026-11-10",
+      "referenceColor": "#243C98",
+      "referenceBasis": "官网标识参考色",
+      "adjusted": "2026-11-13"
     },
     "真岡鐵道": {
       "color": "#003149",
@@ -740,11 +767,14 @@
       "checked": "2026-11-10"
     },
     "西武鉄道": {
-      "color": "#3366CC",
-      "basis": "官网标识参考色",
+      "color": "#5A8421",
+      "basis": "地图辨识配色（本页调整）",
       "source": "https://www.seiburailway.jp/assets/images/header/logo.svg",
-      "note": "拟选铁路公司标识蓝；另含浅蓝、绿。排除山口线新交通系统。",
-      "checked": "2026-11-10"
+      "note": "为区分东京及近郊相邻私铁而选用的本页显示色，并非公司官方色；原参考色 #3366CC。拟选铁路公司标识蓝；另含浅蓝、绿。排除山口线新交通系统。",
+      "checked": "2026-11-10",
+      "referenceColor": "#3366CC",
+      "referenceBasis": "官网标识参考色",
+      "adjusted": "2026-11-13"
     },
     "豊橋鉄道": {
       "color": "#F3D823",
@@ -873,11 +903,14 @@
       "checked": "2026-11-10"
     },
     "首都圏新都市鉄道": {
-      "color": "#003B83",
-      "basis": "官网标识参考色",
+      "color": "#8C711E",
+      "basis": "地图辨识配色（本页调整）",
       "source": "https://www.mir.co.jp/common/img/hdr_logo01.png",
-      "note": "官网公司标识取代表色；未查得单一官方 RGB 规范。",
-      "checked": "2026-11-10"
+      "note": "为区分东京及近郊相邻私铁而选用的本页显示色，并非公司官方色；原参考色 #003B83。官网公司标识取代表色；未查得单一官方 RGB 规范。",
+      "checked": "2026-11-10",
+      "referenceColor": "#003B83",
+      "referenceBasis": "官网标识参考色",
+      "adjusted": "2026-11-13"
     },
     "高松琴平電気鉄道": {
       "color": "#1D2089",
