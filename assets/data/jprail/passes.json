@@ -1,6 +1,6 @@
 {
-  "version": "2026-11-13-seishun18",
-  "checked": "2026-11-10",
+  "version": "2026-11-14-pass-scope-reaudit",
+  "checked": "2026-11-14",
   "scope": "外国游客用铁路pass；部分外国护照产品也允许在日外国人使用。纯地铁/巴士券、普通单程票、面向所有人的一日券不收录。 用户指定例外：增列不限国籍的青春18车票；其他普通一日券不扩收。",
   "coverageNote": "铁路范围按官方线路和命名区间整理；有待核实项目会在票券详情明确列出。地图为范围示意，停运与临时变更须核对运营公告。",
   "passes": [
@@ -62,7 +62,7 @@
         }
       ],
       "source": "https://japanrailpass.net/en/use/conditions-for-use/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
       "exceptions": [
         "Nozomi、Mizuho 须另购专用附加票，不能仅凭 pass 乘坐。",
@@ -101,7 +101,7 @@
         "note": "表列官网在线售价。海外指定代理交换券：7 日 ¥53,000、14 日 ¥84,000、21 日 ¥105,000；当地货币结算受汇率影响。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://japanrailpass.net/en/use/conditions-for-use/",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -179,7 +179,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -254,7 +254,7 @@
         }
       ],
       "source": "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/detail.html?shnId=126000037",
-      "checked": "2026-11-13",
+      "checked": "2026-11-14",
       "trains": "基本适用普通／快速列车普通车自由席；普通车指定席、整理券列车另付相应费用。新干线和一般特急／急行不适用。",
       "exceptions": [
         "公司线须符合当日 JR—公司线—JR 的指定接续条件；不能只在公司线始发／终到，非许可站下车或越出区间须另购公司线全程票。",
@@ -292,7 +292,7 @@
         "note": "连续3日／5日，一人使用，成人儿童同价。北海道新干线附加券另购，不在表列价格或基础线路高亮内。"
       },
       "stationPins": {
-        "checked": "2026-11-13",
+        "checked": "2026-11-14",
         "source": "https://www.jrhokkaido.co.jp/CM/Otoku/007255/",
         "note": "通过／列车限制站不是整张全国券的外边界。",
         "stations": [
@@ -415,7 +415,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-13",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       },
@@ -469,7 +469,7 @@
         }
       ],
       "source": "https://www.jrhokkaido.co.jp/global/english/ticket/railpass/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速及特急列车普通车指定席／自由席；北海道特急目前全车指定席，须乘车前划位。",
       "exceptions": [
         "不含北海道新干线、道南渔火铁道、札幌地铁及路面电车。",
@@ -507,7 +507,7 @@
         "note": "表列预购价。指定车站现场购买的 5/7/10 日款分别为 ¥23,000 / ¥29,000 / ¥38,000。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.jrhokkaido.co.jp/CM/Info/press/pdf/20260318_KO_rumoi.pdf",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -574,7 +574,7 @@
         ]
       },
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -628,7 +628,7 @@
         }
       ],
       "source": "https://www.jrhokkaido.co.jp/global/english/ticket/railpass/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速及特急列车普通车指定席／自由席；北海道特急目前全车指定席，须乘车前划位。",
       "exceptions": [
         "不含洞爷；不含地铁与登别温泉巴士。"
@@ -657,7 +657,7 @@
         "note": "表列预购价；指定车站现场购买 ¥11,000。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.jrhokkaido.co.jp/global/images/ticket/railpass/e-rail02.png",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -721,7 +721,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -775,7 +775,7 @@
         }
       ],
       "source": "https://www.jrhokkaido.co.jp/global/english/ticket/railpass/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速及特急列车普通车指定席／自由席；北海道特急目前全车指定席，须乘车前划位。",
       "exceptions": [
         "不含 Tomamu；向富良野方向仅按官方列明线路乘车，不含石胜线去占冠／Tomamu。"
@@ -804,7 +804,7 @@
         "note": "表列预购价；指定车站现场购买 ¥12,000。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.jrhokkaido.co.jp/global/images/ticket/railpass/e-rail03.png",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -857,7 +857,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -941,7 +941,7 @@
         }
       ],
       "source": "https://www.jreast.co.jp/en/multi/pass/eastpass.html",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
       "exceptions": [
         "不含东海道新干线、伊豆急行及富士急。",
@@ -976,7 +976,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://asset.japan.travel/image/upload/v1771574289/pdf/JR_East_20260220.pdf",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -1057,6 +1057,14 @@
             "role": "boundary",
             "note": "东武铁路权益的区间端点。",
             "operator": "東武鉄道"
+          },
+          {
+            "name": "辰野",
+            "role": "boundary",
+            "operator": "東日本旅客鉄道",
+            "line": "中央線",
+            "note": "JR 东日本中央线辰野支线包含，JR 东海饭田线不含。",
+            "boundaryKind": "company"
           }
         ]
       },
@@ -1081,7 +1089,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -1262,7 +1270,7 @@
         }
       ],
       "source": "https://www.jreast.co.jp/en/multi/pass/tokyowidepass.html",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
       "exceptions": [
         "不含东海道新干线及 JR 巴士；Hayabusa／Komachi 等列车料金按运输条件另付。",
@@ -1294,7 +1302,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://asset.japan.travel/image/upload/v1771574289/pdf/JR_East_20260220.pdf",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -1496,7 +1504,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -1749,7 +1757,7 @@
         }
       ],
       "source": "https://www.jreast.co.jp/en/multi/pass/easthokkaido.html",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
       "exceptions": [
         "不含东海道新干线、道南渔火铁路；东武直通另有条件。"
@@ -1778,7 +1786,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://asset.japan.travel/image/upload/v1771574289/pdf/JR_East_20260220.pdf",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -1841,11 +1849,6 @@
             "note": "官方东京近郊插图列明的区域边缘；不能把热海、大月或轻井泽当作本券内端点。"
           },
           {
-            "name": "千葉",
-            "role": "restriction",
-            "note": "官方东京近郊插图列明的区域边缘；不能把热海、大月或轻井泽当作本券内端点。"
-          },
-          {
             "name": "蘇我",
             "role": "restriction",
             "note": "官方东京近郊插图列明的区域边缘；不能把热海、大月或轻井泽当作本券内端点。"
@@ -1854,6 +1857,13 @@
             "name": "取手",
             "role": "restriction",
             "note": "官方东京近郊插图列明的区域边缘；不能把热海、大月或轻井泽当作本券内端点。"
+          },
+          {
+            "name": "佐倉",
+            "role": "restriction",
+            "operator": "東日本旅客鉄道",
+            "line": "総武線",
+            "note": "东京近郊插图中经千叶接成田机场的连接区间；非全房总铁路权益。"
           }
         ]
       },
@@ -1958,7 +1968,7 @@
           "東日本旅客鉄道",
           "総武線",
           "東京",
-          "千葉"
+          "佐倉"
         ],
         [
           "東日本旅客鉄道",
@@ -2019,15 +2029,20 @@
           "鬼怒川線",
           "下今市",
           "鬼怒川温泉"
+        ],
+        [
+          "東日本旅客鉄道",
+          "東海道線",
+          "鶴見",
+          "羽沢横浜国大"
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "partial",
         "issues": [
-          "南北海道示意图未列札幌东侧函馆线逐站边界；地图接入千岁线需经白石，不能据此宣称白石是已核实票券边界。",
-          "新潟西南支线与东京近郊插图之间的详细可用站表未获取，当前线路范围仍需进一步核实，不能据图推定全券无漏线。",
-          "该券东京近郊范围不是东京广域券；已移除房总全线等无依据高亮，尚待取得可读的完整逐站边界表。"
+          "南北海道官方简图未给札幌东侧函馆线逐站边界；保留连接千岁线所需白石，不把白石宣称为已证实票券边界。",
+          "新潟西南支线尚缺可读的完整逐站边界表，已核对2026主图与东京插图，但不能宣称全券零漏线。"
         ]
       }
     },
@@ -2180,7 +2195,7 @@
         }
       ],
       "source": "https://www.jreast.co.jp/en/multi/pass/tohokuhokkaido.html",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
       "exceptions": [
         "不含道南渔火铁路；南端边界只作示意，以官方图为准。"
@@ -2209,7 +2224,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://asset.japan.travel/image/upload/v1771574289/pdf/JR_East_20260220.pdf",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -2375,7 +2390,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "partial",
         "issues": [
           "南北海道示意图未列札幌东侧函馆线逐站边界；地图接入千岁线需经白石，不能据此宣称白石是已核实票券边界。"
@@ -2436,7 +2451,7 @@
         }
       ],
       "source": "https://sendaitravelpass.jp/1day/en/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速列车普通车自由席。",
       "exceptions": [
         "不含新干线；特急等另核相应费用。"
@@ -2465,7 +2480,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://sendaitravelpass.jp/images/sendaiareapass_map.png",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -2533,7 +2548,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -2564,7 +2579,8 @@
             "おおさか東線",
             "桜島線",
             "奈良線",
-            "関西空港線"
+            "関西空港線",
+            "片町線"
           ]
         },
         {
@@ -2617,7 +2633,7 @@
         }
       ],
       "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansaimini/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "普通、快速及新快速普通车自由席；Haruka 与其他特急另购特急券。",
       "exceptions": [
         "所有新干线均不含。",
@@ -2647,7 +2663,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.westjr.co.jp/travel-information/en/assets/img/tickets-passes/jrwest-rail-pass/kansaimini_map.jpg",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -2770,7 +2786,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -2919,7 +2935,7 @@
         }
       ],
       "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai_wide/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速、新快速、特急普通车；山阳新干线 新大阪—冈山（含 Nozomi／Mizuho）。指定席须预先划位。",
       "exceptions": [
         "不含东海道新干线、九州新干线及范围外铁路；Green Car、卧铺、A-seat 等另有付费条件。",
@@ -2949,7 +2965,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20251029185510024&newwindow=true",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -3134,7 +3150,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -3295,7 +3311,7 @@
         }
       ],
       "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai_hiroshima/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速、新快速、特急普通车；山阳新干线 新大阪—广岛（含 Nozomi／Mizuho）。指定席须预先划位。",
       "exceptions": [
         "不含东海道新干线、九州新干线及范围外铁路；Green Car、卧铺、A-seat 等另有付费条件。",
@@ -3325,7 +3341,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20240930132917632&newwindow=true",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -3502,7 +3518,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -3640,7 +3656,7 @@
         }
       ],
       "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai_sanin/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速、新快速、特急普通车；山阳新干线 新大阪—冈山（含 Nozomi／Mizuho）。指定席须预先划位。",
       "exceptions": [
         "不含东海道新干线、九州新干线及范围外铁路；Green Car、卧铺、A-seat 等另有付费条件。",
@@ -3670,7 +3686,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20240123162111667&newwindow=true",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -3823,7 +3839,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -3997,7 +4013,7 @@
         }
       ],
       "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai_hokuriku/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速、新快速、特急普通车；山阳新干线 新大阪—冈山（含 Nozomi／Mizuho）。指定席须预先划位。 北陆新干线敦贺—上越妙高适用。",
       "exceptions": [
         "不含东海道新干线、九州新干线及范围外铁路；Green Car、卧铺、A-seat 等另有付费条件。",
@@ -4029,7 +4045,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20240123184022761&newwindow=true",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -4269,7 +4285,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -4331,7 +4347,7 @@
         }
       ],
       "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/tottorimatsue/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速与特急普通车指定席／自由席；不含任何新干线。",
       "exceptions": [
         "Super Hakuto／Super Inaba／Yakumo 仅在本券可用区间内；全车指定席列车须乘车前划位。"
@@ -4360,7 +4376,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.westjr.co.jp/travel-information/en/assets/img/tickets-passes/jrwest-rail-pass/tottorimatsue_map.jpg",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -4429,7 +4445,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -4511,7 +4527,7 @@
         }
       ],
       "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/sanyo_sanin/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速、新快速、特急普通车；山阳新干线 新大阪—博多（含 Nozomi／Mizuho）。指定席须预先划位。",
       "exceptions": [
         "不含东海道新干线、九州新干线及范围外铁路；Green Car、卧铺、A-seat 等另有付费条件。",
@@ -4541,7 +4557,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20240930125447620&newwindow=true",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -4650,7 +4666,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -4719,7 +4735,7 @@
         }
       ],
       "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/hiroshima_yamaguchi/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速、新快速、特急普通车；山阳新干线 博多—三原（含 Nozomi／Mizuho）。指定席须预先划位。",
       "exceptions": [
         "不含东海道新干线、九州新干线及范围外铁路；Green Car、卧铺、A-seat 等另有付费条件。",
@@ -4749,7 +4765,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20240930123357617&newwindow=true",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -4836,7 +4852,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -4985,7 +5001,7 @@
         }
       ],
       "source": "https://www.westjr.co.jp/global/en/ticket/pass/kansai_wide_excursion/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速、新快速、特急普通车；山阳新干线 新大阪—冈山（含 Nozomi／Mizuho）。指定席须预先划位。",
       "exceptions": [
         "不含东海道新干线、九州新干线及范围外铁路；Green Car、卧铺、A-seat 等另有付费条件。",
@@ -5015,7 +5031,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.westjr.co.jp/global/en/ticket/pass/kansai_wide_excursion/images/kansai_wide_map.jpg",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -5200,7 +5216,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -5312,7 +5328,7 @@
         }
       ],
       "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/okayama_hiroshima_yamaguchi/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速、新快速、特急普通车；山阳新干线 博多—冈山（含 Nozomi／Mizuho）。指定席须预先划位。",
       "exceptions": [
         "不含东海道新干线、九州新干线及范围外铁路；Green Car、卧铺、A-seat 等另有付费条件。",
@@ -5342,7 +5358,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20250131114227936&newwindow=true",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -5474,7 +5490,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -5607,7 +5623,7 @@
         }
       ],
       "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/hokuriku/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速及特急自由席；北陆新干线仅敦贺—黑部宇奈月温泉的普通车自由席。全车指定席列车不适用自由席权益。",
       "exceptions": [
         "黑部宇奈月温泉—东京不在本券新干线范围内；须另购票。",
@@ -5638,7 +5654,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20240123192508774&newwindow=true",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -5808,7 +5824,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -5884,7 +5900,7 @@
         }
       ],
       "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/all/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速、新快速、特急普通车；山阳新干线 新大阪—博多（含 Nozomi／Mizuho）。指定席须预先划位。 北陆新干线敦贺—上越妙高适用。",
       "exceptions": [
         "不含东海道新干线、九州新干线及范围外铁路；Green Car、卧铺、A-seat 等另有付费条件。",
@@ -5915,7 +5931,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/all/",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -6090,7 +6106,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -6111,7 +6127,7 @@
         7
       ],
       "continuous": true,
-      "scope": "东京经长野、北陆至京都、大阪；2026 年区域扩展。",
+      "scope": "东京经长野、北陆至京都、大阪；含大糸线松本—南小谷—糸鱼川全线、小滨线、舞鹤线及山阴线京都—绫部。",
       "selectors": [
         {
           "operators": [
@@ -6130,7 +6146,9 @@
             "七尾線",
             "越美北線",
             "氷見線",
-            "城端線"
+            "城端線",
+            "小浜線",
+            "舞鶴線"
           ]
         },
         {
@@ -6147,9 +6165,7 @@
             "武蔵野線",
             "鶴見線",
             "青梅線",
-            "五日市線",
-            "中央線",
-            "篠ノ井線"
+            "五日市線"
           ]
         },
         {
@@ -6170,9 +6186,7 @@
             "東日本旅客鉄道"
           ],
           "lineNames": [
-            "北陸新幹線",
-            "中央線",
-            "篠ノ井線"
+            "北陸新幹線"
           ]
         },
         {
@@ -6180,9 +6194,7 @@
             "東日本旅客鉄道"
           ],
           "lineNames": [
-            "東北新幹線",
-            "中央線",
-            "篠ノ井線"
+            "東北新幹線"
           ]
         },
         {
@@ -6190,9 +6202,7 @@
             "東日本旅客鉄道"
           ],
           "lineNames": [
-            "上越新幹線",
-            "中央線",
-            "篠ノ井線"
+            "上越新幹線"
           ]
         },
         {
@@ -6264,9 +6274,7 @@
             "東日本旅客鉄道"
           ],
           "lineNames": [
-            "信越線",
-            "中央線",
-            "篠ノ井線"
+            "信越線"
           ]
         },
         {
@@ -6274,8 +6282,7 @@
             "東日本旅客鉄道"
           ],
           "lineNames": [
-            "篠ノ井線",
-            "中央線"
+            "東北線"
           ]
         },
         {
@@ -6283,8 +6290,7 @@
             "東日本旅客鉄道"
           ],
           "lineNames": [
-            "中央線",
-            "篠ノ井線"
+            "常磐線"
           ]
         },
         {
@@ -6292,9 +6298,7 @@
             "東日本旅客鉄道"
           ],
           "lineNames": [
-            "東北線",
-            "中央線",
-            "篠ノ井線"
+            "東海道線"
           ]
         },
         {
@@ -6302,9 +6306,7 @@
             "東日本旅客鉄道"
           ],
           "lineNames": [
-            "常磐線",
-            "中央線",
-            "篠ノ井線"
+            "総武線"
           ]
         },
         {
@@ -6312,9 +6314,7 @@
             "東日本旅客鉄道"
           ],
           "lineNames": [
-            "東海道線",
-            "中央線",
-            "篠ノ井線"
+            "成田線"
           ]
         },
         {
@@ -6322,9 +6322,7 @@
             "東日本旅客鉄道"
           ],
           "lineNames": [
-            "総武線",
-            "中央線",
-            "篠ノ井線"
+            "高崎線"
           ]
         },
         {
@@ -6332,29 +6330,7 @@
             "東日本旅客鉄道"
           ],
           "lineNames": [
-            "成田線",
-            "中央線",
-            "篠ノ井線"
-          ]
-        },
-        {
-          "operators": [
-            "東日本旅客鉄道"
-          ],
-          "lineNames": [
-            "高崎線",
-            "中央線",
-            "篠ノ井線"
-          ]
-        },
-        {
-          "operators": [
-            "東日本旅客鉄道"
-          ],
-          "lineNames": [
-            "京葉線",
-            "中央線",
-            "篠ノ井線"
+            "京葉線"
           ]
         },
         {
@@ -6386,9 +6362,7 @@
             "東日本旅客鉄道"
           ],
           "lineNames": [
-            "八高線",
-            "中央線",
-            "篠ノ井線"
+            "八高線"
           ]
         },
         {
@@ -6396,9 +6370,7 @@
             "東日本旅客鉄道"
           ],
           "lineNames": [
-            "川越線",
-            "中央線",
-            "篠ノ井線"
+            "川越線"
           ]
         },
         {
@@ -6408,10 +6380,20 @@
           "lineNames": [
             "七尾線"
           ]
+        },
+        {
+          "operators": [
+            "東日本旅客鉄道"
+          ],
+          "lineNames": [
+            "中央線",
+            "篠ノ井線",
+            "大糸線"
+          ]
         }
       ],
       "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/other/hokuriku-arch-pass/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
       "exceptions": [
         "不含东海道新干线；不是东京—大阪所有路线通用票。"
@@ -6440,8 +6422,8 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
-        "source": "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20260128091929024",
+        "checked": "2026-11-14",
+        "source": "https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/download.html?fileId=20260128091929024&newwindow=true",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
           {
@@ -6482,11 +6464,6 @@
             "note": "拱型券官方图与东京近郊插图列明的范围边缘。"
           },
           {
-            "name": "千葉",
-            "role": "boundary",
-            "note": "拱型券官方图与东京近郊插图列明的范围边缘。"
-          },
-          {
             "name": "蘇我",
             "role": "boundary",
             "note": "拱型券官方图与东京近郊插图列明的范围边缘。"
@@ -6498,13 +6475,6 @@
           },
           {
             "name": "猪谷",
-            "role": "boundary",
-            "note": "本券在 JR 西日本一侧至该公司局界；不含 JR 东海／东日本的范围外支线。",
-            "operator": "西日本旅客鉄道",
-            "boundaryKind": "company"
-          },
-          {
-            "name": "南小谷",
             "role": "boundary",
             "note": "本券在 JR 西日本一侧至该公司局界；不含 JR 东海／东日本的范围外支线。",
             "operator": "西日本旅客鉄道",
@@ -6564,13 +6534,6 @@
             "name": "九頭竜湖",
             "role": "terminus",
             "note": "范围内铁路端点。"
-          },
-          {
-            "name": "亀岡",
-            "role": "boundary",
-            "note": "山阴线只到龟冈；往并河／园部方向不含。",
-            "operator": "西日本旅客鉄道",
-            "line": "山陰線"
           },
           {
             "name": "塩尻",
@@ -6652,6 +6615,28 @@
             "note": "能登铁道仅七尾—和仓温泉共享区间；往穴水方向不含。",
             "operator": "のと鉄道",
             "line": "七尾線"
+          },
+          {
+            "name": "綾部",
+            "role": "boundary",
+            "operator": "西日本旅客鉄道",
+            "line": "山陰線",
+            "note": "山阴线可用至绫部；京都—园部—绫部可乘，往福知山方向不含。"
+          },
+          {
+            "name": "佐倉",
+            "role": "boundary",
+            "operator": "東日本旅客鉄道",
+            "line": "総武線",
+            "note": "总武线经千叶延伸至佐仓连接成田线；佐仓往铫子方向不含。"
+          },
+          {
+            "name": "辰野",
+            "role": "boundary",
+            "operator": "東日本旅客鉄道",
+            "line": "中央線",
+            "note": "中央线辰野支线包含；本站 JR 东海饭田线方向不含。",
+            "boundaryKind": "company"
           }
         ]
       },
@@ -6696,7 +6681,7 @@
           "西日本旅客鉄道",
           "山陰線",
           "京都",
-          "亀岡"
+          "綾部"
         ],
         [
           "西日本旅客鉄道",
@@ -6721,12 +6706,6 @@
           "高山線",
           "富山",
           "猪谷"
-        ],
-        [
-          "西日本旅客鉄道",
-          "大糸線",
-          "糸魚川",
-          "南小谷"
         ],
         [
           "東日本旅客鉄道",
@@ -6756,7 +6735,7 @@
           "東日本旅客鉄道",
           "総武線",
           "東京",
-          "千葉"
+          "佐倉"
         ],
         [
           "東日本旅客鉄道",
@@ -6838,7 +6817,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -6985,7 +6964,7 @@
         }
       ],
       "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/other/setouchi/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速、新快速、特急普通车；山阳新干线 新大阪—博多（含 Nozomi／Mizuho）。指定席须预先划位。",
       "exceptions": [
         "不含东海道新干线、九州新干线及范围外铁路；Green Car、卧铺、A-seat 等另有付费条件。",
@@ -7015,7 +6994,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.westjr.co.jp/travel-information/en/assets/img/tickets-passes/other/setouchi_map.jpg",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -7206,7 +7185,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -7335,7 +7314,7 @@
         }
       ],
       "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/other/ssnk/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速及特急普通车；山阳新干线新大阪—博多、九州新干线博多—熊本、西九州新干线武雄温泉—长崎。",
       "exceptions": [
         "不含东海道新干线、熊本—鹿儿岛中央新干线，以及官网列明的豪华观光列车。",
@@ -7365,7 +7344,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.westjr.co.jp/travel-information/en/assets/img/tickets-passes/other/ssnk_map.jpg",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -7565,7 +7544,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -7697,7 +7676,7 @@
         }
       ],
       "source": "https://touristpass.jp/en/takayama_hokuriku/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
       "exceptions": [
         "不含东海道新干线；指定席最多 6 次，详见官网。"
@@ -7726,7 +7705,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://touristpass.jp/assets/img/takayama_hokuriku/routemap_en.jpg",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -7849,7 +7828,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -7935,7 +7914,7 @@
         }
       ],
       "source": "https://touristpass.jp/en/alpine/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
       "exceptions": [
         "不含任何新干线；JR 普通车指定席最多四次。",
@@ -7965,7 +7944,7 @@
         "note": "2026 季销售已于 11 月 6 日结束，表列当季售价；已购票使用期限至 11 月 10 日。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://touristpass.jp/assets/img/alpine/routemap_en.jpg",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -8035,7 +8014,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -8109,7 +8088,7 @@
         }
       ],
       "source": "https://touristpass.jp/en/ise_kumano/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速及特急列车普通车；指定席条件见官方条款。",
       "exceptions": [
         "不含新干线；JR 特急指定席最多 6 次。"
@@ -8138,7 +8117,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://touristpass.jp/assets/img/ise_kumano/routemap_en.jpg",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -8200,7 +8179,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -8254,7 +8233,7 @@
         }
       ],
       "source": "https://touristpass.jp/en/fuji_shizuoka/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "指定 JR 普通线的特急、快速与普通列车普通车自由席；另含伊豆箱根骏豆线。",
       "exceptions": [
         "不含东海道新干线与卧铺列车；指定席等未包含的设备须另购所需车票。"
@@ -8283,7 +8262,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://touristpass.jp/assets/img/fuji_shizuoka/routemap_en.jpg",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -8356,7 +8335,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -8385,7 +8364,7 @@
         }
       ],
       "source": "https://www.jrkyushu.co.jp/english/railpass/railpass.html",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速、特急普通车；所含九州／西九州新干线依各券区间使用。",
       "exceptions": [
         "不含 JR 西日本的山阳新干线（小仓—博多）、博多南线及其他公司铁路。",
@@ -8424,7 +8403,7 @@
         "channelSource": "https://www.jrkyushu.co.jp/english/kyushurailpass/"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.jrkyushu.co.jp/english/pdf/railpass_guidebook.pdf",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -8542,7 +8521,7 @@
         ]
       },
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -8611,7 +8590,7 @@
         }
       ],
       "source": "https://www.jrkyushu.co.jp/english/railpass/railpass.html",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速、特急普通车；所含九州／西九州新干线依各券区间使用。",
       "exceptions": [
         "不含 JR 西日本的山阳新干线（小仓—博多）、博多南线及其他公司铁路。",
@@ -8646,7 +8625,7 @@
         "channelSource": "https://www.jrkyushu.co.jp/english/kyushurailpass/"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.jrkyushu.co.jp/lang/assets/img/railpass/common/img_northern-kyushu.png",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -8774,7 +8753,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -8834,7 +8813,7 @@
         }
       ],
       "source": "https://www.jrkyushu.co.jp/english/railpass/railpass.html",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "范围内普通、快速、特急普通车；所含九州／西九州新干线依各券区间使用。",
       "exceptions": [
         "不含 JR 西日本的山阳新干线（小仓—博多）、博多南线及其他公司铁路。",
@@ -8865,7 +8844,7 @@
         "channelSource": "https://www.jrkyushu.co.jp/english/kyushurailpass/"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.jrkyushu.co.jp/lang/assets/img/railpass/common/img_southern-kyushu.png",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -8954,7 +8933,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -9019,7 +8998,7 @@
         }
       ],
       "source": "https://www.jrkyushu.co.jp/english/railpass/mobilepass.html",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "指定区间普通、快速及特急普通车自由席。",
       "exceptions": [
         "不含新干线；指定席需另购相关车票；须联网展示有效票面。"
@@ -9048,7 +9027,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.jrkyushu.co.jp/lang/assets/img/railpass/mobile/img_fukuoka.png",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -9135,7 +9114,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "partial",
         "issues": [
           "手机版简图标为唐津，未找到西唐津是否包含的明确逐站条款，唐津端点暂按简图，尚不能宣称已完全核实。"
@@ -9185,7 +9164,7 @@
         }
       ],
       "source": "https://shikoku-railwaytrip.com/news/pdf/20260806_en_japan-rail-passes.pdf",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "特急、快速和普通列车普通车自由席；指定席条件需另核。",
       "exceptions": [
         "2026-10 起停售 4/5 日款；现行 3/7 日款。",
@@ -9219,7 +9198,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://shikoku-railwaytrip.com/news/pdf/20260806_en_japan-rail-passes.pdf",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -9289,7 +9268,7 @@
         ]
       },
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -9361,7 +9340,7 @@
         }
       ],
       "source": "https://greater-tokyo-pass.jp/en/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "参与公司的普通、快速等列车；付费特急或指定席须另购附加票。",
       "exceptions": [
         "不含 JR、东京单轨及未参与线路；参加公司的区间例外见官方图。"
@@ -9390,7 +9369,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://greater-tokyo-pass.jp/assets/images/rosen/line.pdf",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -9509,7 +9488,7 @@
         ]
       },
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -9587,7 +9566,7 @@
         }
       ],
       "source": "https://www.kintetsu.co.jp/foreign/english/ticket/krp_1day.html",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "近铁普通、快速、急行；特急费另购。",
       "exceptions": [
         "不含直通大阪地铁、京都地铁或阪神区间。"
@@ -9616,7 +9595,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.kintetsu.co.jp/foreign/english/ticket/krp_1day.html",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -9727,7 +9706,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -9780,7 +9759,7 @@
         }
       ],
       "source": "https://www.kintetsu.co.jp/foreign/english/ticket/krp_2day.html",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "近铁普通、快速、急行；特急费另购。",
       "exceptions": [
         "不含直通大阪地铁、京都地铁或阪神区间。"
@@ -9809,7 +9788,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.kintetsu.co.jp/foreign/guidebook/english/pdf/krp_2day_2020_english.pdf",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -9942,7 +9921,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -9975,7 +9954,7 @@
         }
       ],
       "source": "https://www.kintetsu.co.jp/foreign/english/ticket/krp_5day.html",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "近铁普通、快速、急行；特急费另购。",
       "exceptions": [
         "不含直通大阪地铁、京都地铁或阪神区间。"
@@ -10004,7 +9983,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.kintetsu.co.jp/foreign/english/ticket/krp_5day.html",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -10137,7 +10116,7 @@
         ]
       },
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -10170,7 +10149,7 @@
         }
       ],
       "source": "https://www.kintetsu.co.jp/foreign/english/ticket/krp_5dayplus.html",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "近铁普通、快速、急行；特急费另购。",
       "exceptions": [
         "不含直通大阪地铁、京都地铁或阪神区间。"
@@ -10199,7 +10178,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.kintetsu.co.jp/foreign/english/ticket/krp_5dayplus.html",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -10332,7 +10311,7 @@
         ]
       },
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -10378,7 +10357,7 @@
         }
       ],
       "source": "https://www.tobu.co.jp/en/ticket/nikko/all.html",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "普通、快速等；特急和 SL 须另购相应票。",
       "exceptions": [
         "浅草—下今市仅一次往返；下今市—东武日光／新藤原为区域内不限次。",
@@ -10408,7 +10387,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.tobu.co.jp/en/ticket/nikko/all.html",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -10460,7 +10439,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -10506,7 +10485,7 @@
         }
       ],
       "source": "https://www.tobu.co.jp/en/ticket/nikko/city.html",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "普通、快速等；特急和 SL 须另购相应票。",
       "exceptions": [
         "浅草—下今市仅一次往返；下今市—东武日光／新藤原为区域内不限次。",
@@ -10536,7 +10515,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.tobu.co.jp/en/ticket/nikko/city.html",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -10588,7 +10567,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -10618,7 +10597,7 @@
         }
       ],
       "source": "https://www.tobu.co.jp/en/ticket/kawagoe/premium.html",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "东武东上线指定区间；不是东武全线券。",
       "exceptions": [
         "池袋—川越／川越市仅一次往返；川越—川越市可不限次。"
@@ -10647,7 +10626,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.tobu.co.jp/en/ticket/kawagoe/premium.html",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -10680,7 +10659,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -10710,7 +10689,7 @@
         }
       ],
       "source": "https://www.seiburailway.jp/en/ticket/seibu1daypass/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "普通、快速等；Laview/Red Arrow 等特急与付费座席另购票。",
       "exceptions": [],
       "extras": "无单独确认的附带交通权益。",
@@ -10737,7 +10716,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.seiburailway.jp/en/ticket/seibu1daypass/",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -10817,7 +10796,7 @@
         ]
       },
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -10855,7 +10834,7 @@
         }
       ],
       "source": "https://www.seiburailway.jp/en/ticket/seibu1daypass/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "普通、快速等；Laview/Red Arrow 等特急与付费座席另购票。",
       "exceptions": [],
       "extras": "无单独确认的附带交通权益。",
@@ -10882,7 +10861,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.seiburailway.jp/en/ticket/seibu1daypass/",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -10982,7 +10961,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -11019,7 +10998,7 @@
         }
       ],
       "source": "https://www.odakyu.jp/english/passes/hakone_kamakura/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "普通列车；Romancecar 特急须另购特急券。",
       "exceptions": [],
       "extras": "另含箱根指定巴士、索道及观光船，未画入铁路高亮。",
@@ -11046,7 +11025,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://odakyu-global.com/passes/hakone-kamakura-pass/",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -11083,7 +11062,7 @@
         ]
       },
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -11115,7 +11094,7 @@
         }
       ],
       "source": "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/kyoto-osaka.html",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "京阪列车；Premium Car 与 Liner 须另付费。",
       "exceptions": [],
       "extras": "无单独确认的附带交通权益。",
@@ -11146,7 +11125,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.keihan.co.jp/travel/en/pdf/trains/passes-for-visitors-to-japan/Kyoto_Osaka_Validarea.pdf",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -11195,7 +11174,7 @@
         ]
       },
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -11236,7 +11215,7 @@
         }
       ],
       "source": "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/kyoto-osaka.html",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "京阪列车；Premium Car 与 Liner 须另付费。",
       "exceptions": [],
       "extras": "无单独确认的附带交通权益。",
@@ -11267,7 +11246,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.keihan.co.jp/travel/en/pdf/trains/passes-for-visitors-to-japan/Kyoto_Validarea.pdf",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -11313,7 +11292,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -11349,7 +11328,7 @@
         }
       ],
       "source": "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/eizan-railway.html",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "普通、快速及一般特急；Premium Car 等另购。",
       "exceptions": [],
       "extras": "无单独确认的附带交通权益。",
@@ -11376,7 +11355,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.keihan.co.jp/travel/en/pdf/trains/passes-for-visitors-to-japan/Validarea_Eizanrailway.pdf",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -11431,7 +11410,7 @@
         ]
       },
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -11462,7 +11441,7 @@
         }
       ],
       "source": "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/osaka-subway.html",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "京阪一般列车；特殊座席另付费。",
       "exceptions": [],
       "extras": "附带大阪 Metro 权益，依本页范围设置不高亮地铁。",
@@ -11489,7 +11468,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.keihan.co.jp/travel/en/pdf/trains/passes-for-visitors-to-japan/Validarea_OsakaSubway.pdf",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -11538,7 +11517,7 @@
         ]
       },
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -11569,7 +11548,7 @@
         }
       ],
       "source": "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/otsu.html",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "京阪列车；Premium Car 与 Liner 须另付费。",
       "exceptions": [],
       "extras": "无单独确认的附带交通权益。",
@@ -11596,7 +11575,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.keihan.co.jp/travel/en/pdf/trains/passes-for-visitors-to-japan/Validarea_Otsu.pdf",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -11623,7 +11602,7 @@
         ]
       },
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -11654,7 +11633,7 @@
         }
       ],
       "source": "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/hirakata-park.html",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "京阪列车；Premium Car 与 Liner 须另付费。",
       "exceptions": [],
       "extras": "附带枚方公园入园权益；休园与设施开放日另行确认。",
@@ -11681,7 +11660,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.keihan.co.jp/travel/en/pdf/trains/passes-for-visitors-to-japan/Validarea_Hirakatapark.pdf",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -11730,7 +11709,7 @@
         ]
       },
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -11882,7 +11861,7 @@
         }
       ],
       "source": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "停售前版本：范围内普通、快速、新快速；Haruka 普通车指定席最多两次。",
       "exceptions": [
         "不含任何新干线；Haruka 以外的特急不能只凭本券乘坐。",
@@ -11924,7 +11903,7 @@
         "note": "已停售，表列官方保留页面的历史售价，不代表当前可购买。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.westjr.co.jp/travel-information/en/assets/img/tickets-passes/jrwest-rail-pass/kansai_map.jpg",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -12100,7 +12079,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -12222,7 +12201,7 @@
         }
       ],
       "source": "https://www.surutto.com/kansai_rwpl/en/krp.html",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "指定私铁／电车的一般列车；近铁、南海、京阪及阪急的付费指定席／特急料金须另购。",
       "exceptions": [
         "不含 JR、京都市营地铁、岚电、京阪大津线及巴士。",
@@ -12257,7 +12236,7 @@
         "note": "不含另行购买的特急券、指定席或升级费用；适用列车以本券条款为准。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.surutto.com/kansai_rwpl/assets/pdf/areamap2026_en.pdf",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -12355,7 +12334,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }
@@ -12385,7 +12364,7 @@
         }
       ],
       "source": "https://www.nankai.co.jp/en_railway/ticket/web-nankaiallline2daypass/",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "历史范围内南海一般列车；指定席特急另付费。",
       "exceptions": [
         "不是两日连续券；特急座席另付费。"
@@ -12414,7 +12393,7 @@
         "note": "已停售；当前官方页面未提供可核实的售价，不显示为零元。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://www.nankai.co.jp/en_railway/ticket/web-nankaiallline2daypass/",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -12475,7 +12454,7 @@
         ]
       },
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "partial",
         "issues": [
           "发行方遗留页未写停售日或泉北并入前后的版本日期；按销售方明确排除泉北的历史范围绘制，仍缺发行方带日期的完整历史条款。"
@@ -12528,7 +12507,7 @@
         }
       ],
       "source": "https://shikoku-railwaytrip.com/news/pdf/20260806_en_japan-rail-passes.pdf",
-      "checked": "2026-11-10",
+      "checked": "2026-11-14",
       "trains": "停售前指定 JR 四国区间的普通、快速、特急普通车自由席；另含琴电全线。",
       "exceptions": [
         "不含 Sunrise 列车；本四备赞线去儿岛方向不在香川迷你券铁路范围内。"
@@ -12557,7 +12536,7 @@
         "note": "已停售；官方停售通知未提供该券售价，不显示为零元。"
       },
       "stationPins": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "source": "https://shikoku-railwaytrip.com/news/pdf/20260806_en_japan-rail-passes.pdf",
         "note": "只列官方范围、起讫或限制说明支持的车站；公司交接本身不推定为票券边界。",
         "stations": [
@@ -12627,7 +12606,7 @@
         ]
       ],
       "audit": {
-        "checked": "2026-11-10",
+        "checked": "2026-11-14",
         "status": "verified",
         "issues": []
       }

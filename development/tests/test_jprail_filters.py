@@ -104,7 +104,11 @@ class FilterBrowser(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls.browser.close();cls.pw.stop();cls.server.shutdown();cls.server.server_close()
+        # All per-test contexts have already closed. Stopping this test-owned
+        # driver also reaps its browser; Chrome can otherwise hang on the final
+        # Browser.close acknowledgement after the last renderer has exited.
+        try:cls.pw.stop()
+        finally:cls.server.shutdown();cls.server.server_close()
 
     def page(self,width=1440,height=960,query=''):
         context=self.browser.new_context(viewport={'width':width,'height':height})
@@ -173,7 +177,7 @@ class FilterBrowser(unittest.TestCase):
             checker.check_rendered_layers(page)
             self.assertTrue(page.evaluate('''()=>{
              const c=JPRail.map.getPane('railContext').querySelector('canvas'),data=c.getContext('2d').getImageData(0,0,c.width,c.height).data;
-             let found=0;for(let i=0;i<data.length;i+=4)if(Math.abs(data[i]-163)<=2&&Math.abs(data[i+1]-173)<=2&&Math.abs(data[i+2]-183)<=2&&Math.abs(data[i+3]-153)<=2)found++;
+             let found=0;for(let i=0;i<data.length;i+=4)if(Math.abs(data[i]-122)<=2&&Math.abs(data[i+1]-130)<=2&&Math.abs(data[i+2]-138)<=2&&Math.abs(data[i+3]-204)<=2)found++;
              return found>100;
             }'''))
             shown=Image.open(io.BytesIO(page.locator('#map').screenshot())).convert('RGB')

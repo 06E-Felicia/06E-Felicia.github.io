@@ -8,7 +8,8 @@ export function isMajorStation(s) {
  return HUBS.has(s[0])&&(!centre||(Math.abs(s[1]-centre[0])<.02&&Math.abs(s[2]-centre[1])<.02));
 }
 const outerPin=pin=>pin&&['boundary','terminus'].includes(pin.role);
-const pinColor=pin=>pin.boundaryKind==='company'||pin.role==='company'?'#116979':pin.role==='restriction'?'#986321':pin.role==='terminus'?'#405859':'#126958';
+export const isCompanyPin=pin=>Boolean(pin&&(pin.boundaryKind==='company'||pin.companyJunction||pin.role==='company'));
+const pinColor=pin=>isCompanyPin(pin)?'#116979':pin.role==='restriction'?'#986321':pin.role==='terminus'?'#405859':'#126958';
 const lineBounds=new WeakMap();
 const cells=box=>{const out=[];for(let x=Math.floor(box[0]/64);x<=Math.floor(box[2]/64);x++)for(let y=Math.floor(box[1]/64);y<=Math.floor(box[3]/64);y++)out.push(x+','+y);return out;};
 function crossesBox([ax,ay,bx,by],box) {
@@ -45,7 +46,7 @@ export function createStationLabels(map,getStations,onRender,getPins=()=>[],getR
  const Labels=L.Layer.extend({
   onAdd(m) {
    this.canvas=L.DomUtil.create('canvas','station-label-canvas leaflet-zoom-animated',m.getPane('railStations'));
-   this.canvas.setAttribute('aria-label','车站名称；概览双圈表示主要站，近距离恢复普通站点并逐步显示小站名，适用边界与重要限制站名始终显示');
+   this.canvas.setAttribute('aria-label','车站名称；概览双圈表示主要站，蓝色菱形统一表示公司局界，近距离恢复普通站点并逐步显示小站名，适用边界与重要限制站名始终显示');
    this.widths=new Map();this.sortBuilds=0;
    m.on('moveend zoomend resize',this.schedule,this);m.on('zoomanim',this.animate,this);m.on('zoom',this.followZoom,this);this.schedule();
   },
@@ -77,15 +78,15 @@ export function createStationLabels(map,getStations,onRender,getPins=()=>[],getR
    // companies share its name. These come only from the currently allowed
    // station pool; selecting a pass never introduces out-of-range hubs.
    const majorStations=new Map(),majorSymbols=[],majorLabelNames=[];
-   for(const item of this.items)if(emphasizeHubs&&item.major&&!outerPin(item.pin)&&!majorStations.has(item.s[0])&&bounds.contains([item.s[1],item.s[2]])) {
+   for(const item of this.items)if(emphasizeHubs&&item.major&&!outerPin(item.pin)&&!isCompanyPin(item.pin)&&!majorStations.has(item.s[0])&&bounds.contains([item.s[1],item.s[2]])) {
     majorStations.set(item.s[0],item);const p=map.latLngToContainerPoint([item.s[1],item.s[2]]);
     majorSymbols.push({name:item.s[0],x:p.x,y:p.y,radius:5.4});
    }
-   const pinSymbols=pins.filter(pin=>outerPin(pin)||pin.companyJunction).filter(pin=>bounds.contains([pin.station[1],pin.station[2]])).map(pin=>{
+   const pinSymbols=pins.filter(pin=>outerPin(pin)||isCompanyPin(pin)).filter(pin=>bounds.contains([pin.station[1],pin.station[2]])).map(pin=>{
     const p=map.latLngToContainerPoint([pin.station[1],pin.station[2]]);
-    return {name:pin.name,x:p.x,y:p.y,role:pin.role,junction:pin.companyJunction,major:majorSymbols.some(m=>m.name===pin.name),company:pin.boundaryKind==='company',color:pinColor(pin),radius:pin.role==='boundary'?6.5:4.5};
+    return {name:pin.name,x:p.x,y:p.y,role:pin.role,junction:pin.companyJunction,diamond:isCompanyPin(pin),major:majorSymbols.some(m=>m.name===pin.name),company:pin.boundaryKind==='company',color:pinColor(pin),radius:pin.role==='boundary'?6.5:4.5};
    });
-   const symbolBoxes=[...majorSymbols,...pinSymbols].map(p=>{const r=p.junction?10:p.radius+2;return [p.x-r,p.y-r,p.x+r,p.y+r];});
+   const symbolBoxes=[...majorSymbols,...pinSymbols].map(p=>{const r=p.diamond?10:p.radius+2;return [p.x-r,p.y-r,p.x+r,p.y+r];});
    const mapRect=map.getContainer().getBoundingClientRect();
    const uiBoxes=[...map.getContainer().closest('.map-frame').querySelectorAll('.leaflet-control,.map-layer-controls,.map-state,.basemap-status,.rail-legend')]
     .filter(el=>el.getClientRects().length).map(el=>{const b=el.getBoundingClientRect();return [b.left-mapRect.left-4,b.top-mapRect.top-4,b.right-mapRect.left+4,b.bottom-mapRect.top+4];});
@@ -94,7 +95,7 @@ export function createStationLabels(map,getStations,onRender,getPins=()=>[],getR
    for(const box of [...uiBoxes,...symbolBoxes])for(const key of cells(box)){if(!occupied.has(key))occupied.set(key,[]);occupied.get(key).push(box);}
    const overlap=box=>cells(box).some(k=>(occupied.get(k)||[]).some(b=>box[0]<b[2]&&box[2]>b[0]&&box[1]<b[3]&&box[3]>b[1]));
    for(const item of this.items) {
-    const {s,hub,pin,major}=item,largeSymbol=emphasizeHubs&&major&&!outerPin(pin);
+    const {s,hub,pin,major}=item,largeSymbol=emphasizeHubs&&major&&!outerPin(pin)&&!isCompanyPin(pin);
     if(largeSymbol&&!pin&&majorStations.get(s[0])!==item)continue;
     if(!pin&&z<7&&!hub)continue;
     if(s[1]<bounds.getSouth()||s[1]>bounds.getNorth()||s[2]<bounds.getWest()||s[2]>bounds.getEast())continue;
@@ -103,7 +104,7 @@ export function createStationLabels(map,getStations,onRender,getPins=()=>[],getR
     const text=s[0],font=pin?.role==='boundary'?13:hub?12:11,weight=pin?.role==='boundary'?750:largeSymbol?700:pin?.role==='terminus'?650:hub?600:400;
     ctx.font=`${weight} ${font}px -apple-system, "PingFang SC", sans-serif`;
     const widthKey=weight+'|'+font+'|'+text;if(!this.widths.has(widthKey))this.widths.set(widthKey,ctx.measureText(text).width);
-    const w=this.widths.get(widthKey),space=pin?3:z<9?14:z<12?8:3,gap=pin?.companyJunction?14:outerPin(pin)?12:largeSymbol?10:6;
+    const w=this.widths.get(widthKey),space=pin?3:z<9?14:z<12?8:3,gap=isCompanyPin(pin)?14:outerPin(pin)?12:largeSymbol?10:6;
     let x=point.x+6,y=point.y,box,best,score=Infinity;
     const positions=[0,-16,16,-28,28,-44,44,...(pin?[-60,60,-84,84,-110,110]:[])].flatMap(d=>[[gap,d],[-w-gap-2,d],[-w/2,d||-16]]);
     const consider=(dx,dy)=>{
@@ -132,7 +133,7 @@ export function createStationLabels(map,getStations,onRender,getPins=()=>[],getR
     if(pin&&score<1000) {
      ctx.fillStyle='#fffefa';ctx.fillRect(x-2,y-font/2-3,w+4,font+6);ctx.strokeStyle=color;ctx.strokeRect(x-2,y-font/2-3,w+4,font+6);
     }
-    if(!largeSymbol&&!outerPin(pin)&&!pin?.companyJunction){ctx.beginPath();ctx.arc(point.x,point.y,pin?3.4:hub?2.6:1.8,0,Math.PI*2);ctx.fillStyle='#fffefa';ctx.fill();ctx.lineWidth=pin?1.5:1;ctx.strokeStyle=color;ctx.stroke();}
+    if(!largeSymbol&&!outerPin(pin)&&!isCompanyPin(pin)){ctx.beginPath();ctx.arc(point.x,point.y,pin?3.4:hub?2.6:1.8,0,Math.PI*2);ctx.fillStyle='#fffefa';ctx.fill();ctx.lineWidth=pin?1.5:1;ctx.strokeStyle=color;ctx.stroke();}
     if(score<1000){ctx.lineWidth=3.5;ctx.strokeStyle='#fffefa';ctx.strokeText(text,x,y);}ctx.fillStyle=color;ctx.fillText(text,x,y);
     const anchorKey=Math.floor(point.x/anchorGap)+','+Math.floor(point.y/anchorGap);if(!anchors.has(anchorKey))anchors.set(anchorKey,[]);anchors.get(anchorKey).push(point);
     names.push(s[0]);texts.push(text);if(major)majorLabelNames.push(s[0]);if(pin)pinnedNames.push(s[0]);if(pin?.role==='boundary')boundaryNames.push(s[0]);if(pin?.boundaryKind==='company'||pin?.companyJunction)companyNames.push(s[0]);
@@ -149,11 +150,11 @@ export function createStationLabels(map,getStations,onRender,getPins=()=>[],getR
    for(const p of pinSymbols) {
     ctx.save();ctx.strokeStyle=p.color;ctx.fillStyle='#fffefa';
     if(!p.major){ctx.beginPath();ctx.arc(p.x,p.y,3.4,0,Math.PI*2);ctx.fill();ctx.lineWidth=1.5;ctx.stroke();}
-    if(['boundary','terminus'].includes(p.role)){
-     ctx.setLineDash(p.company?[3,2]:[]);ctx.lineWidth=p.role==='boundary'?2.2:1.5;
+    if(['boundary','terminus'].includes(p.role)&&!p.diamond){
+     ctx.setLineDash([]);ctx.lineWidth=p.role==='boundary'?2.2:1.5;
      ctx.beginPath();ctx.arc(p.x,p.y,p.radius,0,Math.PI*2);ctx.stroke();
     }
-    if(p.junction){ctx.setLineDash([]);ctx.strokeStyle='#116979';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(p.x,p.y-8.5);ctx.lineTo(p.x+8.5,p.y);ctx.lineTo(p.x,p.y+8.5);ctx.lineTo(p.x-8.5,p.y);ctx.closePath();ctx.stroke();}
+    if(p.diamond){ctx.setLineDash([]);ctx.strokeStyle='#116979';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(p.x,p.y-8.5);ctx.lineTo(p.x+8.5,p.y);ctx.lineTo(p.x,p.y+8.5);ctx.lineTo(p.x-8.5,p.y);ctx.closePath();ctx.stroke();}
     ctx.restore();
    }
    onRender({count:names.length,names,texts,pinnedNames,boundaryNames,companyNames,pinnedBoxes,uiBoxes,pinSymbols,majorNames:majorSymbols.map(p=>p.name),majorSymbols,majorLabelNames,sortBuilds:this.sortBuilds,renderMs:performance.now()-started,mode:all?'当前视野全部车站':z<7?'主要枢纽':'区域车站'});

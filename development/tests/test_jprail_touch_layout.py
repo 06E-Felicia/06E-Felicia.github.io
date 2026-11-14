@@ -113,6 +113,70 @@ class TouchAndLayout(unittest.TestCase):
             self.assertNotIn('不在已公布季节',page.locator('#dateResult').inner_text())
         finally:context.close()
 
+    def test_all_company_boundaries_use_one_solid_diamond(self):
+        context,page=self.page(viewport={'width':1600,'height':1040},reduced_motion='reduce')
+        try:
+            # Capture actual Canvas stroke commands, including line dashes;
+            # metadata alone would miss the old extra dashed outer circle.
+            page.add_init_script(r'''(() => {
+              const proto=CanvasRenderingContext2D.prototype;
+              for(const method of ['beginPath','moveTo','lineTo','arc','stroke']){
+                const original=proto[method];
+                proto[method]=function(...args){
+                  if(this.canvas.classList.contains('station-label-canvas')){
+                    if(method==='beginPath')this.symbolPath=[];
+                    else if(method==='stroke'){
+                      (this.canvas.symbolInk||=[]).push({path:this.symbolPath||[],dash:this.getLineDash(),color:this.strokeStyle,width:this.lineWidth});
+                    }else (this.symbolPath||=[]).push([method,...args]);
+                  }
+                  return original.apply(this,args);
+                };
+              }
+              const d=Object.getOwnPropertyDescriptor(HTMLCanvasElement.prototype,'width');
+              Object.defineProperty(HTMLCanvasElement.prototype,'width',{...d,set(v){this.symbolInk=[];d.set.call(this,v);}});
+            })();''')
+            self.load(page);page.locator('#showEnded').check()
+            def inspect():
+                self.settle(page)
+                result=page.evaluate(r'''()=>{
+                  const summary=JPRail.state.stationLabels,ink=document.querySelector('.station-label-canvas').symbolInk||[],issues=[];
+                  const near=(a,b)=>Math.abs(a-b)<.02;
+                  const expected=JPRail.state.annotationStations.filter(p=>p.companyJunction||p.boundaryKind==='company'||p.role==='company');
+                  let count=0;
+                  for(const p of summary.pinSymbols.filter(p=>p.company||p.junction||p.role==='company')){
+                    count++;
+                    const corners=[[p.x,p.y-8.5],[p.x+8.5,p.y],[p.x,p.y+8.5],[p.x-8.5,p.y]];
+                    const diamonds=ink.filter(i=>i.path.length===4&&i.path.every((v,j)=>v[0]===(j?'lineTo':'moveTo')&&near(v[1],corners[j][0])&&near(v[2],corners[j][1])));
+                    const outer=ink.filter(i=>i.path.some(v=>v[0]==='arc'&&near(v[1],p.x)&&near(v[2],p.y)&&v[3]>3.5));
+                    if(!p.diamond||diamonds.length!==1||diamonds[0].color!=='#116979'||diamonds[0].width!==1.5||diamonds[0].dash.length||outer.length||summary.majorNames.includes(p.name))issues.push(p.name);
+                  }
+                  const inView=expected.filter(p=>JPRail.map.getBounds().contains([p.station[1],p.station[2]]));
+                  if(count!==inView.length)issues.push('missing company symbol');
+                  return {count,issues};
+                }''')
+                self.assertEqual(result['issues'],[])
+                return result['count']
+            visits=inspect()
+            ids=page.evaluate('JPRail.state.passes.map(p=>p.id)');self.assertEqual(len(ids),55)
+            for id in ids:
+                with self.subTest(pass_id=id):
+                    page.locator('[data-pass="'+id+'"]').click();visits+=inspect()
+            # Tatsuno is an explicit pass/company boundary absent from the
+            # interface catalogue; it must use the same diamond as an internal
+            # interface such as Minami-Otari on this cross-company pass.
+            page.locator('[data-pass="hokuriku-arch"]').click();self.settle(page)
+            pin=page.evaluate("JPRail.state.pinnedStations.find(p=>p.name==='辰野')")
+            page.evaluate('(s)=>JPRail.camera.setView([s[1],s[2]],11)',pin['station']);visits+=inspect()
+            self.assertTrue(page.evaluate("JPRail.state.stationLabels.pinSymbols.some(p=>p.name==='辰野'&&p.company&&!p.junction&&p.diamond)"))
+            page.locator('[data-pass="hokuriku"]').click();self.settle(page)
+            pin=page.evaluate("JPRail.state.pinnedStations.find(p=>p.name==='黒部宇奈月温泉')")
+            page.evaluate('(s)=>JPRail.camera.setView([s[1],s[2]],11)',pin['station']);visits+=inspect()
+            self.assertTrue(page.evaluate("JPRail.state.stationLabels.pinSymbols.some(p=>p.name==='黒部宇奈月温泉'&&p.role==='boundary'&&!p.diamond)"))
+            self.assertEqual(page.locator('.boundary-swatch.company').count(),0)
+            self.assertIn('所有局界统一使用蓝色菱形',page.locator('.company-boundary-note').inner_text())
+            print('solid company diamonds:',visits,'actual symbols across all 55 products',flush=True)
+        finally:context.close()
+
     def test_all_lines_clears_map_filters_and_restores_initial_view(self):
         for width,height in [(1440,900),(390,844)]:
             with self.subTest(viewport=(width,height)):
@@ -160,7 +224,7 @@ class TouchAndLayout(unittest.TestCase):
             page.add_init_script(RING_INK_PROBE)
             self.load(page,'?pass=hokuriku')
             total=0;largest=0
-            for name in ['黒部宇奈月温泉','猪谷','三国港']:
+            for name in ['黒部宇奈月温泉','九頭竜湖','三国港']:
                 pin=page.evaluate('(n)=>JPRail.state.pinnedStations.find(p=>p.name===n)',name)
                 radius=6.5 if pin['role']=='boundary' else 4.5
                 page.evaluate('(s)=>JPRail.camera.setView([s[1],s[2]],11)',pin['station']);self.settle(page)

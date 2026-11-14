@@ -33,8 +33,8 @@ class FareRegressions(unittest.TestCase):
                 self.assertEqual({s['name'] for s in p['stationPins']['stations'] if s['role']=='boundary'},set(audit[id]['boundaries']))
         # Expectations below are explicit readings of different official maps,
         # not auto-generated endpoint lists from the route under test.
-        positive={'hokuriku-arch':{'亀岡','塩尻','猪谷','南小谷'},'hokuriku':{'黒部宇奈月温泉','猪谷','小浜'},'kansai-hokuriku':{'上越妙高','南小谷','猪谷','児島','新宮'},'tottori-matsue':{'東浜','出雲市','木次','根雨','郡家'},'kintetsu1':{'筒井','生駒','長田'},'kintetsu2':{'三本松'},'kawagoe':{'池袋','川越市'},'seibu-nagatoro':{'野上'},'north-kyushu':{'宇土','大分','熊本'},'south-kyushu':{'熊本','大分','八代','川内'}}
-        negative={'hokuriku-arch':{'松本','高尾','園部','上越妙高','敦賀'},'japan':{'東京','新大阪','博多','上越妙高','猪谷','米原'},'hokuriku':{'上越妙高','富山','高岡'},'kansai-hokuriku':{'敦賀','高松','富山','金沢'},'kawagoe':{'川越'},'nikko-all':{'下今市'},'nikko-heritage':{'下今市'},'seibu-nagatoro':{'長瀞'},'hakone-kamakura':{'小田原','箱根湯本','強羅'},'sanyo-kyushu':{'博多','下関'},'alpine':{'猪谷','松本','塩尻'},'ise':{'新宮','亀山'}}
+        positive={'hokuriku-arch':{'綾部','佐倉','塩尻','辰野','猪谷'},'hokuriku':{'黒部宇奈月温泉','猪谷','小浜'},'kansai-hokuriku':{'上越妙高','南小谷','猪谷','児島','新宮'},'tottori-matsue':{'東浜','出雲市','木次','根雨','郡家'},'kintetsu1':{'筒井','生駒','長田'},'kintetsu2':{'三本松'},'kawagoe':{'池袋','川越市'},'seibu-nagatoro':{'野上'},'north-kyushu':{'宇土','大分','熊本'},'south-kyushu':{'熊本','大分','八代','川内'}}
+        negative={'hokuriku-arch':{'南小谷','亀岡','千葉','松本','高尾','園部','上越妙高','敦賀'},'japan':{'東京','新大阪','博多','上越妙高','猪谷','米原'},'hokuriku':{'上越妙高','富山','高岡'},'kansai-hokuriku':{'敦賀','高松','富山','金沢'},'kawagoe':{'川越'},'nikko-all':{'下今市'},'nikko-heritage':{'下今市'},'seibu-nagatoro':{'長瀞'},'hakone-kamakura':{'小田原','箱根湯本','強羅'},'sanyo-kyushu':{'博多','下関'},'alpine':{'猪谷','松本','塩尻'},'ise':{'新宮','亀山'}}
         for id,names in positive.items():self.assertTrue(names<=set(audit[id]['boundaries']),(id,names-set(audit[id]['boundaries'])))
         for id,names in negative.items():self.assertFalse(names&set(audit[id]['boundaries']),(id,names&set(audit[id]['boundaries'])))
         def all_ops(id):return {op for s in passes[id]['selectors'] for op in s['operators']}
@@ -47,7 +47,7 @@ class FareRegressions(unittest.TestCase):
         self.assertTrue({'万葉線','えちぜん鉄道','富山地方鉄道'}<=all_ops('hokuriku'))
         self.assertTrue(any(s[1:] == ['山陰線','東浜','出雲市'] for s in passes['tottori-matsue']['railOverrides']))
         intervals=json.loads((DATA/'pass-ranges-detail.json').read_text())
-        forbidden={'hokuriku-arch':['並河','毛呂'],'tokyo-wide':['信濃境','小木津','高久','下野宮','石打','中軽井沢'],'kansai-mini':['朝霧','生瀬','馬堀','長滝'],'kintetsu1':['平端','白庭台','菜畑'],'kintetsu2':['赤目口','名張'],'north-kyushu':['松橋','牧'],'tottori-matsue':['西出雲','黒坂','下久野','河原','居組'],'hokuriku':['糸魚川','杉原','能登中島']}
+        forbidden={'hokuriku-arch':['高津','毛呂','南酒々井'],'tokyo-wide':['信濃境','小木津','高久','下野宮','石打','中軽井沢'],'kansai-mini':['朝霧','生瀬','馬堀','長滝'],'kintetsu1':['平端','白庭台','菜畑'],'kintetsu2':['赤目口','名張'],'north-kyushu':['松橋','牧'],'tottori-matsue':['西出雲','黒坂','下久野','河原','居組'],'hokuriku':['糸魚川','杉原','能登中島']}
         for id,names in forbidden.items():
             for name in names:self.assertFalse(any(k.endswith('|'+name) for k in intervals[id]['stationKeys']),(id,name,'range overrun'))
         stations=json.loads((DATA/'stations.json').read_text())
@@ -264,7 +264,7 @@ class RenderedCatalogue(unittest.TestCase):
           const active=Boolean(JPRail.state.selected||JPRail.routeFilters.active(JPRail.state.routeFilters||{})),layer=JPRail.state.contextLayer;
           if(!active)return !layer&&JPRail.state.paintContextFeatures.length===0;
           const m=JPRail.map;
-          return layer&&m.hasLayer(layer)&&Number(m.getPane('railContext').style.zIndex)>Number(m.getPane('railBase').style.zIndex)&&Number(m.getPane('railContext').style.zIndex)<Number(m.getPane('railRoutes').style.zIndex)&&layer.getLayers().every(l=>l.options.color.toLowerCase()==='#a3adb7'&&l.options.opacity===.6&&!l.options.interactive)&&m.getPane('railContext').style.pointerEvents==='none';
+          return layer&&m.hasLayer(layer)&&Number(m.getPane('railContext').style.zIndex)>Number(m.getPane('railBase').style.zIndex)&&Number(m.getPane('railContext').style.zIndex)<Number(m.getPane('railRoutes').style.zIndex)&&layer.getLayers().every(l=>l.options.color.toLowerCase()==='#7a828a'&&l.options.opacity===.8&&l.options.weight===JPRail.railStyle(l.feature).weight&&!l.options.interactive)&&m.getPane('railContext').style.pointerEvents==='none';
         }'''),'grey context is required in filter and pass modes, separate from the opaque matching layer')
         page.wait_for_function('''() => {const m=JPRail.map,g=JPRail.streets.getMap();if(!g)return true;const a=g.getCanvas().getBoundingClientRect(),r=m.getContainer().getBoundingClientRect(),s=m.getSize();return [[.25,.25],[.75,.75]].every(([x,y])=>{const p=L.point(s.x*x,s.y*y),ll=m.containerPointToLatLng(p),q=g.project([ll.lng,ll.lat]);return Math.hypot(q.x+a.x-r.x-p.x,q.y+a.y-r.y-p.y)<2;});}''')
         self.assertTrue(page.evaluate('''() => {if(JPRail.state.detailStatus!=='detail')return true;const m=JPRail.map,c=m.getPane('railRoutes').querySelector('canvas');if(!c)return true;const a=c.getBoundingClientRect(),r=m.getContainer().getBoundingClientRect(),corners=[[a.left-r.left,a.top-r.top],[a.right-r.left,a.bottom-r.top]];return corners.every(p=>JPRail.state.paintBounds.pad(.002).contains(m.containerPointToLatLng(p)));}'''),'prepared geometry must cover the actual padded raster after pan, ready for the next continuous zoom')

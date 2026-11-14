@@ -1,4 +1,4 @@
-import {createStationLabels} from './jprail-stations.js?v=20261114-station-edges';
+import {createStationLabels,isCompanyPin} from './jprail-stations.js?v=20261114-junction-diamonds';
 import {createCamera} from './jprail-camera.js?v=20261110-touch2';
 import {createStreetMap} from './jprail-basemap.js?v=20261110-touch2';
 import {officialStationPins,companyStationPins,stationAnnotations} from './jprail-boundaries.js?v=20261113-seikan18';
@@ -13,7 +13,7 @@ const GRADES = {
  unclassified:{label:'未分类 / 其他',color:'#343c39'}
 };
 const NATIONAL = [[30.7,129.35],[45.65,145.95]];
-const CONTEXT_INK={color:'#A3ADB7',opacity:.6};
+const CONTEXT_INK={color:'#7A828A',opacity:.8};
 const state = {passes:[],network:null,overviewNetwork:null,detailNetwork:null,detailStatus:"overview",stations:[],boundaryMarkers:null,companyBoundaries:[],companyStations:[],annotationStations:[],selected:null,active:null,layers:new Map(),passCoverage:[],displayed:[],paintFeatures:[],stationPool:[],pinnedStations:[],basemap:{status:"loading",tiles:0},stationLabels:{count:0,names:[],mode:"主要枢纽"}};
 let map, infra, railRenderer, contextRenderer, stationMarker, stationLabels, camera, streets, toastTimer, detailPromise, renderedBounds, railColors, routeFilters, operatorPicker, seikanOverlay, seikanFeatures, homeView=true;
 const geometryBounds=new WeakMap();
@@ -162,12 +162,12 @@ function refreshStationPool() {
  state.companyStations=companyStationPins(state.companyBoundaries,state.displayed,state.stations);
  state.annotationStations=stationAnnotations(state.pinnedStations,state.companyStations);
  state.boundaryMarkers.clearLayers();
- for(const pin of state.annotationStations.filter(pin=>['boundary','terminus'].includes(pin.role)||pin.companyJunction)){
+ for(const pin of state.annotationStations.filter(pin=>['boundary','terminus'].includes(pin.role)||isCompanyPin(pin))){
   const boundary=pin.role==='boundary',company=pin.boundaryKind==='company';
-  // Visual inner/outer rings share the station canvas and its zoom transform.
+  // Visible symbols share the station canvas and its zoom transform.
   // This transparent target only supplies the existing tooltip and popup.
-  L.circleMarker([pin.station[1],pin.station[2]],{pane:'railBoundaries',radius:pin.companyJunction?8.5:boundary?6.5:4.5,stroke:false,fill:true,fillOpacity:0})
-   .bindTooltip(`${esc(pin.name)} · ${company?'本券止于公司局界':boundary?'指定线路适用边界':pin.companyJunction?'JR 公司运营局界（不等于票券边界）':'已含铁路端点'}`)
+  L.circleMarker([pin.station[1],pin.station[2]],{pane:'railBoundaries',radius:isCompanyPin(pin)?8.5:boundary?6.5:4.5,stroke:false,fill:true,fillOpacity:0})
+   .bindTooltip(`${esc(pin.name)} · ${company?'本券止于公司局界':isCompanyPin(pin)?(boundary?'JR 公司运营局界（本券适用边界）':'JR 公司运营局界（不等于票券边界）'):boundary?'指定线路适用边界':'已含铁路端点'}`)
    .bindPopup(`<strong>${esc(pin.name)}</strong><br>${esc(pin.note)}`).addTo(state.boundaryMarkers);
  }
  state.stationPool=state.routeFilters?.metro?routeFilters.metroStations(state.routeFilters.metro)
@@ -205,7 +205,7 @@ function syncInfrastructure() {
   seikanOverlay?.addTo(map);
  } else if(seikanOverlay&&map.hasLayer(seikanOverlay))map.removeLayer(seikanOverlay);
  state.seikanOverlay=seikanOverlay;
- $('infrastructureHint').textContent=filtered?'原色为匹配线路 · 浅灰为其余线路':detailed&&!showDetailed?'放大地图以显示详细设施':'原图含货运、站场、专用与停用设施';
+ $('infrastructureHint').textContent=filtered?'原色为匹配线路 · 灰色为其余线路':detailed&&!showDetailed?'放大地图以显示详细设施':'原图含货运、站场、专用与停用设施';
  $('railContextLegend').hidden=!filtered;
  // The optional raster has its own grade palette and cannot inherit our
  // company colors. Do not show a company legend for that separate layer.
@@ -318,7 +318,7 @@ function renderSelection() {
  if(filter.grade==='main')notes.push('本线按正式路名归组，含转交区段；不补画已缺失的铁路。');
  if(filter.grade==='branch')notes.push('地方／其他线指本线、新干线之外的 JR 普速线，包含都市通勤线；不是票价分类。');
  if(filter.grade==='private')notes.push('私铁线按现运营方筛选，包含第三部门及接收的原本线路段。');
- if(metro)notes.push(`${metro.label}：新干线仅作浅灰参考；${metro.circles.map(c=>c.label+'站周边约 '+c.km+' km').join('、')}内的完整站间区段，着色在车站收尾，为浏览示意，不表示票券边界。`);
+ if(metro)notes.push(`${metro.label}：新干线仅作灰色参考；${metro.circles.map(c=>c.label+'站周边约 '+c.km+' km').join('、')}内的完整站间区段，着色在车站收尾，为浏览示意，不表示票券边界。`);
  $('railFilterNote').textContent=notes.join(' ');$('railFilterNote').hidden=!notes.length;
 }
 function fitPass(id) {fitDisplayed();if(!state.displayed.length)toast('当前 Pass 没有已记录的匹配线路。');}
@@ -333,7 +333,7 @@ function removePass(id) {state.selected=null;state.active=null;renderSelection()
 function renderPinnedStops(p) {
  const info=p.stationPins;if(!info)return '';
  const pins=info.stations,company=pins.filter(pin=>pin.boundaryKind==='company');
- return `<section class="detail-section"><h3>适用边界与铁路端点</h3><div class="boundary-stations">${pins.map(pin=>`<button type="button" data-boundary="${esc(pin.name)}" title="${esc(pin.note)}" class="${pin.role} ${pin.boundaryKind||''}">${esc(pin.name)}</button>`).join('')}</div>${company.length?`<p class="company-boundary-note">本券止于公司局界：${esc(company.map(pin=>pin.name).join('、'))}。蓝色虚圈只用于官方范围确认的外缘；内部接续不作边界。</p>`:''}<p style="font-size:10px;margin-top:8px">粗圆圈：指定线路适用边界；细圆圈：已含铁路端点。限制与通过条件见车站提示。站名始终显示；同站其他线路的范围可能不同。</p><a href="${esc(info.source)}" target="_blank" rel="noopener" style="font-size:10px">官方范围来源 ↗</a></section>`;
+ return `<section class="detail-section"><h3>适用边界与铁路端点</h3><div class="boundary-stations">${pins.map(pin=>`<button type="button" data-boundary="${esc(pin.name)}" title="${esc(pin.note)}" class="${pin.role} ${pin.boundaryKind||''}">${esc(pin.name)}</button>`).join('')}</div>${company.length?`<p class="company-boundary-note">本券止于公司局界：${esc(company.map(pin=>pin.name).join('、'))}。所有局界统一使用蓝色菱形；本券是否到此止用以本段及站点说明为准。</p>`:''}<p style="font-size:10px;margin-top:8px">蓝色菱形：公司运营局界；粗圆圈：非局界适用边界；细圆圈：已含铁路端点。限制与通过条件见车站提示。站名始终显示；同站其他线路的范围可能不同。</p><a href="${esc(info.source)}" target="_blank" rel="noopener" style="font-size:10px">官方范围来源 ↗</a></section>`;
 }
 function renderCompanyStops() {
  if(!state.companyStations.length)return '';
