@@ -3,6 +3,7 @@
 No traces or screenshot dumps. JPRAIL_COLOR_OUTPUT may point into a task temp
 directory for small counts; JPRAIL_LIVE_BASEMAP enables real street tiles.
 """
+from development.tests.test_jprail_filters import choose_operators
 import functools
 import importlib.util
 import json
@@ -179,7 +180,7 @@ class PaletteBrowser(unittest.TestCase):
                 self.assertEqual(set(options)-{'','jr','private'},JR|set(palette['operators']))
                 self.assertNotIn('三国芦原線',options)
                 for op in sorted(JR|set(palette['operators'])):
-                    page.locator('#railOperator').select_option(op);settle();verify_layers()
+                    choose_operators(page,op);settle();verify_layers()
                     self.assertTrue(page.evaluate('(op)=>JPRail.state.displayed.every(f=>JPRail.railColors.isRailway(f)&&JPRail.railColors.operatorOf(f.properties.operator)===op)',op))
                     counts['operators']+=1;counts['views']+=1
                 page.locator('#clearRailFilters').click();page.locator('#showEnded').check()
@@ -201,18 +202,17 @@ class PaletteBrowser(unittest.TestCase):
                         page.wait_for_function('JPRail.state.detailStatus==="detail"');verify_layers()
                         counts['paintSamples']+=checks.check_paint(page);counts['views']+=1
                         page.locator('#railGrade').select_option('branch');settle()
-                        self.assertTrue(page.evaluate('JPRail.state.displayed.every(f=>JPRail.gradeOf(f)==="branch")'))
+                        self.assertIsNone(page.evaluate('JPRail.state.selected'))
+                        self.assertTrue(page.evaluate('JPRail.state.displayed.every(f=>JPRail.routeFilters.gradeOf(f)==="branch")'))
                         page.locator('#railGrade').select_option('');settle()
                         counts['passes']+=1
-                page.locator('#railOperator').select_option('東急電鉄');settle()
-                # Selecting a company outside a pass gives an explicit empty
-                # intersection, never an unrelated company-colored full map.
-                if not page.evaluate('JPRail.state.displayed.length'):
-                    self.assertEqual(page.evaluate('[...JPRail.state.layers.values()][0].getLayers().length'),0)
-                    page.locator('.rail-legend summary').click()
-                    self.assertIn('没有匹配',page.locator('#railLegendItems').inner_text())
-                    page.locator('.rail-legend summary').click()
-                page.locator('#clearSelection').click();page.locator('#railOperator').select_option('東葉高速鉄道');settle()
+                choose_operators(page,'東急電鉄');settle()
+                # Line browsing is now independent: a company selection exits
+                # the pass and shows that company's actual ordinary railways.
+                self.assertIsNone(page.evaluate('JPRail.state.selected'))
+                self.assertFalse(page.locator('#detailPanel').is_visible())
+                self.assertEqual({r[0] for r in page.evaluate('JPRail.state.displayed.map(f=>[f.properties.operator])')},{'東急電鉄'})
+                choose_operators(page,'東葉高速鉄道');settle()
                 self.assertEqual({r[0] for r in page.evaluate('JPRail.state.displayed.map(f=>[f.properties.operator])')},{'東葉高速鉄道'})
                 page.locator('.rail-legend summary').click()
                 self.assertIn('東葉高速鉄道',page.locator('#railLegendItems').inner_text())

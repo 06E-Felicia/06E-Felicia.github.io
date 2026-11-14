@@ -1,4 +1,5 @@
 """Trackpad input paths and non-overlapping responsive JPRail layouts."""
+from development.tests.test_jprail_filters import choose_operators
 from pathlib import Path
 from http.server import SimpleHTTPRequestHandler,ThreadingHTTPServer
 from threading import Thread
@@ -122,7 +123,7 @@ class TouchAndLayout(unittest.TestCase):
                     self.assertEqual(page.locator('#resetView').inner_text(),'全部线路')
                     page.locator('[data-pass="japan"]').click();self.settle(page)
                     page.locator('#railGrade').select_option('branch')
-                    page.locator('#railOperator').select_option('京王電鉄');self.settle(page)
+                    choose_operators(page,'京王電鉄');self.settle(page)
                     page.locator('#stationSearch').fill('京都')
                     page.locator('[data-station]').first.click();self.settle(page)
                     page.evaluate('JPRail.camera.zoomBy(.25)')
@@ -138,7 +139,7 @@ class TouchAndLayout(unittest.TestCase):
                     self.assertFalse(page.locator('#infrastructure').is_checked())
                     self.assertEqual(page.evaluate('JPRail.state.pinnedStations.length'),0)
                     self.assertEqual(page.evaluate('JPRail.state.boundaryMarkers.getLayers().length'),page.evaluate('JPRail.state.companyStations.length'))
-                    self.assertTrue(page.evaluate('''()=>['pass','passes','grade','operator'].every(k=>!new URL(location.href).searchParams.has(k))'''))
+                    self.assertTrue(page.evaluate('''()=>['pass','passes','grade','operator','line','metro'].every(k=>!new URL(location.href).searchParams.has(k))'''))
                     self.assertEqual(page.evaluate("JPRail.state.displayed.map(f=>f.properties.operator+'|'+f.properties.name).sort()"),initial['routes'])
                     self.assertEqual(page.evaluate('JPRail.map.getSize()'),initial['size'])
                     self.assertAlmostEqual(page.evaluate('JPRail.map.getZoom()'),initial['zoom'],places=6)

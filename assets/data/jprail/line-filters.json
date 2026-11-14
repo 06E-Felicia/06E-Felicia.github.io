@@ -1,0 +1,577 @@
+{
+  "version": "2026-11-14-metro-reference",
+  "classification": "按正式路名整理JR本线谱系，包含已转交的对应区段；其余JR普通线路列为地方／其他线。不是JR票价干线／地方交通线，也不是OSM基础设施等级。私铁分类按现运营方，和转交本线存在交集。",
+  "geometryNote": "按现有N02网络筛选，不补画已撤轨或缺失线路，不表示实时运营状态。",
+  "metroNote": "新干线不列为彩色匹配，保留浅灰参考与车站资料及搜索。按注明的中心车站及近似公里半径选站，保留范围内车站之间的实际铁路，着色在车站收尾；原顶点与真实分支保留，不连接缺口。不是官方行政区、通勤圈、票券或IC卡范围。",
+  "checked": "2026-11-14",
+  "sources": {
+    "hokkaido": "https://www.jrhokkaido.co.jp/corporate/company/com_02.html",
+    "east": "https://www.jreast.co.jp/estation/facility_search.aspx?searchCategoryCd=1",
+    "central": "https://company.jr-central.co.jp/company/area/",
+    "west": "https://www.jr-odekake.net/route/",
+    "kyushu": "https://www.jrkyushu.co.jp/company/info/data/line_km.html",
+    "igr": "https://igr.jp/company/",
+    "aomori": "https://aoimorirailway.com/company/aoimori",
+    "shinano": "https://www.shinanorailway.co.jp/corporate/docs/company2025.pdf",
+    "tokimeki": "https://www.pref.niigata.lg.jp/sec/koutsuseisaku/1356847798911.html",
+    "ir": "https://www.ishikawa-railway.jp/company/index.html",
+    "ainokaze": "https://ainokaze.co.jp/company/outline",
+    "hapi": "https://www.hapi-line.co.jp/outline/",
+    "orange": "https://www.pref.kagoshima.jp/ac08/infra/kotu/tetudo/zairaisen.html"
+  },
+  "families": [
+    {
+      "id": "hakodate",
+      "label": "函館本線",
+      "jrNames": [
+        "函館線",
+        "函館本線"
+      ],
+      "transfers": [],
+      "sources": [
+        "hokkaido"
+      ]
+    },
+    {
+      "id": "muroran",
+      "label": "室蘭本線",
+      "jrNames": [
+        "室蘭線",
+        "室蘭本線"
+      ],
+      "transfers": [],
+      "sources": [
+        "hokkaido"
+      ]
+    },
+    {
+      "id": "nemuro",
+      "label": "根室本線",
+      "jrNames": [
+        "根室線",
+        "根室本線"
+      ],
+      "transfers": [],
+      "sources": [
+        "hokkaido"
+      ]
+    },
+    {
+      "id": "soya",
+      "label": "宗谷本線",
+      "jrNames": [
+        "宗谷線",
+        "宗谷本線"
+      ],
+      "transfers": [],
+      "sources": [
+        "hokkaido"
+      ]
+    },
+    {
+      "id": "sekihoku",
+      "label": "石北本線",
+      "jrNames": [
+        "石北線",
+        "石北本線"
+      ],
+      "transfers": [],
+      "sources": [
+        "hokkaido"
+      ]
+    },
+    {
+      "id": "senmo",
+      "label": "釧網本線",
+      "jrNames": [
+        "釧網線",
+        "釧網本線"
+      ],
+      "transfers": [],
+      "sources": [
+        "hokkaido"
+      ]
+    },
+    {
+      "id": "hidaka",
+      "label": "日高本線",
+      "jrNames": [
+        "日高線",
+        "日高本線"
+      ],
+      "transfers": [],
+      "sources": [
+        "hokkaido"
+      ]
+    },
+    {
+      "id": "rumoi",
+      "label": "留萌本線",
+      "jrNames": [
+        "留萌線",
+        "留萌本線"
+      ],
+      "transfers": [],
+      "sources": [
+        "hokkaido"
+      ]
+    },
+    {
+      "id": "tokaido",
+      "label": "東海道本線",
+      "jrNames": [
+        "東海道線",
+        "東海道本線"
+      ],
+      "transfers": [],
+      "sources": [
+        "central"
+      ]
+    },
+    {
+      "id": "chuo",
+      "label": "中央本線",
+      "jrNames": [
+        "中央線",
+        "中央本線"
+      ],
+      "transfers": [],
+      "sources": [
+        "central"
+      ]
+    },
+    {
+      "id": "tohoku",
+      "label": "東北本線",
+      "jrNames": [
+        "東北線",
+        "東北本線"
+      ],
+      "transfers": [
+        [
+          "アイジーアールいわて銀河鉄道",
+          "いわて銀河鉄道線"
+        ],
+        [
+          "青い森鉄道",
+          "青い森鉄道線"
+        ]
+      ],
+      "sources": [
+        "east",
+        "igr",
+        "aomori"
+      ]
+    },
+    {
+      "id": "shinetsu",
+      "label": "信越本線",
+      "jrNames": [
+        "信越線",
+        "信越本線"
+      ],
+      "transfers": [
+        [
+          "しなの鉄道",
+          "しなの鉄道線"
+        ],
+        [
+          "しなの鉄道",
+          "北しなの線"
+        ],
+        [
+          "えちごトキめき鉄道",
+          "妙高はねうまライン"
+        ]
+      ],
+      "sources": [
+        "east",
+        "shinano",
+        "tokimeki"
+      ]
+    },
+    {
+      "id": "sobu",
+      "label": "総武本線",
+      "jrNames": [
+        "総武線",
+        "総武本線"
+      ],
+      "transfers": [],
+      "sources": [
+        "east"
+      ]
+    },
+    {
+      "id": "joban",
+      "label": "常磐本線",
+      "jrNames": [
+        "常磐線",
+        "常磐本線"
+      ],
+      "transfers": [],
+      "sources": [
+        "east"
+      ]
+    },
+    {
+      "id": "ou",
+      "label": "奥羽本線",
+      "jrNames": [
+        "奥羽線",
+        "奥羽本線"
+      ],
+      "transfers": [],
+      "sources": [
+        "east"
+      ]
+    },
+    {
+      "id": "uetsu",
+      "label": "羽越本線",
+      "jrNames": [
+        "羽越線",
+        "羽越本線"
+      ],
+      "transfers": [],
+      "sources": [
+        "east"
+      ]
+    },
+    {
+      "id": "hokuriku",
+      "label": "北陸本線",
+      "jrNames": [
+        "北陸線",
+        "北陸本線"
+      ],
+      "transfers": [
+        [
+          "ハピラインふくい",
+          "ハピラインふくい線"
+        ],
+        [
+          "IRいしかわ鉄道",
+          "IRいしかわ鉄道線"
+        ],
+        [
+          "あいの風とやま鉄道",
+          "あいの風とやま鉄道線"
+        ],
+        [
+          "えちごトキめき鉄道",
+          "日本海ひすいライン"
+        ]
+      ],
+      "sources": [
+        "west",
+        "hapi",
+        "ir",
+        "ainokaze",
+        "tokimeki"
+      ]
+    },
+    {
+      "id": "sanyo",
+      "label": "山陽本線",
+      "jrNames": [
+        "山陽線",
+        "山陽本線"
+      ],
+      "transfers": [],
+      "sources": [
+        "west"
+      ]
+    },
+    {
+      "id": "sanin",
+      "label": "山陰本線",
+      "jrNames": [
+        "山陰線",
+        "山陰本線"
+      ],
+      "transfers": [],
+      "sources": [
+        "west"
+      ]
+    },
+    {
+      "id": "kansai",
+      "label": "関西本線",
+      "jrNames": [
+        "関西線",
+        "関西本線"
+      ],
+      "transfers": [],
+      "sources": [
+        "central"
+      ]
+    },
+    {
+      "id": "kisei",
+      "label": "紀勢本線",
+      "jrNames": [
+        "紀勢線",
+        "紀勢本線"
+      ],
+      "transfers": [],
+      "sources": [
+        "central"
+      ]
+    },
+    {
+      "id": "takayama",
+      "label": "高山本線",
+      "jrNames": [
+        "高山線",
+        "高山本線"
+      ],
+      "transfers": [],
+      "sources": [
+        "central"
+      ]
+    },
+    {
+      "id": "kagoshima",
+      "label": "鹿児島本線",
+      "jrNames": [
+        "鹿児島線",
+        "鹿児島本線"
+      ],
+      "transfers": [
+        [
+          "肥薩おれんじ鉄道",
+          "肥薩おれんじ鉄道線"
+        ]
+      ],
+      "sources": [
+        "kyushu",
+        "orange"
+      ]
+    },
+    {
+      "id": "nippo",
+      "label": "日豊本線",
+      "jrNames": [
+        "日豊線",
+        "日豊本線"
+      ],
+      "transfers": [],
+      "sources": [
+        "kyushu"
+      ]
+    },
+    {
+      "id": "nagasaki",
+      "label": "長崎本線",
+      "jrNames": [
+        "長崎線",
+        "長崎本線"
+      ],
+      "transfers": [],
+      "sources": [
+        "kyushu"
+      ]
+    },
+    {
+      "id": "kyudai",
+      "label": "久大本線",
+      "jrNames": [
+        "久大線",
+        "久大本線"
+      ],
+      "transfers": [],
+      "sources": [
+        "kyushu"
+      ]
+    },
+    {
+      "id": "hohi",
+      "label": "豊肥本線",
+      "jrNames": [
+        "豊肥線",
+        "豊肥本線"
+      ],
+      "transfers": [],
+      "sources": [
+        "kyushu"
+      ]
+    },
+    {
+      "id": "chikuho",
+      "label": "筑豊本線",
+      "jrNames": [
+        "筑豊線",
+        "筑豊本線"
+      ],
+      "transfers": [],
+      "sources": [
+        "kyushu"
+      ]
+    }
+  ],
+  "metros": [
+    {
+      "id": "tokyo",
+      "label": "首都圈",
+      "circles": [
+        {
+          "label": "东京",
+          "lng": 139.766,
+          "lat": 35.681,
+          "km": 100
+        }
+      ]
+    },
+    {
+      "id": "keihanshin",
+      "label": "京阪神",
+      "circles": [
+        {
+          "label": "大阪",
+          "lng": 135.495,
+          "lat": 34.702,
+          "km": 55
+        },
+        {
+          "label": "京都",
+          "lng": 135.759,
+          "lat": 34.985,
+          "km": 40
+        },
+        {
+          "label": "神户",
+          "lng": 135.178,
+          "lat": 34.68,
+          "km": 40
+        }
+      ]
+    },
+    {
+      "id": "chukyo",
+      "label": "中京",
+      "circles": [
+        {
+          "label": "名古屋",
+          "lng": 136.882,
+          "lat": 35.171,
+          "km": 70
+        }
+      ]
+    },
+    {
+      "id": "sapporo",
+      "label": "札幌",
+      "circles": [
+        {
+          "label": "札幌",
+          "lng": 141.35,
+          "lat": 43.068,
+          "km": 60
+        }
+      ]
+    },
+    {
+      "id": "sendai",
+      "label": "仙台",
+      "circles": [
+        {
+          "label": "仙台",
+          "lng": 140.882,
+          "lat": 38.26,
+          "km": 55
+        }
+      ]
+    },
+    {
+      "id": "niigata",
+      "label": "新潟",
+      "circles": [
+        {
+          "label": "新潟",
+          "lng": 139.061,
+          "lat": 37.912,
+          "km": 55
+        }
+      ]
+    },
+    {
+      "id": "shizuoka-hamamatsu",
+      "label": "静冈／滨松",
+      "circles": [
+        {
+          "label": "静冈",
+          "lng": 138.388,
+          "lat": 34.972,
+          "km": 50
+        },
+        {
+          "label": "滨松",
+          "lng": 137.735,
+          "lat": 34.704,
+          "km": 50
+        }
+      ]
+    },
+    {
+      "id": "okayama-kurashiki",
+      "label": "冈山／仓敷",
+      "circles": [
+        {
+          "label": "冈山",
+          "lng": 133.919,
+          "lat": 34.667,
+          "km": 50
+        },
+        {
+          "label": "仓敷",
+          "lng": 133.765,
+          "lat": 34.602,
+          "km": 40
+        }
+      ]
+    },
+    {
+      "id": "hiroshima",
+      "label": "广岛",
+      "circles": [
+        {
+          "label": "广岛",
+          "lng": 132.475,
+          "lat": 34.397,
+          "km": 55
+        }
+      ]
+    },
+    {
+      "id": "kitakyushu-fukuoka",
+      "label": "北九州／福冈",
+      "circles": [
+        {
+          "label": "小仓",
+          "lng": 130.883,
+          "lat": 33.886,
+          "km": 50
+        },
+        {
+          "label": "博多",
+          "lng": 130.421,
+          "lat": 33.59,
+          "km": 55
+        }
+      ]
+    },
+    {
+      "id": "kumamoto",
+      "label": "熊本",
+      "circles": [
+        {
+          "label": "熊本",
+          "lng": 130.688,
+          "lat": 32.79,
+          "km": 50
+        }
+      ]
+    }
+  ]
+}

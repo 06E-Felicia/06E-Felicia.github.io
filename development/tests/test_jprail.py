@@ -1,4 +1,5 @@
 """JPRail data and browser regression. Set JPRAIL_BASE_URL to check Pages."""
+from development.tests.test_jprail_filters import choose_operators
 import functools
 import importlib.util
 import io
@@ -191,17 +192,17 @@ class BrowserTests(unittest.TestCase):
                     page.locator('#clearSelection').click()
                     self.assertFalse(page.locator('#detailPanel').is_visible())
                     self.assertAlmostEqual(page.locator('.map-section').bounding_box()['width'],wide,delta=1)
-                    page.locator('#railOperator').select_option('東日本旅客鉄道')
+                    choose_operators(page,'東日本旅客鉄道')
                     self.assertGreater(page.evaluate('JPRail.state.displayed.length'),0)
                     self.assertTrue(page.evaluate("JPRail.state.displayed.every(f=>f.properties.operator==='東日本旅客鉄道')"))
                     for grade,color in (('main','#FF8100'),('branch','#FF8100')):
                         page.locator('#railGrade').select_option(grade)
                         self.assertGreater(page.evaluate('JPRail.state.displayed.length'),0)
-                        self.assertTrue(page.evaluate('(g)=>JPRail.state.displayed.every(f=>JPRail.gradeOf(f)===g)',grade))
+                        self.assertTrue(page.evaluate('(g)=>JPRail.state.displayed.every(f=>JPRail.routeFilters.gradeOf(f)===g)',grade))
                         self.assertTrue(page.evaluate('(c)=>[...JPRail.state.layers.values()][0].getLayers().every(p=>p.options.color===c)',color))
                     page.locator('#railGrade').select_option('highspeed')
                     self.assertTrue(page.evaluate("JPRail.state.displayed.length>0&&JPRail.state.displayed.every(f=>JPRail.gradeOf(f)==='highspeed'&&f.properties.operator==='東日本旅客鉄道')"))
-                    page.locator('#railOperator').select_option('private')
+                    choose_operators(page,'private')
                     self.assertEqual(page.evaluate('JPRail.state.displayed.length'),0)
                     self.assertEqual(page.evaluate('[...JPRail.state.layers.values()][0].getLayers().length'),0)
                     page.locator('#clearRailFilters').click()
@@ -219,9 +220,11 @@ class BrowserTests(unittest.TestCase):
                     page.locator('[data-pass="west-all"]').click()
                     self.assertTrue(page.evaluate('["上越妙高","南小谷","米原","猪谷","新宮"].every(n=>JPRail.state.pinnedStations.some(p=>p.name===n&&p.boundaryKind==="company"))'))
                     page.locator('[data-pass="japan"]').click()
-                    page.locator('#railOperator').select_option('西日本旅客鉄道')
+                    choose_operators(page,'西日本旅客鉄道')
                     self.assertFalse(page.evaluate('JPRail.state.pinnedStations.some(p=>p.boundaryKind==="company")'),'filtering an internal JR company must not turn it into a pass boundary')
-                    page.locator('#clearSelection').click();page.locator('#clearRailFilters').click()
+                    self.assertIsNone(page.evaluate('JPRail.state.selected'))
+                    self.assertFalse(page.locator('#detailPanel').is_visible())
+                    page.locator('#clearRailFilters').click()
                     page.locator('#passSearch').fill('近铁');self.assertEqual(page.locator('.pass-card').count(),4)
                     page.locator('[data-pass="kintetsu1"]').click();page.wait_for_function('JPRail.camera.whenIdle()')
                     self.assertTrue(page.evaluate('JPRail.state.pinnedStations.every(p=>JPRail.map.getBounds().contains([p.station[1],p.station[2]]))'))

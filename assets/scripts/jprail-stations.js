@@ -62,7 +62,7 @@ export function createStationLabels(map,getStations,onRender,getPins=()=>[],getR
    if(pool!==this.pool||pins!==this.pins) {
     this.pool=pool;this.pins=pins;this.sortBuilds++;
     const pinNames=new Set(pins.map(p=>p.station[0]));
-    this.items=[...pins.map(pin=>({s:pin.station,pin,hub:true,major:isMajorStation(pin.station)})),...pool.filter(s=>!pinNames.has(s[0])).map(s=>({s,hub:isMajorStation(s),major:isMajorStation(s),pin:null}))]
+    this.items=[...pins.map(pin=>({s:pin.station,pin,hub:true,major:isMajorStation(pin.station)})),...pool.filter(s=>!pinNames.has(s[0])).map(s=>({s,hub:isMajorStation(s)||Boolean(s.metroEnd),major:isMajorStation(s),pin:null}))]
      .sort((a,b)=>({boundary:3,restriction:2,terminus:1}[b.pin?.role]||0)-({boundary:3,restriction:2,terminus:1}[a.pin?.role]||0)||Number(Boolean(b.pin))-Number(Boolean(a.pin))||Number(b.hub)-Number(a.hub)||(HUBS.get(a.s[0])??999)-(HUBS.get(b.s[0])??999)||a.s[0].localeCompare(b.s[0],'ja'));
    }
    const size=map.getSize(),ratio=Math.min(devicePixelRatio||1,2),z=map.getZoom(),all=z>=16,emphasizeHubs=z<12,bounds=map.getBounds();

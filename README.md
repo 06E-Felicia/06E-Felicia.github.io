@@ -1,8 +1,8 @@
 # 深中气象
 
-深圳中学气象社的网站项目，集成深圳天气与预警展示、华南强对流模拟、暖区暴雨互动游戏，以及保留中的航班数据页面。网站使用 GitHub Pages 发布；天气快照由 GitHub Actions 更新，模拟器在访客浏览器中计算。
+深圳中学气象社的网站项目，集成深圳天气与预警展示、华南强对流模拟、暖区暴雨互动游戏、日本铁路与Pass交互地图，以及保留中的航班数据页面。网站使用 GitHub Pages 发布；天气快照由 GitHub Actions 更新，模拟器在访客浏览器中计算。
 
-[网站首页](https://06e-felicia.github.io/) · [放假模拟器](https://06e-felicia.github.io/Vacation.html) · [StormSim Astra](https://06e-felicia.github.io/simulator.html) · [StormSim Sol](https://06e-felicia.github.io/simulator-sol.html)
+[网站首页](https://06e-felicia.github.io/) · [放假模拟器](https://06e-felicia.github.io/Vacation.html) · [StormSim Astra](https://06e-felicia.github.io/simulator.html) · [StormSim Sol](https://06e-felicia.github.io/simulator-sol.html) · [日本铁道pass地图](https://06e-felicia.github.io/JPRail.html)
 
 ## 页面与功能
 
@@ -16,11 +16,23 @@
 | [simulator-sol.html](simulator-sol.html) | StormSim 2.5 Sol，多尺度随机飑线模型 |
 | [VacationReplay.html](VacationReplay.html) | 已生成的放假模拟器离线回放查看器 |
 | [Flightdat.html](Flightdat.html) | 七机场航班精选，自动采集尝试每 10 分钟更新 |
-| [JPRail.html](JPRail.html) | 日本铁道pass地图：外国游客周游券范围、成人日元票价与分级车站名 |
+| [JPRail.html](JPRail.html) | 日本铁道pass地图：周游券／青春18范围、票价、运营方多选、本线归组与都市圈 |
 | [Feimadat.html](Feimadat.html) | 保留的飞常准页面与数据工具，非默认公开入口，采集工作流仅手动运行 |
 | [agent.html](agent.html) | 智能体跳转入口 |
 
 天气页展示公开来源的数据快照，与模拟器生成的天气互相独立。上游雷暴抵达时间采用发布时间、位置与假定传播速度估算，并不是实际雷达外推。真实预警与停课安排请以气象部门及学校通知为准。
+
+## 日本铁道pass地图
+
+[JPRail](https://06e-felicia.github.io/JPRail.html) 将日本铁路线路、JR／私铁周游券及青春18的适用范围放在同一张交互地图中，支持查看成人日元票价、有效时间、列车限制与官方来源。
+
+- **运营方多选**：JR六家公司及112家非JR普通铁路运营方可分别勾选、叠加，并可按名称搜索。
+- **线路归组**：新干线、本线、地方／其他JR线、私铁线；28组本线合并同名跨公司区段及对应的转交区段，保留现运营方与颜色。
+- **都市圈**：11组范围，按页面注明的中心车站与半径选取完整站间区段，着色在车站收尾。都市圈不把新干线列为彩色匹配，但保留浅灰线路、车站资料与搜索；退出都市圈后可正常浏览新干线。
+- **地图对照**：匹配线路保留原色，其他线路以`#A3ADB7`、60%不透明度作浅灰参考，适用于线路筛选和Pass选择。灰色不表示车票适用。
+- **模式与操作**：Pass单选，与线路筛选独立；开始筛选退出Pass，选择Pass清除线路条件。“全部线路”恢复初始取景与完整网络；放大逐步显示车站名，支持鼠标滚轮、触控板捏合及手机浏览。
+
+本地使用“启动本地预览.command”打开首页，再进入日本铁道pass地图。都市圈是本页的铁路浏览示意，非官方通勤圈、行政区或票券范围。线路几何与设施可能有更新延迟；乘车与购票以运营方官方规则为准。数据与来源见[JPRail数据说明](assets/data/jprail/README.md)，当前验证范围见[验证摘要](development/docs/jprail-validation.md)。
 
 ## 放假模拟器
 

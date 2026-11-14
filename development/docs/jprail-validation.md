@@ -1,28 +1,37 @@
 # JPRail 当前验证摘要
 
-## 本轮：青函显示、独立局界、青春18、首页插画与预览入口（2026-11-13）
+## 线路筛选发布：都市圈新干线参考规则与加深灰线（2026-11-14）
 
-- 保留此前已完成的本地修改：青函共用区间统一按新干线红色／4 px 显示；14 个已知 JR 运营接口独立显示局界符号，不将内部局界自动变成票券边界；青春18默认列第二位，3日 ¥10,000／5日 ¥12,050，基础券不含新干线、海峡货运线与道南铁路。原始网络、车站及公司接口数据未改。依据：[JR北海道共用区间](https://www.jrhokkaido.co.jp/corporate/shinkansen/specificity.html)、[JR西日本青春18](https://tickets.jr-odekake.net/shohindb/view/consumer/tokutoku/detail.html?shnId=126000037)、[JR北海道青春18](https://www.jrhokkaido.co.jp/CM/Otoku/007255/)、[2026新闻稿](https://www.jreast.co.jp/press/2025/20260205_ho02.pdf)。
-- “启动本地预览.command”现在打开首页 index.html；模拟器启动器仍打开模拟器。首页启动不再要求先检查模拟器科学依赖；默认模块入口仍保留原模拟器行为。首页右侧介绍仅说明查询范围、价格、时间、限制与行程比较。
-- 宣传图以用户最终提供的 1448×1086 插画为准，保留人物、标题、两张票卡、列车及接触网等内容。去掉所有站名框／引线，以及西北侧俄罗斯、朝鲜等境外陆地。旧示意线路由网页当前“全部线路”的真实截图替换：597／597 线路组，未选 Pass，无等级／公司筛选，仅日本轮廓；保留站点圆圈和局界符号，不含站名、底图、控件与境外地形。线路不是生成工具重画；在浏览器中按原构图合成为一张生产 WebP，不增加页面图层、监听器或地图逻辑。
-- 最终文件：`assets/images/jprail-preview.webp`，1448×1086，335,878 字节。地图数据沿用 MLIT N02（加工）／OSM，轮廓来自 Natural Earth；宣传图不是实时轨道图，也不用于判断票券权限。生成工具原始输出保留在工具图库，项目只保留一张生产宣传图。
-- 目录55条，新增青春181条官方核对；原54条两档范围记录结构相同。本轮未重新核实原54券全部最新条款；条款证据仍为51完成／4待核。绘图回归不代替这些证据缺口的核实。
+用户已授权上传本轮累计的JPRail筛选器及修正，并要求上传前更新README。以最新origin/main建立隔离工作树，只整理JPRail相关17个文件；天气／航班数据与工作流不回写主工作区旧版本。
 
-### 本轮验证
+### 当前行为
 
-- 从最新 origin/main 的隔离工作树测试：25项全部通过，114.965秒。覆盖本地预览入口、公司配色、全目录绘图、缩放与触控布局、票券数据及发布保护；118运营方、55券、228视图、14,082个真实铁路像素采样点；端点圆圈147帧最大相对偏移0。
-- 最终单张宣传图替换后，1440×1000、390×844、320×640浏览器检查均成功加载1448×1086图像，无横向溢出。已人工查看最终合成图；人物、票卡、标题及列车未被日本地图遮盖，站名框／引线与境外陆地已移除。
-- 青春18与青函／局界针对性回归，以及联网热海地图审核已完成；保留现有一张正式审核图 [jprail-map-review.png](jprail-map-review.png)。仅图片收尾后未重复整套地图回放。
-- 发布准备只整理本任务文件；simulation/preview.py 和首页按任务差异合入最新远端，保留其他任务变更。工作流与发布重试 Action 无修改，保留默认分支检出、fetch/rebase重试、40分钟任务及30分钟Pages时限，不强推。按用户此前要求，上传后不做Actions／线上验收，因此不据推送结果宣称部署成功。
-- 临时截图、统计及隔离工作树均位于本轮独有系统临时目录；任务收尾时停止本轮服务器并清理该目录。保留生产代码、可复用测试、本摘要和一张正式审核图，保护正式数据、其他任务文件与根目录 trash/。
+- 运营方多选：6家JR与112家非JR普通铁路运营方，可单独选择／叠加／搜索，支持分组全选及链接恢复。运营方内部取并集，与等级、本线归组、都市圈取交集；Pass与线路浏览独立。
+- 28组正式路名本线合并同名跨公司区段及对应转交线，保留现运营方与颜色。11组都市圈以范围内车站之间的实际区段显示，原顶点、分支和缺口保留；外缘以车站收尾，概览／精细端点相同，不沿半径切断轨道，不补直线。
+- 都市圈内新干线不列为彩色匹配及匹配数量；**保留浅灰参考、原始及都市圈车站资料和全库搜索**，与其他未匹配线路采用同样显示规则。站名仍按当前匹配线路规则呈现，不因资料保留而新增车票权限。退出都市圈或选择Pass可恢复原新干线匹配范围。
+- 新干线等级可与都市圈组合，结果为无彩色匹配、保留浅灰参考；不会静默清除用户已选等级。全国重置清空条件并恢复初始取景。
+- 非匹配线路／Pass未覆盖线路加深为**#A3ADB7、不透明度60%（透明度40%）**。独立Canvas在底图上方、匹配轨迹下方，匹配段不透明原色覆盖；参考层不参与统计、站名池、权限、局界判断或线路点击。无条件时恢复正常全网配色。
+- 根目录README新增JPRail入口、功能、筛选／Pass切换、都市圈范围、浅灰含义与本地入口；数据README同步当前规则。生产派生数据metro-ranges.json保留新干线／车站资料及N02／OSM来源许可，文件4,377,712字节。
 
-### 最终插画处理提示词
+### 验证
 
-使用内置 image_gen 编辑用户提供的原图；下方是最终底稿修订提示词。之后的实际线路截图与浏览器合成不交由生成工具重画。
+在隔离工作树执行28项检查，**171.636秒，全部通过**。包括：
 
-```text
-Precise compositing preparation edit of the supplied JPRail promotional image. Preserve ALL non-map content exactly: the purple-haired girl's identity, face, eyes, hair, clothing, pose and hands; camera; her booklet; both floating pass cards and every printed word on them; the JPRail logo and ALL existing headings/taglines; cherry blossoms, mountains, pagoda, train, viaduct, overhead contact wires and poles; overall palette, dimensions and composition. Change ONLY the geographical map artwork area. Remove all station-name callout boxes and their leader lines, including 新青森, 仙台, 東京, 名古屋, 新大阪, 広島 and 博多. Remove the northwest foreign mainland/coastline shapes representing Russia, China and the Korean peninsula and their boundary/road strokes. For accurate railway geometry, an exact transparent screenshot of Japan's real railway network will be overlaid afterward by the website: therefore clear the entire old Japanese map silhouette and all its old colored railway paths and station circles as well, leaving a clean seamless continuation of the existing pale blue-gray ocean/sky gradient in those map areas, with absolutely no replacement map or route invented by you. Do not remove, move, cover or change the floating pass cards that sit in front of the map. Do not alter the girl's extended hand or train where they meet the map area. No new text, no changed title, no new station names, no added dates. The result is the same original illustration with only the old geographic diagram and foreign land removed so a geographically exact label-free railway layer can be composited over it. Do not redesign the poster.
+- 全11都市圈实际选择；所有都市圈彩色结果排除新干线，原始及都市圈新干线车站资料仍在。专项验证组合新干线等级、都市圈、全国重置、全库搜索岐阜羽岛及全国Pass恢复，浅灰层保留新干线。
+- 全28本线归组、两档都市圈外缘站点和原始站库对应关系；安土／武佐等具体收尾位置及真实折线路径，不制造站间切口或桥接。
+- 灰色Canvas实际像素验证RGB(163,173,183)、alpha约153；截图差验证参考线实际可见。每张Pass／运营方视图检查opacity=.6、层级、无交互及匹配段原色。正式审核图覆盖为[中京安土／武佐附近](jprail-map-review.png)，本图使用本地后备地理图层，未据其宣称外部瓦片已验收。
+- 118运营方、55券、228视图、14,080个匹配铁路像素采样点；枢纽、公司局界、青春18、两档票券范围、普通滚轮／捏合／gesture能力路径、桌面高度及手机详情均通过，端点内外圈147帧相对偏移0。
+- 3项发布保护回归通过：保留默认分支检出、fetch/rebase推送重试、40分钟任务、30分钟Pages步骤及三次有界部署尝试。工作流与发布Action无修改。
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python -m unittest development.tests.test_jprail_filters development.tests.test_jprail development.tests.test_jprail_colors development.tests.test_jprail_touch_layout development.tests.test_jprail_audit.FareRegressions development.tests.test_pages_deployment -v
 ```
+
+原始网络、车站库、55券目录／审查／两档范围、公司接口、配色、宣传图、相机及底图模块共12个文件与既有提交dc26553比对相同。未重新查验全部票券最新条款，原有51完成／4待核的证据状态保持，不以绘图通过消除缺口。
+
+按用户此前要求，提交上传后不追加Actions或线上检查；不把推送成功等同于Pages部署确认。本轮截图草稿、快照、统计与隔离工作树均置于独有系统临时目录，上传收尾前清理；只保留生产代码／派生数据、可复用测试、本摘要和一张正式审核图，保护正式数据、其他任务文件与根目录trash/。
+
+## 既有配色与历史验收参考
 
 ### 已应用的公司配色与来源
 

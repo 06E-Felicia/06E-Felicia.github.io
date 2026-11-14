@@ -1,8 +1,9 @@
-import {createStationLabels} from './jprail-stations.js?v=20261113-seikan18';
+import {createStationLabels} from './jprail-stations.js?v=20261114-station-edges';
 import {createCamera} from './jprail-camera.js?v=20261110-touch2';
 import {createStreetMap} from './jprail-basemap.js?v=20261110-touch2';
 import {officialStationPins,companyStationPins,stationAnnotations} from './jprail-boundaries.js?v=20261113-seikan18';
 import {createRailColors,JR_OPERATORS,isSeikanShared} from './jprail-colors.js?v=20261113-seikan18';
+import {createRouteFilters,createOperatorPicker,ROUTE_GRADES} from './jprail-filters.js?v=20261114-metro-reference';
 const $ = id => document.getElementById(id);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const GRADES = {
@@ -12,8 +13,9 @@ const GRADES = {
  unclassified:{label:'未分类 / 其他',color:'#343c39'}
 };
 const NATIONAL = [[30.7,129.35],[45.65,145.95]];
+const CONTEXT_INK={color:'#A3ADB7',opacity:.6};
 const state = {passes:[],network:null,overviewNetwork:null,detailNetwork:null,detailStatus:"overview",stations:[],boundaryMarkers:null,companyBoundaries:[],companyStations:[],annotationStations:[],selected:null,active:null,layers:new Map(),passCoverage:[],displayed:[],paintFeatures:[],stationPool:[],pinnedStations:[],basemap:{status:"loading",tiles:0},stationLabels:{count:0,names:[],mode:"主要枢纽"}};
-let map, infra, railRenderer, stationMarker, stationLabels, camera, streets, toastTimer, detailPromise, renderedBounds, railColors, seikanOverlay, seikanFeatures, homeView=true;
+let map, infra, railRenderer, contextRenderer, stationMarker, stationLabels, camera, streets, toastTimer, detailPromise, renderedBounds, railColors, routeFilters, operatorPicker, seikanOverlay, seikanFeatures, homeView=true;
 const geometryBounds=new WeakMap();
 function toast(message) { $('toast').textContent=message; $('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,4500); }
 function duration(p) { return p.durations.map(v=>typeof v==='number'?`${v} 日`:v).join(' / '); }
@@ -26,9 +28,21 @@ export function railColorInfo(feature) {
  return {id:'other:'+grade,label:item.label+'（原等级色）',color:item.color,basis:'未纳入本次铁路公司配色'};
 }
 export function railStyle(feature) {return {color:railColorInfo(feature).color,weight:gradeOf(feature)==='highspeed'?4:3,opacity:1};}
+export function contextStyle(feature){return {...railStyle(feature),...CONTEXT_INK};}
 export function matchesRailFilters(feature,grade,operator) {
- if(grade && gradeOf(feature)!==grade)return false;
- return railColors.matchesOperator(feature,operator);
+ return routeFilters.matches(feature,{grade,operators:Array.isArray(operator)?operator:operator?[operator]:[]});
+}
+function readRouteFilters(){return {grade:$('railGrade').value,line:$('railLine').value,metro:$('railMetro').value,operators:[...$('railOperator').selectedOptions].map(o=>o.value).filter(Boolean)};}
+function clearRouteFilters(){
+ for(const id of ['railGrade','railLine','railMetro'])$(id).value='';
+ for(const option of $('railOperator').options)option.selected=false;
+ $('railOperatorSearch').value='';$('railOperatorSearch').dispatchEvent(new Event('input'));
+ $('railOperatorPicker').open=false;$('railResults').parentElement.open=false;
+ operatorPicker?.sync();$('railLineField').hidden=true;
+}
+function changeRouteFilters(){
+ homeView=false;state.selected=null;state.active=null;map.closePopup();
+ renderList();renderSelection();renderDetail();updateURL();fitDisplayed();
 }
 function outcode([x,y],b) { return (x<b[0]?1:0)|(x>b[2]?2:0)|(y<b[1]?4:0)|(y>b[3]?8:0); }
 // Clip to the declared schematic boundary, never draw a whole long line because
@@ -75,7 +89,8 @@ export function coverageFeatures(network,pass) {
 }
 function linePopup(f,selected=false) {
  const info=railColorInfo(f),op=railColors.operatorOf(f.properties.operator);
- return `<strong>${esc(f.properties.name)}</strong><br>${esc(op)}<br><small>${esc(info.label)} · ${esc(info.basis)}</small>${info.source?`<br><a href="${esc(info.source)}" target="_blank" rel="noopener">配色参考来源 ↗</a>`:''}${selected?'<br><small>Pass 范围示意；请核对产品区间与列车限制。</small>':''}`;
+ const family=routeFilters.familyOf(f);
+ return `<strong>${esc(f.properties.name)}</strong><br>${esc(op)}${family?`<br><small>本线归组：${esc(family.label)}（不改变现运营方）</small>`:''}<br><small>${esc(info.label)} · ${esc(info.basis)}</small>${info.source?`<br><a href="${esc(info.source)}" target="_blank" rel="noopener">配色参考来源 ↗</a>`:''}${selected?'<br><small>Pass 范围示意；请核对产品区间与列车限制。</small>':''}`;
 }
 
 function renderColorLegend(features) {
@@ -91,10 +106,12 @@ function renderColorLegend(features) {
 }
 function setupMap() {
  map=L.map('map',{preferCanvas:true,zoomAnimation:true,zoomAnimationThreshold:4,zoomControl:false,zoomSnap:0,zoomDelta:.25,scrollWheelZoom:false,inertiaMaxSpeed:850,inertiaDeceleration:2200,minZoom:4,maxZoom:18,maxBounds:[[22,119],[49,156.3]],maxBoundsViscosity:.8}).fitBounds(NATIONAL,{padding:[12,12]});
- for(const [name,z] of [['railLand',150],['railBase',200],['railRoutes',350],['railInfrastructure',300],['railStations',450],['railBoundaries',475]])map.createPane(name).style.zIndex=z;
+ for(const [name,z] of [['railLand',150],['railBase',200],['railContext',325],['railRoutes',350],['railInfrastructure',300],['railStations',450],['railBoundaries',475]])map.createPane(name).style.zIndex=z;
+ map.getPane('railContext').style.pointerEvents='none';
  // A continuous zoom scales the previous raster between refreshes. Keep
  // enough real painted margin for a .35-level zoom even at a corner anchor.
  railRenderer=L.canvas({pane:'railRoutes',padding:.3});
+ contextRenderer=L.canvas({pane:'railContext',padding:.3});
  state.boundaryMarkers=L.layerGroup().addTo(map);
  infra=L.tileLayer('https://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png',{subdomains:'abc',pane:'railInfrastructure',minZoom:6,maxNativeZoom:19,maxZoom:18,attribution:'<a href="https://www.openrailwaymap.org/">OpenRailwayMap</a> · © <a href="https://www.openstreetmap.org/copyright">OSM</a>'});
  infra.on('tileerror',()=>{if($('infrastructure').checked)toast('在线设施瓦片未能加载，本地线路仍可使用。');});
@@ -108,6 +125,7 @@ function setupMap() {
   // Leaflet 1.9.4 normally defers Canvas paint another frame. Complete this
   // refreshed buffer now so a continuous gesture never paints a blank frame.
   L.Util.cancelAnimFrame(railRenderer._redrawRequest);railRenderer._redraw();
+  if(contextRenderer._ctx){L.Util.cancelAnimFrame(contextRenderer._redrawRequest);contextRenderer._redraw();}
   stationLabels?.schedule();
  }});
  map.on('moveend',()=>{if(state.network&&state.detailStatus==='detail')renderRoutes();});
@@ -119,15 +137,17 @@ function setupMap() {
  stationLabels=createStationLabels(map,()=>state.stationPool,summary=>{state.stationLabels=summary;$('stationDensity').textContent=`站名：${summary.mode} · ${summary.count} 站${summary.pinnedNames.length?' · 常驻 '+summary.pinnedNames.length+' 站':''}`;},()=>state.annotationStations,()=>state.paintFeatures);
  $('map').closest('.map-frame').querySelector('.rail-legend').addEventListener('toggle',()=>stationLabels.schedule());
  fitHome();
- for(const id of ['railGrade','railOperator'])$(id).addEventListener('change',()=>{renderSelection();renderDetail();updateURL();fitDisplayed();});
- $('clearRailFilters').onclick=()=>{$('railGrade').value='';$('railOperator').value='';renderSelection();renderDetail();updateURL();};
+ $('railGrade').addEventListener('change',()=>{$('railLine').value='';changeRouteFilters();});
+ for(const id of ['railLine','railMetro'])$(id).addEventListener('change',changeRouteFilters);
+ $('clearRailFilters').onclick=showAllLines;
  map.attributionControl.addAttribution('<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N02-2025.html">N02-25（加工）</a> · © <a href="https://www.openstreetmap.org/copyright">OSM</a> · <a href="https://www.naturalearthdata.com/">Natural Earth</a>');
 }
 
 function fitHome() {camera.fitBounds(NATIONAL,{padding:[8,8],reset:true});homeView=true;}
 function showAllLines() {
  state.selected=null;state.active=null;
- $('railGrade').value='';$('railOperator').value='';$('infrastructure').checked=false;
+ clearRouteFilters();$('infrastructure').checked=false;
+ if($('railOperatorPicker'))$('railOperatorPicker').open=false;
  map.closePopup();if(stationMarker){map.removeLayer(stationMarker);stationMarker=null;}
  $('stationSearch').value='';$('stationResults').innerHTML='';
  renderSelection();renderList();renderDetail();updateURL();
@@ -150,7 +170,8 @@ function refreshStationPool() {
    .bindTooltip(`${esc(pin.name)} · ${company?'本券止于公司局界':boundary?'指定线路适用边界':pin.companyJunction?'JR 公司运营局界（不等于票券边界）':'已含铁路端点'}`)
    .bindPopup(`<strong>${esc(pin.name)}</strong><br>${esc(pin.note)}`).addTo(state.boundaryMarkers);
  }
- state.stationPool=state.stations.filter(s=>{
+ state.stationPool=state.routeFilters?.metro?routeFilters.metroStations(state.routeFilters.metro)
+  .filter(s=>routes.has(s[3]+'|'+s[4])).map(s=>Object.assign(s.slice(0,5),{metroEnd:s[5]})):state.stations.filter(s=>{
   const p=routes.get(s[3]+'|'+s[4]);if(!p)return false;
   if(pass?.routeStationKeys&&(!pass.routeOverridesOnly||pass.routeFeatureKeys.has(s[3]+'|'+s[4]))){
    if(!pass.routeStationKeys.has(s[3]+'|'+s[4]+'|'+s[0]))return false;
@@ -162,7 +183,7 @@ function refreshStationPool() {
 }
 
 function syncInfrastructure() {
- const filtered=Boolean(state.selected||$('railGrade').value||$('railOperator').value);
+ const filtered=Boolean(state.selected||routeFilters?.active(readRouteFilters()));
  $('infrastructure').disabled=filtered;
  if(filtered)$('infrastructure').checked=false;
  const detailed=!filtered&&$('infrastructure').checked;
@@ -184,7 +205,8 @@ function syncInfrastructure() {
   seikanOverlay?.addTo(map);
  } else if(seikanOverlay&&map.hasLayer(seikanOverlay))map.removeLayer(seikanOverlay);
  state.seikanOverlay=seikanOverlay;
- $('infrastructureHint').textContent=filtered?'筛选中：仅显示匹配线路':detailed&&!showDetailed?'放大地图以显示详细设施':'原图含货运、站场、专用与停用设施';
+ $('infrastructureHint').textContent=filtered?'原色为匹配线路 · 浅灰为其余线路':detailed&&!showDetailed?'放大地图以显示详细设施':'原图含货运、站场、专用与停用设施';
+ $('railContextLegend').hidden=!filtered;
  // The optional raster has its own grade palette and cannot inherit our
  // company colors. Do not show a company legend for that separate layer.
  $('railLegendItems').hidden=showDetailed;
@@ -199,7 +221,12 @@ function renderList() {
 }
 function updateURL() {
  const url=new URL(location.href);url.searchParams.delete('passes');
- for(const [name,value] of [['pass',state.selected],['grade',$('railGrade').value],['operator',$('railOperator').value]])value?url.searchParams.set(name,value):url.searchParams.delete(name);
+ const filter=readRouteFilters();
+ for(const [name,value] of [['pass',state.selected],['grade',filter.grade],['line',filter.line],['metro',filter.metro]])value?url.searchParams.set(name,value):url.searchParams.delete(name);
+ const encoded=operatorPicker?.urlValues()||{include:filter.operators,exclude:[]};
+ for(const name of ['operator','excludeOperator'])url.searchParams.delete(name);
+ for(const op of encoded.include)url.searchParams.append('operator',op);
+ for(const op of encoded.exclude)url.searchParams.append('excludeOperator',op);
  history.replaceState(null,'',url.pathname+url.search+url.hash);
 }
 function featureBounds(feature) {
@@ -235,6 +262,12 @@ function renderRoutes(force=false) {
  if(!force&&renderedBounds?.contains(view.pad(railRenderer.options.padding)))return;
  renderedBounds=detail?view.pad(.35):null;state.paintBounds=renderedBounds;
  for(const layer of state.layers.values())map.removeLayer(layer);state.layers.clear();
+ if(state.contextLayer){map.removeLayer(state.contextLayer);state.contextLayer=null;}
+ const context=Boolean(state.selected||routeFilters.active(readRouteFilters()));
+ const background=context?(detail?state.network.features.filter(f=>featureBounds(f).intersects(renderedBounds)):state.network.features):[];
+ const limits=renderedBounds&&[renderedBounds.getWest(),renderedBounds.getSouth(),renderedBounds.getEast(),renderedBounds.getNorth()];
+ state.paintContextFeatures=detail?background.map(f=>windowFeature(f,limits)):background;
+ if(context)state.contextLayer=L.geoJSON({type:'FeatureCollection',features:state.paintContextFeatures},{pane:'railContext',renderer:contextRenderer,smoothFactor:detail?.15:1,style:contextStyle,interactive:false}).addTo(map);
  const features=detail?state.displayed.filter(f=>featureBounds(f).intersects(renderedBounds)):state.displayed;
  const pass=state.passes.find(p=>p.id===state.selected);
  const b=renderedBounds;state.paintFeatures=detail?features.map(f=>windowFeature(f,[b.getWest(),b.getSouth(),b.getEast(),b.getNorth()])):features;
@@ -261,22 +294,36 @@ async function updateDetailLevel() {
  renderSelection();
 }
 function renderSelection() {
- const pass=state.passes.find(p=>p.id===state.selected),grade=$('railGrade').value,operator=$('railOperator').value;
- $('selectedPasses').innerHTML=pass?`<button class="selected-chip" type="button" data-focus="${pass.id}" style="--pass-color:#26746c">${esc(pass.name)}</button>`:'<span>全国客运铁路</span>';
+ const pass=state.passes.find(p=>p.id===state.selected),filter=readRouteFilters();state.routeFilters=filter;
+ $('selectedPasses').innerHTML=pass?`<button class="selected-chip" type="button" data-focus="${pass.id}" style="--pass-color:#26746c">${esc(pass.name)}</button>`:`<span>${routeFilters?.active(filter)?'线路浏览 · 不叠加 Pass':'全国客运铁路'}</span>`;
  $('clearSelection').hidden=!state.selected;
  if(!state.network)return;
  const coverage=pass?coverageFeatures(state.network,pass):state.network.features;state.passCoverage=pass?coverage:[];
- const features=coverage.filter(f=>matchesRailFilters(f,grade,operator));
+ const features=routeFilters.apply(coverage,filter,state.detailStatus);
  state.displayed=features;renderColorLegend(features);refreshStationPool();
  renderRoutes(true);
- const title=pass?pass.name:'全国客运铁路';
+ const metro=routeFilters.metros.get(filter.metro),family=routeFilters.families.get(filter.line);
+ const title=pass?pass.name:family?family.label:metro?metro.label+'铁路':'全国客运铁路';
  $('mapState').textContent=`${title} · ${features.length} 个匹配线路组${features.length?'':'，请调整筛选条件'}`;
- const counts=new Map();for(const f of features){const op=railColors.operatorOf(f.properties.operator);counts.set(op,(counts.get(op)||0)+1);}
- $('railResults').innerHTML=[...counts].sort((a,b)=>a[0].localeCompare(b[0],'ja')).map(([op,n])=>`<span>${esc(JR_OPERATORS[op]||op)} <b>${n}</b></span>`).join('')||'<span>没有匹配线路</span>';
- $('clearRailFilters').hidden=!grade&&!operator;
+ const groups=new Map();for(const f of features){
+  const op=railColors.operatorOf(f.properties.operator),family=routeFilters.familyOf(f),id=family?.id||op+'|'+f.properties.name;
+  if(!groups.has(id))groups.set(id,{label:family?.label||f.properties.name,operators:new Set()});groups.get(id).operators.add(JR_OPERATORS[op]||op);
+ }
+ $('railResults').innerHTML=[...groups.values()].sort((a,b)=>a.label.localeCompare(b.label,'ja')).map(g=>`<span class="rail-result-line"><strong>${esc(g.label)}</strong><small>${esc([...g.operators].join(' · '))}</small></span>`).join('')||'<span>没有匹配线路</span>';
+ $('railResults').parentElement.querySelector('summary').textContent=`匹配线路 · ${groups.size}`;
+ $('clearRailFilters').hidden=!routeFilters.active(filter);
+ $('railLineField').hidden=filter.grade!=='main';
+ const notes=[];
+ if(routeFilters.active(filter))notes.push('线路浏览模式 · 不叠加 Pass；运营方多选取并集，与等级／都市圈取交集。');
+ if(filter.grade==='main')notes.push('本线按正式路名归组，含转交区段；不补画已缺失的铁路。');
+ if(filter.grade==='branch')notes.push('地方／其他线指本线、新干线之外的 JR 普速线，包含都市通勤线；不是票价分类。');
+ if(filter.grade==='private')notes.push('私铁线按现运营方筛选，包含第三部门及接收的原本线路段。');
+ if(metro)notes.push(`${metro.label}：新干线仅作浅灰参考；${metro.circles.map(c=>c.label+'站周边约 '+c.km+' km').join('、')}内的完整站间区段，着色在车站收尾，为浏览示意，不表示票券边界。`);
+ $('railFilterNote').textContent=notes.join(' ');$('railFilterNote').hidden=!notes.length;
 }
-function fitPass(id) {fitDisplayed();if(!state.displayed.length)toast('当前 Pass 与筛选条件没有匹配线路。');}
+function fitPass(id) {fitDisplayed();if(!state.displayed.length)toast('当前 Pass 没有已记录的匹配线路。');}
 function showPass(id,fit=true) {
+ clearRouteFilters();if($('railOperatorPicker'))$('railOperatorPicker').open=false;
  homeView=false;state.selected=id;state.active=id;renderSelection();renderList();renderDetail();updateURL();if(fit)fitPass(id);
  if(fit&&matchMedia('(max-width:960px)').matches)requestAnimationFrame(()=>{
   if(state.selected===id&&state.active===id)$('map').closest('.map-frame').scrollIntoView({block:'start',behavior:'auto'});
@@ -354,15 +401,16 @@ async function start() {
  $('clearSelection').onclick=()=>removePass(state.selected);
  $('aboutBtn').onclick=()=>$('aboutDialog').showModal();$('closeAbout').onclick=()=>$('aboutDialog').close();
  try {
- const [catalog,network,land,ranges,palette,companies]=await Promise.all([json('assets/data/jprail/passes.json'),json('assets/data/jprail/network.geojson'),json('assets/data/jprail/japan.geojson'),json('assets/data/jprail/pass-ranges.json'),json('assets/data/jprail/operator-colors.json'),json('assets/data/jprail/company-boundaries.json')]);
+ const [catalog,network,land,ranges,palette,companies,filterData,metroRanges]=await Promise.all([json('assets/data/jprail/passes.json'),json('assets/data/jprail/network.geojson'),json('assets/data/jprail/japan.geojson'),json('assets/data/jprail/pass-ranges.json'),json('assets/data/jprail/operator-colors.json'),json('assets/data/jprail/company-boundaries.json'),json('assets/data/jprail/line-filters.json'),json('assets/data/jprail/metro-ranges.json')]);
  state.companyBoundaries=companies.boundaries;
-  state.palette=palette;railColors=createRailColors(palette);
+  state.palette=palette;railColors=createRailColors(palette);routeFilters=createRouteFilters(filterData,railColors,metroRanges);
+  operatorPicker=createOperatorPicker($('railOperator'),$('railOperatorPicker'),railColors,network,changeRouteFilters);
   for(const pass of catalog.passes)if(ranges[pass.id]){pass.routeFeatures=pass.overviewRouteFeatures=ranges[pass.id].features;pass.routeStationKeys=pass.overviewRouteStationKeys=new Set(ranges[pass.id].stationKeys);pass.routeOverridesOnly=Boolean(ranges[pass.id].partial);pass.routeFeatureKeys=new Set(pass.routeFeatures.map(f=>f.properties.operator+'|'+f.properties.name));}
   state.passes=catalog.passes;state.network=state.overviewNetwork=network;$('coverageNote').textContent=catalog.coverageNote;
   L.geoJSON(land,{pane:'railLand',interactive:false,style:{color:'#b9c9b5',weight:1,fillColor:'#f7f5e9',fillOpacity:1}}).addTo(map);
-  for(const [value,item] of Object.entries(GRADES)){const option=document.createElement('option');option.value=value;option.textContent=item.label;$('railGrade').append(option);}
-  const operators=[...new Set(network.features.filter(railColors.isRailway).map(f=>railColors.operatorOf(f.properties.operator)))].sort((a,b)=>a.localeCompare(b,'ja'));
-  for(const [value,label] of [['jr','JR 六家公司'],['private','私铁 / 第三部门 / 公营（普通铁路）'],...Object.entries(JR_OPERATORS),...operators.filter(op=>!Object.hasOwn(JR_OPERATORS,op)).map(op=>[op,op])]){const option=document.createElement('option');option.value=value;option.textContent=label;$('railOperator').append(option);}
+  for(const [value,label] of Object.entries(ROUTE_GRADES))$('railGrade').append(new Option(label,value));
+  for(const family of filterData.families)$('railLine').append(new Option(family.label,family.id));
+  for(const metro of filterData.metros)$('railMetro').append(new Option(metro.label,metro.id));
   $('catalogCount').textContent=`${state.passes.filter(p=>p.status==='current').length} 种现行`;
   $('dataDate').textContent=`范围核对 ${catalog.checked} · 票价日期见详情`;
   const regions=['全国','北海道','东北','关东','甲信越','东海','北陆','关西','中国','四国','九州'];
@@ -370,13 +418,18 @@ async function start() {
   renderList();
   const params=new URLSearchParams(location.search);
   if([...$('railGrade').options].some(x=>x.value===params.get('grade')))$('railGrade').value=params.get('grade');
-  const operator=railColors.operatorOf(params.get('operator'));
-  if([...$('railOperator').options].some(x=>x.value===operator))$('railOperator').value=operator;
+  const validOperators=new Set([...$('railOperator').options].map(x=>x.value));
+  operatorPicker.set(params.getAll('operator').map(railColors.operatorOf).filter(op=>validOperators.has(op)));
+  const excluded=new Set(params.getAll('excludeOperator').map(railColors.operatorOf));
+  if(excluded.size){const values=operatorPicker.values();operatorPicker.set(operatorPicker.operators.filter(op=>!excluded.has(op)&&values.some(value=>value===op||value==='jr'&&Object.hasOwn(JR_OPERATORS,op)||value==='private'&&!Object.hasOwn(JR_OPERATORS,op))));}
+  if($('railGrade').value==='main'&&routeFilters.families.has(params.get('line')))$('railLine').value=params.get('line');
+  if(routeFilters.metros.has(params.get('metro')))$('railMetro').value=params.get('metro');
   const id=params.get('pass')||(params.get('passes')||'').split(',')[0];
-  if(state.passes.some(p=>p.id===id))showPass(id,false);else renderSelection();
-  if(state.selected||$('railGrade').value||$('railOperator').value)fitDisplayed();
+  if(!routeFilters.active(readRouteFilters())&&state.passes.some(p=>p.id===id))showPass(id,false);else renderSelection();
+  updateURL();
+  if(state.selected||routeFilters.active(readRouteFilters())){homeView=false;fitDisplayed();}
   updateDetailLevel();
-  window.JPRail={state,map,camera,streets,windowFeature,coverageFeatures,gradeOf,railStyle,railColorInfo,railColors,matchesRailFilters};
+  window.JPRail={state,map,camera,streets,windowFeature,coverageFeatures,gradeOf,railStyle,contextStyle,railColorInfo,railColors,routeFilters,matchesRailFilters};
 
  } catch(e) {$('passList').innerHTML='<p class="no-results">数据加载失败，请刷新页面或检查本地文件是否完整。</p>';$('resultCount').textContent='目录读取失败';$('mapState').textContent='铁路数据加载失败；在线设施图仍可浏览';console.error('JPRail data load:',e);}
  try{state.stations=await json('assets/data/jprail/stations.json');refreshStationPool();}catch{$('stationSearch').placeholder='车站数据暂不可用';}

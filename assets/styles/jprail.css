@@ -56,3 +56,26 @@
 .major-station-swatch{display:inline-block;position:relative;width:13px;height:13px;border:1.7px solid #143b40;border-radius:50%;background:#fffefa;flex:none}.major-station-swatch:after{content:'';position:absolute;inset:2px;border:1.2px solid #143b40;border-radius:50%}
 
 .company-junction-swatch{display:inline-block;width:11px;height:11px;border:1.5px solid #116979;transform:rotate(45deg);flex:none;margin:1px}.boundary-stations button.junction{border-color:#116979;color:#116979}
+
+/* Independent line browser: compact controls, with the multi-company list in
+   a bounded popover so opening it does not take height away from the map. */
+.operator-filter{flex:1.35;min-width:170px;max-width:100%;display:grid;gap:4px;color:var(--muted)}
+.operator-picker{position:relative;min-width:0;color:var(--ink)}
+.operator-picker>summary{display:flex;align-items:center;justify-content:space-between;gap:8px;list-style:none;border:1px solid #cbd6ca;border-radius:4px;padding:7px;background:var(--white);font-size:11px;cursor:pointer;min-width:0}
+.operator-picker>summary::-webkit-details-marker{display:none}.operator-picker>summary:after{content:'⌄';flex:none}.operator-picker>summary>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.operator-picker[open]>summary{border-color:var(--green);box-shadow:0 0 0 1px var(--green)}
+.operator-menu{position:absolute;z-index:1300;top:calc(100% + 6px);left:0;width:min(420px,calc(100vw - 60px));padding:12px;border:1px solid #c2d2c5;background:var(--white);box-shadow:0 12px 28px #193c3f30;border-radius:7px;font-size:11px}
+.operator-search{display:grid;gap:5px;color:var(--muted)}.operator-search input{width:100%;min-width:0;padding:7px 8px;border:1px solid #cbd6ca;border-radius:4px;background:var(--paper);color:var(--ink)}
+.operator-actions{display:flex;gap:7px;flex-wrap:wrap;margin:9px 0}.operator-actions button{border:1px solid #d0dbce;border-radius:4px;padding:4px 7px;background:#f0f4ec;font-size:10px}
+.operator-list{max-height:min(42dvh,350px);overflow:auto;overscroll-behavior:contain;scrollbar-width:thin}
+.operator-list fieldset{border:0;border-top:1px solid var(--line);padding:7px 0;min-width:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 8px}
+.operator-list legend{font-size:10px;font-weight:700;padding:0 6px 0 0;color:var(--green)}.operator-list label{display:flex;align-items:center;gap:6px;padding:5px 2px;cursor:pointer;line-height:1.5}.operator-list input{flex:none;margin:0}.operator-list label>span{overflow-wrap:anywhere}
+.operator-list [hidden],#railLineField[hidden],.rail-filter-note[hidden]{display:none!important}
+.rail-filter-note{flex-basis:100%;margin:1px 0 0;padding-top:5px;border-top:1px solid var(--line);font-size:9px;line-height:1.65;color:#65776e}
+.rail-results .rail-result-line{display:block;padding:5px 0;border-bottom:1px solid var(--line)}.rail-result-line strong{display:block;font-size:11px;font-weight:650}.rail-result-line small{display:block;font-size:9px;color:var(--muted);overflow-wrap:anywhere}
+.rail-results>div{width:290px;max-width:calc(100vw - 60px)}
+.rail-filter-bar{position:relative}.rail-filter-bar .rail-results{position:static}#railResults{top:calc(100% + 6px);left:auto;right:8px;max-width:calc(100% - 16px);max-height:min(260px,40dvh)}
+@media(min-width:961px){.operator-filter{display:flex;align-items:center;gap:7px;min-width:185px;white-space:nowrap;font-size:9px}.operator-picker{flex:1;width:0}.operator-picker>summary{padding:4px 6px;min-height:28px}.rail-filter-note{font-size:8px;line-height:1.5}}
+@media(max-width:960px){.operator-filter{min-width:100%;flex-basis:100%;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:10px}.operator-menu{width:min(420px,calc(100vw - 60px))}.rail-filter-bar>label{flex:1;min-width:100px}.operator-list label{padding-block:7px}.rail-filter-note{font-size:9px}.operator-actions button{padding-block:6px}}
+@media(min-width:961px) and (max-width:1180px){.rail-filter-bar{column-gap:6px;row-gap:4px}.operator-filter{min-width:105px}.operator-filter>span{display:none}.rail-filter-bar>label{min-width:100px;gap:4px;font-size:8px}.rail-results summary{font-size:8px}}
+.context-legend{border-top:1px solid var(--line)}.context-legend[hidden]{display:none!important}

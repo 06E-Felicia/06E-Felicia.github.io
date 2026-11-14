@@ -3,6 +3,7 @@
 JPRAIL_BASE_URL may point at Pages. Screenshots stay in memory; optional current
 review image is overwritten at JPRAIL_REVIEW_IMAGE. No replay / browser traces.
 """
+from development.tests.test_jprail_filters import choose_operators
 import functools
 import io
 import json
@@ -170,16 +171,18 @@ class RenderedCatalogue(unittest.TestCase):
                             key=(round(s[1],2),round(s[2],2))
                             if key in seen:continue
                             seen.add(key);page.evaluate('(s)=>JPRail.camera.setView([s[1],s[2]],15)',s);page.wait_for_function('JPRail.camera.whenIdle()');self.check_labels(page);self.check_rendered_layers(page);views+=1
-                        # Exercise each grade and each actual operator, including
-                        # genuine empty intersections, without inventing edges.
+                        # Independent line-browser actions exit pass mode;
+                        # reselect the product before exercising its details.
                         operators=page.evaluate('[...new Set(JPRail.state.passCoverage.filter(JPRail.railColors.isRailway).map(f=>JPRail.railColors.operatorOf(f.properties.operator)))]')
                         for op in operators:
-                            page.locator('#railOperator').select_option(op)
+                            choose_operators(page,op)
                             self.assertTrue(page.evaluate('(op)=>JPRail.state.displayed.every(f=>JPRail.railColors.isRailway(f)&&JPRail.railColors.operatorOf(f.properties.operator)===op)',op))
-                        page.locator('#railOperator').select_option('')
+                        choose_operators(page,'')
                         for grade in ['highspeed','main','branch']:
-                            page.locator('#railGrade').select_option(grade);self.assertTrue(page.evaluate('(g)=>JPRail.state.displayed.every(f=>JPRail.gradeOf(f)===g)',grade))
+                            page.locator('#railGrade').select_option(grade);self.assertTrue(page.evaluate('(g)=>JPRail.state.displayed.every(f=>JPRail.routeFilters.gradeOf(f)===g)',grade))
                         page.locator('#railGrade').select_option('')
+                        self.assertIsNone(page.evaluate('JPRail.state.selected'))
+                        page.locator('[data-pass="'+id+'"]').click();page.wait_for_function('JPRail.camera.whenIdle()')
                         page.locator('#closeDetail').click();self.assertFalse(page.locator('#detailPanel').is_visible());page.locator('[data-focus="'+id+'"]').click();self.assertTrue(page.locator('#detailPanel').is_visible())
                         # An actual drag after rebuilding layers must not leave
                         # a cached view hole or reset the selected product.
@@ -257,6 +260,12 @@ class RenderedCatalogue(unittest.TestCase):
 
     def check_rendered_layers(self,page):
         page.evaluate('()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))')
+        self.assertTrue(page.evaluate('''()=>{
+          const active=Boolean(JPRail.state.selected||JPRail.routeFilters.active(JPRail.state.routeFilters||{})),layer=JPRail.state.contextLayer;
+          if(!active)return !layer&&JPRail.state.paintContextFeatures.length===0;
+          const m=JPRail.map;
+          return layer&&m.hasLayer(layer)&&Number(m.getPane('railContext').style.zIndex)>Number(m.getPane('railBase').style.zIndex)&&Number(m.getPane('railContext').style.zIndex)<Number(m.getPane('railRoutes').style.zIndex)&&layer.getLayers().every(l=>l.options.color.toLowerCase()==='#a3adb7'&&l.options.opacity===.6&&!l.options.interactive)&&m.getPane('railContext').style.pointerEvents==='none';
+        }'''),'grey context is required in filter and pass modes, separate from the opaque matching layer')
         page.wait_for_function('''() => {const m=JPRail.map,g=JPRail.streets.getMap();if(!g)return true;const a=g.getCanvas().getBoundingClientRect(),r=m.getContainer().getBoundingClientRect(),s=m.getSize();return [[.25,.25],[.75,.75]].every(([x,y])=>{const p=L.point(s.x*x,s.y*y),ll=m.containerPointToLatLng(p),q=g.project([ll.lng,ll.lat]);return Math.hypot(q.x+a.x-r.x-p.x,q.y+a.y-r.y-p.y)<2;});}''')
         self.assertTrue(page.evaluate('''() => {if(JPRail.state.detailStatus!=='detail')return true;const m=JPRail.map,c=m.getPane('railRoutes').querySelector('canvas');if(!c)return true;const a=c.getBoundingClientRect(),r=m.getContainer().getBoundingClientRect(),corners=[[a.left-r.left,a.top-r.top],[a.right-r.left,a.bottom-r.top]];return corners.every(p=>JPRail.state.paintBounds.pad(.002).contains(m.containerPointToLatLng(p)));}'''),'prepared geometry must cover the actual padded raster after pan, ready for the next continuous zoom')
         self.assertTrue(page.evaluate('''() => {const layers=[...JPRail.state.layers.values()].flatMap(l=>l.getLayers()),view=JPRail.map.getBounds();const actual=new Set(layers.map(l=>l.feature));return JPRail.state.displayed.every(f=>{window.auditBounds ||= new WeakMap();if(!auditBounds.has(f))auditBounds.set(f,L.geoJSON(f).getBounds());return !view.intersects(auditBounds.get(f))||actual.has(f);});}'''),'visible rail geometry must be retained after pan/LOD/filter')
